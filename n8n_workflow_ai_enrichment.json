@@ -1,0 +1,223 @@
+{
+    "name": "Prospecta - Intelligent AI Crawler",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "ai-enrich",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "webhook-trigger",
+            "name": "Webhook AI Enrich",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{$json.body.website.startsWith('http') ? $json.body.website : 'https://' + $json.body.website}}",
+                "options": {}
+            },
+            "id": "scrape-initial",
+            "name": "Scrape Homepage",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                300,
+                300
+            ],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "jsCode": "// Extracteur de liens intelligent\nconst websiteUrl = $node[\"Webhook AI Enrich\"].json.body.website;\nconst html = $input.first().json.data || \"\";\n\nconst cleanUrl = websiteUrl.replace('https://','').replace('http://','').split('/')[0];\nconst domain = cleanUrl;\nconst protocol = websiteUrl.startsWith('https') ? 'https' : 'http';\nconst baseUrl = `${protocol}://${domain}`;\n\n// 1. Extraire tous les liens internes via Regex\nconst linkRegex = /href=[\"']([^#\"'\\s>]+)[\"']/gi;\nconst links = new Set();\nlet match;\n\n// Ajouter la page initiale en premier\nlinks.add(websiteUrl.startsWith('http') ? websiteUrl : `https://${websiteUrl}`);\n\nwhile ((match = linkRegex.exec(html)) !== null) {\n  let url = match[1];\n  \n  // Gérer les liens relatifs\n  if (url.startsWith('/')) {\n    url = `${baseUrl}${url}`;\n  } else if (!url.startsWith('http')) {\n    url = `${baseUrl}/${url}`;\n  }\n  \n  // Garder seulement les liens du même domaine\n  if (url.includes(domain) && !url.includes('tel:') && !url.includes('mailto:') && !url.endsWith('.jpg') && !url.endsWith('.png') && !url.endsWith('.pdf')) {\n    links.add(url);\n  }\n}\n\n// 2. Priorisation des pages stratégiques pour la prospection\nconst priorityTerms = ['about', 'propos', 'team', 'equipe', 'service', 'produit', 'product', 'contact', 'solution', 'client', 'realisation', 'projet'];\n\nconst sortedLinks = Array.from(links).map(url => {\n  let priority = 100;\n  priorityTerms.forEach((term, index) => {\n    if (url.toLowerCase().includes(term)) priority = index;\n  });\n  // Homepage a la priorité absolue\n  if (url === baseUrl || url === `${baseUrl}/`) priority = -1;\n  return { url, priority };\n});\n\nsortedLinks.sort((a, b) => a.priority - b.priority);\n\n// 3. Retourner les top 20 URLs\nreturn sortedLinks.slice(0, 20).map(l => ({ url: l.url }));"
+            },
+            "id": "discover-links",
+            "name": "Discover & Prioritize Links",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                500,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{$json.url}}",
+                "options": {}
+            },
+            "id": "scrape-pages",
+            "name": "Scrape Site Content",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                750,
+                300
+            ],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "jsCode": "// Nettoyage HTML et extraction du texte profond\nconst items = $input.all();\nconst cleanedPages = items.map((item, index) => {\n  const html = item.json.data || \"\";\n  \n  // Nettoyage agressif des scripts et styles\n  let text = html\n    .replace(/<script[^>]*>.*?<\\/script>/gis, '')\n    .replace(/<style[^>]*>.*?<\\/style>/gis, '')\n    .replace(/<header[^>]*>.*?<\\/header>/gis, '') // Optionnel: garder le header si on veut les menus\n    .replace(/<footer[^>]*>.*?<\\/footer>/gis, '') // Optionnel: garder le footer pour contacts\n    .replace(/<[^>]+>/g, ' ')\n    .replace(/\\s+/g, ' ')\n    .trim();\n  \n  // On garde un maximum de contenu informatif\n  text = text.substring(0, 8000);\n  \n  return {\n    page_number: index + 1,\n    url: item.json.url || 'unknown',\n    content: text\n  };\n});\n\nreturn [{ json: { \n  pages: cleanedPages,\n  count: cleanedPages.length \n} }];"
+            },
+            "id": "clean-content",
+            "name": "Clean Scraped Data",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1000,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "text",
+                "operation": "message",
+                "model": "gpt-4o-mini",
+                "messages": {
+                    "values": [
+                        {
+                            "role": "system",
+                            "content": "Tu es un expert en intelligence commerciale B2B. Ton rôle est d'analyser l'intégralité d'un site web pour en extraire des insights de prospection profonds et générer des ressources d'aide à la vente.\n\nExtrait et structure les informations suivantes :\n1. **Contacts Directs** : TOUS les numéros de téléphone et emails trouvés.\n2. **Personnes Clés** : Dirigeants, responsables, experts mentionnés.\n3. **Activités & Expertises** : Ce qu'ils font précisément, leurs technologies, leurs secteurs.\n4. **Signaux d'Affaires** : Projets récents, recrutements, besoins détectés, points de douleur potentiels.\n5. **Culture & Valeurs** : Mission de l'entreprise.\n6. **Scripts de Vente IA** : Génère DEUX scripts personnalisés (un Email d'approche et un Elevator Pitch) basés sur l'actualité et les besoins de l'entreprise.\n7. **Résumé Stratégique** : Un argumentaire de vente court et percutant.\n\nRéponds en JSON uniquement."
+                        },
+                        {
+                            "role": "user",
+                            "content": "=Voici les données extraites de {{ $json.pages.length }} pages :\n\n{{ $json.pages.map(p => `--- PAGE ${p.url} ---\\n${p.content}`).join('\\n\\n') }}\n\nStructure JSON attendue :\n{\n  \"contact_info\": {\"phones\": [], \"emails\": [], \"addresses\": []},\n  \"key_people\": [{\"name\": \"...\", \"role\": \"...\", \"context\": \"...\"}],\n  \"activities\": {\"services\": [], \"technologies\": [], \"sectors\": []},\n  \"news\": [],\n  \"culture\": {\"mission\": \"\", \"values\": []},\n  \"opportunities\": [{\"signal\": \"...\", \"context\": \"...\"}],\n  \"sales_scripts\": [{\"title\": \"...\", \"content\": \"...\"}],\n  \"summary\": \"Ton résumé ici\"\n}"
+                        }
+                    ]
+                },
+                "options": {
+                    "temperature": 0.2
+                },
+                "jsonOutput": true
+            },
+            "id": "ai-analysis",
+            "name": "AI Deep Analysis",
+            "type": "@n8n/n8n-nodes-langchain.openAi",
+            "typeVersion": 1.3,
+            "position": [
+                1250,
+                300
+            ],
+            "credentials": {
+                "openAiApi": {
+                    "id": "YOUR_OPENAI_CRED_ID",
+                    "name": "OpenAI API"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsCode": "// Consolidation finale optimisée\nconst aiResponse = $input.first().json.message?.content || '{}';\nconst originalBody = $node[\"Webhook AI Enrich\"].json.body;\n\nlet data;\ntry {\n  data = JSON.parse(aiResponse);\n} catch (e) {\n  data = { contact_info: {}, key_people: [], activities: {}, summary: \"Analyse partielle\" };\n}\n\n// Scoring dynamique basé sur la densité de données (Max 100)\nlet score = 30; // Base\nif (originalBody.website) score += 10;\n\n// Emails (Max 15)\nconst emailCount = data.contact_info?.emails?.length || 0;\nif (emailCount > 0) score += 10;\nif (emailCount > 1) score += 5;\n\n// Téléphones (Max 10)\nif (data.contact_info?.phones?.length > 0) score += 10;\n\n// Personnes clés (Max 15)\nconst peopleCount = data.key_people?.length || 0;\nscore += Math.min(15, peopleCount * 5);\n\n// Signaux d'affaires (Max 20)\nconst signalsCount = data.opportunities?.length || 0;\nscore += Math.min(20, signalsCount * 10);\n\nreturn {\n  json: {\n    id: originalBody.id,\n    score_global: Math.min(99, score),\n    phone: data.contact_info?.phones?.[0] || null,\n    email: data.contact_info?.emails?.[0] || null,\n    address: data.contact_info?.addresses?.[0] || null,\n    ai_intelligence: {\n      contact_info: data.contact_info || {},\n      key_people: data.key_people || [],\n      activities: data.activities || {},\n      recent_news: data.news || [],\n      company_culture: data.culture || {},\n      prospecting_opportunities: data.opportunities || [],\n      sales_scripts: data.sales_scripts || [],\n      executive_summary: data.summary || \"\"\n    },\n    enriched_at: new Date().toISOString()\n  }\n};"
+            },
+            "id": "final-output",
+            "name": "Final Result",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1500,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { \"success\": true, \"data\": $json } }}"
+            },
+            "id": "respond-node",
+            "name": "Respond to Frontend",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [
+                1750,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook AI Enrich": {
+            "main": [
+                [
+                    {
+                        "node": "Scrape Homepage",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Scrape Homepage": {
+            "main": [
+                [
+                    {
+                        "node": "Discover & Prioritize Links",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Discover & Prioritize Links": {
+            "main": [
+                [
+                    {
+                        "node": "Scrape Site Content",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Scrape Site Content": {
+            "main": [
+                [
+                    {
+                        "node": "Clean Scraped Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Clean Scraped Data": {
+            "main": [
+                [
+                    {
+                        "node": "AI Deep Analysis",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Deep Analysis": {
+            "main": [
+                [
+                    {
+                        "node": "Final Result",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Final Result": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Frontend",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    }
+}

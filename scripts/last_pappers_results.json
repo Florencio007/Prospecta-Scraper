@@ -1,0 +1,64 @@
+[
+  {
+    "id": "pappers_808462154",
+    "name": "BALM RESTAURANT",
+    "initials": "B",
+    "position": "SASU",
+    "company": "BALM RESTAURANT",
+    "source": "pappers",
+    "score": 75,
+    "email": "",
+    "phone": "",
+    "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
+    "city": "PARIS \nActivit",
+    "tags": [
+      "En activité"
+    ],
+    "socialLinks": {},
+    "contractDetails": {
+      "siren": "808462154",
+      "adresse": "37 RUE DES MATHURINS, 75008 PARIS",
+      "dirigeants": []
+    },
+    "aiIntelligence": {
+      "contactInfo": {
+        "phones": [],
+        "emails": [],
+        "addresses": [
+          "37 RUE DES MATHURINS, 75008 PARIS"
+        ]
+      }
+    }
+  },
+  {
+    "id": "pappers_781422902",
+    "name": "RESTAURANT SCOLAIRE",
+    "initials": "R",
+    "position": "Association d",
+    "company": "RESTAURANT SCOLAIRE",
+    "source": "pappers",
+    "score": 75,
+    "email": "",
+    "phone": "",
+    "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
+    "city": "CHATILLON",
+    "tags": [
+      "En activité"
+    ],
+    "socialLinks": {},
+    "contractDetails": {
+      "siren": "781422902",
+      "adresse": "4 AV SAINT EXUPERY, 79200 CHATILLON-SUR-THOUET",
+      "dirigeants": []
+    },
+    "aiIntelligence": {
+      "contactInfo": {
+        "phones": [],
+        "emails": [],
+        "addresses": [
+          "4 AV SAINT EXUPERY, 79200 CHATILLON-SUR-THOUET"
+        ]
+      }
+    }
+  }
+]

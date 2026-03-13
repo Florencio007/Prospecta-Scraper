@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Des locations de vacances sont aussi disponibles à vos dates",
+    "category": "",
+    "address": "",
+    "phone": "",
+    "website": "",
+    "rating": 0,
+    "totalScore": "",
+    "mapsUrl": ""
+  },
+  {
+    "name": "Central Hôtel Antananarivo",
+    "category": "Hôtel 4 étoiles",
+    "address": "",
+    "phone": "0202222244",
+    "website": "https://www.centralhotel.mg/",
+    "rating": 0,
+    "totalScore": "",
+    "mapsUrl": "https://www.google.com/maps/place/Central+H%C3%B4tel+Antananarivo/data=!4m10!3m9!1s0x21f07e0479b8679f:0xbe4e397e46903ae8!5m2!4m1!1i2!8m2!3d-18.90678!4d47.52071!16s%2Fg%2F11b73sr4cg!19sChIJn2e4eQR-8CER6DqQRn45Tr4?authuser=0&hl=fr&rclk=1"
+  },
+  {
+    "name": "Radisson Serviced Apartments Antananarivo City Center",
+    "category": "Hôtel 4 étoiles",
+    "address": "",
+    "phone": "0202269400",
+    "website": "https://www.radissonhotels.com/en-us/hotels/radisson-serviced-apartments-antananarivo-city-centre?cid=a:se+b:gmb+c:emea+i:local+e:rad+d:mea+h:MGTNRSAP",
+    "rating": 0,
+    "totalScore": "",
+    "mapsUrl": "https://www.google.com/maps/place/Radisson+Serviced+Apartments+Antananarivo+City+Center/data=!4m10!3m9!1s0x21f07dfd655155af:0xa44ffe56a90cf177!5m2!4m1!1i2!8m2!3d-18.911666!4d47.528136!16s%2Fg%2F11gh_6stbv!19sChIJr1VRZf198CERd_EMqVb-T6Q?authuser=0&hl=fr&rclk=1"
+  },
+  {
+    "name": "Madagascar Underground",
+    "category": "Hostel",
+    "address": "Aub. de jeunesse, resto, toit-terrasse",
+    "phone": "0389950332",
+    "website": "https://www.madagascar-underground.com/",
+    "rating": 0,
+    "totalScore": "",
+    "mapsUrl": "https://www.google.com/maps/place/Madagascar+Underground/data=!4m10!3m9!1s0x21f07e06624ccf07:0x87437e4ffd4fee8e!5m2!4m1!1i2!8m2!3d-18.9099277!4d47.5234671!16s%2Fg%2F11b6p742nf!19sChIJB89MYgZ-8CERju5P_U9-Q4c?authuser=0&hl=fr&rclk=1"
+  },
+  {
+    "name": "Hôtel Tana-Jacaranda",
+    "category": "Hôtel",
+    "address": "Hôtel low cost sobre, espace de réunion",
+    "phone": "",
+    "website": "",
+    "rating": 0,
+    "totalScore": "",
+    "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel+Tana-Jacaranda/data=!4m10!3m9!1s0x21f07e05f61b2d59:0xcd6861c325653241!5m2!4m1!1i2!8m2!3d-18.911779!4d47.521577!16s%2Fg%2F1tmsn7px!19sChIJWS0b9gV-8CERQTJlJcNhaM0?authuser=0&hl=fr&rclk=1"
+  }
+]
