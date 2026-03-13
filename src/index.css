@@ -1,0 +1,120 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 219 40% 16%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 219 40% 16%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 219 40% 16%;
+
+    --primary: 219 40% 16%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 20% 96%;
+    --secondary-foreground: 219 40% 16%;
+
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 161 84% 39%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 161 84% 39%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 200 51% 21%;
+    --sidebar-primary: 200 51% 21%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 20% 96%;
+    --sidebar-accent-foreground: 200 51% 21%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 157 35% 46%;
+  }
+
+  .dark {
+    /* Dark Mode avec #1a3a52 (Midnight Blue) */
+    --background: 219 40% 10%;
+    --foreground: 0 0% 100%;
+
+    --card: 219 40% 16%;
+    --card-foreground: 0 0% 100%;
+
+    --popover: 219 40% 16%;
+    --popover-foreground: 0 0% 100%;
+
+    --primary: 0 0% 100%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 219 40% 18%;
+    --secondary-foreground: 0 0% 100%;
+
+    --muted: 219 40% 18%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 161 84% 39%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 219 40% 22%;
+    --input: 219 40% 18%;
+    --ring: 161 84% 39%;
+
+    --sidebar-background: 219 40% 12%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 219 40% 16%;
+    --sidebar-primary-foreground: 170 42% 49%;
+    --sidebar-accent: 219 40% 20%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 219 40% 22%;
+    --sidebar-ring: 170 42% 49%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-outfit;
+  }
+}
+
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    @apply bg-muted-foreground/20 rounded-full;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/40;
+  }
+}
