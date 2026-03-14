@@ -107,31 +107,43 @@ export default function EditCampaignDialog({ isOpen, onClose, campaign, onSave }
                             <div className="grid grid-cols-3 gap-4">
                                 <div className="space-y-2">
                                     <Label className="text-[10px] uppercase font-black text-slate-500 tracking-tighter">Limite / jour</Label>
-                                    <Input
-                                        type="number"
-                                        max={200}
-                                        className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-11 focus:border-emerald-500 font-medium"
-                                        value={form.daily_limit}
-                                        onChange={e => updateForm("daily_limit", parseInt(e.target.value))}
-                                    />
+                                        <Input
+                                            type="number"
+                                            max={200}
+                                            min={0}
+                                            className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-11 focus:border-emerald-500 font-medium"
+                                            value={form.daily_limit}
+                                            onChange={e => {
+                                                const val = e.target.value === "" ? 0 : parseInt(e.target.value);
+                                                updateForm("daily_limit", isNaN(val) ? 0 : val);
+                                            }}
+                                        />
                                 </div>
                                 <div className="space-y-2">
                                     <Label className="text-[10px] uppercase font-black text-slate-500 tracking-tighter">Throttle Min (s)</Label>
-                                    <Input
-                                        type="number"
-                                        className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-11 focus:border-emerald-500 font-medium"
-                                        value={form.throttle_min_seconds}
-                                        onChange={e => updateForm("throttle_min_seconds", parseInt(e.target.value))}
-                                    />
+                                        <Input
+                                            type="number"
+                                            min={0}
+                                            className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-11 focus:border-emerald-500 font-medium"
+                                            value={form.throttle_min_seconds}
+                                            onChange={e => {
+                                                const val = e.target.value === "" ? 0 : parseInt(e.target.value);
+                                                updateForm("throttle_min_seconds", isNaN(val) ? 0 : val);
+                                            }}
+                                        />
                                 </div>
                                 <div className="space-y-2">
                                     <Label className="text-[10px] uppercase font-black text-slate-500 tracking-tighter">Throttle Max (s)</Label>
-                                    <Input
-                                        type="number"
-                                        className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-11 focus:border-emerald-500 font-medium"
-                                        value={form.throttle_max_seconds}
-                                        onChange={e => updateForm("throttle_max_seconds", parseInt(e.target.value))}
-                                    />
+                                        <Input
+                                            type="number"
+                                            min={0}
+                                            className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-11 focus:border-emerald-500 font-medium"
+                                            value={form.throttle_max_seconds}
+                                            onChange={e => {
+                                                const val = e.target.value === "" ? 0 : parseInt(e.target.value);
+                                                updateForm("throttle_max_seconds", isNaN(val) ? 0 : val);
+                                            }}
+                                        />
                                 </div>
                             </div>
 

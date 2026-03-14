@@ -39,7 +39,12 @@ import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { triggerN8nWorkflow, type Channel } from "@/integrations/n8n";
 import { logProspectAdded } from "@/lib/activityLogger";
-// Removed mockProspects import for production
+import { useApiKeys } from "@/hooks/useApiKeys";
+declare global {
+  interface Window {
+    __PROSPECTA_EXTENSION__?: any;
+  }
+}
 
 const industryOptions = [
   { key: "software", label: "Logiciels & SaaS" },
@@ -57,6 +62,7 @@ const ProspectFinder = () => {
   const { toast } = useToast();
   const { t } = useLanguage();
   const { user } = useAuth();
+  const { saveKey, getKeys } = useApiKeys();
   const sb = supabase as any;
 
   // ── ÉTATS DE LA RECHERCHE ──────────────────────────────────────────────────
@@ -182,6 +188,59 @@ const ProspectFinder = () => {
   };
 
   /**
+   * CHARGEMENT DES IDENTIFIANTS : Récupère les credentials LinkedIn/Facebook depuis localStorage ou Supabase
+   */
+  useEffect(() => {
+    const loadCredentials = async () => {
+      // 1. D'abord essayer le localStorage pour la rapidité
+      const localLinkedin = localStorage.getItem('prospecta_linkedin_creds');
+      const localFacebook = localStorage.getItem('prospecta_facebook_creds');
+
+      if (localLinkedin) {
+        try { setLinkedinCredentials(JSON.parse(localLinkedin)); } catch(e) {}
+      }
+      if (localFacebook) {
+        try { setFacebookCredentials(JSON.parse(localFacebook)); } catch(e) {}
+      }
+
+      // 2. Ensuite synchroniser avec Supabase
+      if (user) {
+        const keys = await getKeys();
+        const liKey = keys.find(k => k.provider === 'linkedin' && k.is_active);
+        const fbKey = keys.find(k => k.provider === 'facebook' && k.is_active);
+
+        if (liKey) {
+          const creds = { email: liKey.api_key, password: liKey.api_secret || "" };
+          setLinkedinCredentials(creds);
+          localStorage.setItem('prospecta_linkedin_creds', JSON.stringify(creds));
+        }
+        if (fbKey) {
+          const creds = { email: fbKey.api_key, password: fbKey.api_secret || "" };
+          setFacebookCredentials(creds);
+          localStorage.setItem('prospecta_facebook_creds', JSON.stringify(creds));
+        }
+      }
+    };
+
+    loadCredentials();
+  }, [user, getKeys]);
+
+  /**
+   * SAUVEGARDE LOCALE : Persiste les entrées utilisateur au fur et à mesure
+   */
+  useEffect(() => {
+    if (linkedinCredentials.email || linkedinCredentials.password) {
+      localStorage.setItem('prospecta_linkedin_creds', JSON.stringify(linkedinCredentials));
+    }
+  }, [linkedinCredentials]);
+
+  useEffect(() => {
+    if (facebookCredentials.email || facebookCredentials.password) {
+      localStorage.setItem('prospecta_facebook_creds', JSON.stringify(facebookCredentials));
+    }
+  }, [facebookCredentials]);
+
+  /**
    * RESTAURATION DE SESSION : Recharge les résultats et logs depuis le localStorage au montage
    */
   useEffect(() => {
@@ -287,16 +346,12 @@ const ProspectFinder = () => {
       return;
     }
 
-    // Vérification des identifiants LinkedIn si le canal est actif
-    if (filters.channels.includes("linkedin")) {
-      if (!linkedinCredentials.email.trim() || !linkedinCredentials.password.trim()) {
-        toast({
-          title: "Identifiants LinkedIn requis",
-          description: "Veuillez renseigner votre compte LinkedIn dédié pour lancer le scan.",
-          variant: "destructive",
-        });
-        return;
-      }
+    // Sauvegarde des identifiants dans Supabase si utilisés
+    if (filters.channels.includes("linkedin") && linkedinCredentials.email) {
+      saveKey('linkedin', linkedinCredentials.email, 'LinkedIn Account', linkedinCredentials.password);
+    }
+    if (filters.channels.includes("facebook") && facebookCredentials.email) {
+      saveKey('facebook', facebookCredentials.email, 'Facebook Account', facebookCredentials.password);
     }
 
     setIsSearching(true);
@@ -436,27 +491,52 @@ const ProspectFinder = () => {
           }
           else if (channel === "linkedin") {
             addLog("🛡️ Protocoles LinkedIn...", "system");
-            const url = `/api/scrape/linkedin?email=${encodeURIComponent(linkedinCredentials.email)}&password=${encodeURIComponent(linkedinCredentials.password)}&q=${encodeURIComponent(searchQueryString)}&maxProfiles=${filters.channelLimits.linkedin}&maxPosts=${linkedinOptions.maxPosts}&activityType=${linkedinOptions.activityType}&type=${filters.type}`;
-            const es = new EventSource(url);
-            activeEventSources.current.push(es);
-            es.onmessage = (e) => {
-              let d;
-              try { d = JSON.parse(e.data); } catch(err) { addLog(e.data, 'process'); return; }
-              if (d.message && d.percentage === undefined && !d.error && !d.result) { addLog(d.message, 'process'); }
-              if (d.percentage !== undefined) updateChannelPct(d.percentage, d.message || "");
-              if (d.error && typeof d.error === 'string') addLog(`❌ Erreur: ${d.error}`, 'error');
-              if (d.result) {
-                const r = d.result;
-                setPendingProspects(prev => {
-                  if (prev.some(p => p.socialLinks?.linkedin && p.socialLinks.linkedin === r.socialLinks?.linkedin)) return prev;
-                  return [...prev, r];
+
+            // Option C: Scraping via Prospecta Chrome Extension (100% Local Native)
+            if (window.__PROSPECTA_EXTENSION__) {
+              addLog("🔌 Connexion à l'Agent Chrome Prospecta réussie.", "success");
+              
+              // Abonnement au stream de progression
+              const unsubscribe = window.__PROSPECTA_EXTENSION__.onProgress((msg: any) => {
+                if (msg.type === "SCRAPE_PROGRESS") {
+                  updateChannelPct(msg.progress, msg.message);
+                  addLog(msg.message, msg.status || 'process');
+                } else if (msg.type === "PROSPECT_FOUND") {
+                  setPendingProspects(prev => {
+                    if (prev.some(p => p.profileUrl === msg.prospect.profileUrl)) return prev;
+                    return [...prev, msg.prospect];
+                  });
+                  setSelectedProspectIds(prev => new Set(prev).add(msg.prospect.id));
+                  addLog(`👤 LinkedIn: ${msg.prospect.name}`, 'success');
+                }
+              });
+
+              try {
+                // Lancement de la commande au Service Worker de l'extension
+                await window.__PROSPECTA_EXTENSION__.startSearch({
+                  keyword: filters.keyword,
+                  location: locationQuery,
+                  type: filters.type,
+                  maxLimit: filters.channelLimits.linkedin
                 });
-                setSelectedProspectIds(prev => new Set(prev).add(r.id));
-                addLog(`👤 LinkedIn: ${r.name}`, 'success');
+              } catch (err: any) {
+                addLog(`❌ Erreur Agent Chrome: ${err.message}`, 'error');
+              } finally {
+                unsubscribe();
+                resolveChannel();
               }
-              if (d.percentage === 100 || d.error) { es.close(); resolveChannel(); }
-            };
-            es.onerror = () => { es.close(); resolveChannel(); };
+            } else {
+              // Fallback ou erreur si l'extension n'est pas installée
+              toast({
+                title: "Module Local Requis",
+                description: "LinkedIn a renforcé sa sécurité. Veuillez installer l'Extension Chrome Prospecta pour scraper depuis votre session.",
+                variant: "destructive",
+                duration: 10000,
+              });
+              addLog("❌ Agent Chrome non détecté. Impossible de scraper LinkedIn.", "error");
+              updateChannelPct(100, "Échec (Extension manquante)");
+              resolveChannel();
+            }
           }
           else if (channel === "pages_jaunes") {
              addLog("📖 Pages Jaunes France...", "system");
@@ -796,7 +876,7 @@ const ProspectFinder = () => {
     <div className="min-h-screen bg-secondary">
       <Header />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 py-8">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-foreground">{t("myProspects")}</h1>
@@ -892,12 +972,13 @@ const ProspectFinder = () => {
                           <Input
                             id={`limit-${channel.value}`}
                             type="number"
-                            min="1"
+                            min="0"
                             max="500"
                             className="h-7 w-20 text-xs bg-muted/30 border-muted-foreground/20 focus:border-primary/50"
-                            value={filters.channelLimits[channel.value] || 10}
+                            value={filters.channelLimits[channel.value] !== undefined ? filters.channelLimits[channel.value] : 10}
                             onChange={(e) => {
-                              const val = parseInt(e.target.value) || 1;
+                              const val = e.target.value === "" ? 0 : parseInt(e.target.value);
+                              if (isNaN(val)) return;
                               setFilters(prev => ({
                                 ...prev,
                                 channelLimits: {
@@ -978,11 +1059,14 @@ const ProspectFinder = () => {
                         <Input
                           id="li-max-posts"
                           type="number"
-                          min={1}
-                          max={100}
+                          min="0"
+                          max="100"
+                          className="h-8 bg-muted/20 border-orange-500/20"
                           value={linkedinOptions.maxPosts}
-                          onChange={(e) => setLinkedinOptions(prev => ({ ...prev, maxPosts: Math.max(1, Math.min(100, parseInt(e.target.value) || 30)) }))}
-                          className="border-orange-500/30 focus:border-orange-500/60 text-sm w-24"
+                          onChange={(e) => {
+                            const val = e.target.value === "" ? 0 : parseInt(e.target.value);
+                            setLinkedinOptions(prev => ({ ...prev, maxPosts: isNaN(val) ? 0 : Math.min(100, val) }));
+                          }}
                         />
                         <span className="text-xs text-muted-foreground">activités max par profil</span>
                       </div>
@@ -1080,11 +1164,14 @@ const ProspectFinder = () => {
                         <Input
                           id="fb-max-posts"
                           type="number"
-                          min={1}
-                          max={100}
+                          min="0"
+                          max="100"
+                          className="h-8 bg-muted/20 border-blue-500/20"
                           value={facebookOptions.maxPosts}
-                          onChange={(e) => setFacebookOptions(prev => ({ ...prev, maxPosts: Math.max(1, Math.min(100, parseInt(e.target.value) || 10)) }))}
-                          className="border-blue-500/30 focus:border-blue-500/60 text-sm w-24"
+                          onChange={(e) => {
+                            const val = e.target.value === "" ? 0 : parseInt(e.target.value);
+                            setFacebookOptions(prev => ({ ...prev, maxPosts: isNaN(val) ? 0 : Math.min(100, val) }));
+                          }}
                         />
                         <span className="text-xs text-muted-foreground">activités max par profil</span>
                       </div>
@@ -1164,14 +1251,18 @@ const ProspectFinder = () => {
                 {/* Retro Terminal Header */}
                 <div className="bg-zinc-950 px-4 py-2 border-b border-green-500/20 flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-[10px] text-green-500 font-bold tracking-widest">PROSPECTA_OS_V2.5</span>
+                    <span className="text-[10px] text-green-500 font-bold tracking-widest">
+                      PROSPECTA // LEAD SCANNER
+                    </span>
                     <span className="text-[10px] text-green-500/50">|</span>
-                    <span className="text-[10px] text-zinc-500">{isSearching ? "EXEC_SCAN" : "IDLE"}</span>
+                    <span className="text-[10px] text-zinc-500">
+                      {isSearching ? "SCAN_EN_COURS" : "EN_VEILLE"}
+                    </span>
                   </div>
                   <div className="flex items-center gap-2">
                      <div className={`w-2 h-2 ${isSearching ? 'bg-green-500 animate-pulse' : 'bg-zinc-500'}`}></div>
                      <span className={`text-[9px] font-bold uppercase ${isSearching ? 'text-green-500' : 'text-zinc-500'}`}>
-                       {isSearching ? 'ONLINE' : 'OFFLINE'}
+                       {isSearching ? 'SCAN ACTIF' : 'SCAN PAUSÉ'}
                      </span>
                   </div>
                 </div>
@@ -1181,12 +1272,18 @@ const ProspectFinder = () => {
                   {/* Progress Section */}
                   <div className="flex flex-col gap-1 border-b border-green-500/10 pb-3">
                      <div className="flex justify-between items-center text-[10px] text-green-500">
-                        <span>{isSearching ? "SCANNING_NODES..." : "OPERATION_COMPLETE"}</span>
-                        <span>PROGRESS: {scrapeProgress.percentage}% | CACHE: {pendingProspects.length}</span>
+                       <span className="uppercase tracking-widest">
+                         {isSearching
+                           ? (scrapeProgress.message || loadingMessages[loadingStep] || "Scan des prospects en cours…")
+                           : "Scan terminé — résultats prêts"}
+                       </span>
+                       <span>
+                         Progression : {scrapeProgress.percentage}% • Prospects détectés : {pendingProspects.length}
+                       </span>
                      </div>
                      <div className="h-1 bg-zinc-900 w-full">
                         <div 
-                          className="h-full bg-green-500 transition-all duration-300" 
+                          className="h-full bg-gradient-to-r from-emerald-400 via-emerald-500 to-emerald-300 transition-all duration-300" 
                           style={{ width: `${scrapeProgress.percentage}%` }} 
                         />
                      </div>
@@ -1235,7 +1332,7 @@ const ProspectFinder = () => {
                       className={`text-[10px] uppercase font-bold h-8 rounded-none border ${isSearching ? 'text-red-500 border-red-500/30 hover:bg-red-500/10' : 'text-zinc-500 border-zinc-500/30 hover:text-white hover:bg-zinc-800'}`}
                     >
                       {isSearching ? <Square size={10} className="mr-2 fill-current" /> : <X size={10} className="mr-2" />}
-                      {isSearching ? "ABORT_OPERATION" : "CLEAR_CONSOLE"}
+                      {isSearching ? "Arrêter le scan" : "Vider la console"}
                     </Button>
                   </div>
                 </div>

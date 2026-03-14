@@ -24,25 +24,6 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const lastScrollY = useRef(0);
-
-  // Smart sticky behavior
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      // Show if scrolling up, hide if scrolling down (and outside threshold)
-      if (currentScrollY > lastScrollY.current && currentScrollY > 64) {
-        setIsVisible(false);
-      } else {
-        setIsVisible(true);
-      }
-      lastScrollY.current = currentScrollY;
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   // Configuration des éléments de navigation
   const navItems = [
@@ -62,9 +43,7 @@ const Header = () => {
   };
 
   return (
-    <header className={`sticky top-0 z-40 border-b bg-card transition-all duration-300 ${
-      isVisible ? "translate-y-0 opacity-100" : "-translate-y-full opacity-0"
-    }`}>
+    <header className="fixed top-0 left-0 right-0 z-40 border-b bg-card">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6">
         <div className="flex items-center gap-2 cursor-pointer" onClick={() => navigate("/dashboard")}>
           <Logo size="md" />

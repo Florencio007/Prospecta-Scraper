@@ -66,10 +66,10 @@ const Templates = () => {
         title: "Template généré",
         description: "Votre template a été créé avec succès par l'IA.",
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Erreur",
-        description: err.message,
+        description: (err instanceof Error ? err.message : "Une erreur inconnue s'est produite"),
         variant: "destructive",
       });
     } finally {
@@ -93,7 +93,7 @@ const Templates = () => {
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950">
       <Header />
       
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-12">
         <div className="mb-12">
           <div className="flex items-center gap-3 mb-2">
             <div className="p-2 bg-emerald-500/10 rounded-lg">

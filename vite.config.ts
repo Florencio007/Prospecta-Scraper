@@ -20,7 +20,28 @@ export default defineConfig(({ mode }) => ({
         changeOrigin: true,
         secure: false,
       }
+    },
+    watch: {
+      ignored: [
+        "**/scripts/**",
+        "**/*-results.json",
+        "**/last_gmaps_results.json"
+      ]
     }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+          ui: ['@radix-ui/react-dialog', '@radix-ui/react-select', '@radix-ui/react-tabs', '@radix-ui/react-toast'],
+          supabase: ['@supabase/supabase-js'],
+          charts: ['recharts'],
+          utils: ['clsx', 'tailwind-merge', 'date-fns'],
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000,
   },
   plugins: [
     react(),

@@ -1,3 +1,4 @@
+import React from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -680,14 +681,14 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                 </div>
                                             ) : currentProspect.aiIntelligence ? (
                                                 <div className="space-y-8 animate-in fade-in duration-500">
-                                                    {/* Executive Summary */}
-                                                    {(currentProspect.aiIntelligence?.executiveSummary || currentProspect.summary || currentProspect.aiIntelligence?.executive_summary) && (
+                                                    {/* Executive Summary — FIXED: was wrapped in literal string quotes */}
+                                                    {(currentProspect.aiIntelligence?.executiveSummary || currentProspect.summary || (currentProspect.aiIntelligence as any)?.executive_summary) && (
                                                         <div className="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 p-6 rounded-2xl border border-emerald-500/20 shadow-sm shadow-emerald-500/5">
                                                             <h4 className="text-sm font-bold text-emerald-600 dark:text-emerald-400 mb-3 flex items-center gap-2">
                                                                 <Users size={16} /> {t("profileSummary")}
                                                             </h4>
                                                             <p className="text-sm text-foreground/90 leading-relaxed italic">
-                                                                "{currentProspect.aiIntelligence?.executiveSummary || currentProspect.summary || currentProspect.aiIntelligence?.executive_summary}"
+                                                                &ldquo;{currentProspect.aiIntelligence?.executiveSummary || currentProspect.summary || (currentProspect.aiIntelligence as any)?.executive_summary}&rdquo;
                                                             </p>
                                                         </div>
                                                     )}
@@ -826,15 +827,79 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                         </div>
                                                     </div>
                                                     
-                                                    {/* About / Bio */}
-                                                    {currentProspect.contractDetails.about && (
-                                                        <div className="space-y-2">
-                                                            <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Résumé</h5>
-                                                            <p className="text-sm text-foreground/80 leading-relaxed bg-muted/10 rounded-xl p-4 border border-border/30 whitespace-pre-wrap">
-                                                                {currentProspect.contractDetails.about}
-                                                            </p>
-                                                        </div>
-                                                    )}
+                                                    {/* Description IA générée automatiquement depuis les données disponibles */}
+                                                    {(() => {
+                                                        const cd = currentProspect.contractDetails as any;
+                                                        const isFb = currentProspect.source === 'facebook' || currentProspect.source === 'facebook_page';
+
+                                                        // Génère une description riche à partir des données collectées
+                                                        const parts: string[] = [];
+                                                        const name = currentProspect.name || currentProspect.company || '';
+
+                                                        // Vue d'ensemble / About
+                                                        const overview = cd?.about || cd?.description || cd?.overview || currentProspect.summary || '';
+                                                        if (overview) parts.push(overview.substring(0, 400));
+
+                                                        // Données structurées
+                                                        const sector = cd?.industry || cd?.category || cd?.sector || '';
+                                                        const size = cd?.employeeCount || cd?.companySize || '';
+                                                        const founded = cd?.foundedYear || cd?.founded || '';
+                                                        const hq = cd?.headquarters || cd?.address || cd?.location || '';
+                                                        const specs = Array.isArray(cd?.specialties) && cd.specialties.length > 0 ? cd.specialties.slice(0, 4).join(', ') : '';
+                                                        const site = cd?.website || currentProspect.website || '';
+                                                        const followers = cd?.followers || '';
+
+                                                        // Construction intelligente si pas de vue d'ensemble
+                                                        if (!overview && name) {
+                                                            let desc = `${name}`;
+                                                            if (sector) desc += ` est une entreprise spécialisée dans le secteur ${sector}`;
+                                                            if (hq) desc += ` basée à ${hq}`;
+                                                            if (founded) desc += `, fondée en ${founded}`;
+                                                            if (size) desc += `. Elle compte environ ${size} collaborateurs`;
+                                                            if (specs) desc += `. Ses domaines d'expertise incluent : ${specs}`;
+                                                            if (site) desc += `. Présence web : ${site}`;
+                                                            if (followers) desc += `. ${followers} sur les réseaux sociaux`;
+                                                            desc += '.';
+                                                            parts.push(desc);
+                                                        } else if (overview) {
+                                                            // Complète la description avec des métadonnées structurées
+                                                            const extras: string[] = [];
+                                                            if (sector && !overview.toLowerCase().includes(sector.toLowerCase())) extras.push(`Secteur : ${sector}`);
+                                                            if (size) extras.push(`Taille : ${size}`);
+                                                            if (founded && !overview.includes(founded)) extras.push(`Fondée en ${founded}`);
+                                                            if (hq && !overview.toLowerCase().includes(hq.toLowerCase())) extras.push(`Siège : ${hq}`);
+                                                            if (specs) extras.push(`Spécialisations : ${specs}`);
+                                                            if (extras.length > 0) parts.push(extras.join(' · '));
+                                                        }
+
+                                                        if (parts.length === 0) return null;
+
+                                                        const finalDescription = parts.join('\n\n');
+
+                                                        return (
+                                                            <div className="space-y-2">
+                                                                <div className="flex items-center gap-2">
+                                                                    <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Description</h5>
+                                                                    <span className="text-[9px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-500 rounded-full font-bold uppercase tracking-wider">IA</span>
+                                                                </div>
+                                                                <p className="text-sm text-foreground/80 leading-relaxed bg-muted/10 rounded-xl p-4 border border-border/30 whitespace-pre-wrap">
+                                                                    {finalDescription}
+                                                                </p>
+                                                                {/* Lien Google Maps si disponible */}
+                                                                {(cd?.googleMapsUrl || cd?.mapsUrl) && (
+                                                                    <a
+                                                                        href={cd.googleMapsUrl || cd.mapsUrl}
+                                                                        target="_blank"
+                                                                        rel="noopener noreferrer"
+                                                                        className="flex items-center gap-2 w-fit mt-1 text-xs text-blue-500 hover:text-blue-400 transition-colors px-3 py-1.5 bg-blue-500/5 border border-blue-500/20 rounded-lg hover:bg-blue-500/10"
+                                                                    >
+                                                                        <MapPin size={12} /> Voir sur Google Maps
+                                                                        <ExternalLink size={10} />
+                                                                    </a>
+                                                                )}
+                                                            </div>
+                                                        );
+                                                    })()}
 
                                                     {/* Company Specific Details (LinkedIn/Facebook Pages) */}
                                                     {(currentProspect.contractDetails.industry || currentProspect.contractDetails.foundedYear || currentProspect.contractDetails.employeeCount || currentProspect.contractDetails.companyType) && (
@@ -972,6 +1037,93 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                         </TabsContent>
 
                                         <TabsContent value="linkedin" className="mt-0 space-y-6 animate-in fade-in slide-in-from-bottom-2">
+                                            {/* Normalise les deux structures possibles : activities (LinkedIn) et activity.posts/comments (Facebook) */}
+                                            {(() => {
+                                                const ai = currentProspect.aiIntelligence as any;
+                                                // LinkedIn envoie activities.posts / Facebook envoie activities.posts OU activity.posts
+                                                const posts: any[] = ai?.activities?.posts || ai?.activity?.posts || [];
+                                                const comments: any[] = ai?.activities?.comments || ai?.activity?.comments || [];
+                                                const isFacebook = currentProspect.source === 'facebook' || currentProspect.source === 'facebook_page';
+
+                                                return (
+                                                    <>
+                                                        {posts.length > 0 && (
+                                                            <div className="space-y-4">
+                                                                <h4 className="text-sm font-bold flex items-center gap-2 text-primary">
+                                                                    <MessageSquare size={18} className={isFacebook ? 'text-blue-500' : 'text-blue-400'} />
+                                                                    {isFacebook ? 'Publications Facebook' : 'Posts récents'}
+                                                                </h4>
+                                                                <div className="grid grid-cols-1 gap-4">
+                                                                    {posts.map((post: any, i: number) => (
+                                                                        <div key={i} className="p-4 bg-muted/10 rounded-2xl border border-border/30">
+                                                                            <div className="flex justify-between items-center mb-2">
+                                                                                <span className="text-xs font-semibold text-muted-foreground">{post.date}</span>
+                                                                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium uppercase ${
+                                                                                    isFacebook ? 'bg-blue-500/10 text-blue-500' : 'bg-blue-400/10 text-blue-400'
+                                                                                }`}>{post.actionType || 'Post'}</span>
+                                                                            </div>
+                                                                            {post.text && <p className="text-sm text-foreground/90 whitespace-pre-wrap leading-relaxed">{post.text}</p>}
+                                                                            {post.image && (
+                                                                                <img src={post.image} alt="" className="mt-2 rounded-lg max-h-48 object-cover w-full" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                                                                            )}
+                                                                            {post.originalPost?.text && (
+                                                                                <div className="mt-2 p-3 bg-white/30 dark:bg-black/20 rounded-xl border border-border/20 text-xs">
+                                                                                    <p className="font-semibold text-muted-foreground mb-1">🔁 {post.originalPost.author}</p>
+                                                                                    <p className="text-muted-foreground/80 line-clamp-3">{post.originalPost.text}</p>
+                                                                                </div>
+                                                                            )}
+                                                                            <div className="flex gap-4 mt-3 text-xs text-muted-foreground">
+                                                                                {post.likes !== undefined && <span className="flex items-center gap-1"><ThumbsUp size={12}/> {post.likes}</span>}
+                                                                                {post.comments !== undefined && <span className="flex items-center gap-1"><MessageCircle size={12}/> {post.comments}</span>}
+                                                                                {post.shares !== undefined && <span className="flex items-center gap-1"><Share2 size={12}/> {post.shares}</span>}
+                                                                                {post.postUrl && <a href={post.postUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-blue-500 hover:underline"><ExternalLink size={10}/> voir</a>}
+                                                                            </div>
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
+
+                                                        {comments.length > 0 && (
+                                                            <div className="space-y-4">
+                                                                <h4 className="text-sm font-bold flex items-center gap-2 text-primary mt-4">
+                                                                    <MessageCircle size={18} className="text-blue-500" />
+                                                                    {isFacebook ? 'Commentaires Facebook' : 'Commentaires récents'}
+                                                                </h4>
+                                                                <div className="grid grid-cols-1 gap-4">
+                                                                    {comments.map((comment: any, i: number) => (
+                                                                        <div key={i} className="p-4 bg-muted/10 rounded-2xl border border-border/30">
+                                                                            <div className="flex justify-between items-center mb-2">
+                                                                                <span className="text-xs font-semibold text-muted-foreground">{comment.date}</span>
+                                                                            </div>
+                                                                            {(comment.originalPost?.text || comment.originalPostText) && (
+                                                                                <div className="p-3 bg-white/50 dark:bg-black/20 rounded-lg mb-3 border border-border/20 text-xs">
+                                                                                    <p className="font-semibold mb-1 text-muted-foreground">{comment.originalPost?.author || comment.originalPostAuthor}</p>
+                                                                                    <p className="text-muted-foreground/80 line-clamp-2">{comment.originalPost?.text || comment.originalPostText}</p>
+                                                                                    {(comment.originalPost?.url || comment.originalPostUrl) && (
+                                                                                        <a href={comment.originalPost?.url || comment.originalPostUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline text-[10px] mt-1 flex items-center gap-1"><ExternalLink size={9}/> voir le post</a>
+                                                                                    )}
+                                                                                </div>
+                                                                            )}
+                                                                            {comment.myComment && (
+                                                                                <p className="text-sm font-medium text-foreground/90 whitespace-pre-wrap">↳ {comment.myComment}</p>
+                                                                            )}
+                                                                        </div>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        )}
+
+                                                        {posts.length === 0 && comments.length === 0 && (
+                                                            <div className="py-20 text-center bg-muted/20 rounded-3xl border border-dashed border-border/50">
+                                                                <MessageSquare size={40} className="mx-auto text-muted-foreground/30 mb-4" />
+                                                                <p className="text-muted-foreground italic">Aucune activité récente (posts ou commentaires) trouvée.</p>
+                                                                <p className="text-muted-foreground/50 text-xs mt-2">{isFacebook ? 'Assurez-vous que le profil / la page est public.' : 'Vérifiez que les posts LinkedIn sont récupérés.'}</p>
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                );
+                                            })()}
                                             <h3 className="text-lg font-bold flex items-center gap-2">
                                                 {currentProspect?.source === 'facebook' || currentProspect?.source === 'facebook_page' ? (
                                                     <><Facebook className="text-blue-500" size={20} /> Activité Facebook</>
@@ -982,59 +1134,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
 
 
 
-                                            {/* LinkedIn Activities (Posts and Comments) */}
-                                            {currentProspect.aiIntelligence?.activities?.posts?.length > 0 ? (
-                                                <div className="space-y-4">
-                                                    <h4 className="text-sm font-bold flex items-center gap-2 text-primary">
-                                                        <MessageSquare size={18} className="text-blue-500" /> Posts récents
-                                                    </h4>
-                                                    <div className="grid grid-cols-1 gap-4">
-                                                        {currentProspect.aiIntelligence.activities.posts.map((post: any, i: number) => (
-                                                            <div key={i} className="p-4 bg-muted/10 rounded-2xl border border-border/30">
-                                                                <div className="flex justify-between items-center mb-2">
-                                                                    <span className="text-xs font-semibold text-muted-foreground">{post.date}</span>
-                                                                    <span className="text-[10px] px-2 py-0.5 bg-blue-500/10 text-blue-500 rounded-full font-medium uppercase">{post.actionType}</span>
-                                                                </div>
-                                                                <p className="text-sm text-foreground/90 whitespace-pre-wrap">{post.text}</p>
-                                                                <div className="flex gap-4 mt-3 text-xs text-muted-foreground">
-                                                                    <span className="flex items-center gap-1"><ThumbsUp size={12}/> {post.likes}</span>
-                                                                    <span className="flex items-center gap-1"><MessageCircle size={12}/> {post.comments}</span>
-                                                                </div>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            ) : null}
-
-                                            {currentProspect.aiIntelligence?.activities?.comments?.length > 0 ? (
-                                                 <div className="space-y-4">
-                                                    <h4 className="text-sm font-bold flex items-center gap-2 text-primary mt-4">
-                                                        <MessageCircle size={18} className="text-blue-500" /> Commentaires récents
-                                                    </h4>
-                                                    <div className="grid grid-cols-1 gap-4">
-                                                        {currentProspect.aiIntelligence.activities.comments.map((comment: any, i: number) => (
-                                                            <div key={i} className="p-4 bg-muted/10 rounded-2xl border border-border/30">
-                                                                <div className="flex justify-between items-center mb-2">
-                                                                    <span className="text-xs font-semibold text-muted-foreground">{comment.date}</span>
-                                                                </div>
-                                                                <div className="p-3 bg-white/50 dark:bg-black/20 rounded-lg mb-3 border border-border/20 text-xs">
-                                                                    <p className="font-semibold mb-1 text-muted-foreground">{comment.originalPost?.author}</p>
-                                                                    <p className="text-muted-foreground/80 line-clamp-2">{comment.originalPost?.text}</p>
-                                                                </div>
-                                                                <p className="text-sm font-medium text-foreground/90 whitespace-pre-wrap">↳ {comment.myComment}</p>
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </div>
-                                            ) : null}
-
-                                            {(!currentProspect.aiIntelligence?.activities?.posts?.length) &&
-                                             (!currentProspect.aiIntelligence?.activities?.comments?.length) && (
-                                                <div className="py-20 text-center bg-muted/20 rounded-3xl border border-dashed border-border/50">
-                                                    <MessageSquare size={40} className="mx-auto text-muted-foreground/30 mb-4" />
-                                                    <p className="text-muted-foreground italic">Aucune activité récente (posts ou commentaires) trouvée.</p>
-                                                </div>
-                                            )}
+                                            {/* Le rendu des activités est maintenant géré par le bloc au-dessus */}
                                         </TabsContent>
 
 
@@ -1123,4 +1223,4 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
     );
 };
 
-export default ProspectDetailView;
+export default React.memo(ProspectDetailView);

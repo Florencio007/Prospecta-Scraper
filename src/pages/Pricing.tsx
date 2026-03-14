@@ -70,7 +70,7 @@ const Pricing = () => {
         <div className="min-h-screen bg-secondary">
             <Header />
 
-            <main className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
+            <main className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-12">
                 <div className="text-center mb-12">
                     <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">{t("pricingTitle")}</h1>
                     <p className="text-xl text-muted-foreground">{t("planSelection")}</p>

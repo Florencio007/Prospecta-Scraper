@@ -190,7 +190,7 @@ const Reports = () => {
     <div className="min-h-screen bg-secondary">
       <Header />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 py-8">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-8">
         <div className="mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{t("exportsAndReports")}</h1>
           <p className="text-foreground font-light mt-1">

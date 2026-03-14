@@ -35,6 +35,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { checkSpamScore } from "@/services/emailService";
+import { useApiKeys } from "@/hooks/useApiKeys";
 
 
 
@@ -96,6 +97,23 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
         sequenceType: "Premier contact",
     });
 
+    const { getKeys } = useApiKeys();
+    const [activeProviders, setActiveProviders] = useState<string[]>([]);
+    const [fetchingProviders, setFetchingProviders] = useState(true);
+
+    useEffect(() => {
+        if (isOpen) {
+            getKeys().then(keys => {
+                const active = keys.filter(k => k.is_active).map(k => k.provider);
+                setActiveProviders(active);
+                setFetchingProviders(false);
+            });
+        }
+    }, [isOpen, getKeys]);
+
+    const isSmtpEnabled = activeProviders.includes('smtp');
+    const isBrevoEnabled = activeProviders.includes('brevo');
+
     const updateForm = (key: string, value: any) => setForm(prev => ({ ...prev, [key]: value }));
 
     // Simulate Spam Analysis
@@ -122,8 +140,13 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
                                 <DialogTitle className="text-xl font-black flex items-center gap-2">
                                     <Mail className="text-emerald-500" size={20} /> Nouvelle Campagne
                                 </DialogTitle>
-                                <DialogDescription className="text-slate-500 text-xs mt-1 uppercase font-bold tracking-widest">
+                                <DialogDescription className="text-slate-500 text-xs mt-1 uppercase font-bold tracking-widest flex items-center gap-2">
                                     Étape {step} sur 3
+                                    {!fetchingProviders && (
+                                        <span className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-[10px] lowercase font-medium">
+                                            via {isSmtpEnabled ? 'SMTP' : isBrevoEnabled ? 'Brevo' : 'aucun service'}
+                                        </span>
+                                    )}
                                 </DialogDescription>
                             </div>
                         </div>
@@ -171,7 +194,11 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
                                 <div className="bg-amber-500/5 p-3 rounded-lg border border-amber-500/20 flex items-start gap-2">
                                     <AlertTriangle size={14} className="text-amber-500 mt-0.5 shrink-0" />
                                     <p className="text-[10px] text-amber-600 dark:text-amber-400 font-medium leading-relaxed">
-                                        <span className="font-bold">Important :</span> L'email d'expédition doit être un <span className="underline italic">"Expéditeur Vérifié"</span> configuré dans votre compte Brevo pour garantir la délivrabilité.
+                                        <span className="font-bold">Important :</span> {
+                                            isSmtpEnabled 
+                                            ? 'L\'email d\'expédition doit correspondre à votre compte SMTP (ou être un alias autorisé) pour garantir la délivrabilité.'
+                                            : 'L\'email d\'expédition doit être un "Expéditeur Vérifié" configuré dans votre compte Brevo pour garantir la délivrabilité.'
+                                        }
                                     </p>
                                 </div>
                                 <div className="space-y-2">
@@ -274,27 +301,39 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
                                         <Input
                                             type="number"
                                             max={200}
+                                            min={0}
                                             className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
                                             value={form.dailyLimit}
-                                            onChange={e => updateForm("dailyLimit", parseInt(e.target.value))}
+                                            onChange={e => {
+                                                const val = e.target.value === "" ? 0 : parseInt(e.target.value);
+                                                updateForm("dailyLimit", isNaN(val) ? 0 : val);
+                                            }}
                                         />
                                     </div>
                                     <div className="space-y-2">
                                         <Label className="text-[10px] uppercase font-black text-slate-500 tracking-tighter">Delai Min (s)</Label>
                                         <Input
                                             type="number"
+                                            min={0}
                                             className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
                                             value={form.throttleMin}
-                                            onChange={e => updateForm("throttleMin", parseInt(e.target.value))}
+                                            onChange={e => {
+                                                const val = e.target.value === "" ? 0 : parseInt(e.target.value);
+                                                updateForm("throttleMin", isNaN(val) ? 0 : val);
+                                            }}
                                         />
                                     </div>
                                     <div className="space-y-2">
                                         <Label className="text-[10px] uppercase font-black text-slate-500 tracking-tighter">Delai Max (s)</Label>
                                         <Input
                                             type="number"
+                                            min={0}
                                             className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800"
                                             value={form.throttleMax}
-                                            onChange={e => updateForm("throttleMax", parseInt(e.target.value))}
+                                            onChange={e => {
+                                                const val = e.target.value === "" ? 0 : parseInt(e.target.value);
+                                                updateForm("throttleMax", isNaN(val) ? 0 : val);
+                                            }}
                                         />
                                     </div>
                                 </div>

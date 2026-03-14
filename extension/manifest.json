@@ -1,0 +1,40 @@
+{
+  "manifest_version": 3,
+  "name": "Prospecta AI - Scraper Native",
+  "version": "1.0.0",
+  "description": "Pilote silencieux pour l'extraction de données depuis LinkedIn, Google Maps, etc. Réservé à Prospecta Web.",
+  "permissions": [
+    "tabs",
+    "scripting",
+    "storage",
+    "alarms"
+  ],
+  "host_permissions": [
+    "https://*.linkedin.com/*",
+    "https://*.google.com/maps/*",
+    "https://*.facebook.com/*",
+    "http://localhost:*/*",
+    "https://*.vercel.app/*",
+    "https://*.supabase.co/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://localhost:5173/*",
+        "https://*.vercel.app/*"
+      ],
+      "js": ["content-bridge.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["injected.js"],
+      "matches": ["http://localhost:5173/*", "https://*.vercel.app/*"]
+    }
+  ]
+}

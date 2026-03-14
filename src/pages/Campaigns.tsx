@@ -106,11 +106,11 @@ const Campaigns = () => {
         subject: result.subject || "Sans sujet",
         body: result.body || "Corps non généré"
       };
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('AI Generation Error:', err);
       toast({
         title: "Erreur IA",
-        description: err.message || "Échec de la génération automatique de l'email.",
+        description: (err instanceof Error ? err.message : "Une erreur inconnue s'est produite") || "Échec de la génération automatique de l'email.",
         variant: "destructive"
       });
     } finally {
@@ -136,11 +136,11 @@ const Campaigns = () => {
         body: result.body || currentBody,
         message: result.message
       };
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('[handleRefineAI] AI Refinement Error:', err);
       toast({
         title: "Erreur IA",
-        description: err.message || "Échec de l'affinement automatique.",
+        description: (err instanceof Error ? err.message : "Une erreur inconnue s'est produite") || "Échec de l'affinement automatique.",
         variant: "destructive"
       });
     } finally {
@@ -153,7 +153,7 @@ const Campaigns = () => {
       <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
       <Header />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 py-8">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-8">
         <ApiKeyGuard provider="brevo" featureName="les campagnes email">
           {/* Header Section */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">

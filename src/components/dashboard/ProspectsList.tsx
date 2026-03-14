@@ -1,20 +1,32 @@
 import { useEffect, useState } from "react";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import type { Tables } from "@/integrations/supabase/types";
 import ProspectAnalysisModal from "./ProspectAnalysisModal";
-
 import { useLanguage } from "@/hooks/useLanguage";
+import { useToast } from "@/hooks/use-toast";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type Prospect = Tables<"prospects">;
 
 const ProspectsList = () => {
   const { user } = useAuth();
   const { t } = useLanguage();
+  const { toast } = useToast();
   const [prospects, setProspects] = useState<Prospect[]>([]);
   const [selectedProspect, setSelectedProspect] = useState<Prospect | null>(null);
   const [loading, setLoading] = useState(true);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -45,6 +57,19 @@ const ProspectsList = () => {
     load();
   }, [user]);
 
+  const handleDelete = async () => {
+    if (!deleteId) return;
+    try {
+      const { error } = await supabase.from("prospects").delete().eq("id", deleteId);
+      if (error) throw error;
+      toast({ title: t("success"), description: t("prospectDeleted") });
+      setProspects(prev => prev.filter(p => p.id !== deleteId));
+      setDeleteId(null);
+    } catch (error: any) {
+      toast({ title: t("error"), description: error.message, variant: "destructive" });
+    }
+  };
+
   return (
     <>
       <div className="rounded-lg border bg-card shadow-sm">
@@ -71,13 +96,23 @@ const ProspectsList = () => {
                     </p>
                   </div>
                 </div>
-                <button
-                  onClick={() => setSelectedProspect(p)}
-                  className="flex items-center gap-2 text-accent hover:bg-accent/10 px-3 py-2 rounded-lg transition-colors text-sm font-medium shrink-0"
-                >
-                  <Sparkles size={16} />
-                  <span className="hidden sm:inline">{t("analyze")}</span>
-                </button>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => setSelectedProspect(p)}
+                    className="flex items-center gap-2 text-accent hover:bg-accent/10 px-3 py-2 rounded-lg transition-colors text-sm font-medium"
+                    title={t("analyze")}
+                  >
+                    <Sparkles size={16} />
+                    <span className="hidden sm:inline">{t("analyze")}</span>
+                  </button>
+                  <button
+                    onClick={() => setDeleteId(p.id)}
+                    className="p-2 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                    title={t("delete")}
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
             ))
           ) : (
@@ -90,6 +125,21 @@ const ProspectsList = () => {
         prospect={selectedProspect}
         onClose={() => setSelectedProspect(null)}
       />
+
+      <AlertDialog open={!!deleteId} onOpenChange={o => !o && setDeleteId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("irreversibleDeletion")}</AlertDialogTitle>
+            <AlertDialogDescription>{t("deleteConfirmation")}</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive">
+              {t("delete")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </>
   );
 };

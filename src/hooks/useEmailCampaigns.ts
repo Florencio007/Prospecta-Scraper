@@ -2,7 +2,8 @@ import { useState, useCallback, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useApiKeys } from '@/hooks/useApiKeys';
-import { sendSingleEmail, personalizeTemplate, getWarmupLimit, randomThrottle } from '@/services/emailService';
+import { useToast } from '@/hooks/use-toast';
+import { sendSingleEmail, sendSingleEmailSmtp, personalizeTemplate, getWarmupLimit, randomThrottle } from '@/services/emailService';
 
 export interface EmailCampaign {
     id: string;
@@ -36,6 +37,7 @@ export interface EmailCampaign {
 export function useEmailCampaigns() {
     const { user } = useAuth();
     const { getKeyByProvider } = useApiKeys();
+    const { toast } = useToast();
     const [campaigns, setCampaigns] = useState<EmailCampaign[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -55,9 +57,9 @@ export function useEmailCampaigns() {
             } else {
                 setCampaigns(data || []);
             }
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("fetchCampaigns internal error:", err);
-            setError(err.message || 'Error fetching campaigns');
+            setError((err instanceof Error ? err.message : "Une erreur inconnue s'est produite") || 'Error fetching campaigns');
         } finally {
             setLoading(false);
         }
@@ -219,8 +221,20 @@ export function useEmailCampaigns() {
     const launchDailyBatch = useCallback(async (campaignId: string, onProgress?: (sent: number, total: number) => void) => {
         if (!user) throw new Error("Non authentifié");
 
+        // Try SMTP first (no external API), fall back to Brevo
+        const smtpConfigRaw = await getKeyByProvider('smtp');
         const brevoKey = await getKeyByProvider('brevo');
-        if (!brevoKey) throw new Error("Clé Brevo non configurée. Allez dans Paramètres > Intégrations");
+
+        let smtpConfig: { host: string; port: number; user: string; pass: string } | null = null;
+        if (smtpConfigRaw) {
+            try { smtpConfig = JSON.parse(smtpConfigRaw); } catch { smtpConfig = null; }
+        }
+
+        if (!smtpConfig && !brevoKey) {
+            throw new Error("Aucun service email configuré. Allez dans Paramètres > Intégrations pour configurer SMTP ou Brevo.");
+        }
+
+        const usingSmtp = !!smtpConfig;
 
         const campaign = campaigns.find(c => c.id === campaignId);
         if (!campaign) throw new Error("Campagne non trouvée");
@@ -245,7 +259,6 @@ export function useEmailCampaigns() {
 
         if (rError) throw rError;
         if (!recipients || recipients.length === 0) {
-            // Fin de la campagne
             await updateCampaign(campaignId, { status: 'completed' });
             return { sent: 0, completed: true };
         }
@@ -262,21 +275,36 @@ export function useEmailCampaigns() {
                 entreprise: recipient.company,
             });
 
-            const result = await sendSingleEmail({
-                brevoApiKey: brevoKey,
-                to: { email: recipient.email, name: `${recipient.first_name} ${recipient.last_name}`.trim() },
-                from: { email: campaign.from_email, name: campaign.from_name },
-                replyTo: campaign.reply_to || campaign.from_email,
-                subject: campaign.subject,
-                htmlContent,
-                tags: campaign.tags || [],
-                campaignId: campaign.id
-            });
+            let result;
+            if (usingSmtp && smtpConfig) {
+                result = await sendSingleEmailSmtp({
+                    smtpHost: smtpConfig.host,
+                    smtpPort: smtpConfig.port,
+                    smtpUser: smtpConfig.user,
+                    smtpPass: smtpConfig.pass,
+                    to: { email: recipient.email, name: `${recipient.first_name} ${recipient.last_name}`.trim() },
+                    from: { email: campaign.from_email, name: campaign.from_name },
+                    replyTo: campaign.reply_to || campaign.from_email,
+                    subject: campaign.subject,
+                    htmlContent,
+                    recipientId: recipient.id,
+                });
+            } else {
+                result = await sendSingleEmail({
+                    brevoApiKey: brevoKey!,
+                    to: { email: recipient.email, name: `${recipient.first_name} ${recipient.last_name}`.trim() },
+                    from: { email: campaign.from_email, name: campaign.from_name },
+                    replyTo: campaign.reply_to || campaign.from_email,
+                    subject: campaign.subject,
+                    htmlContent,
+                    tags: campaign.tags || [],
+                    campaignId: campaign.id
+                });
+            }
 
             if (result.messageId) {
-                console.log(`[useEmailCampaigns] Batch send: Email delivered to ${recipient.email}. MessageID: ${result.messageId}`);
+                console.log(`[useEmailCampaigns] Email delivered to ${recipient.email}.`);
                 sentToday++;
-                // Update recipient logic...
                 await (supabase.from('campaign_recipients') as any).update({
                     status: 'sent',
                     sent_at: new Date().toISOString(),
@@ -284,12 +312,23 @@ export function useEmailCampaigns() {
                 }).eq('id', recipient.id);
 
             } else {
-                console.error(`[useEmailCampaigns] Batch send: Email FAILED to ${recipient.email}. Error: ${result.error}`);
+                const errorMsg = result.error || 'Erreur inconnue';
+                console.error(`[useEmailCampaigns] Email FAILED to ${recipient.email}. Error: ${errorMsg}`);
                 errors++;
                 await (supabase.from('campaign_recipients') as any).update({
                     status: 'failed',
-                    bounce_reason: result.error
+                    bounce_reason: errorMsg
                 }).eq('id', recipient.id);
+
+                // If sender not verified, abort immediately and notify user
+                if (errorMsg.includes('vérifié') || errorMsg.includes('not found') || errorMsg.includes('401') || errorMsg.includes('403')) {
+                    toast({
+                        title: 'Erreur d\'envoi critique',
+                        description: errorMsg,
+                        variant: 'destructive',
+                    });
+                    break; // Stop the batch to avoid repeated failures
+                }
             }
 
             if (onProgress) onProgress(sentToday, recipients.length);

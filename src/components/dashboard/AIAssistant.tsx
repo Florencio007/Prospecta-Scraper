@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useRef } from "react";
+import { useState, useMemo, useEffect, useRef, useCallback } from "react";
 import { Sparkles, X, RefreshCw, Check, Loader, BarChart3, MessageSquare, History, PieChart, TrendingUp, Send, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -56,21 +56,9 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
         { title: "Prospecting Tips", prompt: "Give me 3 tips to improve my prospecting today." }
       ];
     }
-  }, [language, profile]);
+  }, [language, profile, t]);
 
-  useEffect(() => {
-    if (open && user?.id) {
-      loadChatHistory();
-    }
-  }, [open, user?.id]);
-
-  useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-    }
-  }, [chatMessages]);
-
-  const loadChatHistory = async () => {
+  const loadChatHistory = useCallback(async () => {
     if (!user?.id) return;
     setLoadingHistory(true);
     const { data, error } = await supabase
@@ -85,7 +73,19 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
       setChatMessages(data as ChatMessage[]);
     }
     setLoadingHistory(false);
-  };
+  }, [user?.id]);
+
+  useEffect(() => {
+    if (open && user?.id) {
+      loadChatHistory();
+    }
+  }, [open, user?.id, loadChatHistory]);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [chatMessages]);
 
   const fetchDashboardData = async () => {
     if (!user?.id) return null;
@@ -171,10 +171,10 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
         role: 'assistant',
         content: aiResponse
       }]);
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Erreur IA",
-        description: err.message,
+        description: err instanceof Error ? (err instanceof Error ? err.message : "Une erreur inconnue s'est produite") : "Une erreur inconnue s'est produite",
         variant: "destructive"
       });
     } finally {
@@ -198,7 +198,7 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
     try {
       const { data: prospects } = await supabase.from('prospects').select('source').eq('user_id', user?.id);
       const sourceCounts: Record<string, number> = {};
-      (prospects as any[])?.forEach(p => { if (p.source) sourceCounts[p.source] = (sourceCounts[p.source] || 0) + 1; });
+      (prospects as { source?: string }[])?.forEach(p => { if (p.source) sourceCounts[p.source] = (sourceCounts[p.source] || 0) + 1; });
       
       const stats = await fetchDashboardData();
       const data = {
@@ -208,8 +208,8 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
       
       const report = await analysteAgent(openaiKey, data);
       setAnalysisReport(report);
-    } catch (err: any) {
-      toast({ title: "Erreur d'analyse", description: err.message, variant: "destructive" });
+    } catch (err: unknown) {
+      toast({ title: "Erreur d'analyse", description: err instanceof Error ? (err instanceof Error ? err.message : "Une erreur inconnue s'est produite") : "Une erreur inconnue s'est produite", variant: "destructive" });
     } finally {
       setGenerating(false);
     }
@@ -235,7 +235,7 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
       </div>
 
       <div className="px-6 py-4 border-b bg-secondary/10">
-        <Tabs value={activeMode} onValueChange={(v: any) => setActiveMode(v)} className="w-full">
+        <Tabs value={activeMode} onValueChange={(v: string) => setActiveMode(v)} className="w-full">
           <TabsList className="grid w-full grid-cols-2 h-11 p-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
             <TabsTrigger value="message" className="rounded-lg font-bold text-xs gap-2">
               <MessageSquare size={14} /> {t("chatAssistant")}

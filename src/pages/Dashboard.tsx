@@ -152,7 +152,7 @@ const Dashboard = () => {
     <div className="min-h-screen bg-secondary">
       <Header />
 
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 py-8">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-8">
         {/* Onboarding Reminder */}
         {profile && !profile.onboarding_completed && (
           <div className="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">

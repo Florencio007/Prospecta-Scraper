@@ -15,7 +15,7 @@ function emitLog(msg, pct = undefined) {
 }
 
 // ── CONFIGURATION ─────────────────────────────────────────────────────────────
-const [,, argEmail, argPass, argQuery, argMax, argMaxPosts, argSearchType, argActivityType] = process.argv;
+const [, , argEmail, argPass, argQuery, argMax, argMaxPosts, argSearchType, argActivityType] = process.argv;
 
 const CONFIG = {
   email: argEmail || '0326077824',
@@ -538,8 +538,8 @@ async function scrapeActivity(page, profileUrl) {
       const dateEl = el.querySelector('abbr[data-utime], a[href*="/posts/"] span, a[href*="/permalink/"] span, abbr');
       const date = dateEl?.getAttribute('title') || dateEl?.textContent?.trim() || '';
 
-      const textEl = el.querySelector('[data-ad-comet-preview="message"]')
-        || el.querySelector('[data-testid="post_message"]')
+      const textEl = el.querySelector('[data-ad-comet-preview="message"], [data-testid="post_message"]')
+        || el.querySelector('div[dir="auto"][style*="text-align: start"]')
         || el.querySelector('[dir="auto"] > div > span')
         || el.querySelector('[dir="auto"]');
       const text = getText(textEl).substring(0, 1500);
@@ -750,9 +750,14 @@ async function scrapePageAbout(page, profileUrl) {
       email: '',
       website: '',
       address: '',
+      mapsUrl: '', // NOUVEAU
       businessHours: '',
       links: [],
-      founded: '',
+      industry: '',      // NOUVEAU
+      companySize: '',   // NOUVEAU
+      companyType: '',   // NOUVEAU
+      foundedYear: '',   // NOUVEAU
+      specialties: [],   // NOUVEAU
       priceRange: '',
     };
 
@@ -794,10 +799,16 @@ async function scrapePageAbout(page, profileUrl) {
       if (descMatch) result.description = descMatch[1].trim().substring(0, 1000);
     }
 
-    // ── Catégorie (type de page) ──
-    // Souvent visible sous le nom ou en petites subs
+    // ── Catégorie / Industrie (type de page) ──
     const catEl = document.querySelector('[role="main"] h2 ~ div span, [role="main"] [data-testid="page-subtitle"]');
-    if (catEl) result.category = catEl.textContent?.trim() || '';
+    if (catEl) {
+      const catText = catEl.textContent?.trim() || '';
+      result.category = catText;
+      result.industry = catText; // Alias pour la cohérence
+      if (catText.includes('Entreprise') || catText.includes('Company') || catText.includes('Agence')) {
+         result.companyType = catText;
+      }
+    }
 
     // ── Téléphone ──
     const phoneMatch = bodyText.match(/(?:\+?\d[\d\s\-().]{6,20}\d)(?=\s|$|\n)/);
@@ -838,6 +849,10 @@ async function scrapePageAbout(page, profileUrl) {
         if (t.length > 5) result.address = t;
       }
     });
+    // Extraire un lien direct Google Maps si dispo (souvent en lien externe masqué)
+    document.querySelectorAll('a[href*="google.com/maps/"], a[href*="maps.google.com"], a[href*="goo.gl/maps"]').forEach(a => {
+      if (!result.mapsUrl) result.mapsUrl = a.href;
+    });
     // Fallback : regex adresse Madagascar / commune
     if (!result.address) {
       const addrMatch = bodyText.match(/(?:Trade Tower|Antananarivo|Madagascar|Mahajanga|Toamasina|Fianarantsoa|Antsiranana)[^\n]{0,100}/);
@@ -850,7 +865,24 @@ async function scrapePageAbout(page, profileUrl) {
 
     // ── Date de création / fondation ──
     const foundedMatch = bodyText.match(/(?:Créée?\s+le|Founded?|Création)[\s:]*([\w\s0-9,]+)(?:\n|$)/);
-    if (foundedMatch) result.founded = foundedMatch[1]?.trim() || '';
+    if (foundedMatch) {
+       result.foundedYear = foundedMatch[1]?.trim() || '';
+    }
+
+    // ── Taille de l'entreprise (heuristique texte) ──
+    const sizeMatch = bodyText.match(/(?:Employés?|Employees?|Taille de l'entreprise?)[\s:]*([\d\-\+]+)(?:\s+employés?)?/i);
+    if (sizeMatch) {
+        result.companySize = sizeMatch[1]?.trim() || '';
+    }
+
+    // ── Spécialisations (si on trouve des listes) ──
+    const specHeader = document.evaluate('//span[contains(text(),"Specialties") or contains(text(),"Spécialisations")]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+    if (specHeader && specHeader.parentElement) {
+       const textBelow = specHeader.parentElement.nextElementSibling?.textContent?.trim();
+       if (textBelow) {
+          result.specialties = textBelow.split(',').map(s => s.trim()).filter(Boolean);
+       }
+    }
 
     // ── Gamme de prix ──
     const priceMatch = bodyText.match(/[€$£]{1,3}/);
@@ -916,13 +948,16 @@ async function scrapeSearchPosts(page) {
       const author = el.querySelector('h2 a, h3 a, [role="link"] span')?.textContent?.trim() || '';
       const authorTitle = el.querySelector('h2 + div span, h3 + div span')?.textContent?.trim() || '';
       const date = el.querySelector('abbr[data-utime], a[aria-label] span')?.textContent?.trim() || '';
-      const textEl = el.querySelector('[data-ad-comet-preview="message"], [data-testid="post_message"], [dir="auto"] > div > span');
-      const text = getText(textEl || el.querySelector('[dir="auto"]')).substring(0, 1000);
+      const textEl = el.querySelector('[data-ad-comet-preview="message"], [data-testid="post_message"]')
+        || el.querySelector('div[dir="auto"][style*="text-align: start"]')
+        || el.querySelector('[dir="auto"] > div > span')
+        || el.querySelector('[dir="auto"]');
+      const text = getText(textEl).substring(0, 1000);
       const likes = el.querySelector('[aria-label*="reaction"], [aria-label*="réaction"]')?.textContent?.trim() || '0';
       const comments = el.querySelector('[aria-label*="comment"], [aria-label*="commentaire"]')?.textContent?.trim() || '0';
       let postUrl = '';
       el.querySelectorAll('a[href*="/posts/"], a[href*="/permalink/"]').forEach(a => { if (!postUrl) postUrl = (a.href || '').split('?')[0]; });
-      if (text.length > 3) results.push({ author, authorTitle, date, text, likes, comments, postUrl });
+      if (text.length > 3 || postUrl) results.push({ actionType: 'Post', author: author || authorTitle, authorTitle, date, text, likes, comments, postUrl });
     });
     return results;
   }, CONFIG.maxPosts);
@@ -968,13 +1003,13 @@ async function main() {
     await login(page);
 
     emitLog(`── PHASE : SCRAPING ${CONFIG.searchType === 'pages' ? 'PAGES' : 'PERSONNES'} ─────────────────────────────────────────`);
-    
+
     // 2. Recherche et récupération de la liste
     const people = await scrapePersonList(page);
 
     const profiles = [];
     const total = Math.min(people.length, CONFIG.maxProfiles);
-    
+
     // 3. Boucle de scraping détaillé
     for (let i = 0; i < total; i++) {
       const pct = Math.round(((i) / total) * 80);
@@ -991,7 +1026,7 @@ async function main() {
           initials: (full.name || people[i].name)?.[0]?.toUpperCase() || 'F',
           position: full.headline || people[i].title || '',
           company: full.headline || people[i].title || '',
-          source: CONFIG.searchType === 'pages' ? 'facebook_page' : 'facebook',
+          source_platform: CONFIG.searchType === 'pages' ? 'facebook_page' : 'facebook',
           score: 60,
           email: full.email || '',
           phone: full.phone || '',
@@ -1032,10 +1067,10 @@ async function main() {
               posts: full.activity?.posts || [],
               comments: full.activity?.comments || [],
             },
-            contactInfo: { 
-              phones: full.phone ? [full.phone] : [], 
-              emails: full.email ? [full.email] : [], 
-              addresses: [] 
+            contactInfo: {
+              phones: full.phone ? [full.phone] : [],
+              emails: full.email ? [full.email] : [],
+              addresses: []
             },
           },
         };

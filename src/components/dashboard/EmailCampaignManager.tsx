@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
     Mail,
     Shield,
@@ -190,10 +190,20 @@ export default function EmailCampaignManager({
     const { t } = useLanguage();
     const [selected, setSelected] = useState<Campaign | null>(null);
     const [filter, setFilter] = useState("all");
+    const [isManageRecipientsOpen, setIsManageRecipientsOpen] = useState(false);
     const [isProspectSelectorOpen, setIsProspectSelectorOpen] = useState(false);
     const [isEditTemplateOpen, setIsEditTemplateOpen] = useState(false);
     const [isEditCampaignOpen, setIsEditCampaignOpen] = useState(false);
-    const [isManageRecipientsOpen, setIsManageRecipientsOpen] = useState(false);
+    const [alreadyAddedIds, setAlreadyAddedIds] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (isProspectSelectorOpen && selected && onGetRecipients) {
+            onGetRecipients(selected.id).then(recs => {
+                const ids = recs.map(r => r.prospect_id || r.id).filter(Boolean);
+                setAlreadyAddedIds(ids);
+            });
+        }
+    }, [isProspectSelectorOpen, selected, onGetRecipients]);
 
     const toggleStatus = async (id: string, currentStatus: string) => {
         const newStatus = currentStatus === "active" ? "paused" : "active";
@@ -202,8 +212,8 @@ export default function EmailCampaignManager({
             if (error) throw error;
             toast({ title: "Statut mis à jour", description: `La campagne est maintenant ${newStatus === 'active' ? 'active' : 'en pause'}.` });
             onRefresh();
-        } catch (err: any) {
-            toast({ title: t("error"), description: err.message, variant: "destructive" });
+        } catch (err: unknown) {
+            toast({ title: t("error"), description: (err instanceof Error ? err.message : "Une erreur inconnue s'est produite"), variant: "destructive" });
         }
     };
 
@@ -215,8 +225,8 @@ export default function EmailCampaignManager({
             toast({ title: "Campagne supprimée", variant: "destructive" });
             if (selected?.id === id) setSelected(null);
             onRefresh();
-        } catch (err: any) {
-            toast({ title: t("error"), description: err.message, variant: "destructive" });
+        } catch (err: unknown) {
+            toast({ title: t("error"), description: (err instanceof Error ? err.message : "Une erreur inconnue s'est produite"), variant: "destructive" });
         }
     };
 
@@ -357,6 +367,7 @@ export default function EmailCampaignManager({
             <AddRecipientDialog
                 isOpen={isProspectSelectorOpen}
                 onClose={() => setIsProspectSelectorOpen(false)}
+                alreadyAddedIds={alreadyAddedIds}
                 onSelected={(ids) => {
                     if (selected && onAddProspects) {
                         onAddProspects(selected.id, ids);
@@ -456,7 +467,7 @@ function CampaignRowCard({ campaign, onSelect, onToggle, onDelete, isSelected }:
                 </div>
 
                 {/* Quick Stats Grid */}
-                <div className="grid grid-cols-4 gap-2">
+                <div className="grid grid-cols-5 gap-2">
                     <div className="bg-slate-50 dark:bg-slate-950/30 p-2 rounded text-center">
                         <div className="text-[9px] text-slate-500 font-bold uppercase">Envoyés</div>
                         <div className="text-xs font-mono font-black text-blue-400">{campaign.sent_count || 0}</div>
@@ -472,6 +483,10 @@ function CampaignRowCard({ campaign, onSelect, onToggle, onDelete, isSelected }:
                     <div className="bg-slate-50 dark:bg-slate-950/30 p-2 rounded text-center">
                         <div className="text-[9px] text-slate-500 font-bold uppercase">Rebonds</div>
                         <div className="text-xs font-mono font-black text-red-500">{campaign.bounced_count || 0}</div>
+                    </div>
+                    <div className="bg-slate-50 dark:bg-slate-950/30 p-2 rounded text-center">
+                        <div className="text-[9px] text-slate-500 font-bold uppercase border-orange-500/20 text-orange-600">Désabos</div>
+                        <div className="text-xs font-mono font-black text-orange-500">{campaign.unsubscribed_count || 0}</div>
                     </div>
                 </div>
             </CardContent>
@@ -500,11 +515,18 @@ function CampaignDetailSidePanel({ campaign, onClose, onLaunchBatch, onAddProspe
                     <div className="text-[10px] font-bold text-emerald-500 uppercase mt-0.5">{campaign.status}</div>
                 </div>
                 <div className="flex items-center gap-2">
-                    {campaign.status === 'active' && onLaunchBatch && (
-                        <Button size="sm" onClick={handleLaunch} disabled={isLaunching || campaign.sent_today >= campaign.daily_limit} className="bg-accent text-accent-foreground h-8 text-xs font-bold shadow-md hover:bg-accent/90">
-                            {isLaunching ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <Send className="w-4 h-4 mr-1" />}
-                            Lancer l'envoi du jour
-                        </Button>
+                    {campaign.status === 'active' && (
+                        <div className="flex flex-col items-end mr-2">
+                            <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/50 text-[10px] mb-1 px-2 py-0.5">
+                                <Zap size={10} className="mr-1 inline animate-pulse" /> Envoi Automatisé (Toutes les 5 min)
+                            </Badge>
+                            {onLaunchBatch && (
+                                <button onClick={handleLaunch} disabled={isLaunching || campaign.sent_today >= campaign.daily_limit} className="text-[10px] text-slate-400 hover:text-slate-600 underline disabled:opacity-50">
+                                    {isLaunching ? <Loader2 className="w-3 h-3 animate-spin inline mr-1" /> : null}
+                                    Forcer un envoi manuel
+                                </button>
+                            )}
+                        </div>
                     )}
                     <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
                         <X size={18} />
@@ -551,10 +573,13 @@ function CampaignDetailSidePanel({ campaign, onClose, onLaunchBatch, onAddProspe
 
                 {/* Main Detailed Stats */}
                 <div className="grid grid-cols-2 gap-3">
-                    <StatCard label="Délivrabilité" value={`${delivRate}%`} IconComponent={CheckCircle} colorClass="text-emerald-500" sub={`${campaign.sent_count - campaign.bounced_count} livrés`} />
-                    <StatCard label="Taux d'ouverture" value={`${openRate}%`} IconComponent={Mail} colorClass="text-blue-500" sub={`${campaign.opened_count} ouverts`} />
-                    <StatCard label="Taux de clic" value={`${clickRate}%`} IconComponent={Zap} colorClass="text-purple-500" sub={`${campaign.clicked_count} clics`} />
-                    <StatCard label="Rebonds" value={campaign.bounced_count} IconComponent={AlertTriangle} colorClass="text-red-500" sub={`${pct(campaign.bounced_count, campaign.sent_count)}%`} />
+                    <StatCard label="Délivrabilité" value={`${delivRate}%`} IconComponent={CheckCircle} colorClass="text-emerald-500" sub={`${campaign.sent_count - (campaign.bounced_count || 0)} livrés`} />
+                    <StatCard label="Taux d'ouverture" value={`${openRate}%`} IconComponent={Mail} colorClass="text-blue-500" sub={`${campaign.opened_count || 0} ouverts`} />
+                    <StatCard label="Taux de clic" value={`${clickRate}%`} IconComponent={Zap} colorClass="text-purple-500" sub={`${campaign.clicked_count || 0} clics`} />
+                    <StatCard label="Rebonds" value={campaign.bounced_count || 0} IconComponent={AlertTriangle} colorClass="text-red-500" sub={`${pct(campaign.bounced_count || 0, campaign.sent_count)}%`} />
+                    <div className="col-span-2">
+                        <StatCard label="Désabonnements" value={campaign.unsubscribed_count || 0} IconComponent={Users} colorClass="text-orange-500" sub={`${pct(campaign.unsubscribed_count || 0, campaign.sent_count)}%`} />
+                    </div>
                 </div>
 
                 {/* Spam Analysis Sidebar */}

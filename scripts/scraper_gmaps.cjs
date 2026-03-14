@@ -66,11 +66,11 @@ async function main() {
       const consentBtn = page.locator('button:has-text("Tout accepter"), button:has-text("Accept all")');
       if (await consentBtn.count() > 0) {
         await consentBtn.first().click();
-        await sleep(1500);
+        await sleep(750);
       }
     } catch (_) {}
 
-    await sleep(3000);
+    await sleep(1500);
     emitLog('🔍 Analyse de la zone géographique et extraction des nœuds...', 20);
 
     const results = [];
@@ -109,7 +109,7 @@ async function main() {
             try {
               detailPage = await ctx.newPage();
               await detailPage.goto(href, { waitUntil: 'domcontentloaded', timeout: 15000 });
-              await sleep(1500);
+              await sleep(750);
               
               const detail = await detailPage.evaluate(() => {
                  const getAttr = (sel, attr) => document.querySelector(sel)?.getAttribute(attr) || '';
@@ -186,7 +186,7 @@ async function main() {
         const feed = document.querySelector('[role="feed"]');
         if (feed) feed.scrollBy(0, 600);
       });
-      await sleep(1500);
+      await sleep(750);
 
       // Check if all loaded
       const endText = await page.locator("text=Vous avez atteint la fin").count().catch(() => 0);

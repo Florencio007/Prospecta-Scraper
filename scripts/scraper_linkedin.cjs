@@ -7,7 +7,7 @@ function emitLog(msg, pct = undefined) {
   process.stdout.write(`PROGRESS:${JSON.stringify({ percentage: pct, message: msg })}\n`);
 }
 
-const [,, argEmail, argPass, argQuery, argMax, argMaxPosts, argSearchType, argActivityType] = process.argv;
+const [, , argEmail, argPass, argQuery, argMax, argMaxPosts, argSearchType, argActivityType] = process.argv;
 
 const CONFIG = {
   email: argEmail || 'yurihandria@gmail.com',
@@ -19,12 +19,35 @@ const CONFIG = {
   activityType: (argActivityType === 'posts' || argActivityType === 'comments') ? argActivityType : 'all',
   outputFile: 'linkedin-results.json',
   headless: false,
-  delay: 2500,
+  delay: 1000,
 };
 
 emitLog(`🚀 LinkedIn Scraper — mode complet\n`);
 if (argEmail) {
   emitLog(`[LinkedIn Scraper] Configuration active : Query="${CONFIG.searchQuery}", Max=${CONFIG.maxProfiles}, Type=${CONFIG.searchType}`);
+  // Debug-mode instrumentation: report effective limits to central logger (best-effort)
+  try {
+    fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Debug-Session-Id': 'ef6e8d',
+      },
+      body: JSON.stringify({
+        sessionId: 'ef6e8d',
+        runId: 'linkedin-limit-pre-fix',
+        hypothesisId: 'L4',
+        location: 'scripts/scraper_linkedin.cjs:12-23',
+        message: 'LinkedIn scraper CONFIG initialized',
+        data: {
+          maxProfiles: CONFIG.maxProfiles,
+          maxPosts: CONFIG.maxPosts,
+          activityType: CONFIG.activityType,
+        },
+        timestamp: Date.now(),
+      }),
+    }).catch(() => { });
+  } catch (_) { }
 }
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -49,12 +72,12 @@ async function promptSearchType() {
 async function login(page) {
   emitLog('🔐 Connexion à LinkedIn...');
   await page.goto('https://www.linkedin.com/login', { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await sleep(2000);
+  await sleep(1000);
   await page.waitForSelector('#username', { timeout: 10000 });
   await page.fill('#username', CONFIG.email);
-  await sleep(400);
+  await sleep(200);
   await page.fill('#password', CONFIG.password);
-  await sleep(400);
+  await sleep(200);
 
   try {
     const keepLoggedCheckbox = await page.$('#rememberMeOptIn-checkbox');
@@ -63,10 +86,10 @@ async function login(page) {
       if (isChecked) {
         const labelText = await page.$('[for="rememberMeOptIn-checkbox"]');
         if (labelText) await labelText.click();
-        await sleep(400);
+        await sleep(200);
       }
     }
-  } catch (e) {}
+  } catch (e) { }
 
   await page.click('[type="submit"]');
 
@@ -107,7 +130,7 @@ async function scrapePersonList(page) {
   const endpoint = CONFIG.searchType === 'companies' ? 'companies' : 'people';
   const allPeople = [];
   let currentPage = 1;
-  const maxPages = Math.ceil(CONFIG.maxProfiles / 10) + 2; 
+  const maxPages = Math.ceil(CONFIG.maxProfiles / 10) + 2;
 
   while (allPeople.length < CONFIG.maxProfiles && currentPage <= maxPages) {
     const url = `https://www.linkedin.com/search/results/${endpoint}/?keywords=${encodeURIComponent(CONFIG.searchQuery)}&page=${currentPage}`;
@@ -178,7 +201,7 @@ async function scrapeContactInfo(page) {
     email = data.email; phone = data.phone; website = data.website;
     const closeBtn = page.locator('button[aria-label="Ignorer"], button[aria-label="Dismiss"], .artdeco-modal__dismiss').first();
     if (await closeBtn.isVisible({ timeout: 2000 }).catch(() => false)) { await closeBtn.click(); await sleep(500); }
-  } catch (_) {}
+  } catch (_) { }
   return { email, phone, website };
 }
 
@@ -195,7 +218,7 @@ async function scrapeMainProfile(page, profileUrl) {
       document.querySelectorAll('button.inline-show-more-text__button, button[aria-label*="voir plus"], button[aria-label*="show more"]').forEach(b => b.click());
     });
     await sleep(500);
-  } catch (_) {}
+  } catch (_) { }
 
   const contact = await scrapeContactInfo(page);
 
@@ -695,7 +718,7 @@ async function scrapeFullProfile(page, person) {
   const main = await scrapeMainProfile(page, person.profileUrl);
   await sleep(CONFIG.delay);
   const skills = await scrapeSkills(page, person.profileUrl).catch(() => []);
-  
+
   let posts = [];
   let comments = [];
   if (CONFIG.activityType === 'all' || CONFIG.activityType === 'posts') {
@@ -729,14 +752,14 @@ async function main() {
     await login(page);
 
     emitLog(`── PHASE : SCRAPING ${CONFIG.searchType.toUpperCase()} ─────────────────────────────────────────`);
-    
+
     const people = await scrapePersonList(page);
 
     const profiles = [];
     const total = Math.min(people.length, CONFIG.maxProfiles);
-    
+
     for (let i = 0; i < total; i++) {
-      const pct = Math.round(((i) / total) * 80); 
+      const pct = Math.round(((i) / total) * 80);
       process.stdout.write(`PROGRESS:${JSON.stringify({ percentage: pct, message: `Scraping ${i + 1}/${total}: ${people[i].name}` })}\n`);
 
       try {
@@ -784,10 +807,10 @@ async function main() {
               posts: full.activity?.posts || [],
               comments: full.activity?.comments || [],
             },
-            contactInfo: { 
-              phones: full.phone ? [full.phone] : [], 
-              emails: full.email ? [full.email] : [], 
-              addresses: full.headquarters ? [full.headquarters] : [] 
+            contactInfo: {
+              phones: full.phone ? [full.phone] : [],
+              emails: full.email ? [full.email] : [],
+              addresses: full.headquarters ? [full.headquarters] : []
             },
           },
         };

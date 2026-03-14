@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 
-export type ApiProvider = 'brevo' | 'openai' | 'google_maps' | 'facebook' | 'linkedin' | 'twilio';
+export type ApiProvider = 'brevo' | 'openai' | 'google_maps' | 'facebook' | 'linkedin' | 'twilio' | 'smtp';
 
 export interface ApiKey {
     id: string;
@@ -34,9 +34,9 @@ export function useApiKeys() {
                 .order('created_at', { ascending: false });
             if (error) { setError(error.message); return []; }
             return data || [];
-        } catch (err: any) {
+        } catch (err: unknown) {
             console.error("getKeys internal error:", err);
-            setError(err.message || 'Error fetching keys');
+            setError((err instanceof Error ? err.message : "Une erreur inconnue s'est produite") || 'Error fetching keys');
             return [];
         } finally {
             setLoading(false);
@@ -108,16 +108,27 @@ export function useApiKeys() {
             if (provider === 'brevo') {
                 const headers = { 
                     'api-key': key, 
-                    'x-sib-api-key': key,
                     'Accept': 'application/json',
                     'Content-Type': 'application/json' 
                 };
 
+                // Test account access
                 const res = await fetch('https://api.brevo.com/v3/account', { headers });
                 const data = await res.json();
                 
-                if (res.ok) {
-                    result = { ok: true, message: `Compte Brevo : ${data.email || 'connecté'}` };
+                if (!res.ok) {
+                    result = { ok: false, message: `Erreur Brevo : ${data.message || 'Clé invalide'}` };
+                } else {
+                    // Check verified senders
+                    const sendersRes = await fetch('https://api.brevo.com/v3/senders', { headers });
+                    let sendersMessage = '';
+                    if (sendersRes.ok) {
+                        const sendersData = await sendersRes.json();
+                        const verifiedCount = sendersData.senders?.filter((s: any) => s.active).length || 0;
+                        sendersMessage = ` - ${verifiedCount} email(s) vérifié(s)`;
+                    }
+                    
+                    result = { ok: true, message: `Compte Brevo : ${data.email || 'connecté'}${sendersMessage}` };
                     
                     try {
                         const baseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -157,8 +168,6 @@ export function useApiKeys() {
                     } catch (webhookErr) {
                         console.error('Webhook automation error:', webhookErr);
                     }
-                } else {
-                    result = { ok: false, message: data.message || 'Clé invalide' };
                 }
             } else if (provider === 'openai') {
                 const res = await fetch('https://api.openai.com/v1/models', {

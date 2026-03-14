@@ -69,6 +69,7 @@ const Prospects = () => {
   const [filterPhone, setFilterPhone] = useState(false);
   const [filterLinkedin, setFilterLinkedin] = useState(false);
   const [filterWebsite, setFilterWebsite] = useState(false);
+  const [isBulkDeleteConfirmOpen, setIsBulkDeleteConfirmOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
   const [debouncedSearch, setDebouncedSearch] = useState("");
@@ -325,6 +326,26 @@ const Prospects = () => {
     }
   };
 
+  const handleBulkDelete = async () => {
+    if (selectedIds.size === 0) return;
+    try {
+      const { error } = await supabase
+        .from("prospects")
+        .delete()
+        .in("id", Array.from(selectedIds));
+      if (error) throw error;
+      toast({ 
+        title: t("success"), 
+        description: t("bulkDeleteSuccess", { count: selectedIds.size }) 
+      });
+      setSelectedIds(new Set());
+      setIsBulkDeleteConfirmOpen(false);
+      loadProspects(true);
+    } catch (error: any) {
+      toast({ title: t("error"), description: error.message, variant: "destructive" });
+    }
+  };
+
   const handleCleanDuplicates = async () => {
     if (!user || prospects.length === 0) return;
 
@@ -391,7 +412,7 @@ const Prospects = () => {
   return (
     <div className="min-h-screen bg-secondary">
       <Header />
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 py-8">
+      <main className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-8">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
             <h1 className="text-3xl font-bold text-foreground">{t("myProspects")}</h1>
@@ -541,6 +562,15 @@ const Prospects = () => {
               </Button>
 
               <Button
+                variant="destructive"
+                onClick={() => setIsBulkDeleteConfirmOpen(true)}
+                className="rounded-full h-9 px-6 text-xs font-bold transition-all active:scale-95"
+              >
+                <Trash2 size={14} className="mr-2" />
+                {t("delete")}
+              </Button>
+
+              <Button
                 variant="ghost"
                 onClick={() => setSelectedIds(new Set())}
                 className="text-slate-400 hover:text-white hover:bg-slate-800 rounded-full h-9 px-4 text-xs font-medium"
@@ -588,6 +618,23 @@ const Prospects = () => {
           <AlertDialogFooter>
             <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteProspect} className="bg-destructive">{t("delete")}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={isBulkDeleteConfirmOpen} onOpenChange={setIsBulkDeleteConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{t("irreversibleDeletion")}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {t("confirmBulkDelete", { count: selectedIds.size })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleBulkDelete} className="bg-destructive">
+              {t("delete")}
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

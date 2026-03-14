@@ -1,6 +1,7 @@
-const fs = require('fs');
+import { readFileSync, writeFileSync } from 'fs';
+
 const pathStr = './src/pages/ProspectFinder.tsx';
-let code = fs.readFileSync(pathStr, 'utf8');
+let code = readFileSync(pathStr, 'utf8');
 
 // 1. Prepare logic for aggregated progress
 const stateInit = `  const [channelProgress, setChannelProgress] = useState<Record<string, number>>({});`;

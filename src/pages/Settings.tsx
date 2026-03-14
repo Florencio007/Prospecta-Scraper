@@ -96,7 +96,7 @@ const Settings = () => {
           userServiceDescription: data.user_service_description || "",
         }));
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching service description:", err);
     }
   };
@@ -127,7 +127,7 @@ const Settings = () => {
           fromEmail: data.from_email,
         });
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching SMTP settings:", err);
     }
   };
@@ -154,7 +154,7 @@ const Settings = () => {
           password: data.password,
         });
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error fetching LinkedIn settings:", err);
     }
   };
@@ -168,7 +168,7 @@ const Settings = () => {
         fetchSmtpSettings(),
         fetchLinkedinSettings(),
       ]);
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError("Erreur lors du chargement des paramètres.");
     } finally {
       setLoading(false);
@@ -621,7 +621,7 @@ const Settings = () => {
     <div className="min-h-screen bg-secondary">
       <Header />
 
-      <main className="mx-auto max-w-4xl px-4 sm:px-6 py-8">
+      <main className="mx-auto max-w-4xl px-4 sm:px-6 pt-20 pb-8">
         <div className="mb-8">
           <h1 className="text-2xl sm:text-3xl font-bold text-foreground">{t("settings")}</h1>
           <p className="text-foreground font-light mt-1">
@@ -761,8 +761,12 @@ const Settings = () => {
                     <Input
                       type="number"
                       placeholder="587"
+                      min="0"
                       value={smtpSettings.port}
-                      onChange={(e) => setSmtpSettings({ ...smtpSettings, port: parseInt(e.target.value) })}
+                      onChange={(e) => {
+                        const val = e.target.value === "" ? 0 : parseInt(e.target.value);
+                        setSmtpSettings({ ...smtpSettings, port: isNaN(val) ? 0 : val });
+                      }}
                     />
                   </div>
                   <div className="space-y-2">

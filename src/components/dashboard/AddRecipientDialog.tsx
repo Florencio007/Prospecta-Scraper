@@ -64,8 +64,12 @@ export default function AddRecipientDialog({ isOpen, onClose, onSelected, onManu
 
             const flattened = data?.map((p: any) => {
                 const pd = Array.isArray(p.prospect_data) ? (p.prospect_data[0] || {}) : (p.prospect_data || {});
+                // IMPORTANT:
+                // importFromProspects(campaignId, prospectIds) attend des IDs correspondant à prospect_data.prospect_id
+                // donc on utilise en priorité pd.prospect_id comme identifiant, avec fallback sur p.id.
+                const effectiveId = pd.prospect_id || p.id;
                 return {
-                    id: p.id,
+                    id: effectiveId,
                     name: pd.name || p.name || 'Nom inconnu',
                     company: pd.company || p.company || 'Entreprise inconnue',
                     email: pd.email || p.email || '',
@@ -119,8 +123,8 @@ export default function AddRecipientDialog({ isOpen, onClose, onSelected, onManu
             await onManualAdd(manualData);
             toast({ title: "Destinataire ajouté" });
             onClose();
-        } catch (err: any) {
-            toast({ title: "Erreur", description: err.message, variant: "destructive" });
+        } catch (err: unknown) {
+            toast({ title: "Erreur", description: (err instanceof Error ? err.message : "Une erreur inconnue s'est produite"), variant: "destructive" });
         } finally {
             setIsSaving(false);
         }

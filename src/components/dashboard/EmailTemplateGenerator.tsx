@@ -77,10 +77,10 @@ const EmailTemplateGenerator = () => {
         title: "Template généré",
         description: "Votre template a été créé avec succès par l'IA.",
       });
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Erreur",
-        description: err.message,
+        description: (err instanceof Error ? err.message : "Une erreur inconnue s'est produite"),
         variant: "destructive",
       });
     } finally {
@@ -128,10 +128,10 @@ const EmailTemplateGenerator = () => {
       });
       setIsSaveDialogOpen(false);
       setTemplateName("");
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Erreur lors de la sauvegarde",
-        description: err.message,
+        description: (err instanceof Error ? err.message : "Une erreur inconnue s'est produite"),
         variant: "destructive",
       });
     } finally {

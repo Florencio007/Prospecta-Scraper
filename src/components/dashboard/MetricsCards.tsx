@@ -26,27 +26,35 @@ const MetricsCards = () => {
           .eq('user_id', user.id);
 
         // Count messages sent (from email_events)
-        const { count: messagesSentCount } = await supabase
-          .from('email_events')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id)
-          .eq('event_type', 'sent');
+        let messagesSentCount = 0;
+        let openedCount = 0;
 
-        // Count opened emails for response rate
-        const { count: openedCount } = await supabase
-          .from('email_events')
-          .select('*', { count: 'exact', head: true })
-          .eq('user_id', user.id)
-          .eq('event_type', 'opened');
+        try {
+          const { count: sent } = await supabase
+            .from('email_events')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', user.id)
+            .eq('event_type', 'sent');
+          messagesSentCount = sent || 0;
 
-        const responseRate = messagesSentCount && messagesSentCount > 0
-          ? ((openedCount || 0) / messagesSentCount) * 100
+          const { count: opened } = await supabase
+            .from('email_events')
+            .select('*', { count: 'exact', head: true })
+            .eq('user_id', user.id)
+            .eq('event_type', 'opened');
+          openedCount = opened || 0;
+        } catch (e) {
+          console.warn('[Metrics] could not fetch email_events (table might be missing):', e);
+        }
+
+        const responseRate = messagesSentCount > 0
+          ? (openedCount / messagesSentCount) * 100
           : 0;
 
         setMetrics({
           totalProspects: prospectsCount || 0,
           responseRate: responseRate,
-          messagesSent: messagesSentCount || 0,
+          messagesSent: messagesSentCount,
         });
       } catch (error) {
         console.error('Error fetching metrics:', error);

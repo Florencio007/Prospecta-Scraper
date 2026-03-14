@@ -6,7 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { Eye, EyeOff, ExternalLink, Loader2, CheckCircle2, XCircle, Clock, AlertTriangle, Key } from 'lucide-react';
+import { Eye, EyeOff, ExternalLink, Loader2, CheckCircle2, XCircle, Clock, AlertTriangle, Key, Server } from 'lucide-react';
+import { testEmailSend, testSmtpConnection } from '@/services/emailService';
 
 const PROVIDERS_CONFIG = [
     {
@@ -77,6 +78,208 @@ const PROVIDERS_CONFIG = [
     },
 ];
 
+// ---- SMTP Configuration Card ----
+const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpdate: () => void }) => {
+    const { saveKey, deleteKey } = useApiKeys();
+    const { toast } = useToast();
+
+    const parseSmtp = (raw?: string) => {
+        if (!raw) return { host: '', port: '587', user: '', pass: '' };
+        try { return JSON.parse(raw); } catch { return { host: raw, port: '587', user: '', pass: '' }; }
+    };
+
+    const saved = parseSmtp(existingConfig?.api_key);
+    const [host, setHost] = useState(saved.host || '');
+    const [port, setPort] = useState(String(saved.port || '587'));
+    const [user, setUser] = useState(saved.user || '');
+    const [pass, setPass] = useState(saved.pass || '');
+    const [showPass, setShowPass] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isTesting, setIsTesting] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [testEmail, setTestEmail] = useState('');
+    const [isSendingTest, setIsSendingTest] = useState(false);
+    const [isTestSuccess, setIsTestSuccess] = useState(existingConfig?.last_test_status === 'success');
+
+    useEffect(() => {
+        const s = parseSmtp(existingConfig?.api_key);
+        setHost(s.host || ''); setPort(String(s.port || '587')); setUser(s.user || ''); setPass(s.pass || '');
+        // Only set the initial DB test success status if we don't already have one locally
+        setIsTestSuccess((prev) => prev || existingConfig?.last_test_status === 'success');
+    }, [existingConfig]);
+    
+    // Reset test success if credentials changed
+    useEffect(() => {
+        setIsTestSuccess(false);
+    }, [host, port, user, pass]);
+
+    const handleSave = async () => {
+        if (!host || !user || !pass) {
+            toast({ title: 'Erreur', description: 'Host, email et mot de passe sont requis.', variant: 'destructive' }); return;
+        }
+        setIsSaving(true);
+        const cfg = JSON.stringify({ host, port: parseInt(port) || 587, user, pass });
+        const ok = await saveKey('smtp' as ApiProvider, cfg, 'Serveur SMTP');
+        setIsSaving(false);
+        if (ok) { toast({ title: 'SMTP Sauvegardé', description: 'Configuration SMTP enregistrée.' }); onUpdate(); }
+        else { toast({ title: 'Erreur', description: 'Impossible de sauvegarder.', variant: 'destructive' }); }
+    };
+
+    const handleTest = async () => {
+        if (!host || !user || !pass) {
+            toast({ title: 'Erreur', description: 'Remplissez tous les champs avant de tester.', variant: 'destructive' }); return;
+        }
+        setIsTesting(true);
+        const result = await testSmtpConnection(host, parseInt(port) || 587, user, pass);
+        setIsTesting(false);
+        if (result.ok) { 
+            toast({ title: '✅ Connexion SMTP réussie !', description: result.message }); 
+            setIsTestSuccess(true);
+        }
+        else { toast({ title: 'Échec SMTP', description: result.message, variant: 'destructive' }); }
+        // Note: Do NOT call onUpdate() here. Testing a connection doesn't save it to DB,
+        // and calling onUpdate() triggers a parent re-render that might destroy our local isTestSuccess state.
+    };
+
+    const handleSendTestEmail = async () => {
+        if (!testEmail || !testEmail.includes('@')) {
+            toast({ title: 'Erreur', description: 'Email invalide', variant: 'destructive' });
+            return;
+        }
+        setIsSendingTest(true);
+        try {
+            const formData = {
+                smtpHost: host,
+                smtpPort: port,
+                smtpUser: user,
+                smtpPass: pass,
+                to: [{ email: testEmail, name: 'Test User' }],
+                sender: { email: existingConfig?.api_key ? parseSmtp(existingConfig.api_key).user : user, name: 'Prospecta AI' },
+                subject: 'Test de configuration SMTP - Prospecta',
+                htmlContent: '<h1>Félicitations !</h1><p>Votre configuration SMTP fonctionne parfaitement sur Prospecta AI.</p>'
+            };
+            
+            // Re-use testEmailSend but pass the smtp id since it now handles both internally given the provider logic
+            const success = await testEmailSend('smtp', formData);
+            if (success) {
+                toast({ title: 'Email envoyé !', description: 'Vérifiez votre boîte de réception.' });
+                setTestEmail('');
+            } else {
+                throw new Error("Erreur d'envoi SMTP");
+            }
+        } catch (error: any) {
+             toast({ title: 'Erreur d\'envoi', description: error.message || "Impossible d'envoyer l'email", variant: 'destructive' });
+        } finally {
+            setIsSendingTest(false);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!confirm('Supprimer la configuration SMTP ?')) return;
+        setIsDeleting(true);
+        await deleteKey('smtp' as ApiProvider);
+        setIsDeleting(false);
+        setHost(''); setUser(''); setPass('');
+        toast({ title: 'SMTP Supprimé' }); onUpdate();
+    };
+
+    const gmailGuide = 'https://support.google.com/accounts/answer/185833';
+
+    return (
+        <Card className="border-2 border-emerald-500/30 shadow-[0_0_15px_rgba(52,211,153,0.08)] col-span-1 md:col-span-2">
+            <CardHeader className="pb-3 bg-emerald-500/5 rounded-t-lg">
+                <div className="flex justify-between items-start">
+                    <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-xl bg-emerald-500 flex items-center justify-center">
+                            <Server size={20} className="text-white" />
+                        </div>
+                        <div>
+                            <CardTitle className="text-lg flex items-center gap-2">
+                                Email SMTP (Sans API)
+                                <Badge className="bg-emerald-500 text-white text-[10px] h-5">Recommandé</Badge>
+                            </CardTitle>
+                            <CardDescription className="text-xs">Envoyez via Gmail, OVH, ou votre propre serveur — 0 API, tracking d'ouverture inclus</CardDescription>
+                        </div>
+                    </div>
+                    {existingConfig && (
+                        <Badge variant={existingConfig.last_test_status === 'success' ? 'default' : 'secondary'}>
+                            {existingConfig.last_test_status === 'success' ? <><CheckCircle2 className="w-3 h-3 mr-1" />Connecté</> : 'Non testé'}
+                        </Badge>
+                    )}
+                </div>
+            </CardHeader>
+            <CardContent className="space-y-4 pt-4">
+                <div className="grid grid-cols-3 gap-4">
+                    <div className="col-span-2 space-y-1">
+                        <Label className="text-xs font-semibold">Serveur SMTP (Host)</Label>
+                        <Input placeholder="smtp.gmail.com" value={host} onChange={e => setHost(e.target.value)} className="bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
+                    </div>
+                    <div className="space-y-1">
+                        <Label className="text-xs font-semibold">Port</Label>
+                        <Input placeholder="587" value={port} onChange={e => setPort(e.target.value)} className="bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
+                    </div>
+                </div>
+                <div className="space-y-1">
+                    <Label className="text-xs font-semibold">Email (utilisateur)</Label>
+                    <Input type="email" placeholder="votre@gmail.com" value={user} onChange={e => setUser(e.target.value)} className="bg-slate-50 dark:bg-slate-900 text-sm" />
+                </div>
+                <div className="space-y-1">
+                    <div className="flex justify-between">
+                        <Label className="text-xs font-semibold">Mot de passe / App Password</Label>
+                        <a href={gmailGuide} target="_blank" rel="noopener noreferrer" className="text-[10px] text-emerald-600 hover:underline flex items-center">Guide Gmail <ExternalLink className="w-3 h-3 ml-1" /></a>
+                    </div>
+                    <div className="relative">
+                        <Input type={showPass ? 'text' : 'password'} placeholder="••••••••••••" value={pass} onChange={e => setPass(e.target.value)} className="pr-10 bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
+                        <Button type="button" variant="ghost" size="icon" className="absolute right-0 top-0 h-full px-3" onClick={() => setShowPass(!showPass)}>
+                            {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </Button>
+                    </div>
+                </div>
+                <div className="bg-blue-50 dark:bg-blue-950/30 p-3 rounded-lg border border-blue-100 dark:border-blue-900 text-[11px] text-blue-700 dark:text-blue-300">
+                    <strong>Gmail :</strong> Activez la 2FA, puis créez un "Mot de passe d'application" (App Password). Utilisez ce mot de passe ici, pas votre mot de passe habituel.
+                </div>
+                
+                {isTestSuccess && (
+                    <div className="pt-4 border-t border-slate-200 dark:border-slate-800 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <Label className="text-xs mb-2 block font-semibold text-emerald-600 dark:text-emerald-400">2. Envoyer un email de test (Recommandé)</Label>
+                        <div className="flex gap-2">
+                            <Input
+                                placeholder="Email de destination pour le test..."
+                                value={testEmail}
+                                onChange={(e) => setTestEmail(e.target.value)}
+                                className="flex-1 text-sm bg-slate-50 dark:bg-slate-900"
+                            />
+                            <Button
+                                variant="secondary"
+                                onClick={handleSendTestEmail}
+                                disabled={isSendingTest || !testEmail}
+                                className="whitespace-nowrap font-medium text-xs bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
+                            >
+                                {isSendingTest ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : null}
+                                Envoyer
+                            </Button>
+                        </div>
+                    </div>
+                )}
+            </CardContent>
+            <CardFooter className="bg-slate-50 dark:bg-slate-900/50 flex justify-between rounded-b-lg border-t px-6 py-4">
+                <div />
+                <div className="flex gap-2">
+                    {existingConfig && (
+                        <Button variant="ghost" size="sm" onClick={handleDelete} disabled={isDeleting} className="text-destructive hover:bg-destructive/10">Supprimer</Button>
+                    )}
+                    <Button variant="outline" size="sm" onClick={handleTest} disabled={isTesting || !host}>
+                        {isTesting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Tester la connexion'}
+                    </Button>
+                    <Button size="sm" onClick={handleSave} disabled={isSaving || !host} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                        {isSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null} Sauvegarder
+                    </Button>
+                </div>
+            </CardFooter>
+        </Card>
+    );
+};
+
 const ApiKeyCard = ({ providerConfig, existingKey, onUpdate }: { providerConfig: any, existingKey?: ApiKey, onUpdate: () => void }) => {
     const { saveKey, testKey, deleteKey } = useApiKeys();
     const { toast } = useToast();
@@ -88,6 +291,7 @@ const ApiKeyCard = ({ providerConfig, existingKey, onUpdate }: { providerConfig:
     const [isSaving, setIsSaving] = useState(false);
     const [isTesting, setIsTesting] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [testEmail, setTestEmail] = useState('');
 
     useEffect(() => {
         setApiKey(existingKey?.api_key || '');
@@ -114,14 +318,29 @@ const ApiKeyCard = ({ providerConfig, existingKey, onUpdate }: { providerConfig:
 
     const handleTest = async () => {
         setIsTesting(true);
-        const result = await testKey(providerConfig.id);
-        setIsTesting(false);
-
-        if (result.ok) {
-            toast({ title: "Test réussi", description: result.message });
+        
+        if (providerConfig.id === 'brevo' && testEmail) {
+            // Test email sending
+            const sendResult = await testEmailSend('brevo', {
+                brevoApiKey: apiKey,
+                to: testEmail
+            });
+            if (sendResult.messageId) {
+                toast({ title: "Test d'envoi", description: `Un email de test a été envoyé à ${testEmail}.` });
+            } else {
+                toast({ title: "Échec de l'envoi", description: sendResult.error, variant: "destructive" });
+            }
         } else {
-            toast({ title: "Échec du test", description: result.message, variant: "destructive" });
+            // Regular API test
+            const result = await testKey(providerConfig.id);
+            if (result.ok) {
+                toast({ title: "Test réussi", description: result.message });
+            } else {
+                toast({ title: "Échec du test", description: result.message, variant: "destructive" });
+            }
         }
+        
+        setIsTesting(false);
         onUpdate();
     };
 
@@ -219,6 +438,19 @@ const ApiKeyCard = ({ providerConfig, existingKey, onUpdate }: { providerConfig:
                         </div>
                     </div>
                 )}
+                {providerConfig.id === 'brevo' && existingKey && (
+                    <div className="space-y-2">
+                        <Label className="text-xs font-semibold">Email de test (optionnel)</Label>
+                        <Input
+                            type="email"
+                            placeholder="votre@email.com"
+                            value={testEmail}
+                            onChange={(e) => setTestEmail(e.target.value)}
+                            className="bg-slate-50 dark:bg-slate-900 text-sm"
+                        />
+                        <p className="text-[10px] text-slate-500">Testez l'envoi d'un email réel pour vérifier la configuration.</p>
+                    </div>
+                )}
             </CardContent>
             <CardFooter className="bg-slate-50 dark:bg-slate-900/50 flex justify-between rounded-b-lg border-t border-slate-100 dark:border-slate-800 px-6 py-4">
                 {existingKey?.last_tested_at ? (
@@ -264,6 +496,7 @@ export const ApiKeysSettings = () => {
     }, []);
 
     const hasBrevoKey = keys.some(k => k.provider === 'brevo' && k.is_active);
+    const hasSmtpKey = keys.some(k => k.provider === 'smtp' && k.is_active);
 
     return (
         <div className="space-y-6">
@@ -277,13 +510,13 @@ export const ApiKeysSettings = () => {
                 </p>
             </div>
 
-            {!hasBrevoKey && !loading && (
+            {!hasBrevoKey && !hasSmtpKey && !loading && (
                 <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 p-4 rounded-lg flex gap-3 items-start animate-in fade-in">
                     <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
                     <div>
-                        <h4 className="font-semibold text-sm">Configuration requise pour les campagnes email</h4>
+                        <h4 className="font-semibold text-sm">Configuration email requise pour les campagnes</h4>
                         <p className="text-sm mt-1 opacity-90">
-                            Vous devez configurer votre clé API Brevo pour activer l'envoi de vos campagnes email. L'inscription est gratuite et vous donne droit à 300 emails/jour.
+                            Configurez SMTP (Gmail, OVH…) ou Brevo pour envoyer vos campagnes email.
                         </p>
                     </div>
                 </div>
@@ -295,6 +528,10 @@ export const ApiKeysSettings = () => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <SmtpCard
+                        existingConfig={keys.find(k => k.provider === 'smtp')}
+                        onUpdate={fetchKeys}
+                    />
                     {PROVIDERS_CONFIG.map((config) => (
                         <ApiKeyCard
                             key={config.id}

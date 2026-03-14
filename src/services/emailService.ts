@@ -15,27 +15,206 @@ export interface BrevoResponse {
     error?: string;
 }
 
-// Envoi d'un seul email via le backend proxy (qui appelle ensuite Brevo)
+// Test email sending
+export async function testEmailSend(provider: string, payload: any): Promise<BrevoResponse> {
+    try {
+        if (provider === 'smtp') {
+            // For SMTP, we reuse the generic send-smtp endpoint because it's transparent.
+            // payload is expected to be SmtpEmailParams-like
+            const response = await fetch('/api/email/send-smtp', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    smtpHost: payload.smtpHost,
+                    smtpPort: payload.smtpPort,
+                    smtpUser: payload.smtpUser,
+                    smtpPass: payload.smtpPass,
+                    to: payload.to[0],
+                    from: payload.sender,
+                    subject: payload.subject,
+                    htmlContent: payload.htmlContent,
+                    isTest: true // Optional flag for backend if needed
+                }),
+            });
+            if (!response.ok) {
+                const err = await response.json();
+                return { error: err.error || "Erreur SMTP" };
+            }
+            return await response.json();
+
+        } else {
+            // Brevo
+            const response = await fetch('/api/email/test', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ brevoApiKey: payload, to: payload.to }), // Legacy signature fallback
+            });
+
+            if (!response.ok) {
+                const err = await response.json();
+                return { error: err.error || (err instanceof Error ? err.message : "Une erreur inconnue s'est produite") };
+            }
+
+            const data = await response.json();
+            return { messageId: data.messageId };
+        }
+    } catch (err) {
+        return { error: `Erreur de connexion : ${(err as Error).message}` };
+    }
+}
 export async function sendSingleEmail(params: SendEmailParams): Promise<BrevoResponse> {
     try {
-        const response = await fetch('/api/email/send', {
+        // #region agent log
+        fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-Debug-Session-Id': 'ef6e8d',
             },
+            body: JSON.stringify({
+                sessionId: 'ef6e8d',
+                runId: 'pre-fix',
+                hypothesisId: 'H1',
+                location: 'src/services/emailService.ts:65',
+                message: 'sendSingleEmail called',
+                data: {
+                    toEmail: params.to?.email,
+                    fromEmail: params.from?.email,
+                    hasBrevoKey: !!params.brevoApiKey,
+                    campaignId: params.campaignId,
+                },
+                timestamp: Date.now(),
+            }),
+        }).catch(() => { });
+        // #endregion agent log
+
+        const response = await fetch('/api/email/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(params),
         });
-
         if (!response.ok) {
             const err = await response.json();
-            return { error: err.error || err.message || `Erreur Serveur ${response.status}` };
-        }
 
+            // #region agent log
+            fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Debug-Session-Id': 'ef6e8d',
+                },
+                body: JSON.stringify({
+                    sessionId: 'ef6e8d',
+                    runId: 'pre-fix',
+                    hypothesisId: 'H2',
+                    location: 'src/services/emailService.ts:72',
+                    message: 'sendSingleEmail backend error response',
+                    data: {
+                        status: response.status,
+                        errorMessage: (err as any)?.error || (err as any)?.message || null,
+                    },
+                    timestamp: Date.now(),
+                }),
+            }).catch(() => { });
+            // #endregion agent log
+
+            return { error: err.error || `Erreur Serveur ${response.status}` };
+        }
+        const data = await response.json();
+
+        // #region agent log
+        fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Debug-Session-Id': 'ef6e8d',
+            },
+            body: JSON.stringify({
+                sessionId: 'ef6e8d',
+                runId: 'pre-fix',
+                hypothesisId: 'H3',
+                location: 'src/services/emailService.ts:76',
+                message: 'sendSingleEmail success response',
+                data: {
+                    messageId: (data as any)?.messageId ?? null,
+                },
+                timestamp: Date.now(),
+            }),
+        }).catch(() => { });
+        // #endregion agent log
+
+        return { messageId: data.messageId };
+    } catch (err) {
+        // #region agent log
+        fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Debug-Session-Id': 'ef6e8d',
+            },
+            body: JSON.stringify({
+                sessionId: 'ef6e8d',
+                runId: 'pre-fix',
+                hypothesisId: 'H4',
+                location: 'src/services/emailService.ts:78',
+                message: 'sendSingleEmail threw',
+                data: {
+                    errorMessage: (err as Error)?.message ?? String(err),
+                },
+                timestamp: Date.now(),
+            }),
+        }).catch(() => { });
+        // #endregion agent log
+
+        return { error: `Erreur de connexion au serveur backend : ${(err as Error).message}` };
+    }
+}
+
+// ---- SMTP (sans API externe) ----
+export interface SmtpEmailParams {
+    smtpHost: string;
+    smtpPort: number;
+    smtpUser: string;
+    smtpPass: string;
+    to: { email: string; name?: string };
+    from: { email: string; name: string };
+    replyTo?: string;
+    subject: string;
+    htmlContent: string;
+    recipientId?: string; // for open tracking
+}
+
+export async function sendSingleEmailSmtp(params: SmtpEmailParams): Promise<BrevoResponse> {
+    try {
+        const response = await fetch('/api/email/send-smtp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(params),
+        });
+        if (!response.ok) {
+            const err = await response.json();
+            return { error: err.error || `Erreur SMTP ${response.status}` };
+        }
         const data = await response.json();
         return { messageId: data.messageId };
-
     } catch (err) {
-        return { error: `Erreur de connexion au serveur backend : ${(err as Error).message}` };
+        return { error: `Erreur de connexion SMTP : ${(err as Error).message}` };
+    }
+}
+
+export async function testSmtpConnection(host: string, port: number, user: string, pass: string): Promise<{ ok: boolean; message: string }> {
+    try {
+        const response = await fetch('/api/email/smtp-test', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ host, port, user, pass }),
+        });
+        const data = await response.json();
+        return response.ok
+            ? { ok: true, message: data.message }
+            : { ok: false, message: data.error };
+    } catch (err) {
+        return { ok: false, message: `Erreur réseau : ${(err as Error).message}` };
     }
 }
 
