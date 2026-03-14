@@ -28,7 +28,7 @@ const CONFIG = {
   // 'all' → posts + commentaires | 'posts' → posts seulement | 'comments' → commentaires seulement
   activityType: (argActivityType === 'posts' || argActivityType === 'comments') ? argActivityType : 'all',
   outputFile: 'facebook-results.json',
-  headless: false,
+  headless: true,
   delay: 2500,
 };
 
@@ -980,7 +980,15 @@ async function main() {
 
   const browser = await chromium.launch({
     headless: CONFIG.headless,
-    args: ['--lang=fr-FR', '--disable-blink-features=AutomationControlled'],
+    args: [
+      '--lang=fr-FR', 
+      '--disable-blink-features=AutomationControlled',
+      '--no-sandbox', 
+      '--disable-setuid-sandbox', 
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+      '--no-zygote'
+    ],
   });
 
   const context = await browser.newContext({

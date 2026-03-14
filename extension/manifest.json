@@ -15,7 +15,8 @@
     "https://*.facebook.com/*",
     "http://localhost:*/*",
     "https://*.vercel.app/*",
-    "https://*.supabase.co/*"
+    "https://*.supabase.co/*",
+    "https://prospecta-scraper.vercel.app/*"
   ],
   "background": {
     "service_worker": "background.js",
@@ -27,14 +28,21 @@
         "http://localhost:5173/*",
         "https://*.vercel.app/*"
       ],
-      "js": ["content-bridge.js"],
+      "js": [
+        "content-bridge.js"
+      ],
       "run_at": "document_start"
     }
   ],
   "web_accessible_resources": [
     {
-      "resources": ["injected.js"],
-      "matches": ["http://localhost:5173/*", "https://*.vercel.app/*"]
+      "resources": [
+        "injected.js"
+      ],
+      "matches": [
+        "http://localhost:5173/*",
+        "https://*.vercel.app/*"
+      ]
     }
   ]
 }

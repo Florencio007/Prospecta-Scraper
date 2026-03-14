@@ -18,7 +18,7 @@ const CONFIG = {
   maxPosts: parseInt(argMaxPosts, 10) || 30,
   activityType: (argActivityType === 'posts' || argActivityType === 'comments') ? argActivityType : 'all',
   outputFile: 'linkedin-results.json',
-  headless: false,
+  headless: true,
   delay: 1000,
 };
 
@@ -737,7 +737,15 @@ async function main() {
 
   const browser = await chromium.launch({
     headless: CONFIG.headless,
-    args: ['--lang=fr-FR', '--disable-blink-features=AutomationControlled'],
+    args: [
+      '--lang=fr-FR', 
+      '--disable-blink-features=AutomationControlled',
+      '--no-sandbox', 
+      '--disable-setuid-sandbox', 
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+      '--no-zygote'
+    ],
   });
 
   const context = await browser.newContext({

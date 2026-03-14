@@ -41,8 +41,16 @@ async function main() {
   emitLog(`🚀 Google Maps Scraper — mode complet\n auditionné par Prospecta\n`, 5);
   emitLog('🛰️ Lancement du moteur de recherche spécialisé...', 7);
   const browser = await chromium.launch({
-    headless: false, // Modification pour voir la progression
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--lang=fr-FR'],
+    headless: true,
+    args: [
+      '--headless=new',
+      '--no-sandbox', 
+      '--disable-setuid-sandbox', 
+      '--disable-dev-shm-usage',
+      '--disable-gpu',
+      '--no-zygote',
+      '--lang=fr-FR'
+    ],
   });
 
   const ctx  = await browser.newContext({
@@ -51,6 +59,16 @@ async function main() {
     viewport: { width: 1280, height: 900 },
   });
   const page = await ctx.newPage();
+
+  // Bloquer images et fonts pour accélérer et éviter les hangs
+  await page.route('**/*', route => {
+    const type = route.request().resourceType();
+    if (['image', 'font', 'media'].includes(type) || route.request().url().includes('google-analytics')) {
+      route.abort();
+    } else {
+      route.continue();
+    }
+  });
 
   // Clean up stale lock
   if (fs.existsSync(CANCEL_LOCK_FILE)) fs.unlinkSync(CANCEL_LOCK_FILE);
@@ -80,42 +98,70 @@ async function main() {
     for (let scroll = 0; scroll < 10 && results.length < MAX_RESULTS; scroll++) {
       checkCancel();
 
-      const items = await page.locator('[role="feed"] > div').all();
-      for (const item of items) {
-        checkCancel();
-        if (results.length >= MAX_RESULTS) break;
+      const extracted = await page.evaluate(() => {
+        const results = [];
+        const links = Array.from(document.querySelectorAll('a[href*="/maps/place/"]'));
+        
+        for (const link of links) {
+          const container = link.closest('[role="feed"] > div') || link.parentElement.parentElement;
+          if (!container) continue;
 
-        try {
-          const nameEl = item.locator('.fontHeadlineSmall, [jsan*="heading"]').first();
-          const name = await nameEl.innerText({ timeout: 1000 }).catch(() => '');
-          if (!name || results.find(r => r.name === name)) continue;
+          // Nom de l'établissement
+          const nameEl = container.querySelector('.fontHeadlineSmall, [jsan*="heading"], h3, .qBF1Pd');
+          const name = nameEl ? nameEl.innerText.trim() : link.getAttribute('aria-label') || '';
+          if (!name || name.length < 2) continue;
 
-          const texts = await item.locator('.W4Efsd > span').allInnerTexts().catch(() => []);
+          // Extraction des meta-textes
+          const texts = Array.from(container.querySelectorAll('.W4Efsd > span')).map(s => s.innerText.trim());
           const category = texts[0] || '';
-          const ratingText = texts.find(t => /^\d[.,]\d/.test(t)) || '';
-          const ratingStar = parseFloat(ratingText.replace(',', '.')) || 0;
-          const totalScore = texts.find(t => /^\([\d,]+\)$/.test(t)) || '';
-          const address = texts.filter(t => t.includes(',') || t.match(/\d{2,}/)).slice(-1)[0] || '';
           
-          const linkEl = item.locator('a[href*="maps"]').first();
-          const href = await linkEl.getAttribute('href').catch(() => '');
-          let phone = texts.find(t => /^\+?[\d\s\-().]{7,}$/.test(t)) || '';
-          const websiteEl = item.locator('a[data-value="Website"]');
-          let website = await websiteEl.getAttribute('href').catch(() => '');
+          let ratingStar = 0;
+          let totalScore = '';
+          const ratingText = texts.find(t => /^\d[.,]\d/.test(t) || t.includes('avis'));
+          if (ratingText) {
+             const mStar = ratingText.match(/(\d[.,]\d)/);
+             if (mStar) ratingStar = parseFloat(mStar[1].replace(',', '.'));
+             const mTotal = ratingText.match(/\(([\d,]+)\)/);
+             if (mTotal) totalScore = mTotal[1].replace(/,/g, '');
+          }
+
+          const address = texts.filter(t => t.includes(',') || t.match(/\d{2,}/)).slice(-1)[0] || '';
+          const phone = texts.find(t => /^\+?[\d\s\-().]{7,}$/.test(t)) || '';
+          const websiteEl = container.querySelector('a[data-value="Website"]');
+          const website = websiteEl ? websiteEl.getAttribute('href') : '';
+          const href = link.getAttribute('href');
+
+          results.push({ name, category, ratingStar, totalScore, address, phone, website, href });
+        }
+        return results;
+      }).catch(e => {
+        return [];
+      });
+
+      if (extracted.length === 0) {
+        emitLog('⚠️ Extraction échouée pour cette itération de scroll.');
+        break;
+      }
+
+      for (const item of extracted) {
+         if (results.find(r => r.name === item.name)) continue;
+         if (results.length >= MAX_RESULTS) break;
+
+         let phone = item.phone;
+         let website = item.website;
+         let address = item.address;
 
           // --- DEEP EXTRACTION VIA NEW TAB ---
-          if (href) {
+          if (item.href) {
             let detailPage = null;
             try {
               detailPage = await ctx.newPage();
-              await detailPage.goto(href, { waitUntil: 'domcontentloaded', timeout: 15000 });
+              await detailPage.goto(item.href, { waitUntil: 'domcontentloaded', timeout: 15000 });
               await sleep(750);
               
               const detail = await detailPage.evaluate(() => {
                  const getAttr = (sel, attr) => document.querySelector(sel)?.getAttribute(attr) || '';
-                 const getText = sel => document.querySelector(sel)?.innerText?.trim() || '';
                  
-                 // Website
                  let websiteUrl = getAttr('a[data-item-id="authority"]', 'href') || 
                                     getAttr('[data-item-id="authority"] a', 'href') || '';
                  if (!websiteUrl) {
@@ -124,7 +170,6 @@ async function main() {
                     if (possible) websiteUrl = possible.href;
                  }
                  
-                 // Phone
                  let phoneNum = getAttr('button[data-item-id^="phone:tel:"]', 'data-item-id')?.replace('phone:tel:', '');
                  if (!phoneNum) {
                     const phoneEl = document.querySelector('button[aria-label*="0"], button[aria-label*="+33"], [data-item-id^="phone"]');
@@ -133,13 +178,7 @@ async function main() {
                         if (m) phoneNum = m[0];
                     }
                  }
-                 if (!phoneNum) {
-                    const bodyText = document.body.innerText;
-                    const m = bodyText.match(/(?:\+33|0)[1-9](?:[\s.-]*\d{2}){4}/);
-                    if (m) phoneNum = m[0];
-                 }
                  
-                 // Address
                  let addr = getAttr('button[data-item-id="address"]', 'aria-label') || 
                             getAttr('button[aria-label*="Adresse"]', 'aria-label');
                  if (addr) addr = addr.replace(/^Adresse:\s*/i, '');
@@ -164,29 +203,33 @@ async function main() {
           // -----------------------------------
 
           const r = {
-            name,
-            category,
+            name: item.name,
+            category: item.category,
             address,
             phone,
             website: website || '',
-            rating: ratingStar,
-            totalScore: totalScore.replace(/[()\s]/g, ''),
-            mapsUrl: href || '',
+            rating: item.ratingStar,
+            totalScore: item.totalScore || '',
+            mapsUrl: item.href || '',
           };
           results.push(r);
           sendResult(r);
 
           const pct = 20 + Math.round((results.length / MAX_RESULTS) * 75);
-          emitLog(`   📍 ${name} [${category}]`, Math.min(pct, 95));
-        } catch (_) {}
+          emitLog(`   📍 ${item.name} [${item.category}]`, Math.min(pct, 95));
       }
 
       // Scroll the feed
-      await page.evaluate(() => {
-        const feed = document.querySelector('[role="feed"]');
-        if (feed) feed.scrollBy(0, 600);
-      });
-      await sleep(750);
+      try {
+        await page.evaluate(() => {
+          const feed = document.querySelector('[role="feed"]');
+          if (feed) feed.scrollBy(0, 800);
+          else window.scrollBy(0, 800);
+        });
+      } catch (e) {
+         emitLog('⚠️ Erreur mineure lors du scroll : ' + e.message);
+      }
+      await sleep(1000);
 
       // Check if all loaded
       const endText = await page.locator("text=Vous avez atteint la fin").count().catch(() => 0);
@@ -199,7 +242,7 @@ async function main() {
     emitLog(`💾 Sauvegardé → ${path.basename(OUTPUT_FILE)}`);
   } catch (err) {
     process.stderr.write(`[GMaps Playwright] Error: ${err.message}\n`);
-    sendProgress(100, `❌ Erreur: ${err.message}`);
+    emitLog(`❌ Erreur: ${err.message}`, 100);
   } finally {
     await browser.close();
     if (fs.existsSync(CANCEL_LOCK_FILE)) fs.unlinkSync(CANCEL_LOCK_FILE);
