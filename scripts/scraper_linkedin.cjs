@@ -9,11 +9,14 @@ function emitLog(msg, pct = undefined) {
 
 const [, , argEmail, argPass, argQuery, argMax, argMaxPosts, argSearchType, argActivityType] = process.argv;
 
+// Type finder: "entreprise" | "personne" | "tous" → searchType: "companies" | "people"
+const searchTypeFromInput = (t) => (t === 'companies' || t === 'company' || (t && t.toLowerCase() === 'entreprise')) ? 'companies' : 'people';
+
 const CONFIG = {
-  email: argEmail || 'yurihandria@gmail.com',
-  password: argPass || 'Flo0320790153Cio',
-  searchQuery: argQuery || 'florencio randrianjafitahina',
-  searchType: (argSearchType === 'companies' || argSearchType === 'company') ? 'companies' : 'people',
+  email: argEmail || '',
+  password: argPass || '',
+  searchQuery: argQuery || '',
+  searchType: searchTypeFromInput(argSearchType),
   maxProfiles: parseInt(argMax, 10) || 10,
   maxPosts: parseInt(argMaxPosts, 10) || 30,
   activityType: (argActivityType === 'posts' || argActivityType === 'comments') ? argActivityType : 'all',
@@ -233,7 +236,7 @@ async function scrapeMainProfile(page, profileUrl) {
     const name = document.querySelector('h1.text-heading-xlarge, h1')?.textContent?.trim() || '';
     const headline = document.querySelector('.text-body-medium.break-words')?.textContent?.trim() || '';
     let photo = '';
-    const photoSelectors = ['.pv-top-card__photo-wrapper img', '.profile-photo-edit__preview', 'img.pv-top-card-profile-picture__image--show', '.pv-top-card-profile-picture__image', '.ph5 img[src*="licdn"]', '.pv-top-card img[src*="licdn"]', 'section.artdeco-card img[src*="licdn"]', 'img[data-delayed-url*="profile-display"]', '.profile-picture img', 'button[aria-label*="photo"] img'];
+    const photoSelectors = ['.pv-top-card__photo-wrapper img', '.profile-photo-edit__preview', 'img.pv-top-card-profile-picture__image--show', '.pv-top-card-profile-picture__image', '.evi-image.profile-photo-edit__preview', '.ph5 img[src*="licdn"]', '.pv-top-card img[src*="licdn"]', 'section.artdeco-card img[src*="licdn"]', 'img[data-delayed-url*="profile-display"]', '.profile-picture img', 'button[aria-label*="photo"] img'];
     for (const sel of photoSelectors) {
       const img = document.querySelector(sel);
       if (img?.src && img.src.includes('licdn')) { photo = img.src; break; }

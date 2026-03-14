@@ -20,10 +20,19 @@ function emitResult(data) {
   process.stdout.write(`RESULT:${JSON.stringify(data)}\n`);
 }
 
-// ─── CONFIGURATION ──────────────────────────────────────────────────────────
-// Récupération des arguments dynamiques (mode, terme de recherche, limite de résultats)
+// ─── CONFIGURATION CLI (alignée finder: type, q, limit) ──────────────────────
+const [, , argType, argQuery, argLimit] = process.argv;
+
+const CONFIG = {
+  mode: 'entreprise',
+  query: argQuery || '',
+  maxResults: parseInt(argLimit || '5', 10),
+  headless: true,
+  delay: 2000,
+};
+
 emitLog(`🚀 Infogreffe Scraper — mode complet\n auditionné par Prospecta\n`, 5);
-if (argQuery) {
+if (CONFIG.query) {
   emitLog(`⚖️ Cible : "${CONFIG.query}"\n📊 Mode : ${CONFIG.mode}\n`, 7);
 }
 

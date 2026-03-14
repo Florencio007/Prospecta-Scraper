@@ -37,7 +37,6 @@ export const ApiKeyGuard: React.FC<ApiKeyGuardProps> = ({ provider, children, fe
 
     if (!hasKey) {
         const providerNames: Record<ApiProvider, string> = {
-            brevo: 'Brevo',
             openai: 'OpenAI',
             google_maps: 'Google Maps',
             facebook: 'Facebook',
@@ -68,12 +67,6 @@ export const ApiKeyGuard: React.FC<ApiKeyGuardProps> = ({ provider, children, fe
                                 <Settings className="mr-2 h-4 w-4" />
                                 Configurer l'intégration
                             </Link>
-                        </Button>
-                        <Button asChild variant="outline" className="w-full sm:w-auto">
-                            <a href="https://app.brevo.com/settings/keys/api" target="_blank" rel="noopener noreferrer">
-                                <Key className="mr-2 h-4 w-4" />
-                                Obtenir ma clé
-                            </a>
                         </Button>
                     </CardFooter>
                 </Card>

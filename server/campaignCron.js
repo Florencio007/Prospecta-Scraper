@@ -131,18 +131,8 @@ async function processCampaigns() {
             try { smtpConfig = JSON.parse(keys[0].api_key); } catch {}
         }
         
-        let brevoKey = null;
         if (!smtpConfig) {
-            const { data: bKeys } = await supabase
-                .from('user_api_keys')
-                .select('*')
-                .eq('user_id', campaign.user_id)
-                .eq('provider', 'brevo');
-            if (bKeys && bKeys.length > 0) brevoKey = bKeys[0].api_key;
-        }
-
-        if (!smtpConfig && !brevoKey) {
-            console.error(`[CRON] No SMTP or Brevo config for user ${campaign.user_id}. Pausing campaign.`);
+            console.error(`[CRON] No SMTP config for user ${campaign.user_id}. Pausing campaign.`);
             await supabase.from('email_campaigns').update({ status: 'paused' }).eq('id', campaign.id);
             continue;
         }
@@ -173,34 +163,15 @@ async function processCampaigns() {
             let errorMessage = '';
 
             try {
-                if (smtpConfig) {
-                    const transporter = createTransporter({ host: smtpConfig.host, port: smtpConfig.port, user: smtpConfig.user, pass: smtpConfig.pass });
-                    await transporter.sendMail({
-                        from: `"${campaign.from_name}" <${campaign.from_email}>`,
-                        to: recipient.email,
-                        replyTo: campaign.reply_to || campaign.from_email,
-                        subject: campaign.subject,
-                        html: finalHtml,
-                    });
-                    success = true;
-                } else if (brevoKey) { // Brevo fallback
-                    const bRes = await fetch('https://api.brevo.com/v3/smtp/email', {
-                        method: 'POST',
-                        headers: { 'api-key': brevoKey, 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            sender: { name: campaign.from_name, email: campaign.from_email },
-                            to: [{ email: recipient.email, name: `${recipient.first_name} ${recipient.last_name}`.trim() }],
-                            subject: campaign.subject,
-                            htmlContent: finalHtml,
-                            replyTo: { email: campaign.reply_to || campaign.from_email }
-                        })
-                    });
-                    if (bRes.ok) success = true;
-                    else {
-                        const err = await bRes.json();
-                        errorMessage = err.message || 'Erreur Brevo';
-                    }
-                }
+                const transporter = createTransporter({ host: smtpConfig.host, port: smtpConfig.port, user: smtpConfig.user, pass: smtpConfig.pass });
+                await transporter.sendMail({
+                    from: `"${campaign.from_name}" <${campaign.from_email}>`,
+                    to: recipient.email,
+                    replyTo: campaign.reply_to || campaign.from_email,
+                    subject: campaign.subject,
+                    html: finalHtml,
+                });
+                success = true;
             } catch (err) {
                 errorMessage = err.message;
             }

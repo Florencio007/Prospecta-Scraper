@@ -5,21 +5,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
 import { Eye, EyeOff, ExternalLink, Loader2, CheckCircle2, XCircle, Clock, AlertTriangle, Key, Server } from 'lucide-react';
 import { testEmailSend, testSmtpConnection } from '@/services/emailService';
 
 const PROVIDERS_CONFIG = [
-    {
-        id: 'brevo' as ApiProvider,
-        name: 'Brevo (Sendinblue)',
-        icon: '📧',
-        description: 'Envoi des campagnes email — jusqu\'à 300 emails/jour gratuits',
-        keyLabel: 'Clé API Brevo',
-        keyPlaceholder: 'xkeysib-...',
-        docsUrl: 'https://app.brevo.com/settings/keys/api',
-        required: true,
-    },
     {
         id: 'openai' as ApiProvider,
         name: 'OpenAI',
@@ -238,6 +230,41 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                 <div className="bg-blue-50 dark:bg-blue-950/30 p-3 rounded-lg border border-blue-100 dark:border-blue-900 text-[11px] text-blue-700 dark:text-blue-300">
                     <strong>Gmail :</strong> Activez la 2FA, puis créez un "Mot de passe d'application" (App Password). Utilisez ce mot de passe ici, pas votre mot de passe habituel.
                 </div>
+
+                <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="guide" className="border-none">
+                        <AccordionTrigger className="text-sm font-semibold py-2 hover:no-underline">
+                            Guide de Connexion — Comment obtenir votre mot de passe ?
+                        </AccordionTrigger>
+                        <AccordionContent className="text-sm space-y-4 pt-1">
+                            <div>
+                                <p className="font-medium text-foreground mb-2">Gmail / Google Workspace</p>
+                                <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
+                                    <li>Allez dans <a href="https://myaccount.google.com/security" target="_blank" rel="noopener noreferrer" className="text-emerald-600 dark:text-emerald-400 underline">Sécurité Google</a>.</li>
+                                    <li>Activez la &quot;Validation en 2 étapes&quot; si ce n&apos;est pas fait.</li>
+                                    <li>Cherchez &quot;Mots de passe d&apos;application&quot; dans la barre de recherche.</li>
+                                    <li>Créez-en un nom &quot;Prospecta&quot; et copiez le code à 16 caractères.</li>
+                                </ol>
+                                <Alert className="mt-2 bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800">
+                                    <AlertTitle className="text-xs">Host &amp; Port</AlertTitle>
+                                    <AlertDescription className="text-xs">Host: smtp.gmail.com — Port: 587 (TLS)</AlertDescription>
+                                </Alert>
+                            </div>
+                            <div>
+                                <p className="font-medium text-foreground mb-2">Outlook / Hotmail</p>
+                                <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
+                                    <li>Allez dans les paramètres de sécurité Microsoft.</li>
+                                    <li>Si &quot;2FA&quot; est actif, créez un mot de passe d&apos;application.</li>
+                                    <li>Sinon, utilisez votre mot de passe habituel.</li>
+                                </ol>
+                                <Alert className="mt-2 bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800">
+                                    <AlertTitle className="text-xs">Host &amp; Port</AlertTitle>
+                                    <AlertDescription className="text-xs">Host: smtp-mail.outlook.com — Port: 587</AlertDescription>
+                                </Alert>
+                            </div>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
                 
                 {isTestSuccess && (
                     <div className="pt-4 border-t border-slate-200 dark:border-slate-800 animate-in fade-in slide-in-from-top-2 duration-300">
@@ -319,25 +346,12 @@ const ApiKeyCard = ({ providerConfig, existingKey, onUpdate }: { providerConfig:
     const handleTest = async () => {
         setIsTesting(true);
         
-        if (providerConfig.id === 'brevo' && testEmail) {
-            // Test email sending
-            const sendResult = await testEmailSend('brevo', {
-                brevoApiKey: apiKey,
-                to: testEmail
-            });
-            if (sendResult.messageId) {
-                toast({ title: "Test d'envoi", description: `Un email de test a été envoyé à ${testEmail}.` });
-            } else {
-                toast({ title: "Échec de l'envoi", description: sendResult.error, variant: "destructive" });
-            }
+        // Regular API test
+        const result = await testKey(providerConfig.id);
+        if (result.ok) {
+            toast({ title: "Test réussi", description: result.message });
         } else {
-            // Regular API test
-            const result = await testKey(providerConfig.id);
-            if (result.ok) {
-                toast({ title: "Test réussi", description: result.message });
-            } else {
-                toast({ title: "Échec du test", description: result.message, variant: "destructive" });
-            }
+            toast({ title: "Échec du test", description: result.message, variant: "destructive" });
         }
         
         setIsTesting(false);
@@ -438,19 +452,6 @@ const ApiKeyCard = ({ providerConfig, existingKey, onUpdate }: { providerConfig:
                         </div>
                     </div>
                 )}
-                {providerConfig.id === 'brevo' && existingKey && (
-                    <div className="space-y-2">
-                        <Label className="text-xs font-semibold">Email de test (optionnel)</Label>
-                        <Input
-                            type="email"
-                            placeholder="votre@email.com"
-                            value={testEmail}
-                            onChange={(e) => setTestEmail(e.target.value)}
-                            className="bg-slate-50 dark:bg-slate-900 text-sm"
-                        />
-                        <p className="text-[10px] text-slate-500">Testez l'envoi d'un email réel pour vérifier la configuration.</p>
-                    </div>
-                )}
             </CardContent>
             <CardFooter className="bg-slate-50 dark:bg-slate-900/50 flex justify-between rounded-b-lg border-t border-slate-100 dark:border-slate-800 px-6 py-4">
                 {existingKey?.last_tested_at ? (
@@ -495,7 +496,6 @@ export const ApiKeysSettings = () => {
         fetchKeys();
     }, []);
 
-    const hasBrevoKey = keys.some(k => k.provider === 'brevo' && k.is_active);
     const hasSmtpKey = keys.some(k => k.provider === 'smtp' && k.is_active);
 
     return (
@@ -510,13 +510,13 @@ export const ApiKeysSettings = () => {
                 </p>
             </div>
 
-            {!hasBrevoKey && !hasSmtpKey && !loading && (
+            {!hasSmtpKey && !loading && (
                 <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 p-4 rounded-lg flex gap-3 items-start animate-in fade-in">
                     <AlertTriangle className="w-5 h-5 shrink-0 mt-0.5" />
                     <div>
-                        <h4 className="font-semibold text-sm">Configuration email requise pour les campagnes</h4>
+                        <h4 className="font-semibold text-sm">Configuration SMTP requise pour les campagnes</h4>
                         <p className="text-sm mt-1 opacity-90">
-                            Configurez SMTP (Gmail, OVH…) ou Brevo pour envoyer vos campagnes email.
+                            Configurez SMTP (Gmail, OVH…) pour envoyer vos campagnes email.
                         </p>
                     </div>
                 </div>

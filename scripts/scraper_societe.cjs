@@ -19,21 +19,13 @@ function emitResult(data) {
 const sleep = ms => new Promise(r => setTimeout(r, ms + Math.floor(Math.random() * 600)));
 const clean = s => (s || '').replace(/\s+/g, ' ').trim();
 
-// ─── CONFIGURATION CLI ────────────────────────────────────────────────────────
-let [, , arg1, arg2, arg3] = process.argv;
+// ─── CONFIGURATION CLI (alignée finder: type, q, limit) ──────────────────────
+const [, , argType, argQuery, argLimit] = process.argv;
 
-let mode = 'entreprise';
-let query = '';
-let maxResults = 5;
-
-if (arg1 && ['entreprise', 'dirigeant'].includes(arg1.toLowerCase())) {
-  mode = arg1.toLowerCase();
-  query = arg2 || '';
-  maxResults = parseInt(arg3 || '5');
-} else {
-  query = arg1 || 'hotel';
-  maxResults = parseInt(arg2 || '5');
-}
+// type finder: "entreprise" | "personne" | "tous" → mode societe: "entreprise" | "dirigeant"
+const mode = (argType && (argType.toLowerCase() === 'personne' || argType.toLowerCase() === 'dirigeant')) ? 'dirigeant' : 'entreprise';
+const query = argQuery || '';
+const maxResults = parseInt(argLimit || '5', 10);
 
 const CONFIG = { mode, query, maxResults, headless: true, delay: 2500 };
 const BASE = 'https://www.societe.com';

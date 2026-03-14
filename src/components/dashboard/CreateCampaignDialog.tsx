@@ -112,7 +112,6 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
     }, [isOpen, getKeys]);
 
     const isSmtpEnabled = activeProviders.includes('smtp');
-    const isBrevoEnabled = activeProviders.includes('brevo');
 
     const updateForm = (key: string, value: any) => setForm(prev => ({ ...prev, [key]: value }));
 
@@ -158,7 +157,7 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
                                     Étape {step} sur 3
                                     {!fetchingProviders && (
                                         <span className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-[10px] lowercase font-medium">
-                                            via {isSmtpEnabled ? 'SMTP' : isBrevoEnabled ? 'Brevo' : 'aucun service'}
+                                            via {isSmtpEnabled ? 'SMTP' : 'aucun service'}
                                         </span>
                                     )}
                                 </DialogDescription>
@@ -216,7 +215,7 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
                                         <span className="font-bold">Important :</span> {
                                             isSmtpEnabled 
                                             ? 'L\'email d\'expédition doit correspondre à votre compte SMTP (ou être un alias autorisé) pour garantir la délivrabilité.'
-                                            : 'L\'email d\'expédition doit être un "Expéditeur Vérifié" configuré dans votre compte Brevo pour garantir la délivrabilité.'
+                                            : 'Veuillez configurer votre compte SMTP dans les paramètres pour pouvoir envoyer des emails.'
                                         }
                                     </p>
                                 </div>

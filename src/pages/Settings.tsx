@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Save, LogOut, Bell, Shield, Palette, Key, Upload, Camera, Mail, ExternalLink, HelpCircle } from "lucide-react";
+import { Save, LogOut, Bell, Shield, Palette, Key, Upload, Camera, ExternalLink } from "lucide-react";
 import Header from "@/components/dashboard/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,7 +11,6 @@ import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
@@ -60,14 +59,6 @@ const Settings = () => {
   const [mfaVerifyCode, setMfaVerifyCode] = useState("");
   const [isMfaEnabled, setIsMfaEnabled] = useState(false);
 
-  const [smtpSettings, setSmtpSettings] = useState({
-    host: "smtp.gmail.com",
-    port: 587,
-    username: profile?.email || "",
-    password: "",
-    fromEmail: profile?.email || "",
-  });
-
   const [linkedinSettings, setLinkedinSettings] = useState({
     email: "",
     password: "",
@@ -98,37 +89,6 @@ const Settings = () => {
       }
     } catch (err: unknown) {
       console.error("Error fetching service description:", err);
-    }
-  };
-
-  const fetchSmtpSettings = async () => {
-    if (!profile?.id) return;
-    try {
-      const { data, error } = await supabase
-        .from('smtp_settings')
-        .select('*')
-        .eq('user_id', profile.id)
-        .maybeSingle();
-
-      if (error) {
-        // Table might not exist yet
-        if (error.code === 'PGRST116' || error.message.includes('not found')) {
-           console.warn("smtp_settings table not found or empty");
-        } else {
-           throw error;
-        }
-      }
-      if (data) {
-        setSmtpSettings({
-          host: data.host,
-          port: data.port.toString(),
-          username: data.username,
-          password: data.password,
-          fromEmail: data.from_email,
-        });
-      }
-    } catch (err: unknown) {
-      console.error("Error fetching SMTP settings:", err);
     }
   };
 
@@ -165,7 +125,6 @@ const Settings = () => {
     try {
       await Promise.all([
         fetchUserServiceDescription(),
-        fetchSmtpSettings(),
         fetchLinkedinSettings(),
       ]);
     } catch (err: unknown) {
@@ -181,11 +140,6 @@ const Settings = () => {
         ...prev,
         photoUrl: profile?.avatar_url || "",
         fullName: profile.full_name,
-      }));
-      setSmtpSettings((prev) => ({
-        ...prev,
-        username: profile.email || "",
-        fromEmail: profile.email || "",
       }));
     }
     fetchAllData(); // Call the combined fetch function
@@ -310,60 +264,6 @@ const Settings = () => {
       toast({
         title: t("error"),
         description: t("profileUpdateError") || "Error updating profile",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSaveSmtp = async () => {
-    setIsLoading(true);
-    try {
-      // Check if exists
-      const { data: existing } = await supabase
-        .from('smtp_settings')
-        .select('id')
-        .eq('user_id', profile?.id)
-        .maybeSingle();
-
-      let error;
-      if (existing) {
-        const { error: updateError } = await supabase
-          .from('smtp_settings')
-          .update({
-            host: smtpSettings.host,
-            port: smtpSettings.port,
-            username: smtpSettings.username,
-            password: smtpSettings.password,
-            from_email: smtpSettings.fromEmail
-          })
-          .eq('user_id', profile?.id);
-        error = updateError;
-      } else {
-        const { error: insertError } = await supabase
-          .from('smtp_settings')
-          .insert([{
-            user_id: profile?.id,
-            host: smtpSettings.host,
-            port: smtpSettings.port,
-            username: smtpSettings.username,
-            password: smtpSettings.password,
-            from_email: smtpSettings.fromEmail
-          }]);
-        error = insertError;
-      }
-
-      if (error) throw error;
-
-      toast({
-        title: t("success"), // key not strictly defined but fallback exists
-        description: "Paramètres SMTP enregistrés avec succès.",
-      });
-    } catch (error: any) {
-      toast({
-        title: t("error"),
-        description: error.message,
         variant: "destructive",
       });
     } finally {
@@ -630,9 +530,8 @@ const Settings = () => {
         </div>
 
         <Tabs defaultValue={defaultTab === 'integrations' ? 'integrations' : 'profile'} className="w-full space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="profile">{t("profile")}</TabsTrigger>
-            <TabsTrigger value="email">Email (SMTP)</TabsTrigger>
             <TabsTrigger value="integrations">Intégrations</TabsTrigger>
             <TabsTrigger value="notifications">{t("notifications")}</TabsTrigger>
             <TabsTrigger value="security">{t("security")}</TabsTrigger>
@@ -733,107 +632,6 @@ const Settings = () => {
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-
-          <TabsContent value="email" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card className="md:col-span-1">
-                <CardHeader>
-                  <div className="flex items-center gap-2">
-                    <Mail className="h-5 w-5 text-accent" />
-                    <CardTitle>Configuration SMTP</CardTitle>
-                  </div>
-                  <CardDescription>
-                    Connectez votre propre boîte mail pour une délivrabilité optimale.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="space-y-2">
-                    <Label>Serveur SMTP (Host)</Label>
-                    <Input
-                      placeholder="smtp.gmail.com"
-                      value={smtpSettings.host}
-                      onChange={(e) => setSmtpSettings({ ...smtpSettings, host: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Port SMTP</Label>
-                    <Input
-                      type="number"
-                      placeholder="587"
-                      min="0"
-                      value={smtpSettings.port}
-                      onChange={(e) => {
-                        const val = e.target.value === "" ? 0 : parseInt(e.target.value);
-                        setSmtpSettings({ ...smtpSettings, port: isNaN(val) ? 0 : val });
-                      }}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Utilisateur (Email)</Label>
-                    <Input
-                      placeholder="votre@email.com"
-                      value={smtpSettings.username}
-                      onChange={(e) => setSmtpSettings({ ...smtpSettings, username: e.target.value })}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Mot de Passe (App Password)</Label>
-                    <Input
-                      type="password"
-                      placeholder="••••••••••••"
-                      value={smtpSettings.password}
-                      onChange={(e) => setSmtpSettings({ ...smtpSettings, password: e.target.value })}
-                    />
-                    <p className="text-[10px] text-muted-foreground">
-                      N'utilisez PAS votre mot de passe habituel. Utilisez un "Mot de passe d'application".
-                    </p>
-                  </div>
-                  <Button onClick={handleSaveSmtp} disabled={isLoading} className="w-full bg-accent text-accent-foreground mt-2">
-                    {isLoading ? "Enregistrement..." : "Sauvegarder la configuration"}
-                  </Button>
-                </CardContent>
-              </Card>
-
-              <Card className="md:col-span-1">
-                <CardHeader>
-                  <div className="flex items-center gap-2">
-                    <HelpCircle className="h-5 w-5 text-accent" />
-                    <CardTitle>Guide de Connexion</CardTitle>
-                  </div>
-                  <CardDescription>Comment obtenir votre mot de passe ?</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="gmail">
-                      <AccordionTrigger>Gmail / Google Workspace</AccordionTrigger>
-                      <AccordionContent className="text-sm space-y-2">
-                        <p>1. Allez dans <a href="https://myaccount.google.com/security" target="_blank" className="text-accent underline">Sécurité Google</a>.</p>
-                        <p>2. Activez la "Validation en 2 étapes" si ce n'est pas fait.</p>
-                        <p>3. Cherchez "Mots de passe d'application" dans la barre de recherche.</p>
-                        <p>4. Créez-en un nom "Prospecta" et copiez le code à 16 caractères.</p>
-                        <Alert className="mt-2 bg-blue-50 dark:bg-blue-900/20 border-blue-200">
-                          <AlertTitle>Host & Port</AlertTitle>
-                          <AlertDescription>Host: smtp.gmail.com <br /> Port: 587 (TLS)</AlertDescription>
-                        </Alert>
-                      </AccordionContent>
-                    </AccordionItem>
-                    <AccordionItem value="outlook">
-                      <AccordionTrigger>Outlook / Hotmail</AccordionTrigger>
-                      <AccordionContent className="text-sm space-y-2">
-                        <p>1. Allez dans les paramètres de sécurité Microsoft.</p>
-                        <p>2. Si "2FA" est actif, créez un mot de passe d'application.</p>
-                        <p>3. Sinon, utilisez votre mot de passe habituel.</p>
-                        <Alert className="mt-2 bg-blue-50 dark:bg-blue-900/20 border-blue-200">
-                          <AlertTitle>Host & Port</AlertTitle>
-                          <AlertDescription>Host: smtp-mail.outlook.com <br /> Port: 587</AlertDescription>
-                        </Alert>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                </CardContent>
-              </Card>
-            </div>
           </TabsContent>
 
           <TabsContent value="integrations" className="space-y-6">

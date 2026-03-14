@@ -1,22 +1,10 @@
-export interface SendEmailParams {
-    brevoApiKey: string;
-    to: { email: string; name?: string };
-    from: { email: string; name: string };
-    replyTo?: string;
-    subject: string;
-    htmlContent: string;
-    textContent?: string;
-    tags?: string[];
-    campaignId?: string;
-}
-
-export interface BrevoResponse {
+export interface SendEmailResponse {
     messageId?: string;
     error?: string;
 }
 
 // Test email sending
-export async function testEmailSend(provider: string, payload: any): Promise<BrevoResponse> {
+export async function testEmailSend(provider: string, payload: any): Promise<SendEmailResponse> {
     try {
         if (provider === 'smtp') {
             // For SMTP, we reuse the generic send-smtp endpoint because it's transparent.
@@ -43,130 +31,10 @@ export async function testEmailSend(provider: string, payload: any): Promise<Bre
             return await response.json();
 
         } else {
-            // Brevo
-            const response = await fetch('/api/email/test', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ brevoApiKey: payload, to: payload.to }), // Legacy signature fallback
-            });
-
-            if (!response.ok) {
-                const err = await response.json();
-                return { error: err.error || (err instanceof Error ? err.message : "Une erreur inconnue s'est produite") };
-            }
-
-            const data = await response.json();
-            return { messageId: data.messageId };
+            return { error: "Service non supporté" };
         }
     } catch (err) {
         return { error: `Erreur de connexion : ${(err as Error).message}` };
-    }
-}
-export async function sendSingleEmail(params: SendEmailParams): Promise<BrevoResponse> {
-    try {
-        // #region agent log
-        fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Debug-Session-Id': 'ef6e8d',
-            },
-            body: JSON.stringify({
-                sessionId: 'ef6e8d',
-                runId: 'pre-fix',
-                hypothesisId: 'H1',
-                location: 'src/services/emailService.ts:65',
-                message: 'sendSingleEmail called',
-                data: {
-                    toEmail: params.to?.email,
-                    fromEmail: params.from?.email,
-                    hasBrevoKey: !!params.brevoApiKey,
-                    campaignId: params.campaignId,
-                },
-                timestamp: Date.now(),
-            }),
-        }).catch(() => { });
-        // #endregion agent log
-
-        const response = await fetch('/api/email/send', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(params),
-        });
-        if (!response.ok) {
-            const err = await response.json();
-
-            // #region agent log
-            fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Debug-Session-Id': 'ef6e8d',
-                },
-                body: JSON.stringify({
-                    sessionId: 'ef6e8d',
-                    runId: 'pre-fix',
-                    hypothesisId: 'H2',
-                    location: 'src/services/emailService.ts:72',
-                    message: 'sendSingleEmail backend error response',
-                    data: {
-                        status: response.status,
-                        errorMessage: (err as any)?.error || (err as any)?.message || null,
-                    },
-                    timestamp: Date.now(),
-                }),
-            }).catch(() => { });
-            // #endregion agent log
-
-            return { error: err.error || `Erreur Serveur ${response.status}` };
-        }
-        const data = await response.json();
-
-        // #region agent log
-        fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Debug-Session-Id': 'ef6e8d',
-            },
-            body: JSON.stringify({
-                sessionId: 'ef6e8d',
-                runId: 'pre-fix',
-                hypothesisId: 'H3',
-                location: 'src/services/emailService.ts:76',
-                message: 'sendSingleEmail success response',
-                data: {
-                    messageId: (data as any)?.messageId ?? null,
-                },
-                timestamp: Date.now(),
-            }),
-        }).catch(() => { });
-        // #endregion agent log
-
-        return { messageId: data.messageId };
-    } catch (err) {
-        // #region agent log
-        fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-Debug-Session-Id': 'ef6e8d',
-            },
-            body: JSON.stringify({
-                sessionId: 'ef6e8d',
-                runId: 'pre-fix',
-                hypothesisId: 'H4',
-                location: 'src/services/emailService.ts:78',
-                message: 'sendSingleEmail threw',
-                data: {
-                    errorMessage: (err as Error)?.message ?? String(err),
-                },
-                timestamp: Date.now(),
-            }),
-        }).catch(() => { });
-        // #endregion agent log
-
-        return { error: `Erreur de connexion au serveur backend : ${(err as Error).message}` };
     }
 }
 

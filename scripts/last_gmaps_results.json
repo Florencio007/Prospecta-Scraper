@@ -1,52 +1,20 @@
 [
   {
-    "name": "Nosy Be Hotel",
-    "category": "4-star hotel",
-    "address": "Address: Plage des cocotiers, Ambaro ",
-    "phone": "",
-    "website": "http://www.nosybehotel.com/",
-    "rating": 0,
-    "totalScore": "",
-    "mapsUrl": "https://www.google.com/maps/place/Nosy+Be+Hotel/data=!4m10!3m9!1s0x2213c9cff33b2b4f:0xf6ec66407e25f958!5m2!4m1!1i2!8m2!3d-13.3666238!4d48.1900355!16s%2Fg%2F1wjw921d!19sChIJTys788_JEyIRWPklfkBm7PY?authuser=0&hl=en&rclk=1"
-  },
-  {
-    "name": "Royal Beach",
-    "category": "4-star hotel",
-    "address": "Address: BP58 Madirokely Nosy Be, 207 ",
-    "phone": "0320532244",
-    "website": "http://www.royalbeach.mg/",
-    "rating": 0,
-    "totalScore": "",
-    "mapsUrl": "https://www.google.com/maps/place/Royal+Beach/data=!4m10!3m9!1s0x2213c856a63f44b1:0xb89e3a3ff27a2c50!5m2!4m1!1i2!8m2!3d-13.392224!4d48.2044747!16s%2Fg%2F11b6_v58d5!19sChIJsUQ_plbIEyIRUCx68j86nrg?authuser=0&hl=en&rclk=1"
-  },
-  {
-    "name": "L'heure Bleue",
-    "category": "4-star hotel",
-    "address": "Address: Madirokely plage Nosy Be, 207 ",
-    "phone": "0345048425",
-    "website": "http://www.heurebleue.com/",
-    "rating": 0,
-    "totalScore": "",
-    "mapsUrl": "https://www.google.com/maps/place/L%27heure+Bleue/data=!4m10!3m9!1s0x2213c9ac63761d0d:0x7c874150c0edc0e4!5m2!4m1!1i2!8m2!3d-13.3893434!4d48.1973615!16s%2Fg%2F1tg_0srs!19sChIJDR12Y6zJEyIR5MDtwFBBh3w?authuser=0&hl=en&rclk=1"
-  },
-  {
-    "name": "Manga Soa Lodge",
+    "name": "Antsirabe Hotel",
     "category": "3-star hotel",
-    "address": "Address: Befefika NOSY BE, 207 ",
-    "phone": "0340783921",
-    "website": "http://www.manga-soa-lodge.com/",
+    "address": "",
+    "phone": "0346635074",
+    "website": "https://www.google.com/travel/clk?pc=AA80OszphJWAS1cUc0RG2rgRBeySieh9TtanHzXuEbj31WelKbF0jL_cvuAOj2J0Kxn4nziGTjmPKD8njDd0EdyyQ29H3randoo0sKX8mRyOFJJUpoye__yff8wU2IgVhdHXQRPUU2ofcguMnePnBFpie0_TyC04T8PYoTVl4LCndpU46xpyPoUmzmHDHYXjet46XsHh1Q&pcurl=https://www.booking.com/searchresults.en.html?dest_id%3D1739734%26highlighted_hotels%3D1739734%26dest_type%3Dhotel%26checkin%3D2026-03-16%26checkout%3D2026-03-17%26group_adults%3D2%26req_adults%3D2%26show_room%3D173973404_201421889_0_2_0%26lang%3Den%26selected_currency%3DMGA%26exrt%3D4758.98486328%26ext_price_total%3D95179.70%26ext_price_tax%3D32638.55%26xfc%3DEUR%26hca%3Dm%26group_children%3D0%26req_children%3D0%26%26ts%3D1773436471%26no_rooms%3D1%26%26utm_source%3Dmetagha%26utm_medium%3Dmapresults%26utm_campaign%3DMG%26utm_term%3Dhotel-1739734%26utm_content%3Ddev-desktop_los-1_bw-1_dow-Monday_defdate-1_room-0_gstadt-2_rateid-0_aud-0_gacid-_mcid-10_ppa-0_clrid-0_ad-0_gstkid-0_checkin-20260316_ppt-%26aid%3D2127708%26label%3Dmetagha-link-MRMG-hotel-1739734_dev-desktop_los-1_bw-1_dow-Monday_defdate-1_room-0_gstadt-2_rateid-0_aud-0_gacid-_mcid-10_ppa-0_clrid-0_ad-0_gstkid-0_checkin-20260316_ppt-&s=AD1XQnl1lROywHZ9lpq4JoJSyPNl",
     "rating": 0,
     "totalScore": "",
-    "mapsUrl": "https://www.google.com/maps/place/Manga+Soa+Lodge/data=!4m10!3m9!1s0x2213be9be91e4333:0x2a6a64198e350e55!5m2!4m1!1i2!8m2!3d-13.3178715!4d48.3429482!16s%2Fg%2F11b6394jpm!19sChIJM0Me6Zu-EyIRVQ41jhlkaio?authuser=0&hl=en&rclk=1"
-  },
-  {
-    "name": "Anjiamarango Beach Resort",
-    "category": "3-star hotel",
-    "address": "Address: Befotaka ",
-    "phone": "0320265598",
-    "website": "http://www.anjiamarango-beach-resort.com/",
-    "rating": 0,
-    "totalScore": "",
-    "mapsUrl": "https://www.google.com/maps/place/Anjiamarango+Beach+Resort/data=!4m10!3m9!1s0x2213c7b0880df185:0xc9b4a983f53b59f0!5m2!4m1!1i2!8m2!3d-13.240962!4d48.253424!16s%2Fg%2F113hj7hbp!19sChIJhfENiLDHEyIR8Fk79YOptMk?authuser=0&hl=en&rclk=1"
+    "mapsUrl": "https://www.google.com/maps/place/Antsirabe+Hotel/data=!4m10!3m9!1s0x21e50e4ff810e0f5:0xce651ec476f38cb5!5m2!4m1!1i2!8m2!3d-19.8534455!4d47.0290808!16s%2Fg%2F11c1xqh79s!19sChIJ9eAQ-E8O5SERtYzzdsQeZc4?authuser=0&hl=en&rclk=1",
+    "gps": null,
+    "platform": "Booking.com",
+    "hours": null,
+    "about": {
+      "amenities": [],
+      "description": "Ar 95,180"
+    },
+    "reviews": []
   }
 ]

@@ -1,54 +1,63 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// Scraper Facebook — Version Playwright
-// Installation : npm install playwright
-//                npx playwright install chromium
-// ─────────────────────────────────────────────────────────────────────────────
+/**
+ * ╔══════════════════════════════════════════════════════════════════════════╗
+ * ║   PROSPECTA — Scraper Facebook (Playwright)                             ║
+ * ║   Utilisable depuis la plateforme (SSE PROGRESS/RESULT) ou en standalone║
+ * ║   Filtres : email, password, q, limit, maxPosts, type, activityType     ║
+ * ╚══════════════════════════════════════════════════════════════════════════╝
+ */
 const { chromium } = require('playwright');
 const fs = require('fs');
+const path = require('path');
 const readline = require('readline');
 
+const CANCEL_LOCK = path.join(__dirname, 'cancel_scrape.lock');
+
 function emitLog(msg, pct = undefined) {
-  // Console log pour l'exécution locale
   console.log(msg);
-  // Envoi vers le frontend (SSE) afin d'être capté par le terminal Prospecta
   process.stdout.write(`PROGRESS:${JSON.stringify({ percentage: pct, message: msg })}\n`);
 }
 
-// ── CONFIGURATION ─────────────────────────────────────────────────────────────
+function emitResult(data) {
+  process.stdout.write(`RESULT:${JSON.stringify(data)}\n`);
+}
+
+function checkCancel() {
+  if (fs.existsSync(CANCEL_LOCK)) {
+    emitLog('🛑 Arrêt demandé (Facebook).', 100);
+    process.exit(0);
+  }
+}
+
+// ─── CONFIG : plateforme (argv) ou standalone (défauts + prompt optionnel)
+// argv = email, password, q, limit, maxPosts, type, activityType
 const [, , argEmail, argPass, argQuery, argMax, argMaxPosts, argSearchType, argActivityType] = process.argv;
 
+const isPlatform = Boolean(argEmail);
+
+const searchTypeFromInput = (t) => (t === 'pages' || t === 'company' || (t && t.toLowerCase() === 'entreprise')) ? 'pages' : 'people';
+
 const CONFIG = {
-  email: argEmail || '0326077824',
-  password: argPass || '0326077824',
-  searchQuery: argQuery || 'florencio randrianjafitahina',
-  // 'people' → recherche de personnes | 'pages' → recherche de pages (entreprises)
-  searchType: (argSearchType === 'pages' || argSearchType === 'company') ? 'pages' : 'people',
-  maxProfiles: parseInt(argMax, 10) || 1,
-  maxPosts: parseInt(argMaxPosts, 10) || 10, // Nombre max de posts/commentaires à extraire
-  // 'all' → posts + commentaires | 'posts' → posts seulement | 'comments' → commentaires seulement
+  email: argEmail || '',
+  password: argPass || '',
+  searchQuery: argQuery || '',
+  searchType: searchTypeFromInput(argSearchType),
+  maxProfiles: parseInt(argMax, 10) || 5,
+  maxPosts: parseInt(argMaxPosts, 10) || 10,
   activityType: (argActivityType === 'posts' || argActivityType === 'comments') ? argActivityType : 'all',
   outputFile: 'facebook-results.json',
-  headless: true,
+  headless: isPlatform ? true : false,
   delay: 2500,
 };
 
-emitLog(`🚀 Facebook Scraper — mode complet\n`);
-if (argEmail) {
-  emitLog(`[Facebook Scraper] Config dynamisée : Query="${CONFIG.searchQuery}", Max=${CONFIG.maxProfiles}, Type=${CONFIG.searchType}`);
-}
-
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-// ── Prompt interactif (utilisé en exécution locale) ───────────────────────────
 async function askQuestion(question) {
   const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
   return new Promise(resolve => rl.question(question, ans => { rl.close(); resolve(ans.trim()); }));
 }
 
-/**
- * Choix interactif du type de recherche (Personnes vs Pages)
- */
 async function promptSearchType() {
+  if (isPlatform) return;
   emitLog('\n┌─────────────────────────────────────┐');
   emitLog('│  Type de recherche Facebook          │');
   emitLog('│  1 → Personnes (profils individuels) │');
@@ -56,140 +65,96 @@ async function promptSearchType() {
   emitLog('└─────────────────────────────────────┘');
   const ans = await askQuestion('Votre choix [1/2] : ');
   CONFIG.searchType = ans === '2' ? 'pages' : 'people';
-  emitLog(`\n✅ Mode sélectionné : ${CONFIG.searchType === 'pages' ? 'Pages' : 'Personnes'}\n`);
+  emitLog(`\n✅ Mode : ${CONFIG.searchType === 'pages' ? 'Pages' : 'Personnes'}\n`);
 }
 
 // ── Login ─────────────────────────────────────────────────────────────────────
-// ── Connexion (Login) ────────────────────────────────────────────────────────
-/**
- * Gère l'authentification sur Facebook, incluant le rejet des cookies
- */
 async function login(page) {
   emitLog('🔐 Connexion à Facebook...');
-  await page.goto('https://www.facebook.com/', { waitUntil: 'networkidle', timeout: 45000 });
+
+  await page.goto('https://www.facebook.com/', { waitUntil: 'domcontentloaded', timeout: 45000 });
   await sleep(3000);
 
-  // Tentative de fermeture automatique du bandeau de cookies (multilingue)
   try {
     const consentTexts = ['Accepter tout', 'Accept all', 'Allow all cookies', 'Tout accepter', 'OK', 'Accepter'];
-    const buttons = page.locator('button, [role="button"]');
-    const count = await buttons.count();
-    for (let i = 0; i < count; i++) {
-      const btn = buttons.nth(i);
+    const buttons = await page.locator('button, [role="button"]').all();
+    for (const btn of buttons) {
       const txt = (await btn.textContent().catch(() => '') || '').trim();
       if (consentTexts.some(t => txt.toLowerCase().includes(t.toLowerCase()))) {
         await btn.click();
-        emitLog(`   🍪 Bandeau Cookies fermé ("${txt}")`);
+        emitLog(`   🍪 Banner GDPR fermé ("${txt}")`);
         await sleep(1500);
         break;
       }
     }
   } catch (_) { }
 
-  // Vérification si déjà connecté via la session actuelle
   if (page.url().includes('/feed') || page.url().includes('facebook.com/?')) {
-    const hasNav = page.locator('[aria-label="Facebook"], [aria-label="Accueil"]');
+    const hasNav = page.locator('[aria-label="Facebook"], [aria-label="Accueil"]').first();
     if (await hasNav.isVisible({ timeout: 2000 }).catch(() => false)) {
       emitLog('✅ Déjà connecté !\n');
       return;
     }
   }
 
-  // Navigation vers la page de login si nécessaire
-  await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle', timeout: 45000 });
+  await page.goto('https://www.facebook.com/login', { waitUntil: 'domcontentloaded', timeout: 45000 });
   await sleep(2500);
 
-  // Recherche des champs E-mail/Login
   let emailSel = null;
   for (const sel of ['#email', 'input[name="email"]', 'input[type="email"]']) {
-    if (await page.locator(sel).isVisible({ timeout: 2000 }).catch(() => false)) { emailSel = sel; break; }
+    if (await page.locator(sel).first().isVisible({ timeout: 2000 }).catch(() => false)) { emailSel = sel; break; }
   }
   if (!emailSel) {
-    if (CONFIG.headless) {
-      emitLog('ERROR: Formulaire de connexion Facebook introuvable (bloqué ou checkpoint). Connexion automatique impossible.');
+    if (isPlatform) {
+      emitLog('ERROR: Formulaire de connexion introuvable.');
       process.exit(1);
-    } else {
-      emitLog('PROGRESS: ⚠️ Formulaire de connexion caché — Veuillez vous connecter manuellement dans le navigateur ouvert...');
-      // wait until we navigate away from this state
-      for (let i = 0; i < 300; i++) {
-        await sleep(1000);
-        if (page.url().includes('/feed') || page.url().includes('facebook.com/?')) break;
-      }
-      return;
     }
+    emitLog('   ⚠️  Formulaire introuvable — complétez le login manuellement puis appuyez ENTRÉE...');
+    await askQuestion('');
+    return;
   }
 
-  await page.fill(emailSel, CONFIG.email);
+  await page.locator(emailSel).first().fill(CONFIG.email);
   await sleep(400);
 
-  // Recherche du champ Mot de passe
   let passSel = null;
   for (const sel of ['#pass', 'input[name="pass"]', 'input[type="password"]']) {
-    if (await page.locator(sel).isVisible({ timeout: 2000 }).catch(() => false)) { passSel = sel; break; }
+    if (await page.locator(sel).first().isVisible({ timeout: 2000 }).catch(() => false)) { passSel = sel; break; }
   }
-  if (!passSel) throw new Error('Champ mot de passe introuvable');
-  await page.fill(passSel, CONFIG.password);
+  if (!passSel) {
+    emitLog('ERROR: Champ mot de passe introuvable');
+    process.exit(1);
+  }
+  await page.locator(passSel).first().fill(CONFIG.password);
   await sleep(400);
 
-  // Clic sur le bouton de connexion
-  let clicked = false;
-  for (const sel of ['[name="login"]', 'button[type="submit"]', '#loginbutton', '[data-testid="royal_login_button"]']) {
-    const btn = page.locator(sel).first();
-    if (await btn.isVisible({ timeout: 1000 }).catch(() => false)) { await btn.click(); clicked = true; break; }
-  }
-  if (!clicked) await page.keyboard.press('Enter');
+  const submitBtn = page.locator('[name="login"], button[type="submit"], #loginbutton, [data-testid="royal_login_button"]').first();
+  if (await submitBtn.isVisible({ timeout: 1000 }).catch(() => false)) await submitBtn.click();
+  else await page.keyboard.press('Enter');
 
-  // Attente du chargement après validation ou d'une erreur
   for (let i = 0; i < 30; i++) {
     await sleep(1000);
-    const url = page.url();
-
-    // Détection d'erreurs d'identifiants
-    const hasError = await page.evaluate(() => {
-      // Les messages d'erreur Facebook peuvent avoir plusieurs sélecteurs selon l'A/B testing
-      const errEl = document.querySelector('#error_box, .login_error_box, [role="alert"], #login_error, [data-testid="royal_login_button"] ~ div');
-      // On s'assure que le texte contient des mots typiques d'erreur
-      const text = errEl ? errEl.innerText.trim().toLowerCase() : '';
-      if (text && (text.includes('incorrect') || text.includes('mot de passe') || text.includes('password') || text.includes('email') || text.includes('invalid') || text.includes('invalide'))) {
-        return errEl.innerText.trim();
-      }
-      return null;
-    });
-
-    if (hasError) {
-      emitLog(`ERROR: Identifiants Facebook invalides : ${hasError}`);
-      process.exit(1);
-    }
-
-    if (!url.includes('/login') && !url.includes('login.php')) break;
+    if (!page.url().includes('/login') && !page.url().includes('login.php')) break;
   }
 
-  // Détection des défis de sécurité (Code 2FA, etc.)
   const finalUrl = page.url();
   if (finalUrl.includes('checkpoint') || finalUrl.includes('two_step') || finalUrl.includes('recover') || finalUrl.includes('challenge')) {
-    if (CONFIG.headless) {
-      emitLog('ERROR: Vérification de sécurité Facebook requise (2FA/Checkpoint). Connexion automatique impossible.');
+    if (isPlatform) {
+      emitLog('ERROR: Vérification (2FA/checkpoint) requise. Connexion automatique impossible.');
       process.exit(1);
-    } else {
-      emitLog('PROGRESS: ⚠️ Vérification de sécurité requise — Veuillez entrer le code 2FA/compléter le défi dans le navigateur...');
-      // Attente automatique que l'utilisateur passe le challenge
-      for (let i = 0; i < 300; i++) {
-        await sleep(1000);
-        const u = page.url();
-        if (!u.includes('checkpoint') && !u.includes('two_step') && !u.includes('recover') && !u.includes('challenge')) break;
-      }
     }
+    emitLog('\n⚠️  Vérification requise — complétez dans le navigateur puis appuyez ENTRÉE...');
+    await askQuestion('');
   }
 
   try {
-    // Fermeture des popups envahissants après login
     await page.evaluate(() => {
       document.querySelectorAll('[aria-label="Close"], [aria-label="Fermer"], [aria-label="Not Now"], [aria-label="Pas maintenant"]').forEach(b => b.click());
     });
     await sleep(800);
   } catch (_) { }
 
-  emitLog(`✅ Connecté avec succès ! (${page.url().substring(0, 60)})\n`);
+  emitLog(`✅ Connecté ! (${page.url().substring(0, 60)})\n`);
 }
 
 // ── Liste des profils / pages ─────────────────────────────────────────────────
@@ -244,7 +209,7 @@ async function scrapePersonList(page) {
   return people;
 }
 
-// ── Photo de profil (méthode dédiée, séparée de la couverture) ───────────────
+// ── Photo de profil (stratégies multiples, zone main uniquement) ───────────────
 async function scrapeProfilePhoto(page, profileUrl) {
   await page.goto(profileUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await sleep(2500);
@@ -252,25 +217,21 @@ async function scrapeProfilePhoto(page, profileUrl) {
   await sleep(800);
 
   const photo = await page.evaluate(() => {
-    // ── IMPORTANT : exclure la navbar du haut (qui contient VOTRE propre avatar)
-    // La navbar est dans [role="banner"] ou [data-pagelet="NavigationBar"]
-    // Le profil cible est dans [role="main"]
     const mainZone = document.querySelector('[role="main"]')
       || document.querySelector('[data-pagelet="ProfileActions"]')
       || document.querySelector('[data-pagelet="ProfileTimeline"]')
       || document.body;
 
-    // ── Stratégie 1 : <image> SVG "Actions pour la photo de profil" DANS la zone main
-    // Structure exacte (DevTools) :
-    //   <svg aria-label="Actions pour la photo de profil">
-    //     <g><image xlink:href="https://scontent.ftnr2-2.fna.fbcdn.net/..."/></g>
-    //   </svg>
     const svgSelectors = [
       'svg[aria-label="Actions pour la photo de profil"] image',
       'svg[aria-label*="Actions pour la photo"] image',
       'svg[aria-label*="profile photo actions"] image',
       'svg[aria-label*="Edit profile photo"] image',
       'svg[aria-label*="photo de profil"] image',
+      'img[data-img-v2]',
+      'img.gpro3582',
+      'img[src*="profile_pic"]',
+      'img[src*="scontent"]',
     ];
     for (const sel of svgSelectors) {
       try {
@@ -282,19 +243,14 @@ async function scrapeProfilePhoto(page, profileUrl) {
       } catch (_) { }
     }
 
-    // ── Stratégie 2 : tous les <svg> DANS main — premier <image> fbcdn
-    // On reste dans mainZone pour éviter de prendre l'avatar de la navbar
     for (const svg of Array.from(mainZone.querySelectorAll('svg'))) {
-      // Ignorer les SVG icônes (petits, pas d'image enfant)
       for (const img of Array.from(svg.querySelectorAll('image'))) {
         const src = img.getAttribute('xlink:href') || img.getAttribute('href') || '';
         if (src && src.includes('fbcdn') && src.startsWith('http')) return src;
       }
     }
 
-    // ── Stratégie 3 : <img> dont l'alt = nom H1 du profil cible, cherché dans main
-    const h1Name = mainZone.querySelector('h1')?.textContent?.trim()
-      || document.querySelector('h1')?.textContent?.trim() || '';
+    const h1Name = mainZone.querySelector('h1')?.textContent?.trim() || document.querySelector('h1')?.textContent?.trim() || '';
     if (h1Name) {
       const byAlt = Array.from(mainZone.querySelectorAll('img[alt]')).find(img =>
         img.alt.trim() === h1Name && img.src?.includes('scontent')
@@ -302,25 +258,17 @@ async function scrapeProfilePhoto(page, profileUrl) {
       if (byAlt) return byAlt.src;
     }
 
-    // ── Stratégie 4 : lien "photo de profil" dans main
-    for (const sel of [
-      'a[aria-label*="photo de profil"] img',
-      'a[aria-label*="profile picture"] img',
-      'a[aria-label*="Profile picture"] img',
-    ]) {
+    for (const sel of ['a[aria-label*="photo de profil"] img', 'a[aria-label*="profile picture"] img', 'a[aria-label*="Profile picture"] img']) {
       const el = mainZone.querySelector(sel);
       if (el?.src?.includes('scontent')) return el.src;
     }
 
-    // ── Stratégie 5 (fallback) : premier img scontent carré dans main
-    // La couverture est rectangulaire (ratio > 2), l'avatar est carré (ratio ~1)
     for (const img of Array.from(mainZone.querySelectorAll('img[src*="scontent"]'))) {
       if (img.src.includes('emoji') || img.src.includes('safe_image')) continue;
       const w = img.naturalWidth || img.width || 0;
       const h = img.naturalHeight || img.height || 0;
       if (w > 0 && h > 0 && w / h > 0.7 && w / h < 1.4 && w >= 80) return img.src;
     }
-
     return '';
   });
 
@@ -329,7 +277,7 @@ async function scrapeProfilePhoto(page, profileUrl) {
   return photo;
 }
 
-// ── Coordonnées ───────────────────────────────────────────────────────────────
+// ── Coordonnées (About > Contact) ─────────────────────────────────────────────
 async function scrapeContactInfo(page, profileUrl) {
   let email = '', phone = '', website = '';
   try {
@@ -361,10 +309,8 @@ async function scrapeContactInfo(page, profileUrl) {
 async function scrapeMainProfile(page, profileUrl) {
   emitLog('   📄 Page principale...');
 
-  // Photo d'abord (méthode dédiée)
   const photo = await scrapeProfilePhoto(page, profileUrl);
 
-  // Re-naviguer pour les autres données
   await page.goto(profileUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await sleep(3000);
   for (let i = 0; i < 8; i++) { await page.evaluate(() => window.scrollBy(0, 500)); await sleep(400); }
@@ -389,9 +335,7 @@ async function scrapeMainProfile(page, profileUrl) {
       while ((n = w.nextNode())) { const t = n.textContent?.trim(); if (t && t !== 'See more' && t !== 'Voir plus') parts.push(t); }
       return parts.join(' ').trim();
     }
-
     const name = document.querySelector('h1')?.textContent?.trim() || '';
-
     let headline = '';
     const introSection = document.querySelector('[data-pagelet="ProfileTilesFeed_0"], [data-pagelet="ProfileTimeline"]');
     if (introSection) {
@@ -402,21 +346,17 @@ async function scrapeMainProfile(page, profileUrl) {
       const allSpans = Array.from(document.querySelectorAll('span[dir="auto"]')).map(s => s.textContent?.trim()).filter(t => t && t.length > 5 && t !== name);
       headline = allSpans.find(t => t.includes(' at ') || t.includes(' chez ') || t.includes('CEO') || t.includes('Founder') || t.includes('Director')) || allSpans[1] || '';
     }
-
     let location = '';
     document.querySelectorAll('[role="main"] span[dir="auto"]').forEach(sp => {
       const t = sp.textContent?.trim() || '';
       if (!location && t.length > 3 && (t.includes(',') || t.includes('Lives') || t.includes('From') || t.includes('Habite') || t.includes('Vit'))) location = t;
     });
-
     let followers = '';
     const follMatch = document.body.innerText.match(/([\d\s,]+)\s*(followers?|abonnés?)/i);
     if (follMatch) followers = follMatch[0].trim();
-
     let about = '';
     const introEl = document.querySelector('[data-pagelet="ProfileIntro"]') || document.querySelector('[aria-label*="Intro"], [aria-label*="intro"]');
     if (introEl) about = getText(introEl).substring(0, 3000);
-
     const experiences = [];
     document.querySelectorAll('[role="main"] [role="listitem"], [role="main"] li').forEach(item => {
       const t = item.textContent?.trim() || '';
@@ -425,11 +365,9 @@ async function scrapeMainProfile(page, profileUrl) {
         if (parts.length >= 2) experiences.push({ role: parts[0].trim(), company: parts[1].trim(), duration: '', location: '', description: '' });
       }
     });
-
     const education = [];
     const eduMatch = document.body.innerText.match(/(?:Studied|Studies|Étudié|Université|University|College|School)[^\n]{0,100}/gi);
     if (eduMatch) eduMatch.slice(0, 5).forEach(e => education.push({ school: e.trim(), degree: '', years: '' }));
-
     return { name, headline, location, followers, about, experiences, education, certifications: [], recommendations: [] };
   });
 
@@ -438,7 +376,7 @@ async function scrapeMainProfile(page, profileUrl) {
 
 // ── Compétences / Work & Education ───────────────────────────────────────────
 async function scrapeSkills(page, profileUrl) {
-  emitLog('   �� Compétences / Travail...');
+  emitLog('   🎯 Compétences / Travail...');
   const workUrl = profileUrl.includes('profile.php')
     ? profileUrl + '&sk=about_work_and_education'
     : `${profileUrl.replace(/\/$/, '')}/about_work_and_education`;
@@ -461,19 +399,16 @@ async function scrapeSkills(page, profileUrl) {
   } catch (_) { return []; }
 }
 
-// ── Activité (posts /posts/) ──────────────────────────────────────────────────
+// ── Activité (posts via /posts/ ou &sk=timeline) ─────────────────────────────
 async function scrapeActivity(page, profileUrl) {
   emitLog('   📝 Activité...');
 
-  // Utiliser /posts/ (onglet dédié, plus fiable que la timeline)
   const postsUrl = profileUrl.includes('profile.php')
     ? profileUrl + '&sk=timeline'
     : `${profileUrl.replace(/\/$/, '')}/posts`;
 
   await page.goto(postsUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await sleep(3500);
-
-  // Scroll agressif pour charger le contenu
   for (let i = 0; i < 12; i++) { await page.evaluate(() => window.scrollBy(0, 900)); await sleep(1300); }
 
   try {
@@ -486,75 +421,47 @@ async function scrapeActivity(page, profileUrl) {
     await sleep(600);
   } catch (_) { }
 
-  // Diagnostic
   const dump = await page.evaluate(() => {
     const articles = Array.from(document.querySelectorAll('[role="article"]'));
-    return {
-      total: articles.length,
-      url: location.href,
-      sample: articles.slice(0, 3).map(el => ({
-        label: el.getAttribute('aria-label')?.substring(0, 60) || '',
-        hasPostLink: !!el.querySelector('a[href*="/posts/"], a[href*="/permalink/"], a[href*="story_fbid"]'),
-        firstSpan: el.querySelector('[dir="auto"]')?.textContent?.trim()?.substring(0, 60) || '',
-      })),
-    };
+    return { total: articles.length, url: location.href, sample: articles.slice(0, 3).map(el => ({
+      label: el.getAttribute('aria-label')?.substring(0, 60) || '',
+      hasPostLink: !!el.querySelector('a[href*="/posts/"], a[href*="/permalink/"], a[href*="story_fbid"]'),
+      firstSpan: el.querySelector('[dir="auto"]')?.textContent?.trim()?.substring(0, 60) || '',
+    })) };
   });
   emitLog(`   🔬 URL: ${dump.url.substring(0, 70)} | Articles: ${dump.total}`);
-  dump.sample.forEach((s, i) => emitLog(`      [${i}] "${s.label}" postLink:${s.hasPostLink} span:"${s.firstSpan}"`));
 
   return await page.evaluate((max) => {
     function getText(el) {
       if (!el) return '';
       const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
       const parts = []; let n;
-      while ((n = w.nextNode())) {
-        const t = n.textContent?.trim();
-        if (t && t !== 'See more' && t !== 'Voir plus' && t.length > 0) parts.push(t);
-      }
+      while ((n = w.nextNode())) { const t = n.textContent?.trim(); if (t && t !== 'See more' && t !== 'Voir plus' && t.length > 0) parts.push(t); }
       return parts.join(' ').trim();
     }
-
     const results = [];
     const seen = new Set();
-
     document.querySelectorAll('[role="article"]').forEach(el => {
       if (results.length >= max) return;
-
       const label = el.getAttribute('aria-label') || '';
       const dataFt = el.getAttribute('data-ft') || '';
       const uid = label || dataFt || el.innerHTML.substring(0, 100);
       if (seen.has(uid)) return;
       seen.add(uid);
-
-      // Ignorer si pas de contenu post
-      const hasContent = el.querySelector(
-        '[data-ad-comet-preview="message"], [data-testid="post_message"], a[href*="/posts/"], a[href*="/permalink/"], a[href*="story_fbid"]'
-      );
+      const hasContent = el.querySelector('[data-ad-comet-preview="message"], [data-testid="post_message"], a[href*="/posts/"], a[href*="/permalink/"], a[href*="story_fbid"]');
       if (!hasContent) return;
-
       const authorEl = el.querySelector('h2 a, h3 a, [data-testid="story-subtitle"] a, strong a');
       const author = authorEl?.textContent?.trim() || '';
-
       const dateEl = el.querySelector('abbr[data-utime], a[href*="/posts/"] span, a[href*="/permalink/"] span, abbr');
       const date = dateEl?.getAttribute('title') || dateEl?.textContent?.trim() || '';
-
-      const textEl = el.querySelector('[data-ad-comet-preview="message"], [data-testid="post_message"]')
-        || el.querySelector('div[dir="auto"][style*="text-align: start"]')
-        || el.querySelector('[dir="auto"] > div > span')
-        || el.querySelector('[dir="auto"]');
+      const textEl = el.querySelector('[data-ad-comet-preview="message"]') || el.querySelector('[data-testid="post_message"]') || el.querySelector('[dir="auto"] > div > span') || el.querySelector('[dir="auto"]');
       const text = getText(textEl).substring(0, 1500);
-
       const likes = el.querySelector('[aria-label*="reaction"], [aria-label*="réaction"], [aria-label*="J\'aime"]')?.textContent?.trim() || '0';
       const comments = el.querySelector('[aria-label*="comment"], [aria-label*="commentaire"]')?.textContent?.trim() || '0';
       const shares = el.querySelector('[aria-label*="share"], [aria-label*="partage"]')?.textContent?.trim() || '0';
-
       let postUrl = '';
-      el.querySelectorAll('a[href*="/posts/"], a[href*="/permalink/"], a[href*="story_fbid"]').forEach(a => {
-        if (!postUrl) postUrl = (a.href || '').split('?')[0];
-      });
-
+      el.querySelectorAll('a[href*="/posts/"], a[href*="/permalink/"], a[href*="story_fbid"]').forEach(a => { if (!postUrl) postUrl = (a.href || '').split('?')[0]; });
       const image = el.querySelector('img[src*="scontent"]')?.src || '';
-
       let originalPost = null;
       const sharedEl = el.querySelector('[aria-label*="Shared"], [data-testid="repost"], [aria-label*="Partagé"]');
       if (sharedEl) {
@@ -564,7 +471,6 @@ async function scrapeActivity(page, profileUrl) {
           url: (sharedEl.querySelector('a[href*="/posts/"]')?.href || '').split('?')[0],
         };
       }
-
       if (text.length > 5 || (originalPost?.text?.length > 5) || postUrl)
         results.push({ actionType: 'Post', author, date, text, image, likes, comments, shares, postUrl, originalPost });
     });
@@ -572,29 +478,12 @@ async function scrapeActivity(page, profileUrl) {
   }, CONFIG.maxPosts);
 }
 
-// ── Commentaires ─────────────────────────────────────────────────────────────
+// ── Commentaires (avec enrichissement par visite des URLs si besoin) ───────────
 async function scrapeComments(page, profileUrl) {
   emitLog('   💬 Commentaires...');
   await page.goto(profileUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await sleep(3000);
   for (let i = 0; i < 10; i++) { await page.evaluate(() => window.scrollBy(0, 900)); await sleep(1200); }
-
-  const domDump = await page.evaluate(() => {
-    const articles = Array.from(document.querySelectorAll('[role="article"]'));
-    return articles.slice(0, 4).map((el, i) => ({
-      i,
-      label: (el.getAttribute('aria-label') || '').substring(0, 70),
-      spans: Array.from(el.querySelectorAll('[dir="auto"]')).map(s => s.textContent?.trim()).filter(Boolean).slice(0, 6),
-      links: Array.from(el.querySelectorAll('a[href]')).map(a => (a.href || '').substring(0, 120)).filter(h => h.includes('/posts/') || h.includes('/permalink/')).slice(0, 3),
-    }));
-  });
-
-  emitLog('\n🔬 DOM timeline articles :');
-  domDump.forEach(d => {
-    emitLog(`\n  [${d.i}] ${d.label}`);
-    emitLog(`       spans: ${JSON.stringify(d.spans)}`);
-    emitLog(`       links: ${JSON.stringify(d.links)}`);
-  });
 
   const rawComments = await page.evaluate((max) => {
     function getText(el) {
@@ -614,7 +503,6 @@ async function scrapeComments(page, profileUrl) {
       const id = label || headerText;
       if (seen.has(id) && id) return;
       if (id) seen.add(id);
-
       const date = el.querySelector('abbr[data-utime], a[aria-label] span, abbr')?.textContent?.trim() || '';
       const allTexts = Array.from(el.querySelectorAll('[dir="auto"] span')).map(s => s.textContent?.trim()).filter(t => t && t.length > 5);
       const originalPostText = allTexts.slice(0, 3).join(' ').substring(0, 1200);
@@ -623,31 +511,26 @@ async function scrapeComments(page, profileUrl) {
       el.querySelectorAll('a[href*="/posts/"], a[href*="/permalink/"]').forEach(a => { if (!originalPostUrl) originalPostUrl = (a.href || '').split('?')[0]; });
       const likes = el.querySelector('[aria-label*="reaction"], [aria-label*="réaction"]')?.textContent?.trim() || '';
       const commentsCount = el.querySelector('[aria-label*="comment"], [aria-label*="commentaire"]')?.textContent?.trim() || '';
-
       if (isCommentActivity || originalPostUrl)
         results.push({ date, myComment: '', originalPostUrl, originalPostAuthor, originalPostAuthorTitle: '', originalPostText, originalPostLikes: likes, originalPostComments: commentsCount });
     });
     return results;
   }, 25);
 
-  emitLog(`\n   📊 ${rawComments.length} activités-commentaires extraites`);
+  emitLog(`   📊 ${rawComments.length} activités-commentaires extraites`);
 
   const enrichedComments = [];
-  for (const comment of rawComments) {
-    let originalPost = {
-      author: comment.originalPostAuthor, authorTitle: '',
-      text: comment.originalPostText, likes: comment.originalPostLikes,
-      comments: comment.originalPostComments, url: comment.originalPostUrl,
-    };
+  const maxToEnrich = isPlatform ? 5 : 25;
+  for (let idx = 0; idx < Math.min(rawComments.length, maxToEnrich); idx++) {
+    const comment = rawComments[idx];
+    let originalPost = { author: comment.originalPostAuthor, authorTitle: '', text: comment.originalPostText, likes: comment.originalPostLikes, comments: comment.originalPostComments, url: comment.originalPostUrl };
     let myComment = comment.myComment;
 
     if (comment.originalPostUrl) {
       try {
-        emitLog(`      🔗 ${comment.originalPostUrl}`);
         await page.goto(comment.originalPostUrl, { waitUntil: 'domcontentloaded', timeout: 25000 });
         await sleep(2500);
         for (let i = 0; i < 5; i++) { await page.evaluate(() => window.scrollBy(0, 500)); await sleep(500); }
-
         try {
           await page.evaluate(() => {
             document.querySelectorAll('[role="button"]').forEach(b => {
@@ -657,7 +540,6 @@ async function scrapeComments(page, profileUrl) {
           });
           await sleep(500);
         } catch (_) { }
-
         const postData = await page.evaluate(() => {
           function getText(el) {
             if (!el) return '';
@@ -680,244 +562,40 @@ async function scrapeComments(page, profileUrl) {
           });
           return { author, text, likes, comments: commentsCount, myCommentText };
         });
-
-        originalPost = {
-          author: postData.author || comment.originalPostAuthor, authorTitle: '',
-          text: postData.text.length > comment.originalPostText.length ? postData.text : comment.originalPostText,
-          likes: postData.likes || comment.originalPostLikes,
-          comments: postData.comments || comment.originalPostComments,
-          url: comment.originalPostUrl,
-        };
+        originalPost = { author: postData.author || comment.originalPostAuthor, authorTitle: '', text: postData.text.length > comment.originalPostText.length ? postData.text : comment.originalPostText, likes: postData.likes || comment.originalPostLikes, comments: postData.comments || comment.originalPostComments, url: comment.originalPostUrl };
         if (postData.myCommentText && postData.myCommentText.length > myComment.length) myComment = postData.myCommentText;
         emitLog(`      ✅ author:"${originalPost.author}" | post:${originalPost.text.length}c | comment:${myComment.length}c`);
-      } catch (err) {
-        emitLog(`      ⚠️  ${err.message}`);
-      }
+      } catch (err) { emitLog(`      ⚠️  ${err.message}`); }
       await sleep(1800);
     }
     enrichedComments.push({ date: comment.date, myComment, originalPost });
   }
+  for (let idx = maxToEnrich; idx < rawComments.length; idx++) {
+    const c = rawComments[idx];
+    enrichedComments.push({ date: c.date, myComment: c.myComment, originalPost: { author: c.originalPostAuthor, authorTitle: '', text: c.originalPostText, likes: c.originalPostLikes, comments: c.originalPostComments, url: c.originalPostUrl } });
+  }
   return enrichedComments;
-}
-
-// ── Page About de la page Facebook (détails complets) ────────────────────────────────
-/**
- * Navigue vers la page About d'une Page Facebook et extrait toutes les informations :
- * followers, suivis, description, téléphone, email, adresse, site web, horaires, liens.
- */
-async function scrapePageAbout(page, profileUrl) {
-  emitLog('   📋 Page About Facebook...');
-
-  const aboutUrl = profileUrl.includes('profile.php')
-    ? profileUrl + '&sk=about'
-    : `${profileUrl.replace(/\/$/, '')}/about`;
-
-  await page.goto(aboutUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await sleep(3000);
-
-  // Cliquer sur "voir plus" pour déployer les descriptions
-  try {
-    await page.evaluate(() => {
-      document.querySelectorAll('[role="button"]').forEach(b => {
-        const t = (b.textContent || '').trim().toLowerCase();
-        if (t === 'voir plus' || t === 'see more') b.click();
-      });
-    });
-    await sleep(600);
-  } catch (_) { }
-
-  // Scroll pour tout charger
-  for (let i = 0; i < 6; i++) { await page.evaluate(() => window.scrollBy(0, 600)); await sleep(500); }
-
-  const aboutData = await page.evaluate(() => {
-    function getText(el) {
-      if (!el) return '';
-      const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
-      const parts = []; let n;
-      while ((n = w.nextNode())) {
-        const t = n.textContent?.trim();
-        if (t && t !== 'Voir plus' && t !== 'See more') parts.push(t);
-      }
-      return parts.join(' ').trim();
-    }
-
-    const result = {
-      followers: '',
-      following: '',
-      description: '',
-      category: '',
-      phone: '',
-      email: '',
-      website: '',
-      address: '',
-      mapsUrl: '', // NOUVEAU
-      businessHours: '',
-      links: [],
-      industry: '',      // NOUVEAU
-      companySize: '',   // NOUVEAU
-      companyType: '',   // NOUVEAU
-      foundedYear: '',   // NOUVEAU
-      specialties: [],   // NOUVEAU
-      priceRange: '',
-    };
-
-    const bodyText = document.body.innerText || '';
-
-    // ── Followers / Suivis depuis le header ou la page About ──
-    // Chercher le pattern "X K followers" ou "X abonnés"
-    const followerPatterns = [
-      /([\d][\d\s,.]*[KkMm]?)\s*(?:followers?|abonnés?)/i,
-      /([\d][\d\s,.]+)\s*(?:followers?|abonnés?)/i,
-    ];
-    for (const pat of followerPatterns) {
-      const m = bodyText.match(pat);
-      if (m) { result.followers = m[0].trim(); break; }
-    }
-
-    // Suivis
-    const followingMatch = bodyText.match(/([\d][\d\s,.]*[KkMm]?)\s*(?:suivi(?:e)?s?|following)/i);
-    if (followingMatch) result.following = followingMatch[0].trim();
-
-    // ── Description / À propos ──
-    // Chercher la section "À propos" ou le premier grand bloc de texte
-    const aboutSelectors = [
-      '[data-pagelet*="About"] [dir="auto"]',
-      'div[role="main"] div[data-ad-comet-preview="message"]',
-      '[aria-label*="propos"] [dir="auto"]',
-      '[aria-label*="About"] [dir="auto"]',
-    ];
-    for (const sel of aboutSelectors) {
-      const el = document.querySelector(sel);
-      if (el) {
-        const t = getText(el);
-        if (t.length > 20) { result.description = t.substring(0, 3000); break; }
-      }
-    }
-    // Fallback : chercher la description dans le body via regex
-    if (!result.description) {
-      const descMatch = bodyText.match(/Description[\s\S]{0,10}?([A-Z][\s\S]{30,500}?)(?:\n[A-Z]|$)/);
-      if (descMatch) result.description = descMatch[1].trim().substring(0, 1000);
-    }
-
-    // ── Catégorie / Industrie (type de page) ──
-    const catEl = document.querySelector('[role="main"] h2 ~ div span, [role="main"] [data-testid="page-subtitle"]');
-    if (catEl) {
-      const catText = catEl.textContent?.trim() || '';
-      result.category = catText;
-      result.industry = catText; // Alias pour la cohérence
-      if (catText.includes('Entreprise') || catText.includes('Company') || catText.includes('Agence')) {
-         result.companyType = catText;
-      }
-    }
-
-    // ── Téléphone ──
-    const phoneMatch = bodyText.match(/(?:\+?\d[\d\s\-().]{6,20}\d)(?=\s|$|\n)/);
-    if (phoneMatch) result.phone = phoneMatch[0].trim();
-    // Chercher aussi les éléments avec icône téléphone
-    document.querySelectorAll('[aria-label*="Téléphone"], [aria-label*="Phone"], [aria-label*="phone"]').forEach(el => {
-      if (!result.phone) {
-        const t = el.closest('div')?.querySelector('[dir="auto"]')?.textContent?.trim() || '';
-        if (t.match(/[\d+\-().]{6,}/)) result.phone = t;
-      }
-    });
-    // Regex plus permissive sur le texte complet
-    if (!result.phone) {
-      const m2 = bodyText.match(/0\d{2}\s?\d{2}\s?\d{3}\s?\d{2}/);
-      if (m2) result.phone = m2[0].trim();
-    }
-
-    // ── Email ──
-    const emailMatch = document.body.innerHTML.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/);
-    if (emailMatch) result.email = emailMatch[0];
-    document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
-      if (!result.email) result.email = a.href.replace('mailto:', '');
-    });
-
-    // ── Site web (liens externes) ──
-    const externalLinks = [];
-    document.querySelectorAll('a[href^="http"]:not([href*="facebook.com"]):not([href*="fb.com"]):not([href*="instagram.com/"])').forEach(a => {
-      const h = a.href || '';
-      if (h && !externalLinks.includes(h)) externalLinks.push(h);
-    });
-    result.website = externalLinks[0] || '';
-    result.links = externalLinks.slice(0, 5);
-
-    // ── Adresse ──
-    document.querySelectorAll('[aria-label*="Adresse"], [aria-label*="Address"], [aria-label*="adresse"]').forEach(el => {
-      if (!result.address) {
-        const t = el.closest('div')?.querySelector('[dir="auto"]')?.textContent?.trim() || '';
-        if (t.length > 5) result.address = t;
-      }
-    });
-    // Extraire un lien direct Google Maps si dispo (souvent en lien externe masqué)
-    document.querySelectorAll('a[href*="google.com/maps/"], a[href*="maps.google.com"], a[href*="goo.gl/maps"]').forEach(a => {
-      if (!result.mapsUrl) result.mapsUrl = a.href;
-    });
-    // Fallback : regex adresse Madagascar / commune
-    if (!result.address) {
-      const addrMatch = bodyText.match(/(?:Trade Tower|Antananarivo|Madagascar|Mahajanga|Toamasina|Fianarantsoa|Antsiranana)[^\n]{0,100}/);
-      if (addrMatch) result.address = addrMatch[0].trim();
-    }
-
-    // ── Horaires / Business Hours ──
-    const hoursMatch = bodyText.match(/(?:Actuellement|Currently|Open|Fermé|Closed|Ouvert)[^\n]{0,80}/);
-    if (hoursMatch) result.businessHours = hoursMatch[0].trim();
-
-    // ── Date de création / fondation ──
-    const foundedMatch = bodyText.match(/(?:Créée?\s+le|Founded?|Création)[\s:]*([\w\s0-9,]+)(?:\n|$)/);
-    if (foundedMatch) {
-       result.foundedYear = foundedMatch[1]?.trim() || '';
-    }
-
-    // ── Taille de l'entreprise (heuristique texte) ──
-    const sizeMatch = bodyText.match(/(?:Employés?|Employees?|Taille de l'entreprise?)[\s:]*([\d\-\+]+)(?:\s+employés?)?/i);
-    if (sizeMatch) {
-        result.companySize = sizeMatch[1]?.trim() || '';
-    }
-
-    // ── Spécialisations (si on trouve des listes) ──
-    const specHeader = document.evaluate('//span[contains(text(),"Specialties") or contains(text(),"Spécialisations")]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
-    if (specHeader && specHeader.parentElement) {
-       const textBelow = specHeader.parentElement.nextElementSibling?.textContent?.trim();
-       if (textBelow) {
-          result.specialties = textBelow.split(',').map(s => s.trim()).filter(Boolean);
-       }
-    }
-
-    // ── Gamme de prix ──
-    const priceMatch = bodyText.match(/[€$£]{1,3}/);
-    if (priceMatch) result.priceRange = priceMatch[0];
-
-    return result;
-  });
-
-  emitLog(`   ✅ About: followers=${aboutData.followers || 'n/d'} | following=${aboutData.following || 'n/d'} | tél=${aboutData.phone || 'n/d'} | liens=${aboutData.links.length}`);
-  return aboutData;
 }
 
 // ── Profil complet ────────────────────────────────────────────────────────────
 async function scrapeFullProfile(page, person) {
   emitLog(`\n📋 Scraping : ${person.name} (${person.profileUrl})`);
-  const main = await scrapeMainProfile(page, person.profileUrl); await sleep(CONFIG.delay);
-  const skills = await scrapeSkills(page, person.profileUrl); await sleep(CONFIG.delay);
-
-  // Extraction About complète (surtout utile pour les Pages d'entreprise)
-  const aboutDetails = await scrapePageAbout(page, person.profileUrl); await sleep(CONFIG.delay);
-
+  const main = await scrapeMainProfile(page, person.profileUrl);
+  await sleep(CONFIG.delay);
+  const skills = await scrapeSkills(page, person.profileUrl);
+  await sleep(CONFIG.delay);
   let activity = [];
   let comments = [];
-
-  if (CONFIG.activityType === 'all' || CONFIG.activityType === 'posts') {
+  if (CONFIG.activityType === 'posts' || CONFIG.activityType === 'all') {
     activity = await scrapeActivity(page, person.profileUrl);
     await sleep(CONFIG.delay);
   }
-  if (CONFIG.activityType === 'all' || CONFIG.activityType === 'comments') {
+  if (CONFIG.activityType === 'comments' || CONFIG.activityType === 'all') {
     comments = await scrapeComments(page, person.profileUrl);
     await sleep(CONFIG.delay);
   }
-
   emitLog(`   → ${skills.length} compétences | ${activity.length} activités | ${comments.length} commentaires`);
-  return { ...person, ...main, skills, activity: { posts: activity, comments }, aboutDetails };
+  return { ...person, ...main, skills, activity: { posts: activity, comments } };
 }
 
 // ── Posts de recherche ────────────────────────────────────────────────────────
@@ -948,16 +626,13 @@ async function scrapeSearchPosts(page) {
       const author = el.querySelector('h2 a, h3 a, [role="link"] span')?.textContent?.trim() || '';
       const authorTitle = el.querySelector('h2 + div span, h3 + div span')?.textContent?.trim() || '';
       const date = el.querySelector('abbr[data-utime], a[aria-label] span')?.textContent?.trim() || '';
-      const textEl = el.querySelector('[data-ad-comet-preview="message"], [data-testid="post_message"]')
-        || el.querySelector('div[dir="auto"][style*="text-align: start"]')
-        || el.querySelector('[dir="auto"] > div > span')
-        || el.querySelector('[dir="auto"]');
-      const text = getText(textEl).substring(0, 1000);
+      const textEl = el.querySelector('[data-ad-comet-preview="message"], [data-testid="post_message"], [dir="auto"] > div > span');
+      const text = getText(textEl || el.querySelector('[dir="auto"]')).substring(0, 1000);
       const likes = el.querySelector('[aria-label*="reaction"], [aria-label*="réaction"]')?.textContent?.trim() || '0';
       const comments = el.querySelector('[aria-label*="comment"], [aria-label*="commentaire"]')?.textContent?.trim() || '0';
       let postUrl = '';
       el.querySelectorAll('a[href*="/posts/"], a[href*="/permalink/"]').forEach(a => { if (!postUrl) postUrl = (a.href || '').split('?')[0]; });
-      if (text.length > 3 || postUrl) results.push({ actionType: 'Post', author: author || authorTitle, authorTitle, date, text, likes, comments, postUrl });
+      if (text.length > 3) results.push({ author, authorTitle, date, text, likes, comments, postUrl });
     });
     return results;
   }, CONFIG.maxPosts);
@@ -966,29 +641,55 @@ async function scrapeSearchPosts(page) {
   return posts;
 }
 
-// ── MAIN ─────────────────────────────────────────────────────────────────────
-// ── POINT D'ENTRÉE PRINCIPAL (Main) ──────────────────────────────────────────
-async function main() {
-  emitLog('🚀 Démarrage du Scraper Facebook — Playwright\n');
+// ── Construction du payload prospect pour la plateforme ───────────────────────
+function buildProspectPayload(full, person, index) {
+  return {
+    id: `fb_${Date.now()}_${index}`,
+    name: full.name || person.name,
+    initials: (full.name || person.name)?.[0]?.toUpperCase() || 'F',
+    position: full.headline || person.title || '',
+    company: full.headline || person.title || '',
+    source_platform: CONFIG.searchType === 'pages' ? 'facebook_page' : 'facebook',
+    score: 60,
+    email: full.email || '',
+    phone: full.phone || '',
+    website: full.website || '',
+    photo: full.photo || person.photo || '',
+    address: full.location || '',
+    tags: full.skills?.slice(0, 5).map(s => s.name) || [],
+    socialLinks: { facebook: full.profileUrl || person.profileUrl || '' },
+    contractDetails: {
+      about: full.about || '',
+      headline: full.headline || '',
+      location: full.location || '',
+      followers: full.followers || '',
+      experiences: full.experiences || [],
+      education: full.education || [],
+      certifications: full.certifications || [],
+      skills: full.skills || [],
+      photo: full.photo || '',
+    },
+    aiIntelligence: {
+      activities: {
+        posts: full.activity?.posts || [],
+        comments: full.activity?.comments || [],
+      },
+    },
+  };
+}
 
-  // Configuration interactive si nécessaire
-  if (!argEmail) {
-    await promptSearchType();
+// ── MAIN ─────────────────────────────────────────────────────────────────────
+async function main() {
+  emitLog('🚀 Facebook Scraper — Playwright\n');
+  if (isPlatform) {
+    emitLog(`[Plateforme] Query="${CONFIG.searchQuery}" | Max=${CONFIG.maxProfiles} | Type=${CONFIG.searchType} | Activity=${CONFIG.activityType}`);
   } else {
-    emitLog(`📡 Mode Intégration API détecté (${CONFIG.searchType})`);
+    await promptSearchType();
   }
 
   const browser = await chromium.launch({
     headless: CONFIG.headless,
-    args: [
-      '--lang=fr-FR', 
-      '--disable-blink-features=AutomationControlled',
-      '--no-sandbox', 
-      '--disable-setuid-sandbox', 
-      '--disable-dev-shm-usage',
-      '--disable-gpu',
-      '--no-zygote'
-    ],
+    args: ['--no-sandbox', '--disable-setuid-sandbox', '--lang=fr-FR', '--disable-blink-features=AutomationControlled'],
   });
 
   const context = await browser.newContext({
@@ -998,7 +699,6 @@ async function main() {
     javaScriptEnabled: true,
   });
 
-  // Injection d'un script anti-détection (masque le statut Playwright)
   await context.addInitScript(() => {
     Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
     window.chrome = { runtime: {} };
@@ -1007,128 +707,77 @@ async function main() {
   const page = await context.newPage();
 
   try {
-    // 1. Connexion
     await login(page);
+    checkCancel();
 
     emitLog(`── PHASE : SCRAPING ${CONFIG.searchType === 'pages' ? 'PAGES' : 'PERSONNES'} ─────────────────────────────────────────`);
 
-    // 2. Recherche et récupération de la liste
     const people = await scrapePersonList(page);
-
     const profiles = [];
     const total = Math.min(people.length, CONFIG.maxProfiles);
 
-    // 3. Boucle de scraping détaillé
     for (let i = 0; i < total; i++) {
-      const pct = Math.round(((i) / total) * 80);
-      process.stdout.write(`PROGRESS:${JSON.stringify({ percentage: pct, message: `Extraction ${i + 1}/${total}: ${people[i].name}` })}\n`);
+      checkCancel();
+      const pct = 5 + Math.round(((i + 1) / total) * 75);
+      emitLog(`Extraction ${i + 1}/${total}: ${people[i].name}`, pct);
 
       try {
         const full = await scrapeFullProfile(page, people[i]);
         profiles.push(full);
 
-        // Transformation en objet Prospect compatible avec le frontend
-        const prospectPayload = {
-          id: `fb_${Date.now()}_${i}`,
-          name: full.name || people[i].name,
-          initials: (full.name || people[i].name)?.[0]?.toUpperCase() || 'F',
-          position: full.headline || people[i].title || '',
-          company: full.headline || people[i].title || '',
-          source_platform: CONFIG.searchType === 'pages' ? 'facebook_page' : 'facebook',
-          score: 60,
-          email: full.email || '',
-          phone: full.phone || '',
-          website: full.website || '',
-          photo: full.photo || '',
-          address: full.location || '',
-          tags: full.skills?.slice(0, 5).map(s => s.name) || [],
-          socialLinks: {
-            facebook: full.profileUrl || people[i].profileUrl || '',
-          },
-          // Détails additionnels
-          contractDetails: {
-            about: full.aboutDetails?.description || full.about || '',
-            headline: full.headline || '',
-            location: full.aboutDetails?.address || full.location || '',
-            followers: full.aboutDetails?.followers || full.followers || '',
-            following: full.aboutDetails?.following || '',
-            experiences: full.experiences || [],
-            education: full.education || [],
-            certifications: full.certifications || [],
-            recommendations: full.recommendations || [],
-            skills: full.skills || [],
-            photo: full.photo || '',
-            // Champs About complèts
-            category: full.aboutDetails?.category || '',
-            phone: full.aboutDetails?.phone || full.phone || '',
-            email: full.aboutDetails?.email || full.email || '',
-            website: full.aboutDetails?.website || full.website || '',
-            address: full.aboutDetails?.address || '',
-            businessHours: full.aboutDetails?.businessHours || '',
-            links: full.aboutDetails?.links || [],
-            founded: full.aboutDetails?.founded || '',
-            priceRange: full.aboutDetails?.priceRange || '',
-          },
-          // Intelligence IA (pour l'onglet activité)
-          aiIntelligence: {
-            activities: {
-              posts: full.activity?.posts || [],
-              comments: full.activity?.comments || [],
-            },
-            contactInfo: {
-              phones: full.phone ? [full.phone] : [],
-              emails: full.email ? [full.email] : [],
-              addresses: []
-            },
-          },
-        };
+        const prospectPayload = buildProspectPayload(full, people[i], i);
+        emitResult(prospectPayload);
 
-        // Envoi au frontend via stdout
-        process.stdout.write(`RESULT:${JSON.stringify(prospectPayload)}\n`);
-
-        emitLog(`\n✅ ${full.name} extrait avec succès`);
+        emitLog(`\n✅ ${full.name} | 📌 ${full.headline || ''}`);
+        if (full.email) emitLog(`   📧 ${full.email}`);
+        if (full.about) emitLog(`   ℹ️  ${full.about.substring(0, 120)}...`);
+        if (full.experiences?.length) full.experiences.forEach(e => emitLog(`   💼 ${e.role} @ ${e.company}`));
+        if (full.skills?.length) emitLog(`   🎯 ${full.skills.map(s => s.name).join(', ')}`);
       } catch (err) {
-        emitLog(`   ❌ Erreur sur ${people[i].name} : ${err.message}`);
-        // Fallback minimal en cas d'erreur
-        const fallback = people[i];
-        if (fallback?.name) {
-          const fallbackPayload = {
-            id: `fb_${Date.now()}_${i}_err`,
-            name: fallback.name,
-            source: CONFIG.searchType === 'pages' ? 'facebook_page' : 'facebook',
-            socialLinks: { facebook: fallback.profileUrl || '' },
-          };
-          process.stdout.write(`RESULT:${JSON.stringify(fallbackPayload)}\n`);
-        }
+        emitLog(`   ❌ ${err.message}`);
+        const fallbackPayload = {
+          id: `fb_${Date.now()}_${i}_err`,
+          name: people[i].name,
+          source_platform: CONFIG.searchType === 'pages' ? 'facebook_page' : 'facebook',
+          socialLinks: { facebook: people[i].profileUrl || '' },
+        };
+        emitResult(fallbackPayload);
         profiles.push(people[i]);
       }
       await sleep(CONFIG.delay);
     }
 
-    // 4. Extraction des posts globaux liés à la recherche
     const searchPosts = await scrapeSearchPosts(page);
 
-    // 5. Exportation finale vers un fichier JSON
-    fs.writeFileSync(CONFIG.outputFile, JSON.stringify({
-      scrapedAt: new Date().toISOString(),
-      query: CONFIG.searchQuery,
-      searchType: CONFIG.searchType,
-      summary: {
-        profiles: profiles.length,
-        searchPosts: searchPosts.length,
-      },
-      profiles,
-      searchPosts,
-    }, null, 2), 'utf8');
+    fs.writeFileSync(
+      path.join(__dirname, CONFIG.outputFile),
+      JSON.stringify({
+        scrapedAt: new Date().toISOString(),
+        query: CONFIG.searchQuery,
+        searchType: CONFIG.searchType,
+        summary: {
+          profiles: profiles.length,
+          totalSkills: profiles.reduce((s, p) => s + (p.skills?.length || 0), 0),
+          totalPosts: profiles.reduce((s, p) => s + (p.activity?.posts?.length || 0), 0),
+          totalComments: profiles.reduce((s, p) => s + (p.activity?.comments?.length || 0), 0),
+          searchPosts: searchPosts.length,
+        },
+        profiles,
+        searchPosts,
+      }, null, 2),
+      'utf8'
+    );
 
-    emitLog(`\n💾 Rapport final sauvegardé → ${CONFIG.outputFile}`);
-
+    emitLog(`\n💾 Sauvegardé → ${CONFIG.outputFile}`, 100);
   } finally {
-    // Fermeture propre du navigateur
     await context.close();
     await browser.close();
-    emitLog('\n🏁 Session terminée.');
+    if (fs.existsSync(CANCEL_LOCK)) try { fs.unlinkSync(CANCEL_LOCK); } catch (_) { }
+    emitLog('\n🏁 Terminé.');
   }
 }
 
-main().catch(console.error);
+main().catch(err => {
+  console.error(err);
+  process.exit(1);
+});

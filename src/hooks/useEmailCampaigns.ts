@@ -221,20 +221,17 @@ export function useEmailCampaigns() {
     const launchDailyBatch = useCallback(async (campaignId: string, onProgress?: (sent: number, total: number) => void) => {
         if (!user) throw new Error("Non authentifié");
 
-        // Try SMTP first (no external API), fall back to Brevo
+        // Use SMTP only
         const smtpConfigRaw = await getKeyByProvider('smtp');
-        const brevoKey = await getKeyByProvider('brevo');
 
         let smtpConfig: { host: string; port: number; user: string; pass: string } | null = null;
         if (smtpConfigRaw) {
             try { smtpConfig = JSON.parse(smtpConfigRaw); } catch { smtpConfig = null; }
         }
 
-        if (!smtpConfig && !brevoKey) {
-            throw new Error("Aucun service email configuré. Allez dans Paramètres > Intégrations pour configurer SMTP ou Brevo.");
+        if (!smtpConfig) {
+            throw new Error("Aucun service SMTP configuré. Allez dans Paramètres > Intégrations pour configurer SMTP.");
         }
-
-        const usingSmtp = !!smtpConfig;
 
         const campaign = campaigns.find(c => c.id === campaignId);
         if (!campaign) throw new Error("Campagne non trouvée");
@@ -275,32 +272,18 @@ export function useEmailCampaigns() {
                 entreprise: recipient.company,
             });
 
-            let result;
-            if (usingSmtp && smtpConfig) {
-                result = await sendSingleEmailSmtp({
-                    smtpHost: smtpConfig.host,
-                    smtpPort: smtpConfig.port,
-                    smtpUser: smtpConfig.user,
-                    smtpPass: smtpConfig.pass,
-                    to: { email: recipient.email, name: `${recipient.first_name} ${recipient.last_name}`.trim() },
-                    from: { email: campaign.from_email, name: campaign.from_name },
-                    replyTo: campaign.reply_to || campaign.from_email,
-                    subject: campaign.subject,
-                    htmlContent,
-                    recipientId: recipient.id,
-                });
-            } else {
-                result = await sendSingleEmail({
-                    brevoApiKey: brevoKey!,
-                    to: { email: recipient.email, name: `${recipient.first_name} ${recipient.last_name}`.trim() },
-                    from: { email: campaign.from_email, name: campaign.from_name },
-                    replyTo: campaign.reply_to || campaign.from_email,
-                    subject: campaign.subject,
-                    htmlContent,
-                    tags: campaign.tags || [],
-                    campaignId: campaign.id
-                });
-            }
+            const result = await sendSingleEmailSmtp({
+                smtpHost: smtpConfig.host,
+                smtpPort: smtpConfig.port,
+                smtpUser: smtpConfig.user,
+                smtpPass: smtpConfig.pass,
+                to: { email: recipient.email, name: `${recipient.first_name} ${recipient.last_name}`.trim() },
+                from: { email: campaign.from_email, name: campaign.from_name },
+                replyTo: campaign.reply_to || campaign.from_email,
+                subject: campaign.subject,
+                htmlContent,
+                recipientId: recipient.id,
+            });
 
             if (result.messageId) {
                 console.log(`[useEmailCampaigns] Email delivered to ${recipient.email}.`);
@@ -308,6 +291,7 @@ export function useEmailCampaigns() {
                 await (supabase.from('campaign_recipients') as any).update({
                     status: 'sent',
                     sent_at: new Date().toISOString(),
+                    // We keep the column but it's now used for SMTP messageId
                     brevo_message_id: result.messageId
                 }).eq('id', recipient.id);
 

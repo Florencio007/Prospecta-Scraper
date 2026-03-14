@@ -156,43 +156,79 @@ async function main() {
             let detailPage = null;
             try {
               detailPage = await ctx.newPage();
-              await detailPage.goto(item.href, { waitUntil: 'domcontentloaded', timeout: 15000 });
-              await sleep(750);
-              
+              await detailPage.goto(item.href, { waitUntil: 'domcontentloaded', timeout: 20000 });
+              await sleep(1500);
+
+              // Tenter d'ouvrir les horaires
+              try {
+                const hoursBtn = detailPage.locator('[data-section-id="hours"] [jsaction*="pane.openhours"]').first();
+                if (await hoursBtn.isVisible()) await hoursBtn.click();
+              } catch (_) {}
+
               const detail = await detailPage.evaluate(() => {
-                 const getAttr = (sel, attr) => document.querySelector(sel)?.getAttribute(attr) || '';
-                 
-                 let websiteUrl = getAttr('a[data-item-id="authority"]', 'href') || 
-                                    getAttr('[data-item-id="authority"] a', 'href') || '';
-                 if (!websiteUrl) {
-                    const allLinks = Array.from(document.querySelectorAll('a[href^="http"]'));
-                    const possible = allLinks.find(a => !a.href.includes('google.') && !a.href.includes('maps.google.') && a.offsetParent !== null);
-                    if (possible) websiteUrl = possible.href;
-                 }
-                 
-                 let phoneNum = getAttr('button[data-item-id^="phone:tel:"]', 'data-item-id')?.replace('phone:tel:', '');
-                 if (!phoneNum) {
-                    const phoneEl = document.querySelector('button[aria-label*="0"], button[aria-label*="+33"], [data-item-id^="phone"]');
-                    if (phoneEl) {
-                        const m = phoneEl.getAttribute('aria-label')?.match(/(?:\+33|0)[1-9](?:[\s.-]*\d{2}){4}/);
-                        if (m) phoneNum = m[0];
-                    }
-                 }
-                 
-                 let addr = getAttr('button[data-item-id="address"]', 'aria-label') || 
-                            getAttr('button[aria-label*="Adresse"]', 'aria-label');
-                 if (addr) addr = addr.replace(/^Adresse:\s*/i, '');
-                 if (!addr) {
-                    const addrEl = document.querySelector('button[data-item-id="address"]');
-                    if (addrEl) addr = addrEl.innerText.trim();
-                 }
-                 
-                 return { websiteUrl, phoneNum, addr };
+                const getAttr = (sel, attr) => document.querySelector(sel)?.getAttribute(attr) || '';
+                
+                // Coordonnées GPS
+                const gpsMatch = window.location.href.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+                const gps = gpsMatch ? { lat: parseFloat(gpsMatch[1]), lng: parseFloat(gpsMatch[2]) } : null;
+
+                // Site web & Plateforme
+                const websiteEl = document.querySelector('a[data-item-id*="authority"], a[aria-label*="site"], a[href*="booking"], a[href*="tripadvisor"], a[href*="airbnb"]');
+                const websiteUrl = websiteEl?.href || '';
+                let platform = 'Site propre';
+                if (websiteUrl.includes('booking.com')) platform = 'Booking.com';
+                else if (websiteUrl.includes('tripadvisor')) platform = 'TripAdvisor';
+                else if (websiteUrl.includes('airbnb')) platform = 'Airbnb';
+
+                // Téléphone
+                let phoneNum = getAttr('button[data-item-id^="phone:tel:"]', 'data-item-id')?.replace('phone:tel:', '');
+                if (!phoneNum) {
+                  const phoneEl = document.querySelector('button[data-tooltip*="phone"] .Io6YTe, [data-tooltip="Copier le numéro de téléphone"]');
+                  phoneNum = phoneEl?.innerText?.trim() || '';
+                }
+
+                // Horaires
+                const hours = {};
+                document.querySelectorAll('.t39EBf tr, [data-section-id="hours"] tr').forEach(row => {
+                  const day = row.querySelector('td:first-child, .ylH6lf')?.innerText?.trim();
+                  const time = row.querySelector('td:last-child, .mxowUb li')?.innerText?.trim();
+                  if (day && time) hours[day] = time;
+                });
+
+                // À propos & Équipements
+                const amenities = Array.from(document.querySelectorAll('li.OyY9Kc span, .fontBodyLarge li span'))
+                  .map(el => el.innerText.trim()).filter(t => t.length > 1 && t.length < 60);
+                
+                const description = document.querySelector('.OoXEc, .QoXOEc, [jslog*="metadata"] span')?.innerText?.trim() || '';
+
+                // Avis
+                const reviews = Array.from(document.querySelectorAll('[data-review-id], .jftiEf')).slice(0, 5).map(el => ({
+                  author: el.querySelector('.d4r55, .hh2c6')?.innerText?.trim() || '',
+                  stars: el.querySelector('[aria-label*="étoile"]')?.getAttribute('aria-label') || '',
+                  text: el.querySelector('.wiI7pd, .MyEned span')?.innerText?.trim() || ''
+                }));
+
+                return { 
+                  websiteUrl, 
+                  phoneNum, 
+                  gps, 
+                  platform, 
+                  hours: Object.keys(hours).length > 0 ? hours : null,
+                  amenities: [...new Set(amenities)],
+                  description,
+                  reviews
+                };
               });
               
               if (detail.websiteUrl) website = detail.websiteUrl;
-              if (detail.phoneNum && (!phone || phone.length < 5)) phone = detail.phoneNum;
-              if (detail.addr && detail.addr.length > (address || '').length) address = detail.addr;
+              if (detail.phoneNum && detail.phoneNum.length > 5) phone = detail.phoneNum;
+              
+              // Enrichissement de l'objet résultat final
+              item.gps = detail.gps;
+              item.platform = detail.platform;
+              item.hours = detail.hours;
+              item.about = { amenities: detail.amenities, description: detail.description };
+              item.reviews = detail.reviews;
               
             } catch (err) {
               // Ignore detail extraction errors
@@ -205,12 +241,18 @@ async function main() {
           const r = {
             name: item.name,
             category: item.category,
-            address,
-            phone,
+            address: item.address || address,
+            phone: phone || item.phone,
             website: website || '',
             rating: item.ratingStar,
             totalScore: item.totalScore || '',
             mapsUrl: item.href || '',
+            // Nouvelles données
+            gps: item.gps,
+            platform: item.platform,
+            hours: item.hours,
+            about: item.about,
+            reviews: item.reviews
           };
           results.push(r);
           sendResult(r);

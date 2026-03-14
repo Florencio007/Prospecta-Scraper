@@ -60,7 +60,7 @@ async function scrapeWebsite() {
         .map(a => a.href)
         .filter(href => href.startsWith(base) && !href.includes('#') && !href.includes('mailto:') && !href.includes('tel:'))
         .filter((value, index, self) => self.indexOf(value) === index) // Unique
-        .slice(0, 5);
+        .slice(0, 10);
     });
 
     let aggregatedText = "";
@@ -94,7 +94,7 @@ async function scrapeWebsite() {
     await browser.close();
 
     // Limit text size for OpenAI (approx 15k characters to stay within tokens safely)
-    aggregatedText = aggregatedText.replace(/\s+/g, ' ').trim().substring(0, 15000);
+    aggregatedText = aggregatedText.replace(/\s+/g, ' ').trim().substring(0, 25000);
 
     emit("PROGRESS", { percentage: 60, message: `Analyse IA des données collectées...` });
 

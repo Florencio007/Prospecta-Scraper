@@ -19,14 +19,17 @@ function emitResult(data) {
 }
 const sleep = ms => new Promise(r => setTimeout(r, ms + Math.floor(Math.random() * 400)));
 
-// ─── CONFIGURATION CLI ────────────────────────────────────────────────────────
-const [, , argQuery, argLocation, argMax, argMode] = process.argv;
+// ─── CONFIGURATION CLI (alignée sur les inputs du finder: q, l, limit, type) ───
+const [, , argQuery, argLocation, argMax, argType] = process.argv;
+
+// type: "entreprise" | "personne" | "tous" (finder) → mode: "entreprise" | "personne"
+const modeFromType = (t) => (t === 'personne' ? 'personne' : 'entreprise');
 
 const CONFIG = {
-  mode: argMode || 'entreprise',          // 'entreprise' | 'personne'
+  mode: modeFromType((argType || 'tous').toLowerCase()),
   query: argQuery || 'hotel',
   location: argLocation || 'Paris',
-  maxResults: parseInt(argMax || '10'),
+  maxResults: parseInt(argMax || '10', 10),
   headless: true,
   delay: 2000,
 };

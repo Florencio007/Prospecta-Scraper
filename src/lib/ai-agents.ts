@@ -141,8 +141,8 @@ export const chatAgent = async (
            - Fonctionne via SSE (Server-Sent Events) pour des résultats en temps réel sans rechargement.
            - LinkedIn/Facebook : Nécessite des comptes dédiés pour éviter les bans. Utilise des scrapers Puppeteer avancés qui simulent le comportement humain.
         2. E-MAIL CAMPAIGNS :
-           - Double compatibilité : Brevo (API v3) et SMTP (standard industriel).
-           - Priorité SMTP : Si les deux sont configurés, le système privilégie le SMTP pour plus de contrôle.
+           - Utilise exclusivement le protocole SMTP (standard industriel) pour l'envoi des messages.
+           - Assure une délivrabilité optimale via une configuration personnalisée.
         3. TRACKING & ANALYTICS :
            - Emails suivis via un pixel invisible dynamique (/api/email/track/open/:id).
            - Les statistiques (Ouvertures, Clics) sont mises à jour en temps réel en base de données.
@@ -160,7 +160,7 @@ export const chatAgent = async (
         
         CONSIGNES DE RÉPONSE :
         - Sois l'expert technique et stratégique ultime.
-        - Si l'utilisateur pose une question sur un problème (ex: "Mes mails ne partent pas"), vérifie s'il a configuré SMTP ou Brevo dans ses paramètres.
+        - Si l'utilisateur pose une question sur un problème (ex: "Mes mails ne partent pas"), vérifie s'il a configuré le SMTP dans ses paramètres.
         - STRUCTURE : Utilise du Markdown propre. Gras pour les points clés.
         - Encourage l'utilisateur à exploiter ses ${userData.stats.totalProspects} prospects.
     `;

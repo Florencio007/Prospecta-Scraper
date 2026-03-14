@@ -131,6 +131,14 @@ export default function ManageRecipientsDialog({ isOpen, onClose, campaign, getR
                                                 {r.company && <span className="flex items-center gap-1"><Building2 size={10} /> {r.company}</span>}
                                                 {r.city && <span className="flex items-center gap-1"><MapPin size={10} /> {r.city}</span>}
                                             </div>
+                                            {r.status === 'failed' && r.bounce_reason && (
+                                                <div className="mt-2 p-2 bg-red-50 dark:bg-red-500/10 rounded border border-red-100 dark:border-red-500/20">
+                                                    <p className="text-[10px] text-red-600 dark:text-red-400 font-bold leading-tight flex items-start gap-1">
+                                                        <span className="shrink-0">⚠️</span>
+                                                        <span>{r.bounce_reason}</span>
+                                                    </p>
+                                                </div>
+                                            )}
                                         </div>
                                         <Button
                                             variant="ghost"

@@ -148,207 +148,6 @@ app.get('/api/scrape/stop', (req, res) => {
   }
 });
 
-// Test Email Sending Endpoint
-app.post('/api/email/test', async (req, res) => {
-  const { brevoApiKey, to } = req.body;
-
-  console.log(`[Express API] Testing email send to ${to}...`);
-
-  if (!brevoApiKey) {
-    return res.status(400).json({ error: 'Clé API Brevo manquante' });
-  }
-
-  try {
-    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      headers: {
-        'api-key': brevoApiKey,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify({
-        sender: { name: 'Prospecta Test', email: 'test@prospecta.ai' }, // Use a verified email
-        to: [{ email: to }],
-        subject: 'Test Email from Prospecta',
-        htmlContent: '<p>This is a test email from Prospecta platform.</p>',
-        textContent: 'This is a test email from Prospecta platform.',
-        tags: ['test'],
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error(`[Express API] Brevo Test Error (${response.status}):`, JSON.stringify(data));
-      return res.status(response.status).json({ error: data.message || `Erreur Brevo ${response.status}`, details: data });
-    }
-
-    console.log(`[Express API] Test email sent successfully. Message ID: ${data.messageId}`);
-    res.json({ success: true, messageId: data.messageId });
-  } catch (err) {
-    console.error('[Express API] Test email error:', err);
-    res.status(500).json({ error: `Erreur interne : ${err.message}` });
-  }
-});
-
-// Email Sending Endpoint (Proxy for Brevo to avoid CORS/Security issues in browser)
-app.post('/api/email/send', async (req, res) => {
-  const { brevoApiKey, to, from, replyTo, subject, htmlContent, textContent, tags, campaignId } = req.body;
-
-  console.log(`[Express API] Attempting to send email to ${to.email} via Brevo...`);
-  console.log(`[Express API] Subject: ${subject}`);
-  console.log(`[Express API] From: ${from.name} <${from.email}>`);
-
-  // #region agent log
-  fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Debug-Session-Id': 'ef6e8d',
-    },
-    body: JSON.stringify({
-      sessionId: 'ef6e8d',
-      runId: 'pre-fix',
-      hypothesisId: 'H1',
-      location: 'server/app.js:168',
-      message: 'backend /api/email/send called',
-      data: {
-        hasBrevoKey: !!brevoApiKey,
-        toEmail: to?.email,
-        fromEmail: from?.email,
-        campaignId,
-      },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => { });
-  // #endregion agent log
-
-  if (!brevoApiKey) {
-    console.warn(`[Express API] Email send failed: Brevo API key missing.`);
-    return res.status(400).json({ error: 'Clé API Brevo manquante' });
-  }
-
-  try {
-    // Check if sender email is verified
-    const checkSenderRes = await fetch('https://api.brevo.com/v3/senders', {
-      headers: {
-        'api-key': brevoApiKey,
-        'Accept': 'application/json',
-      },
-    });
-
-    if (checkSenderRes.ok) {
-      const sendersData = await checkSenderRes.json();
-      const isVerified = sendersData.senders?.some((s) => s.email === from.email && s.active);
-      if (!isVerified) {
-        console.warn(`[Express API] Sender email ${from.email} is not verified in Brevo.`);
-        return res.status(400).json({ error: `L'email expéditeur ${from.email} n'est pas vérifié dans Brevo. Vérifiez votre compte Brevo.` });
-      }
-    } else {
-      console.warn(`[Express API] Could not check senders: ${checkSenderRes.status}`);
-    }
-
-    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
-      method: 'POST',
-      headers: {
-        'api-key': brevoApiKey,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: JSON.stringify({
-        sender: { name: from.name, email: from.email },
-        to: [{ email: to.email, name: to.name }],
-        replyTo: replyTo ? { email: replyTo } : undefined,
-        subject: subject,
-        htmlContent: htmlContent,
-        textContent: textContent,
-        tags: tags,
-        headers: {
-          'X-Mailin-Tag': campaignId || 'prospecta',
-        },
-      }),
-    });
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      console.error(`[Express API] Brevo Error (${response.status}):`, JSON.stringify(data));
-
-      // #region agent log
-      fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Debug-Session-Id': 'ef6e8d',
-        },
-        body: JSON.stringify({
-          sessionId: 'ef6e8d',
-          runId: 'pre-fix',
-          hypothesisId: 'H2',
-          location: 'server/app.js:220',
-          message: 'Brevo non-OK response',
-          data: {
-            status: response.status,
-            errorMessage: data?.message ?? null,
-          },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => { });
-      // #endregion agent log
-
-      return res.status(response.status).json({ error: data.message || `Erreur Brevo ${response.status}` });
-    }
-
-    console.log(`[Express API] Email sent successfully. Brevo Message ID: ${data.messageId}`);
-
-    // #region agent log
-    fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Debug-Session-Id': 'ef6e8d',
-      },
-      body: JSON.stringify({
-        sessionId: 'ef6e8d',
-        runId: 'pre-fix',
-        hypothesisId: 'H3',
-        location: 'server/app.js:225',
-        message: 'Brevo success response',
-        data: {
-          messageId: data?.messageId ?? null,
-        },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => { });
-    // #endregion agent log
-
-    res.json(data);
-  } catch (err) {
-    console.error('[Express API] Internal Email send error:', err);
-    // #region agent log
-    fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Debug-Session-Id': 'ef6e8d',
-      },
-      body: JSON.stringify({
-        sessionId: 'ef6e8d',
-        runId: 'pre-fix',
-        hypothesisId: 'H4',
-        location: 'server/app.js:228',
-        message: 'Exception in /api/email/send',
-        data: {
-          errorMessage: err?.message ?? String(err),
-        },
-        timestamp: Date.now(),
-      }),
-    }).catch(() => { });
-    // #endregion agent log
-
-    res.status(500).json({ error: `Erreur interne : ${err.message}` });
-  }
-});
 
 // ==================== SMTP (No external API) ====================
 
@@ -716,12 +515,12 @@ setupScraperEndpoint(app, '/api/scrape/gmaps', 'scraper_gmaps.cjs', (req) => [
   req.query.type || "tous"
 ]);
 
-// PagesJaunes
+// PagesJaunes — ordre: q (mots-clés), l (ville), limit, type (entreprise/personne/tous)
 setupScraperEndpoint(app, '/api/scrape/pj', 'scraper_pj.cjs', (req) => [
-  req.query.type || "tous",
   req.query.q || "restaurant",
   req.query.l || "Paris",
-  req.query.limit || "5"
+  req.query.limit || "5",
+  req.query.type || "tous"
 ]);
 
 // Societe.com
@@ -803,9 +602,11 @@ app.get('/api/scrape/linkedin', (req, res) => {
 
 // Enrichment - Google (No website)
 setupScraperEndpoint(app, '/api/scrape/enrich-google', 'enricher_google.cjs', (req) => {
-  const { name, company, l, id } = req.query;
+  const { name, company, l, id, openAiKey } = req.query;
   const prospect = { name, company, city: l, id: id || 'temp' };
-  return [`--prospects=${JSON.stringify([prospect])}`];
+  const args = [`--prospects=${JSON.stringify([prospect])}`];
+  if (openAiKey) args.push(`--openai-key=${openAiKey}`);
+  return args;
 });
 
 // Enrichment - Website (Website provided)

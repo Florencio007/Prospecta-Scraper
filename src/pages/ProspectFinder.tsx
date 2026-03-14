@@ -6,6 +6,7 @@ import ProspectsSubNav from "@/components/dashboard/ProspectsSubNav";
 import ProspectDetailView from "@/components/dashboard/ProspectDetailView";
 import CampaignSelectionDialog from "@/components/dashboard/CampaignSelectionDialog";
 import { Logo } from "@/components/Logo";
+import { LoadingLogo } from "@/components/LoadingLogo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -546,7 +547,7 @@ const ProspectFinder = () => {
           }
           else if (channel === "pages_jaunes") {
              addLog("📖 Pages Jaunes France...", "system");
-             const url = `/api/scrape/pj?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city)}&limit=${filters.channelLimits.pages_jaunes}&userId=${user?.id || ""}&type=${filters.type}`;
+             const url = `/api/scrape/pj?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || '')}&limit=${filters.channelLimits.pages_jaunes}&userId=${user?.id || ""}&type=${filters.type}`;
              const es = new EventSource(url);
              activeEventSources.current.push(es);
              es.onmessage = (e) => {
@@ -1451,6 +1452,14 @@ const ProspectFinder = () => {
                     </div>
                   </div>
                 </div>
+              </div>
+            )}
+            {isSearching && pendingProspects.length === 0 && (
+              <div className="flex flex-col items-center justify-center p-20 w-full min-h-[400px]">
+                <LoadingLogo 
+                  size="lg" 
+                  message="Moteurs de recherche en cours d'analyse..." 
+                />
               </div>
             )}
 

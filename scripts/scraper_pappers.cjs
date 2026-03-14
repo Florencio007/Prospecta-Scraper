@@ -18,14 +18,15 @@ function emitResult(data) {
   process.stdout.write(`RESULT:${JSON.stringify(data)}\n`);
 }
 
-// ─── CONFIGURATION CLI ────────────────────────────────────────────────────────
-const [, , argQuery, argLocation, argMax, argToken] = process.argv;
+// ─── CONFIGURATION CLI (alignée finder: q, l, limit, token, type) ─────────────
+const [, , argQuery, argLocation, argMax, argToken, argType] = process.argv;
 
 const CONFIG = {
   query: argQuery || 'hotel',
   location: argLocation || '',
-  maxResults: parseInt(argMax || '5'),
+  maxResults: parseInt(argMax || '5', 10),
   apiToken: argToken || '',
+  type: (argType || 'tous').toLowerCase(), // entreprise | personne | tous (pour cohérence finder)
   headless: true,
   delay: 2500,
   outputFile: 'pappers-results.json',

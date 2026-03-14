@@ -105,77 +105,16 @@ export function useApiKeys() {
         let result = { ok: false, message: '' };
 
         try {
-            if (provider === 'brevo') {
-                const headers = { 
-                    'api-key': key, 
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json' 
-                };
-
-                // Test account access
-                const res = await fetch('https://api.brevo.com/v3/account', { headers });
-                const data = await res.json();
-                
-                if (!res.ok) {
-                    result = { ok: false, message: `Erreur Brevo : ${data.message || 'Clé invalide'}` };
-                } else {
-                    // Check verified senders
-                    const sendersRes = await fetch('https://api.brevo.com/v3/senders', { headers });
-                    let sendersMessage = '';
-                    if (sendersRes.ok) {
-                        const sendersData = await sendersRes.json();
-                        const verifiedCount = sendersData.senders?.filter((s: any) => s.active).length || 0;
-                        sendersMessage = ` - ${verifiedCount} email(s) vérifié(s)`;
-                    }
-                    
-                    result = { ok: true, message: `Compte Brevo : ${data.email || 'connecté'}${sendersMessage}` };
-                    
-                    try {
-                        const baseUrl = import.meta.env.VITE_SUPABASE_URL;
-                        const WEBHOOK_URL = `${baseUrl}/functions/v1/brevo-webhook`;
-                        
-                        let exists = false;
-                        const webhooksRes = await fetch('https://api.brevo.com/v3/webhooks?type=transactional', { headers });
-                        
-                        if (webhooksRes.ok) {
-                            const webhooksData = await webhooksRes.json();
-                            exists = webhooksData.webhooks?.some((w: any) => w.url === WEBHOOK_URL);
-                        } else {
-                            const errorBody = await webhooksRes.text();
-                            // 'document_not_found' on a list endpoint means no webhooks exist for this type
-                            if (errorBody.includes('document_not_found')) {
-                                exists = false;
-                            } else {
-                                console.error('[Brevo Webhook List Error]', webhooksRes.status, errorBody);
-                                // If it's another error, we don't proceed to creation to avoid duplicates if it was just a temporary API issue
-                                return; 
-                            }
-                        }
-                        
-                        if (!exists) {
-                            await fetch('https://api.brevo.com/v3/webhooks', {
-                                method: 'POST',
-                                headers,
-                                body: JSON.stringify({
-                                    url: WEBHOOK_URL,
-                                    description: 'Prospecta AI Webhook',
-                                    events: ['delivered', 'opened', 'click', 'hardBounce', 'softBounce', 'spam', 'unsubscribed'],
-                                    type: 'transactional'
-                                })
-                            });
-                            console.log('Brevo webhook automatically configured.');
-                        }
-                    } catch (webhookErr) {
-                        console.error('Webhook automation error:', webhookErr);
-                    }
-                }
-            } else if (provider === 'openai') {
+            if (provider === 'openai') {
                 const res = await fetch('https://api.openai.com/v1/models', {
                     headers: { Authorization: `Bearer ${key}` }
                 });
                 result = res.ok
                     ? { ok: true, message: 'Clé OpenAI valide' }
                     : { ok: false, message: 'Clé OpenAI invalide ou quota dépassé' };
+            } else if (provider === 'smtp') {
+                // SMTP connection is tested in ApiKeysSettings via testSmtpConnection in emailService
+                result = { ok: true, message: 'Configuration SMTP enregistrée' };
             } else {
                 result = { ok: true, message: 'Clé sauvegardée (test non disponible pour ce provider)' };
             }

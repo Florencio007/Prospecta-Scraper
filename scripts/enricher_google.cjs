@@ -17,6 +17,11 @@ const { chromium } = require("playwright");
 const fs = require("fs");
 const path = require("path");
 
+// Arguments: --prospects='...' --openai-key='...'
+const args = process.argv.slice(2);
+const openaiKeyArg = args.find(a => a.startsWith('--openai-key='));
+const OPENAI_API_KEY = openaiKeyArg ? openaiKeyArg.replace('--openai-key=', '') : null;
+
 // ─── Config ──────────────────────────────────────────────────────────────────
 const CANCEL_LOCK = path.join(__dirname, "cancel_scrape.lock");
 const MAX_SEARCHES_PER_PROSPECT = 3; // max requêtes Google par fiche
@@ -304,6 +309,7 @@ async function enrichProspect(page, prospect) {
           source: result.source,
           confidence: result.confidence,
           query,
+          snippets: snippets.slice(0, 3) // Store snippets for AI review
         });
       } else {
         // Fallback : marquer comme non trouvé
@@ -344,7 +350,57 @@ async function enrichProspect(page, prospect) {
     }
   }
 
+  // ─── AI Analysis ──────────────────────────────────────────────────────────
+  if (OPENAI_API_KEY && enriched.enrichment_log.length > 0) {
+    emit("PROGRESS", { percentage: null, message: `Analyse IA des informations Google...`, current_prospect_id: prospect.id });
+    try {
+      const allSnippets = enriched.enrichment_log
+        .filter(l => l.snippets && l.snippets.length > 0)
+        .map(l => l.snippets.join("\n"))
+        .join("\n\n");
+
+      if (allSnippets.trim()) {
+        const aiResult = await runAIAnalysis(prospect, allSnippets);
+        if (aiResult) {
+          enriched.ai_intelligence = aiResult.ai_intelligence;
+          if (aiResult.email && !enriched.email) enriched.email = aiResult.email;
+          if (aiResult.phone && !enriched.phone) enriched.phone = aiResult.phone;
+          if (aiResult.score_global) enriched.score_global = aiResult.score_global;
+        }
+      }
+    } catch (e) {
+      console.error("AI Analysis error:", e.message);
+    }
+  }
+
   return enriched;
+}
+
+/**
+ * Runs OpenAI analysis on collected snippets
+ */
+async function runAIAnalysis(prospect, text) {
+  const { default: fetch } = await import('node-fetch');
+  
+  const systemPrompt = `Tu es un expert en intelligence commerciale.
+Analyse les snippets de recherche Google pour ${prospect.name} chez ${prospect.company || 'Inconnue'}.
+Extraits une intelligence complète : décideurs, services, opportunités.
+Renvoie UNIQUEMENT un JSON : { "phone": "...", "email": "...", "score_global": 0-100, "ai_intelligence": { ... } }`;
+
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_API_KEY}` },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      response_format: { type: "json_object" },
+      messages: [ { role: "system", content: systemPrompt }, { role: "user", content: text } ],
+      temperature: 0.3
+    })
+  });
+
+  if (!response.ok) return null;
+  const data = await response.json();
+  return JSON.parse(data.choices[0].message.content);
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────

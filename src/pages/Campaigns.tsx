@@ -154,7 +154,7 @@ const Campaigns = () => {
       <Header />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-8">
-        <ApiKeyGuard provider="brevo" featureName="les campagnes email">
+        <ApiKeyGuard provider="smtp" featureName="les campagnes email">
           {/* Header Section */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
             <div className="space-y-1">
