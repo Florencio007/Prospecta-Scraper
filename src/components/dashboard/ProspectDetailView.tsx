@@ -178,17 +178,18 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                     phone: enrichedData.phone || currentProspect.phone,
                     email: enrichedData.email || currentProspect.email,
                     score: enrichedData.score_global || currentProspect.score,
-                    aiIntelligence: {
-                        contactInfo: aiIntelligence.contact_info || { phones: [], emails: [], addresses: [] },
-                        keyPeople: aiIntelligence.key_people || [],
-                        activities: aiIntelligence.activities || {},
-                        recentNews: aiIntelligence.recent_news || [],
-                        companyCulture: aiIntelligence.company_culture || {},
-                        opportunities: aiIntelligence.prospecting_opportunities || [],
-                        salesScripts: aiIntelligence.sales_scripts || [],
-                        executiveSummary: aiIntelligence.executive_summary || ""
-                    }
-                } as Prospect;
+                aiIntelligence: {
+                    contactInfo: aiIntelligence.contact_info || { phones: [], emails: [], addresses: [] },
+                    keyPeople: aiIntelligence.key_people || [],
+                    activities: aiIntelligence.activities || {},
+                    recentNews: aiIntelligence.recent_news || [],
+                    companyCulture: aiIntelligence.company_culture || {},
+                    opportunities: aiIntelligence.prospecting_opportunities || [],
+                    salesScripts: aiIntelligence.sales_scripts || [],
+                    executiveSummary: aiIntelligence.executive_summary || "",
+                    ai_suggestions: aiIntelligence.ai_suggestions || []
+                }
+            } as Prospect;
  
                 // Important: Mettre à jour l'état local immédiatement pour la réactivité UI
                 setLocalProspect(updatedProspect);
@@ -726,11 +727,13 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                                 <Phone size={14} className="text-accent" /> {t("phones")}
                                                             </h4>
                                                             <div className="flex flex-wrap gap-2">
-                                                                {currentProspect.aiIntelligence.contactInfo?.phones?.map((phone, idx) => (
-                                                                    <a key={idx} href={`tel:${phone}`} className="px-3 py-2 bg-secondary/40 rounded-lg border border-border/50 text-sm text-blue-500 hover:bg-secondary/60 transition-colors">
-                                                                        {phone}
-                                                                    </a>
-                                                                )) || <p className="text-xs text-muted-foreground italic">{t("noPhoneExtracted")}</p>}
+                                                                {currentProspect.aiIntelligence.contactInfo?.phones?.length > 0 ? (
+                                                                    currentProspect.aiIntelligence.contactInfo.phones.map((phone, idx) => (
+                                                                        <a key={idx} href={`tel:${phone}`} className="px-3 py-2 bg-secondary/40 rounded-lg border border-border/50 text-sm text-blue-500 hover:bg-secondary/60 transition-colors">
+                                                                            {phone}
+                                                                        </a>
+                                                                    ))
+                                                                ) : <p className="text-xs text-muted-foreground italic">{t("noPhoneExtracted")}</p>}
                                                             </div>
                                                         </div>
                                                         <div className="space-y-4">
@@ -738,17 +741,123 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                                 <Mail size={14} className="text-accent" /> {t("emails")}
                                                             </h4>
                                                             <div className="flex flex-wrap gap-2">
-                                                                {currentProspect.aiIntelligence.contactInfo?.emails?.filter(isSafeEmail).map((email, idx) => (
-                                                                    <a key={idx} href={`mailto:${email}`} className="px-3 py-2 bg-secondary/40 rounded-lg border border-border/50 text-sm text-blue-500 hover:bg-secondary/60 transition-colors">
-                                                                        {email}
-                                                                    </a>
-                                                                )) || <p className="text-xs text-muted-foreground italic">{t("noEmailExtracted")}</p>}
-                                                                {currentProspect.aiIntelligence.contactInfo?.emails?.filter(isSafeEmail).length === 0 && (
-                                                                    <p className="text-xs text-muted-foreground italic">{t("noEmailExtracted")}</p>
-                                                                )}
+                                                                {currentProspect.aiIntelligence.contactInfo?.emails?.filter(isSafeEmail).length > 0 ? (
+                                                                    currentProspect.aiIntelligence.contactInfo.emails.filter(isSafeEmail).map((email, idx) => (
+                                                                        <a key={idx} href={`mailto:${email}`} className="px-3 py-2 bg-secondary/40 rounded-lg border border-border/50 text-sm text-blue-500 hover:bg-secondary/60 transition-colors">
+                                                                            {email}
+                                                                        </a>
+                                                                    ))
+                                                                ) : <p className="text-xs text-muted-foreground italic">{t("noEmailExtracted")}</p>}
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    {/* Key People - NEW */}
+                                                    {currentProspect.aiIntelligence.keyPeople && currentProspect.aiIntelligence.keyPeople.length > 0 && (
+                                                        <div className="space-y-4">
+                                                            <h4 className="text-sm font-bold flex items-center gap-2">
+                                                                <Users size={18} className="text-blue-500" /> Personnes Clés
+                                                            </h4>
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                                                {currentProspect.aiIntelligence.keyPeople.map((person, idx) => (
+                                                                    <div key={idx} className="p-4 bg-blue-500/5 rounded-xl border border-blue-500/10">
+                                                                        <div className="flex items-center justify-between mb-1">
+                                                                            <p className="text-sm font-bold text-foreground">{person.name}</p>
+                                                                            <Badge variant="outline" className="text-[9px] uppercase">{person.role}</Badge>
+                                                                        </div>
+                                                                        <p className="text-xs text-muted-foreground line-clamp-2">{person.context}</p>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Activities & Services - NEW */}
+                                                    {currentProspect.aiIntelligence.activities && (Object.keys(currentProspect.aiIntelligence.activities).length > 0) && (
+                                                        <div className="space-y-4">
+                                                            <h4 className="text-sm font-bold flex items-center gap-2">
+                                                                <Zap size={18} className="text-amber-500" /> Activités & Spécialités
+                                                            </h4>
+                                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                                                {currentProspect.aiIntelligence.activities.services && currentProspect.aiIntelligence.activities.services.length > 0 && (
+                                                                    <div className="space-y-2">
+                                                                        <p className="text-[10px] uppercase font-bold text-muted-foreground">Services</p>
+                                                                        <div className="flex flex-wrap gap-1">
+                                                                            {currentProspect.aiIntelligence.activities.services.map((s, i) => (
+                                                                                <Badge key={i} variant="secondary" className="text-[10px]">{s}</Badge>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                                {currentProspect.aiIntelligence.activities.technologies && currentProspect.aiIntelligence.activities.technologies.length > 0 && (
+                                                                    <div className="space-y-2">
+                                                                        <p className="text-[10px] uppercase font-bold text-muted-foreground">Technologies</p>
+                                                                        <div className="flex flex-wrap gap-1">
+                                                                            {currentProspect.aiIntelligence.activities.technologies.map((t, i) => (
+                                                                                <Badge key={i} variant="outline" className="text-[10px] border-blue-500/20 text-blue-500">{t}</Badge>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                                {currentProspect.aiIntelligence.activities.sectors && currentProspect.aiIntelligence.activities.sectors.length > 0 && (
+                                                                    <div className="space-y-2">
+                                                                        <p className="text-[10px] uppercase font-bold text-muted-foreground">Secteurs</p>
+                                                                        <div className="flex flex-wrap gap-1">
+                                                                            {currentProspect.aiIntelligence.activities.sectors.map((s, i) => (
+                                                                                <Badge key={i} variant="outline" className="text-[10px] border-emerald-500/20 text-emerald-500">{s}</Badge>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Recent News - NEW */}
+                                                    {currentProspect.aiIntelligence.recentNews && currentProspect.aiIntelligence.recentNews.length > 0 && (
+                                                        <div className="space-y-4">
+                                                            <h4 className="text-sm font-bold flex items-center gap-2">
+                                                                <Globe size={18} className="text-blue-400" /> Actualités Récentes
+                                                            </h4>
+                                                            <div className="space-y-3">
+                                                                {currentProspect.aiIntelligence.recentNews.map((news, idx) => (
+                                                                    <div key={idx} className="p-4 bg-muted/20 rounded-xl border border-border/30">
+                                                                        <div className="flex items-center gap-2 mb-1">
+                                                                            <Badge className="text-[9px] uppercase bg-blue-400/10 text-blue-500 border-none">{news.type}</Badge>
+                                                                        </div>
+                                                                        <p className="text-xs text-foreground/80 leading-relaxed">{news.description}</p>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Company Culture - NEW */}
+                                                    {currentProspect.aiIntelligence.companyCulture && (currentProspect.aiIntelligence.companyCulture.mission || (currentProspect.aiIntelligence.companyCulture.values && currentProspect.aiIntelligence.companyCulture.values.length > 0)) && (
+                                                        <div className="space-y-4">
+                                                            <h4 className="text-sm font-bold flex items-center gap-2">
+                                                                <ShieldCheck size={18} className="text-emerald-500" /> Vision & Valeurs
+                                                            </h4>
+                                                            <div className="p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/10 space-y-3">
+                                                                {currentProspect.aiIntelligence.companyCulture.mission && (
+                                                                    <div>
+                                                                        <p className="text-[10px] uppercase font-bold text-muted-foreground mb-1">Mission</p>
+                                                                        <p className="text-sm italic text-foreground/80">"{currentProspect.aiIntelligence.companyCulture.mission}"</p>
+                                                                    </div>
+                                                                )}
+                                                                {currentProspect.aiIntelligence.companyCulture.values && currentProspect.aiIntelligence.companyCulture.values.length > 0 && (
+                                                                    <div>
+                                                                        <p className="text-[10px] uppercase font-bold text-muted-foreground mb-2">Valeurs</p>
+                                                                        <div className="flex flex-wrap gap-2">
+                                                                            {currentProspect.aiIntelligence.companyCulture.values.map((val, i) => (
+                                                                                <span key={i} className="text-xs font-medium text-emerald-600 dark:text-emerald-400">#{val}</span>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
 
                                                     {/* Opportunities */}
                                                     <div className="space-y-4">
@@ -928,6 +1037,23 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                                     <div className="p-3 bg-secondary/20 rounded-xl border border-border/30 flex flex-col gap-1">
                                                                         <span className="text-[10px] uppercase font-bold text-muted-foreground">Fondée en</span>
                                                                         <span className="text-sm font-semibold text-foreground/90">{currentProspect.contractDetails.foundedYear}</span>
+                                                                    </div>
+                                                                )}
+                                                                {currentProspect.contractDetails.rating && (
+                                                                    <div className="p-3 bg-secondary/20 rounded-xl border border-border/30 flex flex-col gap-1">
+                                                                        <span className="text-[10px] uppercase font-bold text-muted-foreground">Note Google</span>
+                                                                        <span className="text-sm font-semibold text-amber-500 flex items-center gap-1">
+                                                                            {currentProspect.contractDetails.rating} ⭐ 
+                                                                            <span className="text-muted-foreground text-[10px] font-normal">
+                                                                                ({currentProspect.contractDetails.totalScore || 0} avis)
+                                                                            </span>
+                                                                        </span>
+                                                                    </div>
+                                                                )}
+                                                                {currentProspect.contractDetails.category && (
+                                                                    <div className="p-3 bg-secondary/20 rounded-xl border border-border/30 flex flex-col gap-1">
+                                                                        <span className="text-[10px] uppercase font-bold text-muted-foreground">Catégorie</span>
+                                                                        <span className="text-sm font-semibold text-foreground/90">{currentProspect.contractDetails.category}</span>
                                                                     </div>
                                                                 )}
                                                             </div>

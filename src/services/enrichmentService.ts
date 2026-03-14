@@ -86,7 +86,10 @@ Structure JSON attendue:
     "ai_intelligence": {
         "executive_summary": "Résumé de l'entreprise, sa proposition de valeur et sa cible (3-4 lignes max).",
         "contact_info": { "phones": ["tel1", "tel2"], "emails": ["email1", "email2"], "addresses": ["adresse 1"] },
-        "key_people": [ { "name": "Nom", "role": "Rôle" } ],
+        "key_people": [ { "name": "Nom", "role": "Rôle", "context": "Détails/Contexte" } ],
+        "activities": { "services": ["Service A", "Service B"], "technologies": ["Tech 1"], "sectors": ["Secteur X"] },
+        "recent_news": [ { "type": "Type", "description": "Description de l'actualité" } ],
+        "company_culture": { "mission": "Mission de l'entreprise", "values": ["Valeur 1", "Valeur 2"] },
         "prospecting_opportunities": [
             { "signal": "Ex: Recrutement en cours / Nouveau produit", "context": "Détails" }
         ],
@@ -95,6 +98,7 @@ Structure JSON attendue:
             { "title": "Elevator Pitch (Call)", "content": "Bonjour, je vous appelle car..." }
         ]
     }
+
 }
 `;
 
