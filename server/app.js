@@ -36,8 +36,16 @@ function getPublicUrl() {
       if (url && url.startsWith('http')) return url;
     }
   } catch { }
-  // Priorité 2 : variable d'environnement
+
+  // Priorité 2 : variable d'environnement explicite
   if (process.env.SERVER_PUBLIC_URL) return process.env.SERVER_PUBLIC_URL.replace(/\/$/, '');
+
+  // Priorité 3 : détection automatique Vercel
+  if (process.env.VERCEL_URL) {
+    const url = process.env.VERCEL_URL.startsWith('http') ? process.env.VERCEL_URL : `https://${process.env.VERCEL_URL}`;
+    return url.replace(/\/$/, '');
+  }
+
   // Fallback
   return `http://localhost:${process.env.PORT || 3001}`;
 }
@@ -793,6 +801,19 @@ app.get('/api/scrape/linkedin', (req, res) => {
   req.on('close', () => child.kill());
 });
 
+// Enrichment - Google (No website)
+setupScraperEndpoint(app, '/api/scrape/enrich-google', 'enricher_google.cjs', (req) => {
+  const { name, company, l, id } = req.query;
+  const prospect = { name, company, city: l, id: id || 'temp' };
+  return [`--prospects=${JSON.stringify([prospect])}`];
+});
+
+// Enrichment - Website (Website provided)
+setupScraperEndpoint(app, '/api/scrape/enrich-website', 'scraper_website_enrich.cjs', (req) => {
+  const { website, name, company, openAiKey } = req.query;
+  return [website, name || "Inconnu", company || "Inconnue", openAiKey];
+});
+
 // Facebook
 app.get('/api/scrape/facebook', (req, res) => {
   const { email, password, q, limit, maxPosts, type, activityType } = req.query;
@@ -824,4 +845,5 @@ app.get('/api/scrape/facebook', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Serveur backend démarré sur : http://localhost:${PORT}`);
+  console.log(`🔗 Public URL pour le tracking : ${getPublicUrl()}`);
 });

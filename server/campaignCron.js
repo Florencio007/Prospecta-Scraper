@@ -22,7 +22,14 @@ function getPublicUrl() {
       if (url && url.startsWith('http')) return url;
     }
   } catch {}
+  
   if (process.env.SERVER_PUBLIC_URL) return process.env.SERVER_PUBLIC_URL.replace(/\/$/, '');
+  
+  if (process.env.VERCEL_URL) {
+    const url = process.env.VERCEL_URL.startsWith('http') ? process.env.VERCEL_URL : `https://${process.env.VERCEL_URL}`;
+    return url.replace(/\/$/, '');
+  }
+  
   return `http://localhost:${process.env.PORT || 3001}`;
 }
 // ─────────────────────────────────────────────────────────────────────────────

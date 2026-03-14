@@ -1,22 +1,52 @@
 [
   {
-    "name": "Radisson Serviced Apartments Antananarivo City Center",
+    "name": "Nosy Be Hotel",
     "category": "4-star hotel",
-    "address": "Address: Làlana Rahamefy Samuel, Antananarivo 101 ",
-    "phone": "0202269400",
-    "website": "https://www.radissonhotels.com/en-us/hotels/radisson-serviced-apartments-antananarivo-city-centre?cid=a:se+b:gmb+c:emea+i:local+e:rad+d:mea+h:MGTNRSAP",
+    "address": "Address: Plage des cocotiers, Ambaro ",
+    "phone": "",
+    "website": "http://www.nosybehotel.com/",
     "rating": 0,
     "totalScore": "",
-    "mapsUrl": "https://www.google.com/maps/place/Radisson+Serviced+Apartments+Antananarivo+City+Center/data=!4m10!3m9!1s0x21f07dfd655155af:0xa44ffe56a90cf177!5m2!4m1!1i2!8m2!3d-18.911666!4d47.528136!16s%2Fg%2F11gh_6stbv!19sChIJr1VRZf198CERd_EMqVb-T6Q?authuser=0&hl=en&rclk=1"
+    "mapsUrl": "https://www.google.com/maps/place/Nosy+Be+Hotel/data=!4m10!3m9!1s0x2213c9cff33b2b4f:0xf6ec66407e25f958!5m2!4m1!1i2!8m2!3d-13.3666238!4d48.1900355!16s%2Fg%2F1wjw921d!19sChIJTys788_JEyIRWPklfkBm7PY?authuser=0&hl=en&rclk=1"
   },
   {
-    "name": "Hotel Carlton",
-    "category": "5-star hotel",
-    "address": "Address: Rue Pierre Stibbe- Anosy 959, Antananarivo 101 ",
-    "phone": "0202226060",
-    "website": "http://www.carlton-madagascar.com/",
+    "name": "Royal Beach",
+    "category": "4-star hotel",
+    "address": "Address: BP58 Madirokely Nosy Be, 207 ",
+    "phone": "0320532244",
+    "website": "http://www.royalbeach.mg/",
     "rating": 0,
     "totalScore": "",
-    "mapsUrl": "https://www.google.com/maps/place/Hotel+Carlton/data=!4m10!3m9!1s0x21f07e0e02f90f5f:0x810bb6406b272064!5m2!4m1!1i2!8m2!3d-18.914848!4d47.517849!16s%2Fm%2F0wfjbn0!19sChIJXw_5Ag5-8CERZCAna0C2C4E?authuser=0&hl=en&rclk=1"
+    "mapsUrl": "https://www.google.com/maps/place/Royal+Beach/data=!4m10!3m9!1s0x2213c856a63f44b1:0xb89e3a3ff27a2c50!5m2!4m1!1i2!8m2!3d-13.392224!4d48.2044747!16s%2Fg%2F11b6_v58d5!19sChIJsUQ_plbIEyIRUCx68j86nrg?authuser=0&hl=en&rclk=1"
+  },
+  {
+    "name": "L'heure Bleue",
+    "category": "4-star hotel",
+    "address": "Address: Madirokely plage Nosy Be, 207 ",
+    "phone": "0345048425",
+    "website": "http://www.heurebleue.com/",
+    "rating": 0,
+    "totalScore": "",
+    "mapsUrl": "https://www.google.com/maps/place/L%27heure+Bleue/data=!4m10!3m9!1s0x2213c9ac63761d0d:0x7c874150c0edc0e4!5m2!4m1!1i2!8m2!3d-13.3893434!4d48.1973615!16s%2Fg%2F1tg_0srs!19sChIJDR12Y6zJEyIR5MDtwFBBh3w?authuser=0&hl=en&rclk=1"
+  },
+  {
+    "name": "Manga Soa Lodge",
+    "category": "3-star hotel",
+    "address": "Address: Befefika NOSY BE, 207 ",
+    "phone": "0340783921",
+    "website": "http://www.manga-soa-lodge.com/",
+    "rating": 0,
+    "totalScore": "",
+    "mapsUrl": "https://www.google.com/maps/place/Manga+Soa+Lodge/data=!4m10!3m9!1s0x2213be9be91e4333:0x2a6a64198e350e55!5m2!4m1!1i2!8m2!3d-13.3178715!4d48.3429482!16s%2Fg%2F11b6394jpm!19sChIJM0Me6Zu-EyIRVQ41jhlkaio?authuser=0&hl=en&rclk=1"
+  },
+  {
+    "name": "Anjiamarango Beach Resort",
+    "category": "3-star hotel",
+    "address": "Address: Befotaka ",
+    "phone": "0320265598",
+    "website": "http://www.anjiamarango-beach-resort.com/",
+    "rating": 0,
+    "totalScore": "",
+    "mapsUrl": "https://www.google.com/maps/place/Anjiamarango+Beach+Resort/data=!4m10!3m9!1s0x2213c7b0880df185:0xc9b4a983f53b59f0!5m2!4m1!1i2!8m2!3d-13.240962!4d48.253424!16s%2Fg%2F113hj7hbp!19sChIJhfENiLDHEyIR8Fk79YOptMk?authuser=0&hl=en&rclk=1"
   }
 ]

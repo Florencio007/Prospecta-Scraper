@@ -122,6 +122,18 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
         setSpamScore(score);
     }, [form.subject, form.body]);
 
+    const [emailError, setEmailError] = useState("");
+
+    const validateEmail = (email: string) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email && !regex.test(email)) {
+            setEmailError("Format d'email invalide");
+            return false;
+        }
+        setEmailError("");
+        return true;
+    };
+
     const handleAI = async () => {
         if (!onGenerateAI) return;
         const result = await onGenerateAI(form.name, "", form.tone, form.sequenceType);
@@ -129,6 +141,8 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
             setForm(prev => ({ ...prev, subject: result.subject, body: result.body }));
         }
     };
+
+    const isStep1Valid = form.name.trim() !== "" && form.fromEmail.trim() !== "" && !emailError;
 
     return (
         <Dialog open={isOpen} onOpenChange={onClose}>
@@ -185,10 +199,15 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
                                         <Label className="text-[10px] uppercase font-black text-slate-500 tracking-tighter">Email</Label>
                                         <Input
                                             placeholder="contact@vtech.mg"
-                                            className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus:border-emerald-500 h-11"
+                                            className={`bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 focus:border-emerald-500 h-11 ${emailError ? 'border-red-500 focus:border-red-500' : ''}`}
                                             value={form.fromEmail}
-                                            onChange={e => updateForm("fromEmail", e.target.value)}
+                                            onChange={e => {
+                                                updateForm("fromEmail", e.target.value);
+                                                validateEmail(e.target.value);
+                                            }}
+                                            onBlur={e => validateEmail(e.target.value)}
                                         />
+                                        {emailError && <p className="text-[10px] text-red-500 font-bold mt-1">{emailError}</p>}
                                     </div>
                                 </div>
                                 <div className="bg-amber-500/5 p-3 rounded-lg border border-amber-500/20 flex items-start gap-2">
@@ -390,7 +409,8 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
                     {step < 3 ? (
                         <Button
                             onClick={() => setStep(s => s + 1)}
-                            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-11 px-8"
+                            disabled={step === 1 && !isStep1Valid}
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-11 px-8 disabled:opacity-50"
                         >
                             Continuer <ChevronRight className="ml-2 h-4 w-4" />
                         </Button>

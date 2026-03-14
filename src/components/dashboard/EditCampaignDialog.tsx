@@ -32,6 +32,17 @@ export default function EditCampaignDialog({ isOpen, onClose, campaign, onSave }
         throttle_max_seconds: 7,
         enable_warmup: true,
     });
+    const [emailError, setEmailError] = useState("");
+
+    const validateEmail = (email: string) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (email && !regex.test(email)) {
+            setEmailError("Format d'email invalide");
+            return false;
+        }
+        setEmailError("");
+        return true;
+    };
 
     useEffect(() => {
         if (campaign) {
@@ -97,10 +108,15 @@ export default function EditCampaignDialog({ isOpen, onClose, campaign, onSave }
                                     <Label className="text-[10px] uppercase font-black text-slate-500 tracking-tighter">Email d'envoi</Label>
                                     <Input
                                         placeholder="Email"
-                                        className="bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-11 focus:border-emerald-500 font-medium"
+                                        className={`bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 h-11 focus:border-emerald-500 font-medium ${emailError ? 'border-red-500 focus:border-red-500' : ''}`}
                                         value={form.from_email}
-                                        onChange={e => updateForm("from_email", e.target.value)}
+                                        onChange={e => {
+                                            updateForm("from_email", e.target.value);
+                                            validateEmail(e.target.value);
+                                        }}
+                                        onBlur={e => validateEmail(e.target.value)}
                                     />
+                                    {emailError && <p className="text-[10px] text-red-500 font-bold mt-1">{emailError}</p>}
                                 </div>
                             </div>
 
@@ -199,8 +215,8 @@ export default function EditCampaignDialog({ isOpen, onClose, campaign, onSave }
                     </Button>
                     <Button
                         onClick={handleSave}
-                        disabled={isSaving}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-black h-11 px-8 gap-2 shadow-lg shadow-emerald-500/20 transition-all active:scale-95 font-outfit"
+                        disabled={isSaving || !!emailError || !form.from_email}
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-black h-11 px-8 gap-2 shadow-lg shadow-emerald-500/20 transition-all active:scale-95 font-outfit disabled:opacity-50"
                     >
                         {isSaving ? <Loader2 className="animate-spin h-4 w-4" /> : <Save size={16} />}
                         Sauvegarder les modifications

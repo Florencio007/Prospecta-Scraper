@@ -46,7 +46,25 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
 
     // Sync local prospect when it changes from props
     if (prospect && (!localProspect || localProspect.id !== prospect.id)) {
-        setLocalProspect(prospect);
+        // Try to load enriched data from localStorage first - user requirement
+        const cacheKey = `enrichment_${prospect.id}`;
+        const cachedData = localStorage.getItem(cacheKey);
+        
+        if (cachedData) {
+            try {
+                const parsed = JSON.parse(cachedData);
+                // Basic validation: ensure it's still the same prospect
+                if (parsed.id === prospect.id) {
+                    setLocalProspect(parsed);
+                } else {
+                    setLocalProspect(prospect);
+                }
+            } catch (e) {
+                setLocalProspect(prospect);
+            }
+        } else {
+            setLocalProspect(prospect);
+        }
     }
 
     const currentProspect = localProspect || prospect;
@@ -97,137 +115,137 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
     const handleEnrich = async () => {
         if (!currentProspect) return;
 
-        if (!isEnrichable(currentProspect.website)) {
+        // Ensure saved before enriching to have a valid UUID for updates
+        const savedId = await ensureProspectSaved();
+        if (!savedId) return;
+
+        const openAiKey = await getKeyByProvider('openai');
+        if (!openAiKey) {
             toast({
-                title: t("websiteRequired"),
-                description: t("websiteRequiredDesc"),
+                title: "Clé OpenAI requise",
+                description: "Veuillez configurer votre clé OpenAI dans les Paramètres (Intégrations) pour utiliser l'enrichissement IA.",
                 variant: "destructive"
             });
             return;
         }
 
-        // Ensure saved before enriching to have a valid UUID for updates
-        const savedId = await ensureProspectSaved();
-        if (!savedId) return;
-
         setIsEnriching(true);
 
         try {
-            // 1. Check Enrichment Cache
-            const domain = extractDomain(currentProspect.website);
-            console.log("Checking enrichment cache for domain:", domain);
+            const hasWebsite = !!currentProspect.website && 
+                             !currentProspect.website.toLowerCase().includes("google.com/maps") && 
+                             !currentProspect.website.toLowerCase().includes("goo.gl/maps");
 
-            const { data: cachedEnrichment } = await supabase
-                .from('cached_enrichments')
-                .select('data')
-                .eq('domain', domain)
-                .maybeSingle();
- 
-            let enrichedData = null;
- 
-            if (cachedEnrichment) {
-                console.log("Enrichment Cache HIT!");
-                enrichedData = cachedEnrichment.data as any;
-                toast({
-                    title: t("success"),
-                    description: "Intelligence récupérée du cache ! ⚡",
-                });
-            } else {
-                console.log("Enrichment Cache MISS. Calling local enrichment...");
- 
-                const openAiKey = await getKeyByProvider('openai');
-                if (!openAiKey) {
+            console.log(hasWebsite ? "Starting Website Enrichment..." : "Starting Google Search Enrichment...");
+
+            const queryParams = new URLSearchParams({
+                name: currentProspect.name,
+                company: currentProspect.company || '',
+                l: currentProspect.city || '',
+                id: currentProspect.id || '',
+                website: currentProspect.website || '',
+                openAiKey: openAiKey
+            });
+
+            const endpoint = hasWebsite ? '/api/scrape/enrich-website' : '/api/scrape/enrich-google';
+            const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001';
+            const eventSource = new EventSource(`${serverUrl}${endpoint}?${queryParams.toString()}`);
+
+            eventSource.onmessage = async (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    
+                    if (data.message) {
+                        // Progress update
+                        console.log(`Enrichment Progress: ${data.percentage}% - ${data.message}`);
+                    }
+
+                    if (data.result) {
+                        const enrichedData = data.result;
+                        const aiIntelligence = enrichedData.ai_intelligence || {};
+
+                        const updatedProspect = {
+                            ...currentProspect,
+                            phone: enrichedData.phone || currentProspect.phone,
+                            email: enrichedData.email || currentProspect.email,
+                            score: enrichedData.score_global || currentProspect.score,
+                            aiIntelligence: {
+                                contactInfo: aiIntelligence.contact_info || { phones: [], emails: [], addresses: [] },
+                                keyPeople: aiIntelligence.key_people || [],
+                                activities: aiIntelligence.activities || {},
+                                recentNews: aiIntelligence.recent_news || [],
+                                companyCulture: aiIntelligence.company_culture || {},
+                                opportunities: aiIntelligence.prospecting_opportunities || [],
+                                salesScripts: aiIntelligence.sales_scripts || [],
+                                executiveSummary: aiIntelligence.executive_summary || "",
+                                ai_suggestions: aiIntelligence.ai_suggestions || []
+                            }
+                        } as Prospect;
+
+                        // Important: Update UI immediately
+                        setLocalProspect(updatedProspect);
+
+                        // Browser Persistence (localStorage) - user requirement
+                        localStorage.setItem(`enrichment_${currentProspect.id}`, JSON.stringify(updatedProspect));
+
+                        // DB Persistence (Supabase)
+                        if (currentProspect.id) {
+                            try {
+                                await supabase
+                                    .from("prospects")
+                                    .update({ score: updatedProspect.score } as any)
+                                    .eq("id", currentProspect.id);
+
+                                await supabase
+                                    .from("prospect_data")
+                                    .update({
+                                        phone: updatedProspect.phone,
+                                        email: updatedProspect.email,
+                                        summary: updatedProspect.aiIntelligence?.executiveSummary,
+                                        ai_intelligence: updatedProspect.aiIntelligence
+                                    } as any)
+                                    .eq("prospect_id", currentProspect.id);
+                            } catch (pErr) {
+                                console.error("DB Update error:", pErr);
+                            }
+                        }
+
+                        const contactCount = (aiIntelligence.contact_info?.phones?.length || 0) + (aiIntelligence.contact_info?.emails?.length || 0);
+                        toast({
+                            title: t("aiEnrichmentSuccess"),
+                            description: t("aiEnrichmentSuccessDesc", { contactCount, personCount: aiIntelligence.key_people?.length || 0 }),
+                        });
+
+                        eventSource.close();
+                        setIsEnriching(false);
+                    }
+
+                    if (data.error) {
+                        throw new Error(data.error);
+                    }
+                } catch (e: any) {
+                    console.error("Event processing error:", e);
                     toast({
-                        title: "Clé OpenAI requise",
-                        description: "Veuillez configurer votre clé OpenAI dans les Paramètres (Intégrations) pour utiliser l'enrichissement IA.",
+                        title: t("error"),
+                        description: e.message || t("aiEnrichmentError"),
                         variant: "destructive"
                     });
+                    eventSource.close();
                     setIsEnriching(false);
-                    return;
                 }
- 
-                try {
-                    const res = await enrichProspectLocally(
-                        currentProspect.website,
-                        openAiKey,
-                        { name: currentProspect.name, company: currentProspect.company }
-                    );
- 
-                    enrichedData = res;
- 
-                    // Save to Cache (Background)
-                    (async () => {
-                        await supabase
-                            .from('cached_enrichments')
-                            .insert([{
-                                domain: domain,
-                                data: enrichedData
-                            }]);
-                    })();
-                } catch (enrichError: any) {
-                    throw new Error(enrichError.message);
-                }
-            }
- 
-            if (enrichedData) {
-                const aiIntelligence = enrichedData.ai_intelligence || {};
- 
-                const updatedProspect = {
-                    ...currentProspect,
-                    // Mettre à jour les infos de contact si trouvées
-                    phone: enrichedData.phone || currentProspect.phone,
-                    email: enrichedData.email || currentProspect.email,
-                    score: enrichedData.score_global || currentProspect.score,
-                aiIntelligence: {
-                    contactInfo: aiIntelligence.contact_info || { phones: [], emails: [], addresses: [] },
-                    keyPeople: aiIntelligence.key_people || [],
-                    activities: aiIntelligence.activities || {},
-                    recentNews: aiIntelligence.recent_news || [],
-                    companyCulture: aiIntelligence.company_culture || {},
-                    opportunities: aiIntelligence.prospecting_opportunities || [],
-                    salesScripts: aiIntelligence.sales_scripts || [],
-                    executiveSummary: aiIntelligence.executive_summary || "",
-                    ai_suggestions: aiIntelligence.ai_suggestions || []
-                }
-            } as Prospect;
- 
-                // Important: Mettre à jour l'état local immédiatement pour la réactivité UI
-                setLocalProspect(updatedProspect);
- 
-                // Persister dans la base de données
-                try {
-                    // 1. Mise à jour du score dans la table prospects
-                    const { error: pError } = await supabase
-                        .from("prospects")
-                        .update({ score: updatedProspect.score })
-                        .eq("id", currentProspect.id);
- 
-                    if (pError) console.error("Error updating prospect score:", pError);
- 
-                    // 2. Mise à jour des infos détaillées dans prospect_data
-                    const { error: pdError } = await supabase
-                        .from("prospect_data")
-                        .update({
-                            phone: updatedProspect.phone,
-                            email: updatedProspect.email,
-                            summary: updatedProspect.aiIntelligence?.executiveSummary,
-                            ai_intelligence: updatedProspect.aiIntelligence // Stockage du JSON complet
-                        })
-                        .eq("prospect_id", currentProspect.id);
- 
-                    if (pdError) console.error("Error updating prospect data:", pdError);
-                } catch (persistError) {
-                    console.error("Persistence error:", persistError);
-                }
+            };
 
-                const contactCount = (aiIntelligence.contact_info?.phones?.length || 0) + (aiIntelligence.contact_info?.emails?.length || 0);
+            eventSource.onerror = (err) => {
+                console.error("EventSource error:", err);
+                eventSource.close();
+                setIsEnriching(false);
                 toast({
-                    title: t("aiEnrichmentSuccess"),
-                    description: t("aiEnrichmentSuccessDesc", { contactCount, personCount: aiIntelligence.key_people?.length || 0 }),
+                    title: t("error"),
+                    description: "Erreur de connexion avec le serveur d'enrichissement",
+                    variant: "destructive"
                 });
-            } else {
-                throw new Error(t("aiEnrichmentNoData"));
-            }
+            };
+
         } catch (error: any) {
             console.error("AI Enrichment error:", error);
             toast({
@@ -235,7 +253,6 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                 description: t("aiEnrichmentError"),
                 variant: "destructive",
             });
-        } finally {
             setIsEnriching(false);
         }
     };
@@ -359,13 +376,48 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                 return null;
             }
 
+            // 0. Check if prospect already exists by email OR name+company to avoid unique constraint error
+            if (currentProspect.email || (currentProspect.name && currentProspect.company)) {
+                let existing = null;
+                
+                // Try by email first
+                if (currentProspect.email) {
+                    const { data: byEmail } = await supabase
+                        .from("prospect_data")
+                        .select("prospect_id, prospects!inner(user_id)")
+                        .eq("email", currentProspect.email)
+                        .eq("prospects.user_id", user.id)
+                        .maybeSingle();
+                    if (byEmail) existing = byEmail;
+                }
+                
+                // Fallback to name + company
+                if (!existing && currentProspect.name && currentProspect.company) {
+                    const { data: byName } = await supabase
+                        .from("prospect_data")
+                        .select("prospect_id, prospects!inner(user_id)")
+                        .eq("name", currentProspect.name)
+                        .eq("company", currentProspect.company)
+                        .eq("prospects.user_id", user.id)
+                        .maybeSingle();
+                    if (byName) existing = byName;
+                }
+                
+                if (existing) {
+                    console.log("Prospect already exists in DB. Using existing ID:", existing.prospect_id);
+                    const updated = { ...currentProspect, id: existing.prospect_id as string };
+                    setLocalProspect(updated);
+                    return existing.prospect_id as string;
+                }
+            }
+
             // 1. Insert into prospects
             const { data: newP, error: pErr } = await supabase.from("prospects").insert([{
                 source: currentProspect.source,
                 score: currentProspect.score,
                 user_id: user.id,
                 status: 'new'
-            }]).select().single();
+            }]).select().single() as any;
 
             if (pErr) throw pErr;
 
@@ -394,7 +446,12 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
             return null;
         } catch (error: any) {
             console.error("Error auto-saving prospect:", error);
-            toast({ title: t("error"), description: t("errorSavingProspect"), variant: "destructive" });
+            const errorMessage = error.message || error.details || t("errorSavingProspect");
+            toast({ 
+                title: t("error"), 
+                description: `${t("errorSavingProspect")}: ${errorMessage}`, 
+                variant: "destructive" 
+            });
             return null;
         }
     };
@@ -459,8 +516,8 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                             className="w-full border-border text-foreground hover:bg-muted rounded-xl transition-all py-6"
                                             variant="outline"
                                         >
-                                            {isEnriching ? <Loader2 size={18} className="animate-spin" /> : <ShieldCheck className="mr-2" size={18} />}
-                                            <span className="font-medium">{isEnriching ? t("verifying") : t("verifyEnrich")}</span>
+                                            {isEnriching ? <Loader2 size={18} className="animate-spin" /> : <Sparkles className="mr-2" size={18} />}
+                                            <span className="font-medium">{isEnriching ? t("verifying") : t("extractIntelligence")}</span>
                                         </Button>
                                         <Button
                                             onClick={handleAIAnalysis}

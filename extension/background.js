@@ -17,56 +17,85 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 });
 
 async function startScrapingProcess(params) {
-    const { keyword, location, type } = params;
+    const { keyword, location, type, channel } = params;
     
-    // Notification UI Vercel : Début
-    emitProgress("Initialisation de l'Agent Prospecta Local...", 5, "info");
+    emitProgress(`Initialisation du canal [${channel.toUpperCase()}]...`, 5, "info");
 
     return new Promise(async (resolve, reject) => {
         try {
-            // Création d'un onglet inactif/minimisé vers LinkedIn
-            emitProgress("Ouverture de LinkedIn avec votre session...", 10, "info");
+            let searchUrl = "";
+            let command = "";
+
+            switch (channel) {
+                case "linkedin":
+                    searchUrl = `https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(keyword + (location ? ' ' + location : ''))}`;
+                    command = "EXTRACT_LINKEDIN_DATA";
+                    break;
+                case "google_maps":
+                    searchUrl = `https://www.google.com/maps/search/${encodeURIComponent(keyword + ' ' + (location || ''))}`;
+                    command = "EXTRACT_GMAPS_DATA";
+                    break;
+                case "facebook":
+                    searchUrl = `https://www.facebook.com/search/top/?q=${encodeURIComponent(keyword)}`;
+                    command = "EXTRACT_FACEBOOK_DATA";
+                    break;
+                case "pages_jaunes":
+                    searchUrl = `https://www.pagesjaunes.fr/annuaire/chercherlespros?quoiqui=${encodeURIComponent(keyword)}&ou=${encodeURIComponent(location || '')}`;
+                    command = "EXTRACT_PJ_DATA";
+                    break;
+                case "pappers":
+                    searchUrl = `https://www.pappers.fr/recherche?q=${encodeURIComponent(keyword + ' ' + (location || ''))}`;
+                    command = "EXTRACT_PAPPERS_DATA";
+                    break;
+                case "societe":
+                    searchUrl = `https://www.societe.com/cgi-bin/search?champs=${encodeURIComponent(keyword)}`;
+                    command = "EXTRACT_SOCIETE_DATA";
+                    break;
+                case "infogreffe":
+                    searchUrl = `https://www.infogreffe.fr/recherche-entreprise-dirigeant/resultats-recherche-entreprise-dirigeant.html?phrase=${encodeURIComponent(keyword)}`;
+                    command = "EXTRACT_INFOGREFFE_DATA";
+                    break;
+                default:
+                    return reject(new Error("Canal de scraping non supporté par l'extension."));
+            }
+
+            emitProgress(`Ouverture de ${channel} (Visible)...`, 10, "info");
             
-            const searchUrl = `https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(keyword + (location ? ' ' + location : ''))}`;
+            // On ouvre l'onglet en ACTIVE: TRUE pour que le client voie le scraping
+            activeScrapeTab = await chrome.tabs.create({ url: searchUrl, active: true });
             
-            activeScrapeTab = await chrome.tabs.create({ url: searchUrl, active: false });
-            
-            // On attend que la page charge un peu
+            // Attente du chargement
             setTimeout(async () => {
-                emitProgress("Injection du script d'extraction natif...", 20, "info");
+                emitProgress("Démarrage de l'extraction native...", 20, "info");
                 
                 try {
-                    // Exécute le script de scraping dans l'onglet LinkedIn
-                    const results = await chrome.scripting.executeScript({
+                    await chrome.scripting.executeScript({
                         target: { tabId: activeScrapeTab.id },
                         files: ['content-scraper.js']
                     });
                     
-                    // Passe les paramètres au script via un message classique
                     chrome.tabs.sendMessage(activeScrapeTab.id, { 
-                        command: 'EXTRACT_LINKEDIN_DATA',
+                        command: command,
                         params: params 
                     }, (extractionResponse) => {
-                        // Nettoyage : Ferme l'onglet de scraping à la fin
+                        // On ferme l'onglet à la fin (ou on pourrait le laisser ouvert si le client préfère)
                         if (activeScrapeTab) {
-                            chrome.tabs.remove(activeScrapeTab.id);
+                            // chrome.tabs.remove(activeScrapeTab.id); // Optionnel : Décommenter pour fermer l'onglet
                             activeScrapeTab = null;
                         }
 
                         if (extractionResponse && extractionResponse.error) {
                             reject(new Error(extractionResponse.error));
                         } else {
-                            // Succès complet
-                            emitProgress("Scraping local terminé avec succès !", 100, "success");
+                            emitProgress(`Scraping ${channel} terminé !`, 100, "success");
                             resolve(extractionResponse?.data || []);
                         }
                     });
 
                 } catch (e) {
-                    if (activeScrapeTab) chrome.tabs.remove(activeScrapeTab.id);
                     reject(e);
                 }
-            }, 5000); // 5 secondes pour laisser LinkedIn charger (SPA)
+            }, 6000); 
 
         } catch (error) {
             reject(error);

@@ -408,13 +408,55 @@ const ProspectFinder = () => {
           const updateChannelPct = (pct: number, msg: string) => {
             setChannelProgress(prev => {
               const next = { ...prev, [channel]: pct };
-              // Calcul de la moyenne globale pour la barre de progression
               const values = Object.values(next);
               const avg = Math.round(values.reduce((a, b) => a + b, 0) / filters.channels.length);
               setScrapeProgress({ percentage: avg, message: `[${channel.toUpperCase()}] ${msg}` });
               return next;
             });
           };
+
+          // --- MODE AGENT NATIF (Extension Chrome) ---
+          // Détection si l'extension peut gérer ce canal
+          const extensionChannels = ["linkedin", "google_maps", "facebook", "pages_jaunes", "pappers", "societe", "infogreffe"];
+          if (window.__PROSPECTA_EXTENSION__ && extensionChannels.includes(channel)) {
+            addLog(`🚀 Agent Local: Lancement du canal ${channel}...`, "system");
+            
+            const unsubscribe = window.__PROSPECTA_EXTENSION__.onProgress((msg: any) => {
+              if (msg.type === "SCRAPE_PROGRESS") {
+                updateChannelPct(msg.progress, msg.message);
+                addLog(msg.message, msg.status || 'process');
+              } else if (msg.type === "PROSPECT_FOUND") {
+                setPendingProspects(prev => {
+                  const exists = prev.some(p => 
+                    (p.id === msg.prospect.id) || 
+                    (p.name === msg.prospect.name && p.company === msg.prospect.company)
+                  );
+                  if (exists) return prev;
+                  return [...prev, msg.prospect];
+                });
+                setSelectedProspectIds(prev => new Set(prev).add(msg.prospect.id));
+                addLog(`👤 Trouvé (${channel}): ${msg.prospect.name}`, 'success');
+              }
+            });
+
+            try {
+              const res = await window.__PROSPECTA_EXTENSION__.startSearch({
+                keyword: filters.keyword,
+                location: locationQuery,
+                type: filters.type,
+                channel: channel,
+                maxLimit: filters.channelLimits[channel as keyof typeof filters.channelLimits] || 10
+              });
+              updateChannelPct(100, "Terminé");
+              unsubscribe();
+              resolveChannel();
+              return; // On stoppe ici si l'extension a géré le canal
+            } catch (err: any) {
+              addLog(`⚠️ Repli Serveur [${channel}]: ${err.message}`, 'process');
+              unsubscribe();
+              // On continue vers la logique EventSource ci-dessous
+            }
+          }
 
           if (channel === "govcon") {
             try {
@@ -491,52 +533,16 @@ const ProspectFinder = () => {
           }
           else if (channel === "linkedin") {
             addLog("🛡️ Protocoles LinkedIn...", "system");
-
-            // Option C: Scraping via Prospecta Chrome Extension (100% Local Native)
-            if (window.__PROSPECTA_EXTENSION__) {
-              addLog("🔌 Connexion à l'Agent Chrome Prospecta réussie.", "success");
-              
-              // Abonnement au stream de progression
-              const unsubscribe = window.__PROSPECTA_EXTENSION__.onProgress((msg: any) => {
-                if (msg.type === "SCRAPE_PROGRESS") {
-                  updateChannelPct(msg.progress, msg.message);
-                  addLog(msg.message, msg.status || 'process');
-                } else if (msg.type === "PROSPECT_FOUND") {
-                  setPendingProspects(prev => {
-                    if (prev.some(p => p.profileUrl === msg.prospect.profileUrl)) return prev;
-                    return [...prev, msg.prospect];
-                  });
-                  setSelectedProspectIds(prev => new Set(prev).add(msg.prospect.id));
-                  addLog(`👤 LinkedIn: ${msg.prospect.name}`, 'success');
-                }
-              });
-
-              try {
-                // Lancement de la commande au Service Worker de l'extension
-                await window.__PROSPECTA_EXTENSION__.startSearch({
-                  keyword: filters.keyword,
-                  location: locationQuery,
-                  type: filters.type,
-                  maxLimit: filters.channelLimits.linkedin
-                });
-              } catch (err: any) {
-                addLog(`❌ Erreur Agent Chrome: ${err.message}`, 'error');
-              } finally {
-                unsubscribe();
-                resolveChannel();
-              }
-            } else {
-              // Fallback ou erreur si l'extension n'est pas installée
-              toast({
-                title: "Module Local Requis",
-                description: "LinkedIn a renforcé sa sécurité. Veuillez installer l'Extension Chrome Prospecta pour scraper depuis votre session.",
-                variant: "destructive",
-                duration: 10000,
-              });
-              addLog("❌ Agent Chrome non détecté. Impossible de scraper LinkedIn.", "error");
-              updateChannelPct(100, "Échec (Extension manquante)");
-              resolveChannel();
-            }
+            // L'extension a déjà tenté de gérer LinkedIn plus haut. 
+            // Si on arrive ici, c'est que l'extension n'est pas installée.
+            toast({
+              title: "Module Local Requis",
+              description: "LinkedIn nécessite l'Extension Chrome Prospecta pour fonctionner en toute sécurité.",
+              variant: "destructive",
+            });
+            addLog("❌ Extension Prospecta manquante pour LinkedIn.", "error");
+            updateChannelPct(100, "Échec (Extension manquante)");
+            resolveChannel();
           }
           else if (channel === "pages_jaunes") {
              addLog("📖 Pages Jaunes France...", "system");
