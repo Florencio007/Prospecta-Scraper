@@ -6,20 +6,27 @@ let currentVercelTab = null;
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (request.command === "START_SCRAPE") {
         console.log("Démarrage du scraping demandé par :", sender.tab?.url);
+        console.log("Params reçus:", request.params);
         currentVercelTab = sender.tab?.id;
         
         startScrapingProcess(request.params)
-            .then(data => sendResponse({ requestId: request.requestId, data }))
-            .catch(error => sendResponse({ requestId: request.requestId, error: error.message }));
+            .then(data => {
+                console.log("Scraping réussi, envoi de la réponse.");
+                sendResponse({ requestId: request.requestId, data });
+            })
+            .catch(error => {
+                console.error("Erreur Scraping:", error);
+                sendResponse({ requestId: request.requestId, error: error.message });
+            });
         
         return true; // Indique une réponse asynchrone
     }
 });
 
 async function startScrapingProcess(params) {
-    const { keyword, location, type, channel } = params;
+    const { keyword, location, type, channel = "unknown" } = params;
     
-    emitProgress(`Initialisation du canal [${channel.toUpperCase()}]...`, 5, "info");
+    emitProgress(`Initialisation du canal [${(channel || "unknown").toUpperCase()}]...`, 5, "info");
 
     return new Promise(async (resolve, reject) => {
         try {

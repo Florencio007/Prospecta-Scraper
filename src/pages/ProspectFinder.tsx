@@ -410,7 +410,7 @@ const ProspectFinder = () => {
               const next = { ...prev, [channel]: pct };
               const values = Object.values(next);
               const avg = Math.round(values.reduce((a, b) => a + b, 0) / filters.channels.length);
-              setScrapeProgress({ percentage: avg, message: `[${channel.toUpperCase()}] ${msg}` });
+              setScrapeProgress({ percentage: avg, message: `[${(channel || 'N/A').toUpperCase()}] ${msg}` });
               return next;
             });
           };
