@@ -416,11 +416,13 @@ const ProspectFinder = () => {
             });
           };
 
-          // --- MODE AGENT NATIF (Extension Chrome) ---
-          // Détection si l'extension peut gérer ce canal
-          const extensionChannels = ["linkedin", "google_maps", "facebook", "pages_jaunes", "pappers", "societe", "infogreffe"];
-          if (window.__PROSPECTA_EXTENSION__ && extensionChannels.includes(channel)) {
-            addLog(`🚀 Agent Local: Lancement du canal ${channel}...`, "system");
+          // --- MODE AGENT LOCAL (Playwright Serveur) ---
+          // On n'utilise plus l'extension Chrome, mais les scripts locaux du serveur.
+          const localPlaywrightChannels = ["linkedin", "facebook"];
+          const extensionChannels = ["google_maps", "pages_jaunes", "pappers", "societe", "infogreffe"];
+          
+          if (window.__PROSPECTA_EXTENSION__ && extensionChannels.includes(channel) && !localPlaywrightChannels.includes(channel)) {
+            addLog(`🚀 Agent Extension: Lancement du canal ${channel}...`, "system");
             
             const unsubscribe = window.__PROSPECTA_EXTENSION__.onProgress((msg: any) => {
               if (msg.type === "SCRAPE_PROGRESS") {
@@ -533,17 +535,60 @@ const ProspectFinder = () => {
             es.onerror = () => { es.close(); resolveChannel(); };
           }
           else if (channel === "linkedin") {
-            addLog("🛡️ Protocoles LinkedIn...", "system");
-            // L'extension a déjà tenté de gérer LinkedIn plus haut. 
-            // Si on arrive ici, c'est que l'extension n'est pas installée.
-            toast({
-              title: "Module Local Requis",
-              description: "LinkedIn nécessite l'Extension Chrome Prospecta pour fonctionner en toute sécurité.",
-              variant: "destructive",
-            });
-            addLog("❌ Extension Prospecta manquante pour LinkedIn.", "error");
-            updateChannelPct(100, "Échec (Extension manquante)");
-            resolveChannel();
+            addLog("🛡️ Protocoles LinkedIn (Local)...", "system");
+            const url = `/api/scrape/linkedin?q=${encodeURIComponent(filters.keyword)}&email=${encodeURIComponent(linkedinCredentials.email)}&password=${encodeURIComponent(linkedinCredentials.password)}&maxProfiles=${filters.channelLimits.linkedin}&maxPosts=${linkedinOptions.maxPosts}&type=${filters.type}&activityType=${linkedinOptions.activityType}`;
+            const es = new EventSource(url);
+            activeEventSources.current.push(es);
+            es.onmessage = (e) => {
+              let d;
+              try { d = JSON.parse(e.data); } catch(err) { addLog(e.data, 'process'); return; }
+              if (d.message && d.percentage === undefined && !d.error && !d.result) { addLog(d.message, 'process'); }
+              if (d.percentage !== undefined) updateChannelPct(d.percentage, d.message || "");
+              if (d.error && typeof d.error === 'string') addLog(`❌ Erreur: ${d.error}`, 'error');
+              if (d.result) {
+                const mapped = {
+                  ...d.result,
+                  id: d.result.id || `li_${Math.random().toString(36).substr(2, 9)}`,
+                  source: "linkedin"
+                };
+                setPendingProspects(prev => {
+                   if (prev.some(p => p.profileUrl === mapped.profileUrl)) return prev;
+                   return [...prev, mapped];
+                });
+                setSelectedProspectIds(prev => new Set(prev).add(mapped.id));
+                addLog(`👤 LinkedIn: ${mapped.name}`, 'success');
+              }
+              if (d.percentage === 100 || d.error) { es.close(); resolveChannel(); }
+            };
+            es.onerror = () => { es.close(); resolveChannel(); };
+          }
+          else if (channel === "facebook") {
+            addLog("👥 Protocoles Facebook (Local)...", "system");
+            const url = `/api/scrape/facebook?q=${encodeURIComponent(filters.keyword)}&email=${encodeURIComponent(facebookCredentials.email)}&password=${encodeURIComponent(facebookCredentials.password)}&limit=${filters.channelLimits.facebook}&maxPosts=${facebookOptions.maxPosts}&type=${filters.type}&activityType=${facebookOptions.activityType}`;
+            const es = new EventSource(url);
+            activeEventSources.current.push(es);
+            es.onmessage = (e) => {
+              let d;
+              try { d = JSON.parse(e.data); } catch(err) { addLog(e.data, 'process'); return; }
+              if (d.message && d.percentage === undefined && !d.error && !d.result) { addLog(d.message, 'process'); }
+              if (d.percentage !== undefined) updateChannelPct(d.percentage, d.message || "");
+              if (d.error && typeof d.error === 'string') addLog(`❌ Erreur: ${d.error}`, 'error');
+              if (d.result) {
+                const mapped = {
+                  ...d.result,
+                  id: d.result.id || `fb_${Math.random().toString(36).substr(2, 9)}`,
+                  source: "facebook"
+                };
+                setPendingProspects(prev => {
+                   if (prev.some(p => p.profileUrl === mapped.profileUrl)) return prev;
+                   return [...prev, mapped];
+                });
+                setSelectedProspectIds(prev => new Set(prev).add(mapped.id));
+                addLog(`👥 Facebook: ${mapped.name}`, 'success');
+              }
+              if (d.percentage === 100 || d.error) { es.close(); resolveChannel(); }
+            };
+            es.onerror = () => { es.close(); resolveChannel(); };
           }
           else if (channel === "pages_jaunes") {
              addLog("📖 Pages Jaunes France...", "system");

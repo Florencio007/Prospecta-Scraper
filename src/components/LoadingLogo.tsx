@@ -48,8 +48,8 @@ export function LoadingLogo({
         )}
         
         {/* The Prospecta Logo in the center */}
-        <div className={`relative z-10 transition-transform duration-500 ${size === 'xs' ? '' : 'hover:scale-110'}`}>
-          <Logo size={logoSizeMap[size]} className={size === 'xs' ? 'h-3' : ''} />
+        <div className={`relative z-10 transition-all duration-700 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm rounded-full p-1.5 shadow-xl border border-white/20 dark:border-slate-700/50 ${size === 'xs' ? 'p-0.5' : 'hover:scale-110 hover:shadow-accent/20'}`}>
+          <Logo size={logoSizeMap[size]} className={size === 'xs' ? 'h-3 w-3' : ''} />
         </div>
       </div>
       
