@@ -14,7 +14,37 @@ function emitLog(msg, pct = undefined) {
   console.log(msg);
   process.stdout.write(`PROGRESS:${JSON.stringify({ percentage: pct, message: msg })}\n`);
 }
+
+/** Affiche un résumé lisible directement dans le terminal */
+function printResult(data) {
+  const line = '─'.repeat(60);
+  console.log(`\n${line}`);
+  console.log(`🏢  ${data.name || data.denomination || 'N/A'}  ${data.statut ? `[${data.statut}]` : ''}`);
+  if (data.siren)          console.log(`   SIREN       : ${data.siren}`);
+  if (data.siret)          console.log(`   SIRET        : ${data.siret}`);
+  if (data.tva)            console.log(`   TVA          : ${data.tva}`);
+  if (data.formeJuridique) console.log(`   Forme jur.   : ${data.formeJuridique}`);
+  if (data.capital)        console.log(`   Capital      : ${data.capital}`);
+  if (data.adresse)        console.log(`   Adresse      : ${data.adresse}`);
+  if (data.email)          console.log(`   Email        : ${data.email}`);
+  if (data.phone)          console.log(`   Tél          : ${data.phone}`);
+  if (data.website)        console.log(`   Site web     : ${data.website}`);
+  if (data.codeNaf)        console.log(`   Code NAF     : ${data.codeNaf} — ${data.libelleNaf || ''}`);
+  if (data.employees)      console.log(`   Effectifs    : ${data.employees}`);
+  if (data.dateCreation)   console.log(`   Création     : ${data.dateCreation}`);
+  if (data.dernierCA)      console.log(`   Dernier CA   : ${data.dernierCA} €`);
+  if (data.dirigeants?.length) {
+    console.log(`   Dirigeant(s) : ${data.dirigeants.slice(0, 3).map(d => `${d.prenom || ''} ${d.nom || d}`).join(', ')}`);
+  }
+  if (data.finances?.length) {
+    console.log(`   Finances     : ${data.finances.slice(0, 3).map(f => `${f.annee}: CA ${f.chiffreAffaires ?? '?'}€, Résultat ${f.resultatNet ?? '?'}€`).join(' | ')}`);
+  }
+  if (data.sourceUrl)      console.log(`   Source       : ${data.sourceUrl}`);
+  console.log(line);
+}
+
 function emitResult(data) {
+  printResult(data);
   process.stdout.write(`RESULT:${JSON.stringify(data)}\n`);
 }
 

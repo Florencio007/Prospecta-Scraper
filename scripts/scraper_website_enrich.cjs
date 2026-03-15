@@ -43,13 +43,13 @@ async function scrapeWebsite() {
     const page = await context.newPage();
 
     const fullUrl = websiteUrl.startsWith('http') ? websiteUrl : `https://${websiteUrl}`;
-    
+
     emit("PROGRESS", { percentage: 20, message: `Navigation vers ${fullUrl}...` });
     try {
-        await page.goto(fullUrl, { waitUntil: 'networkidle', timeout: 30000 });
+      await page.goto(fullUrl, { waitUntil: 'networkidle', timeout: 30000 });
     } catch (e) {
-        emit("PROGRESS", { percentage: 25, message: `Erreur navigation (${e.message}), tentative avec domcontentloaded...` });
-        await page.goto(fullUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
+      emit("PROGRESS", { percentage: 25, message: `Erreur navigation (${e.message}), tentative avec domcontentloaded...` });
+      await page.goto(fullUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
     }
 
     // 1. Extract links to crawl (limit to 5 internal links)
@@ -64,7 +64,7 @@ async function scrapeWebsite() {
     });
 
     let aggregatedText = "";
-    
+
     // Scrape homepage
     emit("PROGRESS", { percentage: 30, message: `Extraction du texte de la page d'accueil...` });
     const homeText = await page.evaluate(() => {
@@ -76,19 +76,19 @@ async function scrapeWebsite() {
 
     // Scrape other pages
     for (let i = 0; i < links.length; i++) {
-        const link = links[i];
-        emit("PROGRESS", { percentage: 30 + (i * 5), message: `Scraping page secondaire: ${link}...` });
-        try {
-            await page.goto(link, { waitUntil: 'domcontentloaded', timeout: 15000 });
-            const pageText = await page.evaluate(() => {
-                const scripts = document.querySelectorAll('script, style, noscript, iframe, svg, img, video, audio, nav, footer, header');
-                scripts.forEach(s => s.remove());
-                return document.body.innerText;
-            });
-            aggregatedText += `PAGE: ${link}\n${pageText}\n\n`;
-        } catch (e) {
-            console.error(`Failed to scrape ${link}: ${e.message}`);
-        }
+      const link = links[i];
+      emit("PROGRESS", { percentage: 30 + (i * 5), message: `Scraping page secondaire: ${link}...` });
+      try {
+        await page.goto(link, { waitUntil: 'domcontentloaded', timeout: 15000 });
+        const pageText = await page.evaluate(() => {
+          const scripts = document.querySelectorAll('script, style, noscript, iframe, svg, img, video, audio, nav, footer, header');
+          scripts.forEach(s => s.remove());
+          return document.body.innerText;
+        });
+        aggregatedText += `PAGE: ${link}\n${pageText}\n\n`;
+      } catch (e) {
+        console.error(`Failed to scrape ${link}: ${e.message}`);
+      }
     }
 
     await browser.close();
@@ -115,7 +115,7 @@ Structure JSON:
     "email": "email principal de contact ou null",
     "score_global": 85,
     "ai_intelligence": {
-        "executive_summary": "Résumé stratégique (5-6 lignes).",
+        "executive_summary": "Résumé stratégique (5-12 lignes).",
         "contact_info": { "phones": ["tel1", "tel2"], "emails": ["email1", "email2"], "addresses": ["adresse 1"] },
         "key_people": [ { "name": "Nom", "role": "Rôle", "context": "Détails" } ],
         "activities": { "services": ["Service A", "Service B"], "technologies": ["Tech 1"], "sectors": ["Secteur X"] },
@@ -131,25 +131,25 @@ Structure JSON:
 `;
 
     const openAiResponse = await fetchFn('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${openAiKey}`
-        },
-        body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            response_format: { type: "json_object" },
-            messages: [
-                { role: "system", content: systemPrompt },
-                { role: "user", content: `Contenu collecté sur le site: \n\n${aggregatedText}` }
-            ],
-            temperature: 0.3,
-        })
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${openAiKey}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        response_format: { type: "json_object" },
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: `Contenu collecté sur le site: \n\n${aggregatedText}` }
+        ],
+        temperature: 0.3,
+      })
     });
 
     if (!openAiResponse.ok) {
-        const err = await openAiResponse.json();
-        throw new Error(`OpenAI Error: ${err.error?.message || openAiResponse.statusText}`);
+      const err = await openAiResponse.json();
+      throw new Error(`OpenAI Error: ${err.error?.message || openAiResponse.statusText}`);
     }
 
     const aiData = await openAiResponse.json();

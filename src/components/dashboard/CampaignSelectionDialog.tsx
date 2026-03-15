@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Plus, PlusCircle } from "lucide-react";
-import { LoadingLogo } from "@/components/LoadingLogo";
+import { Plus, PlusCircle, Loader2 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -171,7 +170,7 @@ const CampaignSelectionDialog = ({
                                     onClick={handleQuickCreateCampaign}
                                     disabled={loading}
                                 >
-                                    {loading ? <LoadingLogo size="xs" compact /> : "Créer et ajouter"}
+                                    {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "Créer et ajouter"}
                                 </Button>
                             </div>
                         </div>
@@ -179,7 +178,7 @@ const CampaignSelectionDialog = ({
                         <>
                             {loading ? (
                                 <div className="flex flex-col items-center justify-center py-8 space-y-3">
-                                    <LoadingLogo size="md" />
+                                    <Loader2 className="h-8 w-8 animate-spin text-accent" />
                                     <span className="text-sm text-slate-500">Chargement des campagnes...</span>
                                 </div>
                             ) : campaigns.length > 0 ? (

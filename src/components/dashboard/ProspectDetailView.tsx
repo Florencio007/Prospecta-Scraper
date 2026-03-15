@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, Globe, MessageCircle, ExternalLink, ShieldCheck, Zap, Linkedin, Facebook, Instagram, Twitter, Youtube, Pin, Share2, Copy, Save, X, MapPin, Sparkles, Loader2, Plus, Clock, Users, MessageSquare, ThumbsUp } from "lucide-react";
+import { Mail, Phone, Globe, MessageCircle, ExternalLink, ShieldCheck, Zap, Linkedin, Facebook, Instagram, Twitter, Youtube, Pin, Share2, Copy, Save, X, MapPin, Sparkles, Loader2, Plus, Clock, Users, MessageSquare, ThumbsUp, Star, Info } from "lucide-react";
 import { Prospect } from "@/data/mockData";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useToast } from "@/hooks/use-toast";
@@ -498,9 +498,25 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                         </div>
                                         <h3 className="text-xl font-bold text-foreground">{currentProspect.name}</h3>
                                         <p className="text-muted-foreground text-sm font-medium">{currentProspect.position || t("positionUnknown")}</p>
-                                        <div className="flex items-center justify-center gap-1 mt-1 text-xs text-muted-foreground/80">
-                                            <Globe size={12} />
-                                            <span>{currentProspect.company || t("companyUnknown")}</span>
+                                        <div className="flex flex-col items-center justify-center gap-1 mt-1">
+                                            <div className="flex items-center gap-1 text-xs text-muted-foreground/80">
+                                                <Globe size={12} />
+                                                <span>{currentProspect.company || t("companyUnknown")}</span>
+                                            </div>
+                                            {(currentProspect.contractDetails?.starRating || currentProspect.contractDetails?.price) && (
+                                                <div className="flex items-center gap-3 mt-2">
+                                                    {currentProspect.contractDetails?.starRating && (
+                                                        <Badge variant="secondary" className="bg-amber-500/10 text-amber-600 border-amber-500/20 text-[10px] font-bold">
+                                                            <Star size={10} className="mr-1 fill-amber-500" /> {currentProspect.contractDetails.starRating}
+                                                        </Badge>
+                                                    )}
+                                                    {currentProspect.contractDetails?.price && (
+                                                        <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 text-[10px] font-bold">
+                                                            {currentProspect.contractDetails.price}
+                                                        </Badge>
+                                                    )}
+                                                </div>
+                                            )}
                                         </div>
                                     </div>
 
@@ -517,7 +533,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                             className="w-full border-border text-foreground hover:bg-muted rounded-xl transition-all py-6"
                                             variant="outline"
                                         >
-                                            {isEnriching ? <LoadingLogo size="xs" compact /> : <Sparkles className="mr-2" size={18} />}
+                                            {isEnriching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="mr-2" size={18} />}
                                             <span className="font-medium">{isEnriching ? t("verifying") : t("extractIntelligence")}</span>
                                         </Button>
                                         <Button
@@ -526,7 +542,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                             className="w-full border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/5 rounded-xl transition-all py-6"
                                             variant="outline"
                                         >
-                                            {isAnalyzing ? <LoadingLogo size="xs" compact /> : <Zap className="mr-2" size={18} />}
+                                            {isAnalyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="mr-2" size={18} />}
                                             <span className="font-bold">{isAnalyzing ? t("analyzing") : t("aiStrategy")}</span>
                                         </Button>
                                     </div>
@@ -646,6 +662,15 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                     <span className="text-xs font-semibold text-muted-foreground group-hover:text-pink-400 transition-colors">Instagram</span>
                                                 </a>
                                             )}
+                                            
+                                            {/* Plateformes Google Maps Additionnelles */}
+                                            {currentProspect.contractDetails?.platformLinks && Array.isArray(currentProspect.contractDetails.platformLinks) && currentProspect.contractDetails.platformLinks.map((pl: any, idx: number) => (
+                                                <a key={idx} href={pl.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-secondary/20 rounded-xl border border-border/30 hover:border-accent/40 hover:bg-secondary/40 transition-all group">
+                                                    <Globe size={16} className="text-accent" />
+                                                    <span className="text-xs font-semibold text-muted-foreground group-hover:text-accent transition-colors">{pl.name}</span>
+                                                </a>
+                                            ))}
+                                            
                                             {((currentProspect.socialLinks?.twitter) || (currentProspect.website && (currentProspect.website.toLowerCase().includes("twitter.com") || currentProspect.website.toLowerCase().includes("x.com")))) && (
                                                 <a href={currentProspect.socialLinks?.twitter || currentProspect.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-secondary/20 rounded-xl border border-border/30 hover:border-blue-300/40 hover:bg-secondary/40 transition-all group">
                                                     <Twitter size={16} className="text-blue-300" />
@@ -656,12 +681,6 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                 <a href={currentProspect.socialLinks?.youtube || currentProspect.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-secondary/20 rounded-xl border border-border/30 hover:border-red-500/40 hover:bg-secondary/40 transition-all group">
                                                     <Youtube size={16} className="text-red-500" />
                                                     <span className="text-xs font-semibold text-muted-foreground group-hover:text-red-500 transition-colors">YouTube</span>
-                                                </a>
-                                            )}
-                                            {((currentProspect.socialLinks?.pinterest) || (currentProspect.website && (currentProspect.website.toLowerCase().includes("pinterest.com") || currentProspect.website.toLowerCase().includes("pinterest.fr")))) && (
-                                                <a href={currentProspect.socialLinks?.pinterest || currentProspect.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-secondary/20 rounded-xl border border-border/30 hover:border-red-600/40 hover:bg-secondary/40 transition-all group">
-                                                    <Pin size={16} className="text-red-600" />
-                                                    <span className="text-xs font-semibold text-muted-foreground group-hover:text-red-600 transition-colors">Pinterest</span>
                                                 </a>
                                             )}
                                         </div>
@@ -961,7 +980,10 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                 <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2">
                                                     <div className="flex items-center justify-between">
                                                         <h3 className="text-lg font-bold flex items-center gap-2">
-                                                            <Users className="text-primary" size={20} /> Profil {currentProspect.source === 'facebook' || currentProspect.source === 'facebook_page' ? 'Facebook' : 'LinkedIn'}
+                                                            <Users className="text-primary" size={20} /> Profil {
+                                                                currentProspect.source === 'facebook' || currentProspect.source === 'facebook_page' ? 'Facebook' : 
+                                                                currentProspect.source === 'google_maps' ? 'Google Maps' : 'LinkedIn'
+                                                            }
                                                         </h3>
                                                         
                                                         {/* Profile URL links */}
@@ -1001,21 +1023,32 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                         const name = currentProspect.name || currentProspect.company || '';
 
                                                         // Vue d'ensemble / About
-                                                        const overview = cd?.about || cd?.description || cd?.overview || currentProspect.summary || '';
-                                                        if (overview && typeof overview === 'string') parts.push(overview.substring(0, 400));
-                                                        else if (overview) parts.push(String(overview).substring(0, 400));
+                                                        let rawAbout = cd?.about;
+                                                        let overview = '';
+                                                        let amenities: string[] = [];
+                                                        
+                                                        if (rawAbout && typeof rawAbout === 'object') {
+                                                            overview = rawAbout.description || rawAbout.overview || '';
+                                                            amenities = rawAbout.amenities || [];
+                                                        } else {
+                                                            overview = rawAbout || cd?.description || cd?.overview || currentProspect.summary || '';
+                                                        }
+                                                        
+                                                        const overviewStr = typeof overview === 'string' ? overview : String(overview || '');
+
+                                                         if (overviewStr) parts.push(overviewStr);
 
                                                         // Données structurées
                                                         const sector = cd?.industry || cd?.category || cd?.sector || '';
                                                         const size = cd?.employeeCount || cd?.companySize || '';
                                                         const founded = cd?.foundedYear || cd?.founded || '';
-                                                        const hq = cd?.headquarters || cd?.address || cd?.location || '';
+                                                        const hq = cd?.address || cd?.headquarters || cd?.location || currentProspect.address || '';
                                                         const specs = Array.isArray(cd?.specialties) && cd.specialties.length > 0 ? cd.specialties.slice(0, 4).join(', ') : '';
                                                         const site = cd?.website || currentProspect.website || '';
                                                         const followers = cd?.followers || '';
 
                                                         // Construction intelligente si pas de vue d'ensemble
-                                                        if (!overview && name) {
+                                                        if (!overviewStr && name) {
                                                             let desc = `${name}`;
                                                             if (sector) desc += ` est une entreprise spécialisée dans le secteur ${sector}`;
                                                             if (hq) desc += ` basée à ${hq}`;
@@ -1026,16 +1059,18 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                             if (followers) desc += `. ${followers} sur les réseaux sociaux`;
                                                             desc += '.';
                                                             parts.push(desc);
-                                                        } else if (overview) {
+                                                        } else if (overviewStr && typeof overviewStr === 'string') {
                                                             // Complète la description avec des métadonnées structurées
                                                             const extras: string[] = [];
-                                                            if (sector && !overview.toLowerCase().includes(sector.toLowerCase())) extras.push(`Secteur : ${sector}`);
+                                                            if (sector) extras.push(`Secteur : ${sector}`);
                                                             if (size) extras.push(`Taille : ${size}`);
-                                                            if (founded && !overview.includes(founded)) extras.push(`Fondée en ${founded}`);
-                                                            if (hq && !overview.toLowerCase().includes(hq.toLowerCase())) extras.push(`Siège : ${hq}`);
+                                                            if (founded) extras.push(`Fondée en ${founded}`);
+                                                            if (hq) extras.push(`Localisation : ${hq}`);
                                                             if (specs) extras.push(`Spécialisations : ${specs}`);
                                                             if (extras.length > 0) parts.push(extras.join(' · '));
                                                         }
+                                                        
+                                                        // Les équipements sont désormais affichés dans une grille de badges dédiée
 
                                                         if (parts.length === 0) return null;
 
@@ -1045,7 +1080,6 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                             <div className="space-y-2">
                                                                 <div className="flex items-center gap-2">
                                                                     <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Description</h5>
-                                                                    <span className="text-[9px] px-1.5 py-0.5 bg-emerald-500/10 text-emerald-500 rounded-full font-bold uppercase tracking-wider">IA</span>
                                                                 </div>
                                                                 <p className="text-sm text-foreground/80 leading-relaxed bg-muted/10 rounded-xl p-4 border border-border/30 whitespace-pre-wrap">
                                                                     {finalDescription}
@@ -1067,7 +1101,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                     })()}
 
                                                     {/* Company Specific Details (LinkedIn/Facebook Pages) */}
-                                                    {(currentProspect.contractDetails.industry || currentProspect.contractDetails.foundedYear || currentProspect.contractDetails.employeeCount || currentProspect.contractDetails.companyType) && (
+                                                    {(currentProspect.contractDetails.industry || currentProspect.contractDetails.foundedYear || currentProspect.contractDetails.employeeCount || currentProspect.contractDetails.companyType || currentProspect.contractDetails.plusCode || currentProspect.contractDetails.checkIn) && (
                                                         <div className="space-y-3 mt-4">
                                                             <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Informations Générales</h5>
                                                             <div className="grid grid-cols-2 gap-3">
@@ -1075,6 +1109,12 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                                     <div className="p-3 bg-secondary/20 rounded-xl border border-border/30 flex flex-col gap-1">
                                                                         <span className="text-[10px] uppercase font-bold text-muted-foreground">Secteur</span>
                                                                         <span className="text-sm font-semibold text-foreground/90">{currentProspect.contractDetails.industry}</span>
+                                                                    </div>
+                                                                )}
+                                                                {currentProspect.contractDetails.plusCode && (
+                                                                    <div className="p-3 bg-secondary/20 rounded-xl border border-border/30 flex flex-col gap-1">
+                                                                        <span className="text-[10px] uppercase font-bold text-muted-foreground">Plus Code</span>
+                                                                        <span className="text-sm font-semibold text-foreground/90">{currentProspect.contractDetails.plusCode}</span>
                                                                     </div>
                                                                 )}
                                                                 {currentProspect.contractDetails.employeeCount && (
@@ -1112,6 +1152,58 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                                         <span className="text-sm font-semibold text-foreground/90">{currentProspect.contractDetails.category}</span>
                                                                     </div>
                                                                 )}
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Équipements & Services (Amenities) */}
+                                                    {(() => {
+                                                        const amenities = (currentProspect.contractDetails as any)?.about?.amenities || 
+                                                                         (currentProspect.contractDetails as any)?.amenities || [];
+                                                        if (!amenities || amenities.length === 0) return null;
+                                                        return (
+                                                            <div className="space-y-3 mt-6">
+                                                                <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                                                    <Info size={14} className="text-blue-500" /> Équipements & Services
+                                                                </h5>
+                                                                <div className="flex flex-wrap gap-2">
+                                                                    {amenities.map((item: string, i: number) => (
+                                                                        <span key={i} className="px-3 py-1.5 bg-blue-500/5 text-blue-600 dark:text-blue-400 rounded-xl text-xs font-medium border border-blue-500/10 hover:bg-blue-500/10 transition-colors">
+                                                                            {item}
+                                                                        </span>
+                                                                    ))}
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })()}
+
+                                                    {/* Avis Google Maps */}
+                                                    {currentProspect.contractDetails.reviews?.length > 0 && (
+                                                        <div className="space-y-4 mt-8">
+                                                            <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                                                <Star size={14} className="text-amber-500" /> Avis Clients Google
+                                                            </h5>
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                {currentProspect.contractDetails.reviews.map((rev: any, i: number) => (
+                                                                    <div key={i} className="p-4 bg-muted/10 rounded-2xl border border-border/10 space-y-2 hover:bg-muted/20 transition-all">
+                                                                        <div className="flex justify-between items-start">
+                                                                            <div className="flex flex-col">
+                                                                                <span className="text-sm font-bold text-foreground/90">{rev.author}</span>
+                                                                                <div className="flex text-amber-500 mt-1">
+                                                                                    {(() => {
+                                                                                        const ratingStr = rev.rating || '5';
+                                                                                        const stars = parseInt(ratingStr.match(/\d/)?.[0] || '5') || 5;
+                                                                                        return Array.from({ length: 5 }).map((_, si) => (
+                                                                                            <Star key={si} size={10} fill={si < stars ? "currentColor" : "none"} className={si < stars ? "text-amber-500" : "text-muted-foreground/30"} />
+                                                                                        ));
+                                                                                    })()}
+                                                                                </div>
+                                                                            </div>
+                                                                            <span className="text-[10px] text-muted-foreground">{rev.date}</span>
+                                                                        </div>
+                                                                        <p className="text-sm text-foreground/70 italic leading-relaxed line-clamp-4">"{rev.text}"</p>
+                                                                    </div>
+                                                                ))}
                                                             </div>
                                                         </div>
                                                     )}
@@ -1222,9 +1314,21 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                             {/* Normalise les deux structures possibles : activities (LinkedIn) et activity.posts/comments (Facebook) */}
                                             {(() => {
                                                 const ai = currentProspect.aiIntelligence as any;
-                                                // LinkedIn envoie activities.posts / Facebook envoie activities.posts OU activity.posts
-                                                const posts: any[] = ai?.activities?.posts || ai?.activity?.posts || [];
-                                                const comments: any[] = ai?.activities?.comments || ai?.activity?.comments || [];
+                                                const cd = currentProspect.contractDetails as any;
+                                                // LinkedIn scraper stores posts at: prospect.activity.posts (saved under contract_details)
+                                                // Facebook / LinkedIn via aiIntelligence: ai.activities.posts or ai.activity.posts
+                                                const posts: any[] = 
+                                                    ai?.activities?.posts || 
+                                                    ai?.activity?.posts || 
+                                                    cd?.activity?.posts || 
+                                                    (currentProspect as any)?.activity?.posts || 
+                                                    [];
+                                                const comments: any[] = 
+                                                    ai?.activities?.comments || 
+                                                    ai?.activity?.comments || 
+                                                    cd?.activity?.comments || 
+                                                    (currentProspect as any)?.activity?.comments || 
+                                                    [];
                                                 const isFacebook = currentProspect.source === 'facebook' || currentProspect.source === 'facebook_page';
 
                                                 return (

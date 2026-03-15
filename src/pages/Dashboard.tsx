@@ -12,6 +12,8 @@ import { Badge } from "@/components/ui/badge";
 import { useLanguage } from "@/hooks/useLanguage";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { SourceDistributionChart } from "@/components/dashboard/SourceDistributionChart";
+import { ProspectGrowthChart } from "@/components/dashboard/ProspectGrowthChart";
 
 /**
  * Page de tableau de bord principal
@@ -30,6 +32,7 @@ const Dashboard = () => {
   // Données récupérées de la base de données
   const [recentActivity, setRecentActivity] = useState<any[]>([]);
   const [topSources, setTopSources] = useState<any[]>([]);
+  const [growthData, setGrowthData] = useState<any[]>([]);
 
   useEffect(() => {
     if (!user?.id) return;
@@ -45,7 +48,7 @@ const Dashboard = () => {
           .limit(4),
         supabase
           .from('prospects')
-          .select('source')
+          .select('source, created_at')
           .eq('user_id', user.id)
       ]);
 
@@ -107,6 +110,35 @@ const Dashboard = () => {
           .slice(0, 4);
 
         setTopSources(sources);
+
+        // Préparation des données de croissance
+        const days = 30;
+        const growth: Record<string, number> = {};
+        const now = new Date();
+        
+        // Initialiser les derniers 30 jours à 0
+        for (let i = days; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(now.getDate() - i);
+          growth[d.toISOString().split('T')[0]] = 0;
+        }
+
+        // Remplir avec les données réelles
+        (prospects as any[]).forEach(p => {
+          const dateStr = new Date(p.created_at).toISOString().split('T')[0];
+          if (growth[dateStr] !== undefined) {
+            growth[dateStr]++;
+          }
+        });
+
+        // Convertir en tableau cumulatif pour le graphique en aires
+        let cumulative = 0;
+        const growthArray = Object.entries(growth).map(([date, count]) => {
+          cumulative += count;
+          return { date, count: cumulative };
+        });
+
+        setGrowthData(growthArray);
       }
     };
 
@@ -227,7 +259,12 @@ const Dashboard = () => {
         {/* Main Content Grid */}
         <div className="grid lg:grid-cols-3 gap-6 mt-8">
           {/* Left Column - Prospects List */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 space-y-6">
+            <Card className="bg-white border-none shadow-sm overflow-hidden">
+               <CardContent className="p-6">
+                 <ProspectGrowthChart data={growthData} />
+               </CardContent>
+            </Card>
             <ProspectsList />
           </div>
 
@@ -264,11 +301,21 @@ const Dashboard = () => {
 
             {/* Top Sources */}
             <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">{t("topSources")}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
+              <CardContent className="p-6">
+                <SourceDistributionChart 
+                  data={topSources.map((s, i) => ({
+                    ...s,
+                    color: [
+                      "hsl(var(--accent))", 
+                      "#3B82F6", 
+                      "#8B5CF6", 
+                      "#10B981", 
+                      "#F59E0B"
+                    ][i % 5]
+                  }))} 
+                />
+                
+                <div className="space-y-4 mt-6">
                   {topSources.length > 0 ? (
                     topSources.map((source, idx) => (
                       <div key={idx}>
@@ -282,10 +329,19 @@ const Dashboard = () => {
                             <div className="text-xs text-muted-foreground">{source.percentage}%</div>
                           </div>
                         </div>
-                        <div className="w-full bg-secondary rounded-full h-2">
+                        <div className="w-full bg-secondary rounded-full h-1.5">
                           <div
-                            className="bg-accent h-2 rounded-full transition-all duration-300"
-                            style={{ width: `${source.percentage}%` }}
+                            className="bg-accent h-1.5 rounded-full transition-all duration-300"
+                            style={{ 
+                              width: `${source.percentage}%`,
+                              backgroundColor: [
+                                "hsl(var(--accent))", 
+                                "#3B82F6", 
+                                "#8B5CF6", 
+                                "#10B981", 
+                                "#F59E0B"
+                              ][idx % 5]
+                            }}
                           />
                         </div>
                       </div>

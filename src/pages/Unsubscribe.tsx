@@ -3,8 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { CheckCircle, XCircle } from 'lucide-react';
-import { LoadingLogo } from '@/components/LoadingLogo';
+import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
 import { logSimpleAudit } from '@/lib/privacy/utils';
 
 const Unsubscribe = () => {
@@ -28,7 +27,7 @@ const Unsubscribe = () => {
                 .from('contact_preferences')
                 .select('*')
                 .eq('unsubscribe_token', token)
-                .single();
+                .single() as any;
 
             if (findError || !pref) {
                 console.error('Find error:', findError);
@@ -45,7 +44,7 @@ const Unsubscribe = () => {
                     can_contact_phone: false,
                     unsubscribed_at: new Date().toISOString(),
                 })
-                .eq('id', pref.id);
+                .eq('id', (pref as any).id);
 
             if (updateError) {
                 console.error('Update error:', updateError);
@@ -56,7 +55,7 @@ const Unsubscribe = () => {
             // Log simple
             await logSimpleAudit('unsubscribe', 'contact_preference', pref.id);
 
-            setEmail(pref.email);
+            setEmail((pref as any).email);
             setStatus('success');
         } catch (error) {
             console.error('Unsubscribe error:', error);
@@ -81,7 +80,10 @@ const Unsubscribe = () => {
                 </CardHeader>
                 <CardContent className="text-center">
                     {status === 'loading' && (
-                        <LoadingLogo size="xl" message="Traitement de votre demande..." />
+                        <div className="flex flex-col items-center justify-center py-10 gap-4">
+                            <Loader2 className="h-10 w-10 animate-spin text-accent" />
+                            <p className="text-sm text-slate-500 font-medium">Traitement de votre demande...</p>
+                        </div>
                     )}
 
                     {status === 'success' && (

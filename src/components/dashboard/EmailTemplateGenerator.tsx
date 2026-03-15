@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { Sparkles, Copy, Save, Check, Wand2, MessageSquare, Flame, Info, Briefcase } from "lucide-react";
-import { LoadingLogo } from "@/components/LoadingLogo";
+import { Sparkles, Copy, Save, Check, Wand2, MessageSquare, Flame, Info, Briefcase, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -206,7 +205,7 @@ const EmailTemplateGenerator = () => {
               className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-base gap-3 shadow-[0_10px_30px_rgba(16,185,129,0.2)] transition-all active:scale-95"
             >
               {isGenerating ? (
-                <LoadingLogo size="xs" compact />
+                <Loader2 className="h-5 w-5 animate-spin" />
               ) : (
                 <Wand2 size={20} />
               )}
@@ -311,7 +310,7 @@ const EmailTemplateGenerator = () => {
               className="h-12 px-8 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl shadow-lg shadow-emerald-500/20"
             >
               {isSaving ? (
-                <LoadingLogo size="xs" compact className="mr-2" />
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               ) : (
                 <Save className="mr-2" size={18} />
               )}

@@ -6,7 +6,6 @@ import ProspectsSubNav from "@/components/dashboard/ProspectsSubNav";
 import ProspectDetailView from "@/components/dashboard/ProspectDetailView";
 import CampaignSelectionDialog from "@/components/dashboard/CampaignSelectionDialog";
 import { Logo } from "@/components/Logo";
-import { LoadingLogo } from "@/components/LoadingLogo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -41,6 +40,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { triggerN8nWorkflow, type Channel } from "@/integrations/n8n";
 import { logProspectAdded } from "@/lib/activityLogger";
 import { useApiKeys } from "@/hooks/useApiKeys";
+import { LoadingLogo } from "@/components/LoadingLogo";
 declare global {
   interface Window {
     __PROSPECTA_EXTENSION__?: any;
@@ -418,8 +418,8 @@ const ProspectFinder = () => {
 
           // --- MODE AGENT LOCAL (Playwright Serveur) ---
           // On n'utilise plus l'extension Chrome, mais les scripts locaux du serveur.
-          const localPlaywrightChannels = ["linkedin", "facebook"];
-          const extensionChannels = ["google_maps", "pages_jaunes", "pappers", "societe", "infogreffe"];
+          const localPlaywrightChannels = ["linkedin", "facebook", "google_maps"];
+          const extensionChannels = ["pages_jaunes", "pappers", "societe", "infogreffe"];
           
           if (window.__PROSPECTA_EXTENSION__ && extensionChannels.includes(channel) && !localPlaywrightChannels.includes(channel)) {
             addLog(`🚀 Agent Extension: Lancement du canal ${channel}...`, "system");
@@ -515,13 +515,14 @@ const ProspectFinder = () => {
               if (d.error && typeof d.error === 'string') addLog(`❌ Erreur: ${d.error}`, 'error');
               if (d.result) {
                 const mapped = {
+                  ...d.result,
                   id: `gmap_${Math.random().toString(36).substr(2, 9)}`,
                   name: d.result.name, initials: (d.result.name?.[0] || "G").toUpperCase(),
                   position: d.result.category, company: d.result.name, source: "google_maps",
                   score: calculateInitialScore(d.result), email: d.result.phone ? "Extraction..." : "",
                   phone: d.result.phone || "", website: d.result.website || "",
                   city: filters.city || "", tags: [d.result.category].filter(Boolean),
-                  contractDetails: d.result
+                  contractDetails: d.result.contractDetails || d.result
                 };
                 setPendingProspects(prev => {
                    if (prev.some(p => p.name === mapped.name && p.company === mapped.company)) return prev;
@@ -881,6 +882,12 @@ const ProspectFinder = () => {
           contract_details: {
             ...(p.contractDetails || {}),
             photo: p.photo || null,
+            // LinkedIn scraper stores these fields at the root level of the prospect (not inside contractDetails)
+            // We explicitly persist them here so they are accessible via contractDetails in the detail view
+            ...(p.activity ? { activity: p.activity } : {}),
+            ...(p.about && !(p.contractDetails as any)?.about ? { about: p.about } : {}),
+            ...(p.followers && !(p.contractDetails as any)?.followers ? { followers: p.followers } : {}),
+            ...(p.headline && !(p.contractDetails as any)?.headline ? { headline: p.headline } : {}),
           },
           web_intelligence: p.aiIntelligence || p.webIntelligence || null
         }]);
@@ -959,7 +966,7 @@ const ProspectFinder = () => {
                   />
                   {isSearching && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                      <LoadingLogo size="xs" compact />
+                      <Loader2 className="h-4 w-4 animate-spin text-accent" />
                     </div>
                   )}
                 </div>
@@ -1275,7 +1282,7 @@ const ProspectFinder = () => {
                     onClick={handleSearch}
                     disabled={isSearching}
                   >
-                    {isSearching ? <LoadingLogo size="xs" compact className="mr-2" /> : <Search size={18} className="mr-2" />}
+                    {isSearching ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Search size={18} className="mr-2" />}
                     {isSearching ? t("loading") : t("rechercher")}
                   </Button>
 
@@ -1417,7 +1424,7 @@ const ProspectFinder = () => {
                       className="border-accent text-accent hover:bg-accent/10"
                       disabled={selectedProspectIds.size === 0 || isSavingForCampaign}
                     >
-                      {isSavingForCampaign ? <LoadingLogo size="xs" compact className="mr-2" /> : <Plus className="mr-2" size={16} />}
+                      {isSavingForCampaign ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2" size={16} />}
                       {t("addToCampaign")} ({selectedProspectIds.size})
                     </Button>
                     <Button size="sm" onClick={handleSaveSelected} className="bg-accent" disabled={selectedProspectIds.size === 0}>

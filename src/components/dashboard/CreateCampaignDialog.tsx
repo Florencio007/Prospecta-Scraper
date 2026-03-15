@@ -12,9 +12,9 @@ import {
     Mail,
     ChevronRight,
     ChevronLeft,
-    Clock
+    Clock,
+    Loader2
 } from "lucide-react";
-import { LoadingLogo } from "@/components/LoadingLogo";
 import {
     Dialog,
     DialogContent,
@@ -283,7 +283,7 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
                                         disabled={isGeneratingAI}
                                         className="h-10 bg-emerald-600 hover:bg-emerald-700 text-white gap-2 px-6 shadow-lg shadow-emerald-500/20"
                                     >
-                                        {isGeneratingAI ? <LoadingLogo size="xs" compact /> : <Wand2 className="h-4 w-4" />}
+                                        {isGeneratingAI ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />}
                                         Générer
                                     </Button>
                                 </div>

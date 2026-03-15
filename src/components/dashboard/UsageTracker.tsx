@@ -1,7 +1,6 @@
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Zap, TrendingUp, Users } from "lucide-react";
-import { LoadingLogo } from "@/components/LoadingLogo";
+import { Zap, TrendingUp, Users, Loader2 } from "lucide-react";
 import { useUsage } from "@/hooks/useUsage";
 import { useLanguage } from "@/hooks/useLanguage";
 
@@ -12,7 +11,7 @@ const UsageTracker = () => {
     if (loading) {
         return (
             <Card className="border-accent/20 bg-accent/5 overflow-hidden flex items-center justify-center p-12">
-                <LoadingLogo size="xs" compact />
+                <Loader2 className="h-6 w-6 animate-spin text-accent" />
             </Card>
         );
     }

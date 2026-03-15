@@ -13,7 +13,8 @@ import {
     X, 
     Mail, 
     Building2, 
-    MapPin
+    MapPin,
+    Loader2
 } from "lucide-react";
 import { LoadingLogo } from "@/components/LoadingLogo";
 import { Input } from "@/components/ui/input";
@@ -147,7 +148,7 @@ export default function ManageRecipientsDialog({ isOpen, onClose, campaign, getR
                                             disabled={deletingId === r.id}
                                             className="h-9 w-9 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10"
                                         >
-                                            {deletingId === r.id ? <LoadingLogo size="xs" compact /> : <Trash2 size={14} />}
+                                            {deletingId === r.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 size={14} />}
                                         </Button>
                                     </div>
                                 ))}

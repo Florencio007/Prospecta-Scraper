@@ -28,12 +28,6 @@ const CONFIG = {
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-const cleanText = (text) => {
-  if (!text) return '';
-  // Supprimer les icônes Google Maps (souvent au début) et les espaces insécables
-  return text.replace(/^[\uE000-\uF8FF\u2000-\u200B\u2028\u2029\uFEFF\u00A0]|[\uE000-\uF8FF]/g, '').trim();
-};
-
 function emitLog(msg, pct = undefined) {
   console.log(msg);
   process.stdout.write(`PROGRESS:${JSON.stringify({ percentage: pct, message: msg })}\n`);
@@ -106,122 +100,148 @@ async function scrapeHotelDetail(page, url) {
     }
   } catch (_) {}
 
-  // ── 1. Extraire les infos de base (sur l'onglet par défaut / Présentation) ──────
-  const coreData = await page.evaluate(() => {
-    const data = {};
-    data.name = document.querySelector('h1')?.textContent?.trim() || '';
-    const addrEl = document.querySelector('[data-item-id="address"] .Io6YTe, [data-item-id="address"]');
-    data.address = addrEl ? addrEl.textContent.trim() : '';
-    const phoneEl = document.querySelector('[data-item-id*="phone"] .Io6YTe, [data-item-id*="phone"]');
-    data.phone = phoneEl ? phoneEl.textContent.trim() : '';
-    const webEl = document.querySelector('[data-item-id="authority"]');
-    data.website = webEl ? (webEl.href || webEl.querySelector('a')?.href || '') : '';
-    // Plus Code
-    const plusCodeEl = document.querySelector('[data-item-id="oloc"] .Io6YTe, [data-item-id="oloc"]');
-    if (plusCodeEl) data.plusCode = plusCodeEl.textContent.trim().split(' ')[0];
-    
-    return data;
-  });
-
-  // ── 2. Parcourir les onglets ────────────────────────────────────────────────
-  let aboutData = { amenities: [], description: '', plusCode: '' };
-  let reviews = [];
-  const tabs = await page.$$('.buttonText, .m6QErb button, [role="tab"]');
-  for (const tab of tabs) {
-    try {
+  // Ouvrir l'onglet "À propos"
+  try {
+    // Chercher le bouton "À propos" dans la barre d'onglets (Présentation / Prix / Avis / À propos)
+    const tabs = await page.locator('[role="tab"], button.hh2c6, .m6QErb button').all();
+    for (const tab of tabs) {
       const text = await tab.textContent();
       if (text && (text.includes('À propos') || text.includes('About'))) {
         await tab.click();
-        await sleep(2000);
-        const aData = await page.evaluate(() => {
-          const amenities = [];
-          document.querySelectorAll('.OyY9Kc span, .fontBodyLarge li span, .m6QErb .fontBodyMedium span').forEach(el => {
-            let t = el.textContent?.trim();
-            t = t?.replace(/^[\uE000-\uF8FF]/, '').trim();
-            if (t && t.length > 1 && !amenities.includes(t)) amenities.push(t);
-          });
-          const descEls = document.querySelectorAll('.OoXEc, .QoXOEc, [jslog*="metadata"] span, .m6QErb.XiKgde .fontBodyMedium, .PYv6f, .drf9m');
-          let descParts = [];
-          descEls.forEach(el => {
-            const t = el.textContent?.replace(/^[\uE000-\uF8FF]/, '').trim();
-            if (t && t.length > 20 && !t.includes('Ar') && !t.includes('€') && !t.includes('$')) {
-              descParts.push(t);
-            }
-          });
-          const fullDesc = descParts.join('\n\n');
-          
-          return { amenities, description: fullDesc };
-        });
-        aboutData = { ...aboutData, ...aData };
+        await sleep(1200);
+        break;
       }
-      if (text && (text.includes('Avis') || text.includes('Reviews'))) {
-        await tab.click();
-        await sleep(2000);
-        reviews = await page.evaluate(() => {
-          const items = [];
-          const texts = new Set();
-          document.querySelectorAll('.jftiEf, .G67oK, [data-review-id]').forEach(el => {
-            const author = el.querySelector('.d4r55, .TSZ61b')?.textContent?.trim() || 'Client Maps';
-            const text = el.querySelector('.wiI7c, .MyEned, .wiI7cb')?.textContent?.trim() || '';
-            const date = el.querySelector('.rsqaUf, .P76i9c, .rsqawe')?.textContent?.trim() || '';
-            const ratingEl = el.querySelector('span[role="img"][aria-label*="étoile"], .kv96bc, .kvMYC');
-            const rating = ratingEl ? ratingEl.getAttribute('aria-label') || ratingEl.textContent : '';
-            if (author && (text || rating) && !texts.has(text)) {
-              items.push({ author, text, date, rating });
-              if (text) texts.add(text);
-            }
-          });
-          return items.slice(0, 10);
-        });
-      }
-    } catch (_) {}
-  }
+    }
+  } catch (_) {}
 
-  // ── 3. Finalisation ────────────────────────────────────────────────────────
-  const data = await page.evaluate((context) => {
-    const { coreData, aboutData, reviews } = context;
+  const data = await page.evaluate((eName) => {
+
+    // ── Nom ──────────────────────────────────────────────────────────────────
+    const name = eName || '';
+
+    // ── Coordonnées GPS (dans l'URL de la page) ───────────────────────────────
     const gpsMatch = window.location.href.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-    const gps = gpsMatch ? { lat: parseFloat(gpsMatch[1]), lng: parseFloat(gpsMatch[2]) } : null;
-    
-    const clean = (t) => {
-      if (!t) return '';
-      return t.replace(/^[\uE000-\uF8FF\u2000-\u200B\u2028\u2029\uFEFF\u00A0]|[\uE000-\uF8FF]/g, '').trim();
-    };
+    const gps = gpsMatch
+      ? { lat: parseFloat(gpsMatch[1]), lng: parseFloat(gpsMatch[2]) }
+      : null;
 
+    // ── Note globale & Stars ───────────────────────────────────────────────────
     const rating = document.querySelector('.F7nice span[aria-hidden="true"]')?.textContent?.trim() || '';
     const reviewCount = document.querySelector('.F7nice span[aria-label*="avis"]')?.textContent?.trim()?.replace(/[()]/g, '').trim() || '';
-    const category = document.querySelector('button[jsaction*="pane.rating.category"], .DkEaL, .fontBodyMedium .fontBodyMedium')?.textContent?.trim() || '';
-    const starsEl = Array.from(document.querySelectorAll('.fontBodyMedium, span')).find(el => /Hôtel \d étoiles|Hotel \d stars/i.test(el.textContent));
+    
+    // Star rating (ex: "Hôtel 3 étoiles")
+    const starsEl = Array.from(document.querySelectorAll('.fontBodyMedium, span')).find(el => 
+        /Hôtel \d étoiles|Hotel \d stars/i.test(el.textContent)
+    );
     const starRating = starsEl ? starsEl.textContent.trim() : '';
 
-    const coreDataCleaned = {
-      name: clean(coreData.name),
-      address: clean(coreData.address),
-      phone: clean(coreData.phone),
-      plusCode: clean(coreData.plusCode),
-      website: coreData.website
+    // Price if available
+    const priceEl = document.querySelector('.x88Sre, .WC7frf');
+    const price = priceEl ? priceEl.textContent.trim() : '';
+
+    // ── Téléphone ────────────────────────────────────────────────────────────
+    let phone = '';
+    const phoneEl = Array.from(document.querySelectorAll('.Io6YTe, button[aria-label*="Téléphone"], [data-tooltip*="téléphone"]')).find(el => 
+        /(\+?\d[\d\s.-]{7,}\d)/.test(el.textContent)
+    );
+    if (phoneEl) {
+        phone = (phoneEl.getAttribute('aria-label') || phoneEl.textContent).replace(/.*:/, '').trim();
+    } else {
+        // Fallback: chercher n'importe quel élément avec un format de téléphone
+        const allText = document.body.innerText;
+        const phoneMatch = allText.match(/(\+?\d[\d\s.-]{7,}\d)/);
+        if (phoneMatch) phone = phoneMatch[0].trim();
+    }
+
+    // ── Site web + plateforme ─────────────────────────────────────────────────
+    const officialSiteEl = document.querySelector('a[data-item-id*="authority"], a[aria-label*="site"]');
+    const website = officialSiteEl ? officialSiteEl.href : '';
+    
+    const platformLinks = [];
+    const allLinks = Array.from(document.querySelectorAll('a[href*="booking.com"], a[href*="tripadvisor"], a[href*="airbnb"], a[href*="expedia"], a[href*="hotels.com"], a[href*="agoda"], a[href*="kayak"]'));
+    allLinks.forEach(link => {
+        const url = link.href;
+        let pName = '';
+        if (url.includes('booking.com'))      pName = 'Booking.com';
+        else if (url.includes('tripadvisor')) pName = 'TripAdvisor';
+        else if (url.includes('airbnb'))      pName = 'Airbnb';
+        else if (url.includes('expedia'))     pName = 'Expedia';
+        else if (url.includes('hotels.com'))  pName = 'Hotels.com';
+        else if (url.includes('agoda'))       pName = 'Agoda';
+        
+        if (pName && !platformLinks.some(pl => pl.name === pName)) {
+            platformLinks.push({ name: pName, url });
+        }
+    });
+
+    let platform = platformLinks.length > 0 ? platformLinks[0].name : 'Site propre';
+
+    // ── Heures d'ouverture ────────────────────────────────────────────────────
+    const hoursRows = document.querySelectorAll('.t39EBf tr, [data-section-id="hours"] tr');
+    const hours = {};
+    hoursRows.forEach(row => {
+      const day  = row.querySelector('td:first-child, .ylH6lf')?.textContent?.trim();
+      const time = row.querySelector('td:last-child, .mxowUb li')?.textContent?.trim();
+      if (day && time) hours[day] = time;
+    });
+
+    // Fallback : texte condensé si tableau vide
+    const hoursText = Object.keys(hours).length === 0
+      ? document.querySelector('.t39EBf, [data-section-id="hours"]')?.textContent?.trim() || ''
+      : null;
+
+    // ── À propos (équipements + description) ─────────────────────────────────
+    const aboutItems = [];
+    const amenityEls = document.querySelectorAll('.OyY9Kc span, .fontBodyLarge li span, .m6QErb .fontBodyMedium span');
+    amenityEls.forEach(el => {
+      const t = el.textContent?.trim();
+      if (t && t.length > 1 && t.length < 60 && !aboutItems.includes(t)) {
+          aboutItems.push(t);
+      }
+    });
+
+    const descEl = document.querySelector('.OoXEc, .QoXOEc, [jslog*="metadata"] span, .m6QErb .fontBodySmall span, .PYv6f div');
+    const descText = descEl?.textContent?.trim() || '';
+
+    const about = {
+      amenities: aboutItems,
+      description: descText,
+      fullText: document.querySelector('.m6QErb.XiKgde')?.innerText?.trim() || ''
     };
 
+    const reviews = []; // Placeholder for reviews to avoid ReferenceError
+
+    // ── Adresse ───────────────────────────────────────────────────────────────
+    let address = '';
+    const potentialAddressItems = Array.from(document.querySelectorAll('.Io6YTe, .fontBodyMedium'));
+    const addressItem = potentialAddressItems.find(el => {
+        const text = el.textContent.trim();
+        return text.length > 5 && text.length < 200 && /\d/.test(text) && text.includes(',') && !text.includes('·') && !text.includes('étoiles');
+    });
+    
+    if (addressItem) {
+        address = addressItem.textContent.trim();
+    } else {
+        const addressEl = document.querySelector('[data-item-id*="address"], [aria-label*="Adresse"]');
+        if (addressEl) address = addressEl.textContent.replace(/.*:/, '').trim();
+    }
+
+    // ── Catégorie ─────────────────────────────────────────────────────────────
+    let category = '';
+    const catEl = document.querySelector('button[jsaction*="pane.rating.category"], .DkEaL');
+    if (catEl) category = catEl.textContent.trim();
+    else if (starRating) category = starRating;
+
     return {
-      name: coreDataCleaned.name || clean(document.querySelector('h1')?.textContent),
-      address: coreDataCleaned.address,
-      phone: coreDataCleaned.phone,
-      website: coreDataCleaned.website,
-      plusCode: coreDataCleaned.plusCode || clean(aboutData.plusCode),
-      rating,
-      reviewCount,
-      gps,
-      category,
-      starRating,
-      about: {
-        amenities: aboutData.amenities || [],
-        description: clean(aboutData.description),
-      },
-      reviews: reviews.map(r => ({ ...r, author: clean(r.author), text: clean(r.text) })),
+      name, gps, phone, website, platform, platformLinks,
+      price, starRating,
+      hours: Object.keys(hours).length > 0 ? hours : hoursText,
+      rating, reviewCount,
+      reviews: reviews.slice(0, 5),
+      about, address, category,
       url: window.location.href,
-      platform: coreDataCleaned.website ? 'Site propre' : 'Google Maps'
     };
-  }, { coreData, aboutData, reviews });
+  }, earlyName);
 
   return data;
 }
@@ -253,10 +273,6 @@ async function main() {
   });
 
   const page = await context.newPage();
-
-  page.on('console', msg => {
-    if (msg.type() === 'log') console.log(`[PAGE LOG] ${msg.text()}`);
-  });
 
   try {
     // 1. Aller sur la page de recherche Google Maps

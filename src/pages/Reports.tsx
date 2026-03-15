@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Download, FileText, Check, Filter } from "lucide-react";
+import { Download, FileText, Check, Filter, BarChart3 } from "lucide-react";
 import Header from "@/components/dashboard/Header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -15,6 +15,19 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { exportProspects } from "@/lib/exportUtils";
 import { logExportGenerated } from "@/lib/activityLogger";
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  Legend,
+  Cell
+} from "recharts";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { useEffect } from "react";
 
 interface ExportOption {
   id: string;
@@ -46,6 +59,26 @@ const Reports = () => {
     includeDate: true,
     includeTags: true,
   });
+  const [campaignData, setCampaignData] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const fetchCampaignData = async () => {
+      const { data, error } = await supabase
+        .from('email_campaigns')
+        .select('name, sent_count, opened_count, clicked_count')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(5);
+
+      if (data) {
+        setCampaignData(data);
+      }
+    };
+
+    fetchCampaignData();
+  }, [user?.id]);
 
   const exportOptions: ExportOption[] = [
     {
@@ -144,7 +177,7 @@ const Reports = () => {
       }
 
       // Export using the utility function
-      exportProspects(prospects, selectedFormat as 'csv' | 'json' | 'excel', filters);
+      exportProspects(prospects, selectedFormat as 'csv' | 'xlsx' | 'json' | 'pdf', filters);
 
       // Log activity
       await logExportGenerated(user.id, selectedFormat.toUpperCase(), prospects.length);
@@ -197,6 +230,59 @@ const Reports = () => {
             {t("exportDataAndReports")}
           </p>
         </div>
+
+        {/* Performance Analytics Section */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <FileText size={20} className="text-accent" />
+              Analyse de Performance des Campagnes
+            </CardTitle>
+            <CardDescription>
+              Comparaison de l'engagement (Envois, Ouvertures, Clics) de vos dernières campagnes.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {campaignData.length > 0 ? (
+              <div className="h-[300px] w-full">
+                <ChartContainer
+                  config={{
+                    sent: { label: "Envoyés", color: "hsl(var(--accent))" },
+                    opened: { label: "Ouverts", color: "#3B82F6" },
+                    clicked: { label: "Cliqués", color: "#10B981" },
+                  }}
+                  className="h-full w-full"
+                >
+                  <BarChart data={campaignData}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.1} />
+                    <XAxis 
+                      dataKey="name" 
+                      axisLine={false} 
+                      tickLine={false} 
+                      tick={{ fontSize: 12 }}
+                      tickMargin={10}
+                    />
+                    <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+                    <ChartTooltip content={<ChartTooltipContent />} />
+                    <Legend iconType="circle" />
+                    <Bar dataKey="sent_count" name="Envoyés" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="opened_count" name="Ouverts" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="clicked_count" name="Cliqués" fill="#10B981" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ChartContainer>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="w-12 h-12 rounded-full bg-accent/5 flex items-center justify-center mb-4">
+                  <BarChart3 size={24} className="text-accent/40" />
+                </div>
+                <p className="text-sm text-muted-foreground max-w-xs">
+                  Aucune donnée de campagne disponible pour le moment. Lancez votre première campagne pour voir les statistiques.
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
         <Card className="mb-8">
           <CardHeader>

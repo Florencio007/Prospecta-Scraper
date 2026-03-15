@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { Plus, Search, Filter, Mail, Linkedin, Facebook, MessageCircle, Globe, Instagram, Music, Zap, CheckCircle2, XCircle, MoreVertical, Trash2, Phone, ExternalLink } from "lucide-react";
-import { LoadingLogo } from "@/components/LoadingLogo";
+import { Plus, Search, Filter, Mail, Linkedin, Facebook, MessageCircle, Globe, Instagram, Music, Zap, CheckCircle2, XCircle, MoreVertical, Trash2, Phone, ExternalLink, Loader2 } from "lucide-react";
 import Header from "@/components/dashboard/Header";
 import ProspectsSubNav from "@/components/dashboard/ProspectsSubNav";
 import ProspectDetailView from "@/components/dashboard/ProspectDetailView";
@@ -492,8 +491,9 @@ const Prospects = () => {
 
         <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
           {isLoading ? (
-            <div className="p-20 text-center">
-                <LoadingLogo size="lg" message={t("cloudSync")} />
+            <div className="p-20 text-center flex flex-col items-center justify-center gap-4">
+                <Loader2 className="h-10 w-10 animate-spin text-accent" />
+                <p className="text-sm text-slate-500 font-medium">{t("cloudSync")}</p>
             </div>
           ) : filteredProspects.length === 0 ? (
             <div className="p-20 text-center text-muted-foreground">{t("noProspectsFound")}</div>

@@ -7,6 +7,37 @@ function emitLog(msg, pct = undefined) {
   process.stdout.write(`PROGRESS:${JSON.stringify({ percentage: pct, message: msg })}\n`);
 }
 
+/** Affiche un résumé lisible directement dans le terminal — sans IA */
+function printResult(data) {
+  const line = '─'.repeat(60);
+  const icon = data.source === 'linkedin_company' ? '🏢' : '👤';
+  console.log(`\n${line}`);
+  console.log(`${icon}  ${data.name || 'N/A'}  ${ data.position ? `— ${data.position}` : '' }`);
+  if (data.email)     console.log(`   Email     : ${data.email}`);
+  if (data.phone)     console.log(`   Tél       : ${data.phone}`);
+  if (data.website)   console.log(`   Site web  : ${data.website}`);
+  if (data.address)   console.log(`   Lieu      : ${data.address}`);
+  const cd = data.contractDetails || {};
+  if (cd.followers)   console.log(`   Abonnés  : ${cd.followers}`);
+  if (cd.about)       console.log(`   Bio       : ${cd.about.substring(0, 150)}${cd.about.length > 150 ? '...' : ''}`);
+  if (cd.experiences?.length) {
+    console.log(`   Expé      : ${cd.experiences.slice(0, 2).map(e => `${e.role || ''} @ ${e.company || ''}`).join(' | ')}`);
+  }
+  if (cd.skills?.length) {
+    console.log(`   Skills    : ${cd.skills.slice(0, 5).map(s => s.name || s).join(', ')}`);
+  }
+  const posts = data.activity?.posts || cd.activity?.posts || data.aiIntelligence?.activities?.posts || [];
+  if (posts.length)   console.log(`   Posts     : ${posts.length} post(s) scrappé(s)`);
+  const lk = (data.socialLinks || {}).linkedin;
+  if (lk)            console.log(`   LinkedIn  : ${lk}`);
+  console.log(line);
+}
+
+function emitResult(data) {
+  printResult(data);
+  process.stdout.write(`RESULT:${JSON.stringify(data)}\n`);
+}
+
 const [, , argEmail, argPass, argQuery, argMax, argMaxPosts, argSearchType, argActivityType] = process.argv;
 
 // Type finder: "entreprise" | "personne" | "tous" → searchType: "companies" | "people"
@@ -133,7 +164,7 @@ async function scrapePersonList(page) {
   const endpoint = CONFIG.searchType === 'companies' ? 'companies' : 'people';
   const allPeople = [];
   let currentPage = 1;
-  const maxPages = Math.ceil(CONFIG.maxProfiles / 10) + 2;
+  const maxPages = Math.ceil(CONFIG.maxProfiles / 10) + 3;
 
   while (allPeople.length < CONFIG.maxProfiles && currentPage <= maxPages) {
     const url = `https://www.linkedin.com/search/results/${endpoint}/?keywords=${encodeURIComponent(CONFIG.searchQuery)}&page=${currentPage}`;
@@ -141,54 +172,117 @@ async function scrapePersonList(page) {
 
     await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await sleep(4000);
-    for (let i = 0; i < 6; i++) { await page.evaluate(() => window.scrollBy(0, 800)); await sleep(1000); }
+
+    // Scroll agressif pour charger tous les résultats dynamiquement
+    for (let i = 0; i < 10; i++) { await page.evaluate(() => window.scrollBy(0, 700)); await sleep(700); }
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await sleep(500);
 
     const people = await page.evaluate((searchType) => {
       const linkSel = searchType === 'companies' ? 'a[href*="/company/"]' : 'a[href*="/in/"]';
-      
-      // Select all candidate items
-      let cards = Array.from(document.querySelectorAll('.reusable-search__result-container, li.reusable-search__result-container, [data-view-name="search-entity-result-universal-template"]'));
-      
-      // If no cards found via standard classes, try looking for containers that HAVE the appropriate link
-      if (!cards.length) {
-        const links = Array.from(document.querySelectorAll(linkSel));
-        cards = links.map(a => a.closest('li, div.mb1, div.pb3, .artdeco-entity-lockup') || a.parentElement).filter(Boolean);
-      }
-
       const results = [];
       const seenUrls = new Set();
 
-      cards.forEach(card => {
-        const linkEl = card.querySelector(linkSel) || (card.tagName === 'A' ? card : null);
-        if (!linkEl) return;
-
+      function extractFromCard(card) {
+        const linkEl = card.querySelector(linkSel) || (card.tagName === 'A' && (card.href || '').includes(searchType === 'companies' ? '/company/' : '/in/') ? card : null);
+        if (!linkEl) return null;
         const href = (linkEl.href || '').split('?')[0];
-        if (!href || seenUrls.has(href) || href.includes('/search/')) return;
+        if (!href || seenUrls.has(href) || href.includes('/search/') || href.includes('/jobs/')) return null;
         seenUrls.add(href);
 
+        // Nom : plusieurs stratégies successives
         let name = '';
-        const nameEl = linkEl.querySelector('span[aria-hidden="true"], .entity-result__title-text') || linkEl;
-        name = nameEl.textContent?.trim() || '';
-        // Clean LinkedIn name (sometimes includes 'View profile', etc)
+        for (const sel of ['span[aria-hidden="true"]', '.entity-result__title-text', '.app-aware-link span', 'span.t-16', 'h3 span', 'h3']) {
+          const el = linkEl.querySelector(sel) || card.querySelector(sel);
+          if (el) { name = el.textContent?.trim() || ''; if (name) break; }
+        }
         name = name.split('\n')[0].replace(/\s+/g, ' ').trim();
+        if (!name || name === 'LinkedIn Member' || name === 'Membre LinkedIn' || name.length < 2) return null;
 
         let title = '';
-        const titleEl = card.querySelector('.entity-result__primary-subtitle, .t-14.t-black.t-normal, div.t-14.t-black--light');
-        title = titleEl?.textContent?.trim() || '';
+        for (const sel of ['.entity-result__primary-subtitle', '.t-14.t-black.t-normal', '.entity-result__summary', '.t-14.t-black--light']) {
+          const el = card.querySelector(sel);
+          if (el) { title = el.textContent?.trim() || ''; if (title) break; }
+        }
 
         let loc = '';
-        const locEl = card.querySelector('.entity-result__secondary-subtitle, .t-14.t-black--light');
-        loc = locEl?.textContent?.trim() || '';
-
-        let photo = card.querySelector('img')?.src || '';
-
-        if (name && name !== 'LinkedIn Member' && name !== 'Membre LinkedIn') {
-          results.push({ name, title, location: loc, profileUrl: href, photo });
+        for (const sel of ['.entity-result__secondary-subtitle', '.entity-result__location', '.t-14.t-black--light:last-of-type']) {
+          const el = card.querySelector(sel);
+          if (el) { loc = el.textContent?.trim() || ''; if (loc) break; }
         }
+
+        const photo = card.querySelector('img[src*="licdn"]')?.src || card.querySelector('img')?.src || '';
+        return { name, title, location: loc, profileUrl: href, photo };
+      }
+
+      // ── Stratégie 1 : sélecteurs clasiques LinkedIn ──────────────────────────
+      let cards = Array.from(document.querySelectorAll(
+        '.reusable-search__result-container, li.reusable-search__result-container, [data-view-name="search-entity-result-universal-template"]'
+      ));
+
+      // ── Stratégie 2 : li dans la liste de résultats ──────────────────────────
+      if (!cards.length) {
+        cards = Array.from(document.querySelectorAll('ul.reusable-search__entity-result-list li, ul[class*="search"] li'));
+      }
+
+      // ── Stratégie 3 : ancres /in/ ou /company/ trouvées, remontée vers li ──
+      if (!cards.length) {
+        const links = Array.from(document.querySelectorAll(linkSel));
+        const seen = new Set();
+        cards = links.map(a => {
+          const parent = a.closest('li') || a.closest('[class*="result"]') || a.closest('[class*="entity"]') || a.parentElement;
+          return parent;
+        }).filter(el => {
+          if (!el) return false;
+          const key = el.innerHTML.substring(0, 80);
+          if (seen.has(key)) return false;
+          seen.add(key);
+          return true;
+        });
+      }
+
+      // ── Stratégie 4 : attributs data URN ────────────────────────────────────
+      if (!cards.length) {
+        cards = Array.from(document.querySelectorAll('[data-chameleon-result-urn], [data-entity-urn], [data-occludable-entity-urn]'));
+      }
+
+      // ── Stratégie 5 : tous les li ayant le bon lien ──────────────────────────
+      if (!cards.length) {
+        cards = Array.from(document.querySelectorAll('li')).filter(li => li.querySelector(linkSel));
+      }
+
+      // ── Stratégie 6 : extraction directe depuis les liens (dernier recours) ──
+      if (!cards.length) {
+        Array.from(document.querySelectorAll(linkSel)).forEach(a => {
+          const href = (a.href || '').split('?')[0];
+          if (!href || seenUrls.has(href) || href.includes('/search/')) return;
+          seenUrls.add(href);
+          const name = (a.querySelector('span[aria-hidden="true"]')?.textContent || a.textContent || '').trim().split('\n')[0].replace(/\s+/g, ' ').trim();
+          if (name && name !== 'LinkedIn Member' && name.length > 1) {
+            results.push({ name, title: '', location: '', profileUrl: href, photo: '' });
+          }
+        });
+        return results;
+      }
+
+      cards.forEach(card => {
+        if (results.length >= 50) return;
+        const extracted = extractFromCard(card);
+        if (extracted) results.push(extracted);
       });
 
       return results;
     }, CONFIG.searchType);
+
+    emitLog(`   → ${people.length} profil(s) trouvé(s) sur cette page`);
+
+    // Si 0 résultats sur la première page, retry avec scroll supplémentaire
+    if (people.length === 0 && currentPage === 1) {
+      emitLog('   ⚠️  Aucun résultat détecté, retry...');
+      for (let i = 0; i < 5; i++) { await page.evaluate(() => window.scrollBy(0, 1000)); await sleep(1200); }
+      currentPage++;
+      continue;
+    }
 
     if (people.length === 0) break;
 
@@ -199,7 +293,7 @@ async function scrapePersonList(page) {
       }
     }
     currentPage++;
-    await sleep(2000);
+    await sleep(2500);
   }
 
   const label = CONFIG.searchType === 'companies' ? 'entreprises' : 'profils';
@@ -314,13 +408,23 @@ async function scrapeSkills(page, profileUrl) {
 }
 
 // ── Activité (posts) ──────────────────────────────────────────────────────────
-async function scrapeActivity(page, profileUrl) {
+async function scrapeActivity(page, profileUrl, isCompany = false) {
   emitLog('   📝 Activité...');
-  await page.goto(`${profileUrl}/recent-activity/all/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  
+  // LinkedIn a changé ses URL d'activité récemment
+  // Entreprises : /posts/?feedView=all
+  // Personnes : /recent-activity/all/
+  const url = isCompany 
+    ? `${profileUrl.replace(/\/$/, '')}/posts/?feedView=all` 
+    : `${profileUrl.replace(/\/$/, '')}/recent-activity/all/`;
+    
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await sleep(3000);
-  for (let i = 0; i < 8; i++) { await page.evaluate(() => window.scrollBy(0, 900)); await sleep(1200); }
+  
+  // Scroll pour charger
+  for (let i = 0; i < 6; i++) { await page.evaluate(() => window.scrollBy(0, 900)); await sleep(1200); }
 
-  return await page.evaluate((max) => {
+  let posts = await page.evaluate((max) => {
     function getText(el) {
       if (!el) return '';
       const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
@@ -330,20 +434,32 @@ async function scrapeActivity(page, profileUrl) {
     }
     const results = [];
     const seen = new Set();
-    document.querySelectorAll('[data-urn], .feed-shared-update-v2').forEach(el => {
+    
+    // Nouveaux et anciens sélecteurs LinkedIn
+    const postElements = document.querySelectorAll(
+      '[data-urn], .feed-shared-update-v2, .profile-creator-shared-feed-update__container, .update-components-update-v2'
+    );
+    
+    postElements.forEach(el => {
+      // Ignorer les sous-éléments qui ont aussi un data-urn
+      if (el.parentElement?.closest('[data-urn]') || el.parentElement?.closest('.feed-shared-update-v2')) return;
       if (results.length >= max) return;
+      
       const urn = el.getAttribute('data-urn') || el.getAttribute('data-id') || '';
       if (seen.has(urn) && urn) return;
       if (urn) seen.add(urn);
+      
       const actionType = el.querySelector('.update-components-header__text-wrapper span[aria-hidden="true"]')?.textContent?.trim() || 'Post';
-      const author = el.querySelector('.update-components-actor__name span[aria-hidden="true"]')?.textContent?.trim() || '';
-      const date = el.querySelector('.update-components-actor__sub-description span[aria-hidden="true"]')?.textContent?.trim() || '';
-      const text = getText(el.querySelector('.update-components-text, .feed-shared-text'));
+      const author = el.querySelector('.update-components-actor__name span[aria-hidden="true"], .update-components-actor__title span[aria-hidden="true"]')?.textContent?.trim() || '';
+      const date = el.querySelector('.update-components-actor__sub-description span[aria-hidden="true"], .update-components-actor__sub-description')?.textContent?.trim() || '';
+      const text = getText(el.querySelector('.update-components-text, .feed-shared-text, .feed-shared-update-v2__description'));
+      
       const likes = el.querySelector('.social-details-social-counts__reactions-count')?.textContent?.trim() || '0';
       const comments = el.querySelector('.social-details-social-counts__comments a, .social-details-social-counts__comments span')?.textContent?.trim() || '0';
       const shares = el.querySelector('[aria-label*="reposts"], [aria-label*="partage"]')?.textContent?.trim() || '0';
       const postUrl = el.querySelector('a[href*="/posts/"], a[href*="/feed/update/"]')?.href?.split('?')[0] || '';
       const image = el.querySelector('.update-components-image__image, .feed-shared-image img')?.src || '';
+      
       const mini = el.querySelector('.update-components-mini-update-v2, .feed-shared-mini-update-v2');
       let originalPost = null;
       if (mini) {
@@ -353,11 +469,58 @@ async function scrapeActivity(page, profileUrl) {
           url: mini.querySelector('a[href*="/posts/"], a[href*="/feed/"]')?.href?.split('?')[0] || '',
         };
       }
+      
       if (text.length > 2 || (originalPost?.text?.length > 2))
         results.push({ actionType, author, date, text: text.substring(0, 1500), image, likes, comments, shares, postUrl, originalPost });
     });
     return results;
   }, CONFIG.maxPosts);
+
+  // Fallback si la page d'activité ne retourne rien (ex: redirection vers le profil principal)
+  if (posts.length === 0 && !isCompany) {
+    emitLog('   ⚠️  Aucun post trouvé sur la page dédiée, tentative sur la page principale...');
+    await page.goto(profileUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await sleep(3000);
+    // Scroll jusqu'à la section activité
+    for (let i = 0; i < 5; i++) { await page.evaluate(() => window.scrollBy(0, 1000)); await sleep(1000); }
+    
+    posts = await page.evaluate((max) => {
+      function getText(el) {
+        if (!el) return '';
+        const w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        const parts = []; let n;
+        while ((n = w.nextNode())) { const t = n.textContent?.trim(); if (t) parts.push(t); }
+        return parts.join(' ').trim();
+      }
+      const results = [];
+      const sections = document.querySelectorAll('section');
+      let activitySection = null;
+      sections.forEach(s => {
+        if (s.textContent?.toLowerCase().includes('activité') || s.textContent?.toLowerCase().includes('activity')) {
+          activitySection = s;
+        }
+      });
+      
+      if (!activitySection) return [];
+      
+      activitySection.querySelectorAll('li.profile-creator-shared-feed-update__container, .feed-shared-update-v2').forEach(el => {
+         if (results.length >= max) return;
+         const text = getText(el.querySelector('.update-components-text, .feed-shared-text') || el);
+         if (text.length > 10) {
+           results.push({
+             actionType: 'Post',
+             author: '',
+             date: '',
+             text: text.substring(0, 1500),
+             likes: '0', comments: '0', shares: '0', postUrl: '', image: ''
+           });
+         }
+      });
+      return results;
+    }, CONFIG.maxPosts);
+  }
+
+  return posts;
 }
 
 // ── Commentaires ─────────────────────────────────────────────────────────────
@@ -612,46 +775,6 @@ async function scrapeCompanyProfile(page, companyUrl) {
   return data;
 }
 
-// ── Skills (Personnes) ────────────────────────────────────────────────────────
-async function scrapeSkills(page, profileUrl) {
-  emitLog('   🎯 Compétences...');
-  await page.goto(`${profileUrl}/details/skills/`, { waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => null);
-  await sleep(2000);
-  return await page.evaluate(() => {
-    return Array.from(document.querySelectorAll('.pvs-list__item-container')).map(el => ({
-      name: el.querySelector('span[aria-hidden="true"]')?.textContent?.trim() || '',
-      count: el.querySelector('.pvs-list__item-subtitle')?.textContent?.trim() || '0'
-    })).filter(s => s.name);
-  });
-}
-
-// ── Activité (Personnes) ──────────────────────────────────────────────────────
-async function scrapeActivity(page, profileUrl) {
-  emitLog('   📝 Activités (Posts)...');
-  await page.goto(`${profileUrl}/recent-activity/shares/`, { waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => null);
-  await sleep(2000);
-  return await page.evaluate(() => {
-    return Array.from(document.querySelectorAll('.feed-shared-update-v2')).map(el => ({
-      text: el.querySelector('.feed-shared-update-v2__description')?.textContent?.trim() || '',
-      date: el.querySelector('.update-components-actor__sub-description')?.textContent?.trim() || '',
-      postUrl: el.querySelector('a.app-aware-link')?.href || ''
-    })).filter(a => a.text).slice(0, 10);
-  });
-}
-
-async function scrapeComments(page, profileUrl) {
-  emitLog('   💬 Commentaires...');
-  await page.goto(`${profileUrl}/recent-activity/comments/`, { waitUntil: 'domcontentloaded', timeout: 20000 }).catch(() => null);
-  await sleep(2000);
-  return await page.evaluate(() => {
-    return Array.from(document.querySelectorAll('.feed-shared-update-v2')).map(el => ({
-      text: el.querySelector('.feed-shared-update-v2__commentary')?.textContent?.trim() || '',
-      date: el.querySelector('.update-components-actor__sub-description')?.textContent?.trim() || '',
-      postUrl: el.querySelector('a.app-aware-link')?.href || ''
-    })).filter(a => a.text).slice(0, 10);
-  });
-}
-
 // ── Page About entreprise (détails complets) ──────────────────────────────────
 async function scrapeCompanyAbout(page, companyUrl) {
   emitLog('   📋 Page About entreprise...');
@@ -731,6 +854,12 @@ async function scrapeFullProfile(page, person) {
     const company = await scrapeCompanyProfile(page, person.profileUrl);
     await sleep(CONFIG.delay);
     const aboutDetails = await scrapeCompanyAbout(page, person.profileUrl);
+    
+    let posts = [];
+    if (CONFIG.activityType === 'all' || CONFIG.activityType === 'posts') {
+      posts = await scrapeActivity(page, person.profileUrl, true).catch(() => []);
+    }
+
     return {
       ...person,
       ...company,
@@ -742,6 +871,7 @@ async function scrapeFullProfile(page, person) {
       foundedYear: aboutDetails.foundedYear,
       specialties: aboutDetails.specialties,
       phone: aboutDetails.phone || '',
+      activity: { posts, comments: [] }
     };
   }
 
@@ -817,6 +947,15 @@ async function main() {
           website: full.website || '',
           photo: full.photo || '',
           address: full.headquarters || full.location || '',
+          // ── Champs racine (LinkedIn) — nécessaires pour persistance dans contract_details ──
+          about: full.about || '',
+          headline: full.headline || '',
+          followers: full.followers || '',
+          // ── Activité au niveau racine (pour ProspectDetailView) ──
+          activity: {
+            posts: full.activity?.posts || [],
+            comments: full.activity?.comments || [],
+          },
           tags: CONFIG.searchType === 'companies'
             ? (full.specialties?.slice(0, 5) || [])
             : (full.skills?.slice(0, 5).map(s => s.name) || []),
@@ -838,8 +977,13 @@ async function main() {
             companySize: full.companySize || '',
             specialties: full.specialties || [],
             industry: full.industry || '',
+            // ── Activité dans contractDetails (fallback ProspectDetailView) ──
+            activity: {
+              posts: full.activity?.posts || [],
+              comments: full.activity?.comments || [],
+            },
           },
-          // Intelligence IA (activités récentes)
+          // ── Intelligence (activités récentes — chemin alternatif) ──
           aiIntelligence: {
             activities: {
               posts: full.activity?.posts || [],
@@ -853,8 +997,8 @@ async function main() {
           },
         };
 
-        // Envoi du résultat JSON au processus parent
-        process.stdout.write(`RESULT:${JSON.stringify(prospectPayload)}\n`);
+        // Envoi du résultat JSON au processus parent (avec affichage direct dans le terminal)
+        emitResult(prospectPayload);
 
         emitLog(`\n✅ ${full.name} extrait avec succès`);
       } catch (err) {
@@ -868,7 +1012,8 @@ async function main() {
             source: CONFIG.searchType === 'companies' ? 'linkedin_company' : 'linkedin',
             socialLinks: { linkedin: fallback.profileUrl || '' },
           };
-          process.stdout.write(`RESULT:${JSON.stringify(fallbackPayload)}\n`);
+          emitResult(fallbackPayload);
+
         }
         profiles.push(people[i]);
       }
@@ -876,7 +1021,7 @@ async function main() {
     }
 
     // 4. Recherche de posts additionnels (global)
-    const searchPosts = await scrapeSearchPosts(page);
+    const searchPosts = []; // await scrapeSearchPosts(page); // TODO: scrapeSearchPosts n'est pas définie
 
     // 5. Sauvegarde locale du rapport complet
     fs.writeFileSync(CONFIG.outputFile, JSON.stringify({

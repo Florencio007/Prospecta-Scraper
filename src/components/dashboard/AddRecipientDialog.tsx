@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Search, Users, Check, Plus, UserPlus } from "lucide-react";
+import { Search, Users, Check, Plus, UserPlus, Loader2 } from "lucide-react";
 import { LoadingLogo } from "@/components/LoadingLogo";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -289,7 +289,7 @@ export default function AddRecipientDialog({ isOpen, onClose, onSelected, onManu
                                     disabled={isSaving || !manualData.email}
                                     className="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-8 gap-2"
                                 >
-                                    {isSaving ? <LoadingLogo size="xs" compact /> : <Plus size={16} />}
+                                    {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus size={16} />}
                                     Ajouter manuellement
                                 </Button>
                             </div>

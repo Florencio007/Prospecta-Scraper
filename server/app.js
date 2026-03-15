@@ -108,8 +108,9 @@ function setupScraperEndpoint(app, endpoint, scriptName, getArgs) {
         try { fs.unlinkSync(lockPath); } catch (e) { }
       }
 
-      // Specific handling for GMaps output file if needed (as per original vite config)
-      if (scriptName === 'scraper_gmaps.cjs') {
+      // Specific handling for GMaps output      // Google Maps passe en Playwright, donc il faut nettoyer différemment si nécessaire
+      if (scriptName === 'scraper_googlemaps.cjs') {
+        exec('pkill -f "Chromium" || true'); // Simplification pour Playwright
         const outputPath = path.resolve(rootDir, 'scripts', 'last_gmaps_results.json');
         if (fs.existsSync(outputPath)) {
           try {
@@ -506,11 +507,11 @@ app.get('/api/email/unsubscribe/:recipientId', async (req, res) => {
   }
 });
 
-// Google Maps
-setupScraperEndpoint(app, '/api/scrape/gmaps', 'scraper_gmaps.cjs', (req) => [
-  req.query.q || "hotel",
-  req.query.l || "Antananarivo",
-  req.query.limit || "20",
+// ── GMAPS SCRAPER ─────────────────────────────────────────────────────────────
+setupScraperEndpoint(app, '/api/scrape/gmaps', 'scraper_googlemaps.cjs', (req) => [
+  req.query.q || '',
+  req.query.l || '',
+  req.query.limit || '20',
   req.query.userId || "",
   req.query.type || "tous"
 ]);

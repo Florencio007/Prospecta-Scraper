@@ -283,7 +283,7 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                                 disabled={isSendingTest || !testEmail}
                                 className="whitespace-nowrap font-medium text-xs bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
                             >
-                                {isSendingTest ? <LoadingLogo size="xs" compact className="mr-2" /> : null}
+                                {isSendingTest ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                                 Envoyer
                             </Button>
                         </div>
@@ -297,10 +297,10 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                         <Button variant="ghost" size="sm" onClick={handleDelete} disabled={isDeleting} className="text-destructive hover:bg-destructive/10">Supprimer</Button>
                     )}
                     <Button variant="outline" size="sm" onClick={handleTest} disabled={isTesting || !host}>
-                        {isTesting ? <LoadingLogo size="xs" compact /> : 'Tester la connexion'}
+                        {isTesting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Tester la connexion'}
                     </Button>
                     <Button size="sm" onClick={handleSave} disabled={isSaving || !host} className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                        {isSaving ? <LoadingLogo size="xs" compact className="mr-2" /> : null} Sauvegarder
+                        {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} Sauvegarder
                     </Button>
                 </div>
             </CardFooter>
@@ -467,12 +467,12 @@ const ApiKeyCard = ({ providerConfig, existingKey, onUpdate }: { providerConfig:
                                 Supprimer
                             </Button>
                             <Button variant="outline" size="sm" onClick={handleTest} disabled={isTesting || !apiKey}>
-                                {isTesting ? <LoadingLogo size="xs" compact /> : 'Tester'}
+                                {isTesting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Tester'}
                             </Button>
                         </>
                     )}
                     <Button variant="default" size="sm" onClick={handleSave} disabled={isSaving || !apiKey} className="bg-accent hover:bg-accent/90">
-                        {isSaving ? <LoadingLogo size="xs" compact className="mr-2" /> : null}
+                        {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
                         Sauvegarder
                     </Button>
                 </div>

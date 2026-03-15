@@ -10,8 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Mail, Sparkles, Save, X, MessageSquare, Send, Bot, User, Edit } from "lucide-react";
-import { LoadingLogo } from "@/components/LoadingLogo";
+import { Mail, Sparkles, Save, X, MessageSquare, Send, Bot, User, Edit, Loader2 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Message {
@@ -155,7 +154,7 @@ export default function EditTemplateDialog({
                                                 disabled={isGeneratingAI}
                                                 className="h-11 border-dashed border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/10 gap-2 font-outfit"
                                             >
-                                                {isGeneratingAI ? <LoadingLogo size="xs" compact /> : <Sparkles className="h-4 w-4" />}
+                                                {isGeneratingAI ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
                                                 Régénérer
                                             </Button>
                                         )}
@@ -203,7 +202,7 @@ export default function EditTemplateDialog({
                                 {isGeneratingAI && (
                                     <div className="flex justify-start">
                                         <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-2xl rounded-tl-none border border-slate-200 dark:border-slate-700">
-                                            <LoadingLogo size="xs" compact />
+                                            <Loader2 className="h-4 w-4 animate-spin" />
                                         </div>
                                     </div>
                                 )}
@@ -244,7 +243,7 @@ export default function EditTemplateDialog({
                         disabled={isSaving}
                         className="bg-emerald-600 hover:bg-emerald-700 text-white font-black h-11 px-10 gap-2 shadow-[0_0_20px_rgba(16,185,129,0.2)] font-outfit"
                     >
-                        {isSaving ? <LoadingLogo size="xs" compact /> : <Save size={16} />}
+                        {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save size={16} />}
                         Enregistrer les modifications
                     </Button>
                 </DialogFooter>

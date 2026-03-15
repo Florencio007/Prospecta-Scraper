@@ -21,7 +21,6 @@ import {
     X,
     UserPlus
 } from "lucide-react";
-import { LoadingLogo } from "@/components/LoadingLogo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -241,7 +240,7 @@ export default function EmailCampaignManager({
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <LoadingLogo size="lg" message="Mise à jour..." />
+                <Loader2 className="h-10 w-10 animate-spin text-emerald-500" />
                 <p className="text-slate-500 font-medium">Chargement des campagnes...</p>
             </div>
         );
@@ -522,7 +521,7 @@ function CampaignDetailSidePanel({ campaign, onClose, onLaunchBatch, onAddProspe
                             </Badge>
                             {onLaunchBatch && (
                                 <button onClick={handleLaunch} disabled={isLaunching || campaign.sent_today >= campaign.daily_limit} className="text-[10px] text-slate-400 hover:text-slate-600 underline disabled:opacity-50">
-                                    {isLaunching ? <LoadingLogo size="xs" compact className="mr-1" /> : null}
+                                    {isLaunching ? <Loader2 className="mr-1 h-3 w-3 animate-spin inline" /> : null}
                                     Forcer un envoi manuel
                                 </button>
                             )}
