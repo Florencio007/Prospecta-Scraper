@@ -77,7 +77,7 @@ export const AgentInstallModal = ({ open, onOpenChange }: Props) => (
             className="flex flex-col items-center p-4 rounded-xl border bg-card hover:bg-accent/5 hover:border-accent/40 transition-all duration-300 group text-center space-y-2"
           >
             <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform duration-300">
-              <img src="/windows-logo.jpg" alt="Windows" className="w-6 h-6 object-contain mix-blend-multiply dark:mix-blend-normal" />
+              <img src="/windows-logo.png" alt="Windows" className="w-6 h-6 object-contain" />
             </div>
             <div className="space-y-0.5">
               <p className="text-sm font-bold">Windows</p>
