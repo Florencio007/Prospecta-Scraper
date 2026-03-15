@@ -1,4 +1,5 @@
 import { useAuth } from "@/hooks/useAuth";
+import { LoadingLogo } from "./LoadingLogo";
 import { Navigate, useLocation } from "react-router-dom";
 
 const ProtectedRoute = ({ children, showOnboarding = true }: { children: React.ReactNode, showOnboarding?: boolean }) => {
@@ -8,7 +9,7 @@ const ProtectedRoute = ({ children, showOnboarding = true }: { children: React.R
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-accent" />
+        <LoadingLogo size="lg" message="Initialisation..." />
       </div>
     );
   }

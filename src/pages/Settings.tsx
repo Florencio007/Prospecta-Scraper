@@ -626,7 +626,7 @@ const Settings = () => {
                     disabled={isLoading}
                     className="bg-accent text-accent-foreground hover:bg-accent/90"
                   >
-                    <Save size={18} className="mr-2" />
+                    {isLoading ? <LoadingLogo size="xs" compact className="mr-2" /> : <Save size={18} className="mr-2" />}
                     {isLoading ? t("saving") : t("saveChanges")}
                   </Button>
                 </div>
@@ -682,7 +682,7 @@ const Settings = () => {
                   disabled={isLoading}
                   className="w-full bg-accent text-accent-foreground mt-4"
                 >
-                  <Save size={18} className="mr-2" />
+                  {isLoading ? <LoadingLogo size="xs" compact className="mr-2" /> : <Save size={18} className="mr-2" />}
                   {isLoading ? "Enregistrement..." : "Enregistrer les credentials LinkedIn"}
                 </Button>
 

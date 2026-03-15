@@ -721,10 +721,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                             {isEnriching ? (
                                                 <div className="flex flex-col items-center justify-center py-20 text-center space-y-6 bg-emerald-500/5 rounded-3xl border border-emerald-500/20 animate-in fade-in zoom-in duration-500">
                                                     <div className="relative">
-                                                        <div className="h-24 w-24 rounded-full border-2 border-emerald-500/30 border-t-emerald-500 animate-spin" />
-                                                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse">
-                                                            <Logo size="md" />
-                                                        </div>
+                                                        <LoadingLogo size="lg" compact />
                                                     </div>
                                                     <div className="space-y-2">
                                                         <h4 className="text-xl font-bold text-emerald-500 animate-bounce">{t("aiAnalyzingWeb")}</h4>

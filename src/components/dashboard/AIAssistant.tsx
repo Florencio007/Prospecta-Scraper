@@ -253,7 +253,7 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
             <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-4">
               {loadingHistory && (
                 <div className="flex justify-center py-4">
-                  <Loader className="animate-spin text-accent" size={20} />
+                  <LoadingLogo size="xs" compact />
                 </div>
               )}
               
@@ -310,7 +310,7 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
                         <Sparkles size={16} />
                       </div>
                       <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-tl-none">
-                        <Loader className="animate-spin text-accent" size={16} />
+                        <LoadingLogo size="xs" compact />
                       </div>
                    </div>
                 </div>
@@ -364,7 +364,7 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
             {generating && (
               <div className="flex flex-col items-center justify-center py-20 text-center animate-pulse">
                 <div className="h-16 w-16 bg-accent/20 rounded-2xl flex items-center justify-center mb-6 animate-bounce">
-                  <Loader className="animate-spin text-accent" size={32} />
+                  <LoadingLogo size="md" compact />
                 </div>
                 <p className="text-lg font-black font-outfit bg-gradient-to-r from-accent to-emerald-500 bg-clip-text text-transparent">Analyse de vos données...</p>
                 <p className="text-xs text-muted-foreground mt-2 font-bold uppercase tracking-widest">Calcul des tendances</p>

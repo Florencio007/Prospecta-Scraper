@@ -949,12 +949,20 @@ const ProspectFinder = () => {
             <CardContent className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="keyword">{t("keywords")}</Label>
-                <Input
-                  id="keyword"
-                  placeholder={t("namePositionPlaceholder")}
-                  value={filters.keyword}
-                  onChange={(e) => setFilters({ ...filters, keyword: e.target.value })}
-                />
+                <div className="relative">
+                  <Input
+                    id="keyword"
+                    placeholder={t("namePositionPlaceholder")}
+                    value={filters.keyword}
+                    onChange={(e) => setFilters({ ...filters, keyword: e.target.value })}
+                    className={isSearching ? "pr-10" : ""}
+                  />
+                  {isSearching && (
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <LoadingLogo size="xs" compact />
+                    </div>
+                  )}
+                </div>
               </div>
 
               <div className="space-y-2">
