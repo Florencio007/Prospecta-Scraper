@@ -26,7 +26,6 @@ const Onboarding = lazy(() => import("./pages/Onboarding"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
 const Templates = lazy(() => import("./pages/Templates"));
 const NotFound = lazy(() => import("./pages/NotFound"));
-const ScanPage = lazy(() => import("./pages/ScanPage"));
 
 const queryClient = new QueryClient();
 
@@ -137,11 +136,6 @@ const App = () => (
                       path="/templates"
                       element={<Navigate to="/campaigns" replace />}
                     />
-                    <Route path="/scan" element={
-                        <ProtectedRoute>
-                          <ScanPage />
-                        </ProtectedRoute>
-                      } />
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                   <GlobalAIAssistant />

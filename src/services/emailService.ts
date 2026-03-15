@@ -53,19 +53,24 @@ export interface SmtpEmailParams {
 }
 
 export async function sendSingleEmailSmtp(params: SmtpEmailParams): Promise<BrevoResponse> {
+    console.log(`[sendSingleEmailSmtp] Calling /api/email/send-smtp...`);
     try {
         const response = await fetch('/api/email/send-smtp', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(params),
         });
+        console.log(`[sendSingleEmailSmtp] Response Status: ${response.status} ${response.statusText}`);
         if (!response.ok) {
-            const err = await response.json();
+            const err = await response.json().catch(() => ({ error: 'Unknown response format' }));
+            console.error(`[sendSingleEmailSmtp] Error Data:`, err);
             return { error: err.error || `Erreur SMTP ${response.status}` };
         }
         const data = await response.json();
+        console.log(`[sendSingleEmailSmtp] Success Data:`, data);
         return { messageId: data.messageId };
     } catch (err) {
+        console.error(`[sendSingleEmailSmtp] Catch Error:`, err);
         return { error: `Erreur de connexion SMTP : ${(err as Error).message}` };
     }
 }

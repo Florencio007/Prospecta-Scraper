@@ -1,0 +1,135 @@
+{
+  "scrapedAt": "2026-03-15T08:21:11.422Z",
+  "query": "hotel nosy be",
+  "total": 2,
+  "hotels": [
+    {
+      "name": "Blue Sky Resort",
+      "category": "Complexe hôtelier",
+      "address": "",
+      "phone": "",
+      "website": "",
+      "rating": "",
+      "totalScore": "",
+      "mapsUrl": "https://www.google.com/maps/place/Blue+Sky+Resort/@-13.3231755,48.1850347,17z/data=!4m10!3m9!1s0x2213b7c4298d4cb1:0x12c917c86417e8d0!5m2!4m1!1i2!8m2!3d-13.3231755!4d48.1850347!10e1!16s%2Fg%2F11l38dhhjk?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+      "gps": {
+        "lat": -13.3231755,
+        "lng": 48.1850347
+      },
+      "platform": "Site propre",
+      "hours": "",
+      "about": {
+        "amenities": [
+          "307 994 Ar",
+          "Complexe hôtelier"
+        ],
+        "description": "307 994 Ar"
+      },
+      "reviews": [],
+      "contractDetails": {
+        "name": "Blue Sky Resort",
+        "gps": {
+          "lat": -13.3231755,
+          "lng": 48.1850347
+        },
+        "phone": "",
+        "website": "",
+        "platform": "Site propre",
+        "hours": "",
+        "rating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "about": {
+          "amenities": [
+            "307 994 Ar",
+            "Complexe hôtelier"
+          ],
+          "description": "307 994 Ar"
+        },
+        "address": "",
+        "category": "Complexe hôtelier",
+        "url": "https://www.google.com/maps/place/Blue+Sky+Resort/@-13.3231755,48.1850347,17z/data=!4m10!3m9!1s0x2213b7c4298d4cb1:0x12c917c86417e8d0!5m2!4m1!1i2!8m2!3d-13.3231755!4d48.1850347!10e1!16s%2Fg%2F11l38dhhjk?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D"
+      },
+      "aiIntelligence": {
+        "activities": {
+          "posts": [],
+          "comments": []
+        },
+        "contactInfo": {
+          "phones": [],
+          "emails": [],
+          "addresses": []
+        },
+        "executiveSummary": "307 994 Ar",
+        "companyCulture": {
+          "mission": "Équipements et services : 307 994 Ar, Complexe hôtelier"
+        }
+      }
+    },
+    {
+      "name": "Anjiamarango Beach Resort",
+      "category": "Hôtels à proximité",
+      "address": "Installé sur une plage du canal du Mozambique, ce complexe de style décontracté se trouve à 17 km de l'aéroport de Fascene et à 29 km de la réserve naturelle intégrale de Lokobe.Les élégants bungalows en bois sont dotés d'un toit de chaume et d'une terrasse. Ils disposent d'un coin salon, d'une moustiquaire, d'une salle de bain attenante, d'un mini-frigo et d'un coffre-fort. Un service de chambre est proposé.Le petit-déjeuner est inclus. L'établissement possède un restaurant, un bar, une piscine extérieure, une piscine pour enfants et une salle de jeux équipée d'une télévision.",
+      "phone": "",
+      "website": "",
+      "rating": "",
+      "totalScore": "",
+      "mapsUrl": "https://www.google.com/maps/place/Anjiamarango+Beach+Resort/@-13.240962,48.253424,17z/data=!4m10!3m9!1s0x2213c7b0880df185:0xc9b4a983f53b59f0!5m2!4m1!1i2!8m2!3d-13.240962!4d48.253424!10e1!16s%2Fg%2F113hj7hbp?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+      "gps": {
+        "lat": -13.240962,
+        "lng": 48.253424
+      },
+      "platform": "Site propre",
+      "hours": "",
+      "about": {
+        "amenities": [
+          "313 266 Ar",
+          "Hôtel 3 étoiles"
+        ],
+        "description": ""
+      },
+      "reviews": [],
+      "contractDetails": {
+        "name": "Anjiamarango Beach Resort",
+        "gps": {
+          "lat": -13.240962,
+          "lng": 48.253424
+        },
+        "phone": "",
+        "website": "",
+        "platform": "Site propre",
+        "hours": "",
+        "rating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "about": {
+          "amenities": [
+            "313 266 Ar",
+            "Hôtel 3 étoiles"
+          ],
+          "description": ""
+        },
+        "address": "Installé sur une plage du canal du Mozambique, ce complexe de style décontracté se trouve à 17 km de l'aéroport de Fascene et à 29 km de la réserve naturelle intégrale de Lokobe.Les élégants bungalows en bois sont dotés d'un toit de chaume et d'une terrasse. Ils disposent d'un coin salon, d'une moustiquaire, d'une salle de bain attenante, d'un mini-frigo et d'un coffre-fort. Un service de chambre est proposé.Le petit-déjeuner est inclus. L'établissement possède un restaurant, un bar, une piscine extérieure, une piscine pour enfants et une salle de jeux équipée d'une télévision.",
+        "category": "Hôtels à proximité",
+        "url": "https://www.google.com/maps/place/Anjiamarango+Beach+Resort/@-13.240962,48.253424,17z/data=!4m10!3m9!1s0x2213c7b0880df185:0xc9b4a983f53b59f0!5m2!4m1!1i2!8m2!3d-13.240962!4d48.253424!10e1!16s%2Fg%2F113hj7hbp?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D"
+      },
+      "aiIntelligence": {
+        "activities": {
+          "posts": [],
+          "comments": []
+        },
+        "contactInfo": {
+          "phones": [],
+          "emails": [],
+          "addresses": [
+            "Installé sur une plage du canal du Mozambique, ce complexe de style décontracté se trouve à 17 km de l'aéroport de Fascene et à 29 km de la réserve naturelle intégrale de Lokobe.Les élégants bungalows en bois sont dotés d'un toit de chaume et d'une terrasse. Ils disposent d'un coin salon, d'une moustiquaire, d'une salle de bain attenante, d'un mini-frigo et d'un coffre-fort. Un service de chambre est proposé.Le petit-déjeuner est inclus. L'établissement possède un restaurant, un bar, une piscine extérieure, une piscine pour enfants et une salle de jeux équipée d'une télévision."
+          ]
+        },
+        "executiveSummary": "",
+        "companyCulture": {
+          "mission": "Équipements et services : 313 266 Ar, Hôtel 3 étoiles"
+        }
+      }
+    }
+  ]
+}

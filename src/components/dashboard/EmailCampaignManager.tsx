@@ -19,7 +19,8 @@ import {
     Plus,
     Sparkles,
     X,
-    UserPlus
+    UserPlus,
+    Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,6 +30,8 @@ import { useToast } from "@/hooks/use-toast";
 import { useLanguage } from "@/hooks/useLanguage";
 import { supabase } from "@/integrations/supabase/client";
 import { triggerN8nWorkflow } from "@/integrations/n8n";
+import { LoadingLogo } from "@/components/LoadingLogo";
+import { ConfirmDialog } from "./ConfirmDialog";
 import AddRecipientDialog from "./AddRecipientDialog";
 import EditTemplateDialog from "./EditTemplateDialog";
 import EditCampaignDialog from "./EditCampaignDialog";
@@ -188,6 +191,8 @@ export default function EmailCampaignManager({
     const { toast } = useToast();
     const { t } = useLanguage();
     const [selected, setSelected] = useState<Campaign | null>(null);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+    const [campaignToDelete, setCampaignToDelete] = useState<string | null>(null);
     const [filter, setFilter] = useState("all");
     const [isManageRecipientsOpen, setIsManageRecipientsOpen] = useState(false);
     const [isProspectSelectorOpen, setIsProspectSelectorOpen] = useState(false);
@@ -216,16 +221,24 @@ export default function EmailCampaignManager({
         }
     };
 
-    const deleteCampaign = async (id: string) => {
-        if (!confirm("Êtes-vous sûr de vouloir supprimer cette campagne ?")) return;
+    const handleDeleteClick = (id: string) => {
+        setCampaignToDelete(id);
+        setIsDeleteDialogOpen(true);
+    };
+
+    const deleteCampaign = async () => {
+        if (!campaignToDelete) return;
         try {
-            const { error } = await (supabase as any).from("email_campaigns").delete().eq("id", id);
+            const { error } = await (supabase as any).from("email_campaigns").delete().eq("id", campaignToDelete);
             if (error) throw error;
             toast({ title: "Campagne supprimée", variant: "destructive" });
-            if (selected?.id === id) setSelected(null);
+            if (selected?.id === campaignToDelete) setSelected(null);
             onRefresh();
         } catch (err: unknown) {
             toast({ title: t("error"), description: (err instanceof Error ? err.message : "Une erreur inconnue s'est produite"), variant: "destructive" });
+        } finally {
+            setIsDeleteDialogOpen(false);
+            setCampaignToDelete(null);
         }
     };
 
@@ -240,8 +253,7 @@ export default function EmailCampaignManager({
     if (isLoading) {
         return (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
-                <Loader2 className="h-10 w-10 animate-spin text-emerald-500" />
-                <p className="text-slate-500 font-medium">Chargement des campagnes...</p>
+                <LoadingLogo size="md" message="Chargement des campagnes..." />
             </div>
         );
     }
@@ -308,7 +320,7 @@ export default function EmailCampaignManager({
                                 isSelected={selected?.id === c.id}
                                 onSelect={() => setSelected(c)}
                                 onToggle={() => toggleStatus(c.id, c.status)}
-                                onDelete={() => deleteCampaign(c.id)}
+                                onDelete={() => handleDeleteClick(c.id)}
                             />
                         ))
                     )}
@@ -338,6 +350,7 @@ export default function EmailCampaignManager({
                             onEditTemplateClick={() => setIsEditTemplateOpen(true)}
                             onEditCampaignClick={() => setIsEditCampaignOpen(true)}
                             onManageRecipientsClick={() => setIsManageRecipientsOpen(true)}
+                            onDeleteClick={() => handleDeleteClick(selected.id)}
                         />
                     </div>
                 )}
@@ -407,6 +420,15 @@ export default function EmailCampaignManager({
                     <AntiSpamBestPractices />
                 </div>
             )}
+
+            <ConfirmDialog
+                isOpen={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+                onConfirm={deleteCampaign}
+                title="Supprimer la campagne ?"
+                description="Cette action est irréversible. Toutes les données de prospection liées à cette campagne seront supprimées."
+                confirmText="Supprimer définitivement"
+            />
         </div>
     );
 }
@@ -442,7 +464,7 @@ function CampaignRowCard({ campaign, onSelect, onToggle, onDelete, isSelected }:
                             {campaign.status === 'active' ? <Pause size={12} /> : <Play size={12} />}
                             <span className="hidden lg:inline">{campaign.status === 'active' ? 'Pause' : 'Reprendre'}</span>
                         </Button>
-                        <Button variant="outline" size="sm" onClick={onDelete} className="h-8 text-red-500 border-red-500/20 hover:bg-red-500/10">
+                        <Button variant="outline" size="sm" onClick={() => onDelete(campaign.id)} className="h-8 text-red-500 border-red-500/20 hover:bg-red-500/10">
                             <Trash2 size={12} />
                         </Button>
                     </div>
@@ -493,7 +515,7 @@ function CampaignRowCard({ campaign, onSelect, onToggle, onDelete, isSelected }:
     );
 }
 
-function CampaignDetailSidePanel({ campaign, onClose, onLaunchBatch, onAddProspectsClick, onEditTemplateClick, onEditCampaignClick, onManageRecipientsClick }: { campaign: Campaign, onClose: () => void, onLaunchBatch?: () => void, onAddProspectsClick?: () => void, onEditTemplateClick?: () => void, onEditCampaignClick?: () => void, onManageRecipientsClick?: () => void }) {
+function CampaignDetailSidePanel({ campaign, onClose, onLaunchBatch, onAddProspectsClick, onEditTemplateClick, onEditCampaignClick, onManageRecipientsClick, onDeleteClick }: { campaign: Campaign, onClose: () => void, onLaunchBatch?: () => void, onAddProspectsClick?: () => void, onEditTemplateClick?: () => void, onEditCampaignClick?: () => void, onManageRecipientsClick?: () => void, onDeleteClick?: () => void }) {
     const delivRate = pct(campaign.sent_count - (campaign.bounced_count || 0), campaign.sent_count);
     const openRate = pct(campaign.opened_count, campaign.sent_count);
     const clickRate = pct(campaign.clicked_count, campaign.opened_count);
@@ -527,9 +549,16 @@ function CampaignDetailSidePanel({ campaign, onClose, onLaunchBatch, onAddProspe
                             )}
                         </div>
                     )}
-                    <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
-                        <X size={18} />
-                    </Button>
+                    <div className="flex items-center gap-2">
+                        {onDeleteClick && (
+                            <Button variant="ghost" size="icon" onClick={onDeleteClick} className="h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20">
+                                <Trash2 size={18} />
+                            </Button>
+                        )}
+                        <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
+                            <X size={18} />
+                        </Button>
+                    </div>
                 </div>
             </CardHeader>
             <CardContent className="p-5 flex flex-col gap-5">

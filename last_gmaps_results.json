@@ -1,0 +1,76 @@
+{
+  "scrapedAt": "2026-03-15T13:26:15.338Z",
+  "query": "hotel nosy be",
+  "total": 1,
+  "hotels": [
+    {
+      "name": "Blue Sky Resort",
+      "category": "",
+      "address": "Ambaro 207",
+      "phone": "038 55 768 57",
+      "website": "https://www.blueskyresortnosybe.com/",
+      "rating": "",
+      "totalScore": "",
+      "mapsUrl": "https://www.google.com/maps/place/Blue+Sky+Resort/@-13.3231755,48.1850347,17z/data=!4m11!3m10!1s0x2213b7c4298d4cb1:0x12c917c86417e8d0!5m2!4m1!1i2!8m2!3d-13.3231755!4d48.1850347!9m1!1b1!16s%2Fg%2F11l38dhhjk?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+      "gps": {
+        "lat": -13.3231755,
+        "lng": 48.1850347
+      },
+      "platform": "Site propre",
+      "about": {
+        "amenities": [
+          "303 052 Ar",
+          "Complexe hôtelier",
+          "15–16 mars"
+        ],
+        "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine extérieure Climatisation Accepte les animaux Service de chambre Restaurant Cuisine dans toutes ch. Navette aéroport Centre de fitness Bar\n\nPetit déjeuner payant\n\nCuisine dans toutes ch."
+      },
+      "reviews": [],
+      "contractDetails": {
+        "name": "Blue Sky Resort",
+        "address": "Ambaro 207",
+        "phone": "038 55 768 57",
+        "website": "https://www.blueskyresortnosybe.com/",
+        "plusCode": "M5GP+P2",
+        "rating": "",
+        "reviewCount": "",
+        "gps": {
+          "lat": -13.3231755,
+          "lng": 48.1850347
+        },
+        "category": "",
+        "starRating": "",
+        "about": {
+          "amenities": [
+            "303 052 Ar",
+            "Complexe hôtelier",
+            "15–16 mars"
+          ],
+          "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine extérieure Climatisation Accepte les animaux Service de chambre Restaurant Cuisine dans toutes ch. Navette aéroport Centre de fitness Bar\n\nPetit déjeuner payant\n\nCuisine dans toutes ch."
+        },
+        "reviews": [],
+        "url": "https://www.google.com/maps/place/Blue+Sky+Resort/@-13.3231755,48.1850347,17z/data=!4m11!3m10!1s0x2213b7c4298d4cb1:0x12c917c86417e8d0!5m2!4m1!1i2!8m2!3d-13.3231755!4d48.1850347!9m1!1b1!16s%2Fg%2F11l38dhhjk?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxMS4wIKXMDSoASAFQAw%3D%3D",
+        "platform": "Site propre"
+      },
+      "aiIntelligence": {
+        "activities": {
+          "posts": [],
+          "comments": []
+        },
+        "contactInfo": {
+          "phones": [
+            "038 55 768 57"
+          ],
+          "emails": [],
+          "addresses": [
+            "Ambaro 207"
+          ]
+        },
+        "executiveSummary": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine extérieure Climatisation Accepte les animaux Service de chambre Restaurant Cuisine dans toutes ch. Navette aéroport Centre de fitness Bar\n\nPetit déjeuner payant\n\nCuisine dans toutes ch.",
+        "companyCulture": {
+          "mission": "Équipements et services : 303 052 Ar, Complexe hôtelier, 15–16 mars"
+        }
+      }
+    }
+  ]
+}

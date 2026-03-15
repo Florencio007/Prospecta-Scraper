@@ -272,6 +272,15 @@ export function useEmailCampaigns() {
                 entreprise: recipient.company,
             });
 
+            console.log(`[launchDailyBatch] Preparing to send to ${recipient.email}...`);
+            console.log(`[launchDailyBatch] SMTP Config:`, { host: smtpConfig.host, port: smtpConfig.port, user: smtpConfig.user });
+            console.log(`[launchDailyBatch] Payload:`, {
+                to: recipient.email,
+                from: campaign.from_email,
+                subject: campaign.subject,
+                htmlLength: htmlContent.length
+            });
+
             const result = await sendSingleEmailSmtp({
                 smtpHost: smtpConfig.host,
                 smtpPort: smtpConfig.port,
@@ -284,6 +293,7 @@ export function useEmailCampaigns() {
                 htmlContent,
                 recipientId: recipient.id,
             });
+            console.log(`[launchDailyBatch] sendSingleEmailSmtp Result:`, result);
 
             if (result.messageId) {
                 console.log(`[useEmailCampaigns] Email delivered to ${recipient.email}.`);

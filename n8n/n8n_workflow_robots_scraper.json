@@ -1,0 +1,220 @@
+{
+    "name": "Prospecta - Scraper Automatique via Robots.txt",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "robots-scraper",
+                "responseMode": "onReceived",
+                "options": {}
+            },
+            "id": "webhook-trigger",
+            "name": "Webhook Trigger",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "=https://{{$json.body.domain.replace('https://','').replace('http://','').split('/')[0]}}/robots.txt",
+                "options": {}
+            },
+            "id": "fetch-robots",
+            "name": "Fetch Robots.txt",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                300,
+                300
+            ],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "jsCode": "// Extraction de l'URL du Sitemap depuis le robots.txt\nconst robotsText = $input.first().json.data || \"\";\nconst sitemapRegex = /Sitemap:\\s*(https?:\\/\\/\\S+)/gi;\nconst matches = [];\nlet match;\n\nwhile ((match = sitemapRegex.exec(robotsText)) !== null) {\n  matches.push({ url: match[1] });\n}\n\n// Si aucun sitemap n'est trouvé, on tente le chemin par défaut\nif (matches.length === 0) {\n  const domain = $node[\"Webhook Trigger\"].json.body.domain.replace('https://','').replace('http://','').split('/')[0];\n  matches.push({ url: `https://${domain}/sitemap.xml` });\n}\n\nreturn matches;"
+            },
+            "id": "extract-sitemap-url",
+            "name": "Extract Sitemap URL",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                500,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{$json.url}}",
+                "options": {}
+            },
+            "id": "fetch-sitemap-xml",
+            "name": "Fetch Sitemap XML",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                700,
+                300
+            ],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "id": "xml-to-json",
+            "name": "XML to JSON",
+            "type": "n8n-nodes-base.xml",
+            "typeVersion": 1,
+            "position": [
+                900,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Aplatir la structure du sitemap pour avoir une liste d'URLs propre\nconst xmlData = $input.first().json;\nconst urls = xmlData.urlset?.url || xmlData.sitemapindex?.sitemap || [];\n\nreturn (Array.isArray(urls) ? urls : [urls]).map(u => ({\n  url: u.loc?.[0] || u.loc || \"\"\n})).filter(u => u.url !== \"\");"
+            },
+            "id": "normalize-urls",
+            "name": "Normalize URLs",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "batchSize": 5,
+                "options": {}
+            },
+            "id": "split-batches",
+            "name": "Split In Batches",
+            "type": "n8n-nodes-base.splitInBatches",
+            "typeVersion": 3,
+            "position": [
+                1300,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{$json.url}}",
+                "options": {}
+            },
+            "id": "scrape-page",
+            "name": "Scrape Page Content",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                1550,
+                150
+            ],
+            "continueOnFail": true
+        }
+    ],
+    "connections": {
+        "Webhook Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "fetch-robots",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "fetch-robots": {
+            "main": [
+                [
+                    {
+                        "node": "extract-sitemap-url",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "extract-sitemap-url": {
+            "main": [
+                [
+                    {
+                        "node": "fetch-sitemap-xml",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "fetch-sitemap-xml": {
+            "main": [
+                [
+                    {
+                        "node": "xml-to-json",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "xml-to-json": {
+            "main": [
+                [
+                    {
+                        "node": "normalize-urls",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "normalize-urls": {
+            "main": [
+                [
+                    {
+                        "node": "split-batches",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "split-batches": {
+            "main": [
+                [
+                    {
+                        "node": "scrape-page",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "scrape-page": {
+            "main": [
+                [
+                    {
+                        "node": "split-batches",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "tags": [
+        {
+            "name": "prospecta"
+        },
+        {
+            "name": "scraper"
+        }
+    ]
+}

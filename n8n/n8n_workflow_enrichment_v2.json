@@ -1,0 +1,377 @@
+{
+    "name": "Prospecta - Enrichissement Avancé (Hunter + Apollo + Web Scraping)",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "prospect-enrich",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "webhook-enrich",
+            "name": "Webhook Enrich",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.hunter.io/v2/domain-search",
+                "options": {
+                    "redirect": {
+                        "redirect": {}
+                    }
+                },
+                "queryParametersUi": {
+                    "parameter": [
+                        {
+                            "name": "domain",
+                            "value": "={{$json.body.website.replace('https://','').replace('http://','').split('/')[0]}}"
+                        }
+                    ]
+                }
+            },
+            "id": "hunter-io",
+            "name": "Hunter.io - Emails",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                400,
+                100
+            ],
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "YOUR_HUNTER_CRED_ID",
+                    "name": "Hunter.io API Key"
+                }
+            },
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.apollo.io/v1/organizations/enrich",
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"domain\": \"{{$json.body.website.replace('https://','').replace('http://','').split('/')[0]}}\"\n}",
+                "options": {}
+            },
+            "id": "apollo",
+            "name": "Apollo.io - Business Info",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                400,
+                300
+            ],
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "YOUR_APOLLO_CRED_ID",
+                    "name": "Apollo.io API Key"
+                }
+            },
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "url": "=https://{{$json.body.website.replace('https://','').replace('http://','').split('/')[0]}}/robots.txt",
+                "options": {}
+            },
+            "id": "fetch-robots",
+            "name": "Fetch Robots.txt",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                400,
+                500
+            ],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "jsCode": "// Extraction du Sitemap depuis robots.txt\nconst robotsText = $input.first().json.data || \"\";\nconst sitemapRegex = /Sitemap:\\s*(https?:\\/\\/\\S+)/gi;\nconst matches = [];\nlet match;\n\nwhile ((match = sitemapRegex.exec(robotsText)) !== null) {\n  matches.push({ url: match[1] });\n}\n\nif (matches.length === 0) {\n  const domain = $node[\"Webhook Enrich\"].json.body.website.replace('https://','').replace('http://','').split('/')[0];\n  matches.push({ url: `https://${domain}/sitemap.xml` });\n}\n\nreturn matches.length > 0 ? [matches[0]] : [];"
+            },
+            "id": "extract-sitemap",
+            "name": "Extract Sitemap URL",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                600,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{$json.url}}",
+                "options": {}
+            },
+            "id": "fetch-sitemap",
+            "name": "Fetch Sitemap",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                800,
+                500
+            ],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "id": "xml-parser",
+            "name": "Parse Sitemap XML",
+            "type": "n8n-nodes-base.xml",
+            "typeVersion": 1,
+            "position": [
+                1000,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Extraire les 3 premières URLs du sitemap pour analyse\nconst xmlData = $input.first().json;\nconst urls = xmlData.urlset?.url || xmlData.sitemapindex?.sitemap || [];\nconst urlList = (Array.isArray(urls) ? urls : [urls])\n  .map(u => ({\n    url: u.loc?.[0] || u.loc || \"\"\n  }))\n  .filter(u => u.url !== \"\")\n  .slice(0, 3);\n\nreturn urlList;"
+            },
+            "id": "select-urls",
+            "name": "Select Top URLs",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1200,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{$json.url}}",
+                "options": {}
+            },
+            "id": "scrape-pages",
+            "name": "Scrape Pages",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                1400,
+                500
+            ],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "aggregate": "aggregateAllItemData",
+                "options": {}
+            },
+            "id": "aggregate-content",
+            "name": "Aggregate Content",
+            "type": "n8n-nodes-base.aggregate",
+            "typeVersion": 1,
+            "position": [
+                1600,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "combineBy": "position",
+                "options": {}
+            },
+            "id": "merge-all",
+            "name": "Merge All Data",
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 2.1,
+            "position": [
+                1800,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Consolidation finale avec analyse du contenu web\nconst items = $input.all();\nconst hunter = items[0]?.json || {};\nconst apollo = items[1]?.json?.organization || {};\nconst webContent = items[2]?.json?.data || [];\nconst original = $node[\"Webhook Enrich\"].json.body;\n\nlet score = original.score || 70;\nlet services = original.services || [];\nlet brandValues = original.brandValues || [];\nlet webInsights = \"\";\n\n// 1. Emails Hunter\nconst verifiedEmail = hunter.data?.emails?.find(e => e.confidence > 80)?.value || hunter.data?.emails?.[0]?.value;\nif (verifiedEmail) score += 15;\n\n// 2. Apollo.io Info\nif (apollo.industry) services.push(apollo.industry);\nif (apollo.keywords) brandValues.push(...apollo.keywords.slice(0, 5));\nif (apollo.annual_revenue_estimated) score += 10;\n\n// 3. Analyse du contenu web scrapé\nif (webContent.length > 0) {\n  const combinedText = webContent.map(item => item.data || \"\").join(\" \").toLowerCase();\n  \n  // Détection de mots-clés métier\n  const keywords = ['innovation', 'digital', 'transformation', 'ai', 'cloud', 'saas', 'b2b', 'enterprise'];\n  const foundKeywords = keywords.filter(kw => combinedText.includes(kw));\n  \n  if (foundKeywords.length > 0) {\n    brandValues.push(...foundKeywords.slice(0, 3));\n    score += 5;\n  }\n  \n  webInsights = `Site actif avec ${webContent.length} pages analysées. Mots-clés détectés: ${foundKeywords.join(', ') || 'aucun'}.`;\n}\n\nreturn {\n  json: {\n    id: original.id,\n    email: verifiedEmail || original.email,\n    score_global: Math.min(99, score),\n    services: [...new Set(services)],\n    brand_values: [...new Set(brandValues)],\n    tone_analysis: apollo.short_description || original.toneAnalysis || \"Profil enrichi.\",\n    web_intelligence: webInsights\n  }\n};"
+            },
+            "id": "final-consolidation",
+            "name": "Final Consolidation",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                2000,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "json",
+                "responseBody": "={{ { \"success\": true, \"data\": $json } }}"
+            },
+            "id": "respond-webhook",
+            "name": "Respond to Webhook",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [
+                2200,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook Enrich": {
+            "main": [
+                [
+                    {
+                        "node": "Hunter.io - Emails",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Apollo.io - Business Info",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Fetch Robots.txt",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Hunter.io - Emails": {
+            "main": [
+                [
+                    {
+                        "node": "Merge All Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Apollo.io - Business Info": {
+            "main": [
+                [
+                    {
+                        "node": "Merge All Data",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Fetch Robots.txt": {
+            "main": [
+                [
+                    {
+                        "node": "Extract Sitemap URL",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract Sitemap URL": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch Sitemap",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch Sitemap": {
+            "main": [
+                [
+                    {
+                        "node": "Parse Sitemap XML",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Parse Sitemap XML": {
+            "main": [
+                [
+                    {
+                        "node": "Select Top URLs",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Select Top URLs": {
+            "main": [
+                [
+                    {
+                        "node": "Scrape Pages",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Scrape Pages": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate Content",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Aggregate Content": {
+            "main": [
+                [
+                    {
+                        "node": "Merge All Data",
+                        "type": "main",
+                        "index": 2
+                    }
+                ]
+            ]
+        },
+        "Merge All Data": {
+            "main": [
+                [
+                    {
+                        "node": "Final Consolidation",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Final Consolidation": {
+            "main": [
+                [
+                    {
+                        "node": "Respond to Webhook",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "tags": [
+        {
+            "name": "prospecta"
+        },
+        {
+            "name": "enrichment"
+        },
+        {
+            "name": "scraper"
+        }
+    ]
+}

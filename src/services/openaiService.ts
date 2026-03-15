@@ -16,6 +16,7 @@ export const fetchOpenAICompletion = async (apiKey: string, messages: any[]) => 
             model: 'gpt-4o-mini', // Modèle performant et économique
             messages,
             temperature: 0.7,
+            response_format: { type: "json_object" }
         }),
     });
 
@@ -55,13 +56,24 @@ export const generateEmailTemplate = async (userId: string, campaignName: string
     ]);
 
     try {
-        // Extraire le JSON si OpenAI ajoute du markdown
-        const jsonMatch = content.match(/\{[\s\S]*\}/);
-        const jsonStr = jsonMatch ? jsonMatch[0] : content;
-        return JSON.parse(jsonStr);
+        // Strip out any markdown code blocks (e.g., ```json\n...\n```)
+        let cleanedContent = content.trim();
+        if (cleanedContent.startsWith('```')) {
+            const lines = cleanedContent.split('\n');
+            if (lines.length > 1) {
+                // Remove first line (e.g. ```json)
+                lines.shift();
+                // Remove last line (e.g. ```)
+                if (lines[lines.length - 1].trim().startsWith('```')) {
+                    lines.pop();
+                }
+                cleanedContent = lines.join('\n');
+            }
+        }
+        return JSON.parse(cleanedContent);
     } catch (e) {
-        console.error("Erreur de parsing JSON OpenAI", content);
-        throw new Error("Le format de réponse de l'IA est invalide");
+        console.error("Erreur de parsing JSON OpenAI", content, e);
+        throw new Error("Le format de réponse de l'IA est invalide. Veuillez réessayer.");
     }
 };
 
@@ -101,11 +113,20 @@ export const refineEmailTemplate = async (
     const content = await fetchOpenAICompletion(apiKey, messages as any);
 
     try {
-        const jsonMatch = content.match(/\{[\s\S]*\}/);
-        const jsonStr = jsonMatch ? jsonMatch[0] : content;
-        return JSON.parse(jsonStr);
+        let cleanedContent = content.trim();
+        if (cleanedContent.startsWith('```')) {
+            const lines = cleanedContent.split('\n');
+            if (lines.length > 1) {
+                lines.shift();
+                if (lines[lines.length - 1].trim().startsWith('```')) {
+                    lines.pop();
+                }
+                cleanedContent = lines.join('\n');
+            }
+        }
+        return JSON.parse(cleanedContent);
     } catch (e) {
-        console.error("Erreur de parsing JSON OpenAI", content);
-        throw new Error("L'IA n'a pas pu générer un format valide.");
+        console.error("Erreur de parsing JSON OpenAI", content, e);
+        throw new Error("L'IA n'a pas pu générer un format valide. Veuillez réessayer.");
     }
 };

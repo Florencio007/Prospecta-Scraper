@@ -8,8 +8,9 @@ import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { Eye, EyeOff, ExternalLink, CheckCircle2, XCircle, Clock, AlertTriangle, Key, Server } from 'lucide-react';
+import { Eye, EyeOff, ExternalLink, CheckCircle2, XCircle, Clock, AlertTriangle, Key, Server, Trash2 } from 'lucide-react';
 import { LoadingLogo } from '@/components/LoadingLogo';
+import { ConfirmDialog } from './ConfirmDialog';
 import { testEmailSend, testSmtpConnection } from '@/services/emailService';
 
 const PROVIDERS_CONFIG = [
@@ -93,6 +94,7 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
     const [testEmail, setTestEmail] = useState('');
     const [isSendingTest, setIsSendingTest] = useState(false);
     const [isTestSuccess, setIsTestSuccess] = useState(existingConfig?.last_test_status === 'success');
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     useEffect(() => {
         const s = parseSmtp(existingConfig?.api_key);
@@ -100,7 +102,7 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
         // Only set the initial DB test success status if we don't already have one locally
         setIsTestSuccess((prev) => prev || existingConfig?.last_test_status === 'success');
     }, [existingConfig]);
-    
+
     // Reset test success if credentials changed
     useEffect(() => {
         setIsTestSuccess(false);
@@ -125,8 +127,8 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
         setIsTesting(true);
         const result = await testSmtpConnection(host, parseInt(port) || 587, user, pass);
         setIsTesting(false);
-        if (result.ok) { 
-            toast({ title: '✅ Connexion SMTP réussie !', description: result.message }); 
+        if (result.ok) {
+            toast({ title: '✅ Connexion SMTP réussie !', description: result.message });
             setIsTestSuccess(true);
         }
         else { toast({ title: 'Échec SMTP', description: result.message, variant: 'destructive' }); }
@@ -151,7 +153,7 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                 subject: 'Test de configuration SMTP - Prospecta',
                 htmlContent: '<h1>Félicitations !</h1><p>Votre configuration SMTP fonctionne parfaitement sur Prospecta AI.</p>'
             };
-            
+
             // Re-use testEmailSend but pass the smtp id since it now handles both internally given the provider logic
             const success = await testEmailSend('smtp', formData);
             if (success) {
@@ -161,18 +163,22 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                 throw new Error("Erreur d'envoi SMTP");
             }
         } catch (error: any) {
-             toast({ title: 'Erreur d\'envoi', description: error.message || "Impossible d'envoyer l'email", variant: 'destructive' });
+            toast({ title: 'Erreur d\'envoi', description: error.message || "Impossible d'envoyer l'email", variant: 'destructive' });
         } finally {
             setIsSendingTest(false);
         }
     };
 
     const handleDelete = async () => {
-        if (!confirm('Supprimer la configuration SMTP ?')) return;
+        setIsDeleteDialogOpen(true);
+    };
+
+    const confirmDelete = async () => {
         setIsDeleting(true);
         await deleteKey('smtp' as ApiProvider);
         setIsDeleting(false);
         setHost(''); setUser(''); setPass('');
+        setIsDeleteDialogOpen(false);
         toast({ title: 'SMTP Supprimé' }); onUpdate();
     };
 
@@ -266,7 +272,7 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                         </AccordionContent>
                     </AccordionItem>
                 </Accordion>
-                
+
                 {isTestSuccess && (
                     <div className="pt-4 border-t border-slate-200 dark:border-slate-800 animate-in fade-in slide-in-from-top-2 duration-300">
                         <Label className="text-xs mb-2 block font-semibold text-emerald-600 dark:text-emerald-400">2. Envoyer un email de test (Recommandé)</Label>
@@ -283,7 +289,7 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                                 disabled={isSendingTest || !testEmail}
                                 className="whitespace-nowrap font-medium text-xs bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
                             >
-                                {isSendingTest ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                                {isSendingTest ? <LoadingLogo size="sm" /> : null}
                                 Envoyer
                             </Button>
                         </div>
@@ -297,13 +303,22 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                         <Button variant="ghost" size="sm" onClick={handleDelete} disabled={isDeleting} className="text-destructive hover:bg-destructive/10">Supprimer</Button>
                     )}
                     <Button variant="outline" size="sm" onClick={handleTest} disabled={isTesting || !host}>
-                        {isTesting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Tester la connexion'}
+                        {isTesting ? <LoadingLogo size="sm" /> : 'Tester la connexion'}
                     </Button>
                     <Button size="sm" onClick={handleSave} disabled={isSaving || !host} className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                        {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null} Sauvegarder
+                        {isSaving ? <LoadingLogo size="sm" /> : null} Sauvegarder
                     </Button>
                 </div>
             </CardFooter>
+
+            <ConfirmDialog
+                isOpen={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+                onConfirm={confirmDelete}
+                title="Supprimer la configuration SMTP ?"
+                description="Êtes-vous sûr de vouloir supprimer ces paramètres ? Vos campagnes ne pourront plus envoyer d'emails tant qu'une nouvelle configuration n'est pas configurée."
+                confirmText="Supprimer"
+            />
         </Card>
     );
 };
@@ -327,6 +342,8 @@ const ApiKeyCard = ({ providerConfig, existingKey, onUpdate }: { providerConfig:
         setLabel(existingKey?.label || providerConfig.name);
     }, [existingKey, providerConfig.name]);
 
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
     const handleSave = async () => {
         if (!apiKey.trim()) {
             toast({ title: "Erreur", description: "La clé API ne peut pas être vide.", variant: "destructive" });
@@ -346,7 +363,7 @@ const ApiKeyCard = ({ providerConfig, existingKey, onUpdate }: { providerConfig:
 
     const handleTest = async () => {
         setIsTesting(true);
-        
+
         // Regular API test
         const result = await testKey(providerConfig.id);
         if (result.ok) {
@@ -354,16 +371,20 @@ const ApiKeyCard = ({ providerConfig, existingKey, onUpdate }: { providerConfig:
         } else {
             toast({ title: "Échec du test", description: result.message, variant: "destructive" });
         }
-        
+
         setIsTesting(false);
         onUpdate();
     };
 
     const handleDelete = async () => {
-        if (!confirm(`Êtes-vous sûr de vouloir supprimer la configuration de ${providerConfig.name} ?`)) return;
+        setIsDeleteDialogOpen(true);
+    };
+
+    const confirmDelete = async () => {
         setIsDeleting(true);
         const success = await deleteKey(providerConfig.id);
         setIsDeleting(false);
+        setIsDeleteDialogOpen(false);
 
         if (success) {
             toast({ title: "Supprimée", description: "Clé API supprimée avec succès." });
@@ -467,16 +488,25 @@ const ApiKeyCard = ({ providerConfig, existingKey, onUpdate }: { providerConfig:
                                 Supprimer
                             </Button>
                             <Button variant="outline" size="sm" onClick={handleTest} disabled={isTesting || !apiKey}>
-                                {isTesting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Tester'}
+                                {isTesting ? <LoadingLogo className="h-4 w-4 animate-spin" /> : 'Tester'}
                             </Button>
                         </>
                     )}
                     <Button variant="default" size="sm" onClick={handleSave} disabled={isSaving || !apiKey} className="bg-accent hover:bg-accent/90">
-                        {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                        {isSaving ? <LoadingLogo className="mr-2 h-4 w-4 animate-spin" /> : null}
                         Sauvegarder
                     </Button>
                 </div>
             </CardFooter>
+
+            <ConfirmDialog
+                isOpen={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+                onConfirm={confirmDelete}
+                title={`Supprimer la clé ${providerConfig.name} ?`}
+                description={`Cette action supprimera votre clé ${providerConfig.name} de nos serveurs. Vous devrez la rajouter pour réactiver les fonctionnalités liées à ce service.`}
+                confirmText="Supprimer la clé"
+            />
         </Card>
     );
 };

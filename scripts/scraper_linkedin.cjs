@@ -898,10 +898,10 @@ async function main() {
   const browser = await chromium.launch({
     headless: CONFIG.headless,
     args: [
-      '--lang=fr-FR',
+      '--lang=fr-FR', 
       '--disable-blink-features=AutomationControlled',
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
+      '--no-sandbox', 
+      '--disable-setuid-sandbox', 
       '--disable-dev-shm-usage',
       '--disable-gpu',
       '--no-zygote'
