@@ -5,7 +5,6 @@
  * ╚══════════════════════════════════════════════════════════════════════════╝
  */
 const { chromium } = require('playwright');
-const { getOrCreateContext, openNewTab, closeTab, isFacebookLoggedIn } = require('./browser-manager.cjs');
 const fs = require('fs');
 const path = require('path');
 const readline = require('readline');
@@ -795,30 +794,27 @@ async function main() {
     await promptSearchType();
   }
 
-  // ── Navigateur persistant (réutilise la session si elle existe) ──
-  const context = await getOrCreateContext({ headless: CONFIG.headless });
+  const browser = await chromium.launch({
+    headless: CONFIG.headless,
+    args: ['--lang=fr-FR', '--disable-blink-features=AutomationControlled'],
+  });
 
-  // Anti-détection injecté sur chaque nouvelle page
+  const context = await browser.newContext({
+    viewport: { width: 1280, height: 900 },
+    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+    locale: 'fr-FR',
+    javaScriptEnabled: true,
+  });
+
   await context.addInitScript(() => {
     Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
     window.chrome = { runtime: {} };
   });
 
-  const page = await openNewTab(context);
+  const page = await context.newPage();
 
   try {
-    // Vérification si déjà connecté à Facebook (cookies persistés)
-    emitLog('🔐 Vérification de la session Facebook existante...');
-    const alreadyLoggedIn = await isFacebookLoggedIn(page);
-    if (alreadyLoggedIn) {
-      emitLog('✅ Session Facebook existante détectée — pas besoin de se reconnecter !');
-    } else if (CONFIG.email && CONFIG.password) {
-      emitLog('⚠️  Session expirée ou absente — connexion avec les identifiants fournis...');
-      await login(page);
-    } else {
-      emitLog('ERROR: Pas de session active et aucun identifiant fourni.');
-      process.exit(1);
-    }
+    await login(page);
     checkCancel();
 
     emitLog(`── PHASE : SCRAPING ${CONFIG.searchType === 'pages' ? 'PAGES' : 'PERSONNES'} ─────────────────────────────────────────`);
@@ -879,9 +875,8 @@ async function main() {
     emitLog(`\n💾 Sauvegardé → ${CONFIG.outputFile}`);
 
   } finally {
-    await closeTab(context, page);
-    emitLog('\n🏁 Onglet fermé — navigateur toujours actif.');
     await context.close();
+    await browser.close();
     emitLog('\n🏁 Session terminée.');
   }
 }
