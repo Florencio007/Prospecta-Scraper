@@ -83,7 +83,7 @@ export const AgentInstallModal = ({ open, onOpenChange }: Props) => (
               <p className="text-[13px] font-bold text-zinc-200">Windows</p>
               <p className="text-[9px] text-zinc-500 uppercase tracking-wider">Win 10/11 x64</p>
             </div>
-            <div className="flex items-center gap-1.5 text-[10px] font-bold text-accent pt-0.5">
+            <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#00d1a0] pt-0.5">
               <Download size={11} />
               <span>DÉMARRER</span>
             </div>
@@ -103,7 +103,7 @@ export const AgentInstallModal = ({ open, onOpenChange }: Props) => (
             <div className="grid grid-cols-2 gap-1.5 pt-1">
               <a
                 href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospecta.Agent-1.0.0-arm64.dmg"
-                className="text-[9px] bg-accent text-white font-black py-1.5 rounded-lg transition-all hover:bg-accent/90 flex items-center justify-center gap-1 shadow-lg shadow-accent/20"
+                className="text-[9px] bg-[#00d1a0] text-[#05080f] font-black py-1.5 rounded-lg transition-all hover:bg-[#00b088] flex items-center justify-center gap-1 shadow-lg shadow-[#00d1a0]/20"
               >
                 M1/M2/M3
               </a>
@@ -121,9 +121,9 @@ export const AgentInstallModal = ({ open, onOpenChange }: Props) => (
         <div className="flex flex-col items-center space-y-3 pt-4">
           <Button
             onClick={() => window.location.reload()}
-            className="w-full h-12 bg-accent text-white hover:bg-accent/90 rounded-2xl font-black text-sm shadow-[0_8px_20px_-6px_rgba(34,197,94,0.5)] transition-all hover:translate-y-[-2px] active:translate-y-[1px] gap-2 border-none"
+            className="w-full h-12 bg-[#00d1a0] hover:bg-[#00b088] text-[#05080f] rounded-2xl font-black text-sm shadow-[0_0_20px_rgba(0,209,160,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98] gap-2 border-none ring-2 ring-[#00d1a0]/50 ring-offset-2 ring-offset-[#0b0f1a]"
           >
-            <RefreshCcw size={16} />
+            <RefreshCcw size={16} className="font-bold" />
             J'AI FINI L'INSTALLATION
           </Button>
           <p className="text-[9px] text-zinc-600 font-mono tracking-tighter uppercase">
