@@ -10,32 +10,31 @@ interface InstallerPopupProps {
   onInstallConfirmed: () => void;
 }
 
-const INSTALLER_BASE = "https://prospecta-scraper.vercel.app";
 
 const platforms = [
   {
     id: "windows",
     label: "Windows",
     icon: Monitor,
-    url: `${INSTALLER_BASE}/Prospecta Agent Setup 1.0.0.exe`,
+    url: "https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospecta.Agent.Setup.1.0.0.exe",
     color: "bg-blue-600 hover:bg-blue-500",
-    badge: ".exe · 79 MB",
+    badge: ".exe",
   },
   {
     id: "mac-arm",
     label: "macOS Apple Silicon (M1/M2/M3)",
     icon: Apple,
-    url: `${INSTALLER_BASE}/Prospecta Agent-1.0.0-arm64.dmg`,
+    url: "https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospecta.Agent-1.0.0-arm64.dmg",
     color: "bg-zinc-700 hover:bg-zinc-600",
-    badge: ".dmg · 91 MB",
+    badge: ".dmg (ARM)",
   },
   {
     id: "mac-intel",
     label: "macOS Intel",
     icon: Apple,
-    url: `${INSTALLER_BASE}/Prospecta Agent-1.0.0.dmg`,
+    url: "https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospecta.Agent-1.0.0.dmg",
     color: "bg-zinc-600 hover:bg-zinc-500",
-    badge: ".dmg · 96 MB",
+    badge: ".dmg (Intel)",
   },
 ];
 
