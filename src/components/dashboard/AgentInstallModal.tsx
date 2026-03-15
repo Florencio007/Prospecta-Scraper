@@ -35,16 +35,16 @@ interface Props {
 
 export const AgentInstallModal = ({ open, onOpenChange }: Props) => (
   <Dialog open={open} onOpenChange={onOpenChange}>
-    <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border-none shadow-2xl bg-[#0b0f1a] text-white max-h-[90vh] overflow-y-auto rounded-3xl">
+    <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border border-border/50 shadow-2xl bg-card text-card-foreground max-h-[90vh] overflow-y-auto rounded-[2rem] font-outfit">
       <div className="p-5 space-y-4">
         {/* Header with Logo */}
         <div className="flex flex-col items-center text-center space-y-2">
           <Logo size="md" className="mb-0.5" />
           <div className="space-y-1">
-            <DialogTitle className="text-xl font-bold tracking-tight text-white leading-tight">
+            <DialogTitle className="text-xl font-bold tracking-tight text-foreground leading-tight">
               Activez la puissance de Prospecta
             </DialogTitle>
-            <DialogDescription className="text-[13px] text-zinc-400 max-w-[360px] mx-auto leading-relaxed">
+            <DialogDescription className="text-[13px] text-muted-foreground max-w-[360px] mx-auto leading-relaxed">
               Le moteur de recherche Prospecta nécessite l'agent local pour garantir une extraction ultra-rapide et sécurisée directement sur votre machine.
             </DialogDescription>
           </div>
@@ -61,8 +61,8 @@ export const AgentInstallModal = ({ open, onOpenChange }: Props) => (
               <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold text-[10px] mb-0.5">
                 {n}
               </div>
-              <p className="font-semibold text-[12px] text-zinc-200">{title}</p>
-              <p className="text-[9px] text-zinc-500 leading-tight">{desc}</p>
+              <p className="font-semibold text-[12px] text-foreground/90">{title}</p>
+              <p className="text-[9px] text-muted-foreground leading-tight">{desc}</p>
             </div>
           ))}
         </div>
@@ -74,42 +74,42 @@ export const AgentInstallModal = ({ open, onOpenChange }: Props) => (
             href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospecta.Agent.Setup.1.0.0.exe"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex flex-col items-center p-3.5 rounded-2xl border border-white/5 bg-white/[0.03] hover:bg-accent/10 hover:border-accent/40 transition-all duration-300 group text-center space-y-2"
+            className="flex flex-col items-center p-3.5 rounded-2xl border border-border/50 bg-secondary/50 hover:bg-accent/10 hover:border-accent/40 transition-all duration-300 group text-center space-y-2"
           >
-            <div className="w-9 h-9 bg-zinc-800/50 rounded-lg flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform duration-300 border border-white/5">
+            <div className="w-9 h-9 bg-background/50 rounded-lg flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform duration-300 border border-border/50">
               <img src="/windows-logo.png" alt="Windows" className="w-5 h-5 object-contain" />
             </div>
             <div className="space-y-0.5">
-              <p className="text-[13px] font-bold text-zinc-200">Windows</p>
-              <p className="text-[9px] text-zinc-500 uppercase tracking-wider">Win 10/11 x64</p>
+              <p className="text-[13px] font-bold text-foreground">Windows</p>
+              <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Win 10/11 x64</p>
             </div>
-            <div className="flex items-center gap-1.5 text-[10px] font-bold text-[#00d1a0] pt-0.5">
+            <div className="flex items-center gap-1.5 text-[10px] font-bold text-accent pt-0.5">
               <Download size={11} />
               <span>DÉMARRER</span>
             </div>
           </a>
 
           {/* macOS */}
-          <div className="flex flex-col p-3.5 rounded-2xl border border-white/5 bg-white/[0.03] space-y-2 text-center shadow-lg">
+          <div className="flex flex-col p-3.5 rounded-2xl border border-border/50 bg-secondary/50 space-y-2 text-center shadow-lg">
             <div className="flex flex-col items-center space-y-2">
-              <div className="w-9 h-9 bg-zinc-800/50 rounded-lg flex items-center justify-center overflow-hidden border border-white/5">
+              <div className="w-9 h-9 bg-background/50 rounded-lg flex items-center justify-center overflow-hidden border border-border/50">
                 <img src="/apple-logo.png" alt="macOS" className="w-5 h-5 object-contain" />
               </div>
               <div className="space-y-0.5">
-                <p className="text-[13px] font-bold text-zinc-200">macOS</p>
-                <p className="text-[9px] text-zinc-500 uppercase tracking-wider">Silicon & Intel</p>
+                <p className="text-[13px] font-bold text-foreground">macOS</p>
+                <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Silicon & Intel</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-1.5 pt-1">
               <a
                 href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospecta.Agent-1.0.0-arm64.dmg"
-                className="text-[9px] bg-[#00d1a0] text-[#05080f] font-black py-1.5 rounded-lg transition-all hover:bg-[#00b088] flex items-center justify-center gap-1 shadow-lg shadow-[#00d1a0]/20"
+                className="text-[9px] bg-accent text-accent-foreground font-black py-1.5 rounded-lg transition-all hover:opacity-90 flex items-center justify-center gap-1 shadow-lg shadow-accent/20"
               >
                 M1/M2/M3
               </a>
               <a
                 href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospecta.Agent-1.0.0.dmg"
-                className="text-[9px] bg-zinc-800 text-zinc-300 font-black py-1.5 rounded-lg transition-all hover:bg-zinc-700 flex items-center justify-center gap-1 border border-white/5"
+                className="text-[9px] bg-card text-muted-foreground font-black py-1.5 rounded-lg transition-all hover:bg-secondary flex items-center justify-center gap-1 border border-border/50"
               >
                 INTEL
               </a>
@@ -121,12 +121,12 @@ export const AgentInstallModal = ({ open, onOpenChange }: Props) => (
         <div className="flex flex-col items-center space-y-3 pt-4">
           <Button
             onClick={() => window.location.reload()}
-            className="w-full h-12 bg-[#00d1a0] hover:bg-[#00b088] text-[#05080f] rounded-2xl font-black text-sm shadow-[0_0_20px_rgba(0,209,160,0.4)] transition-all hover:scale-[1.02] active:scale-[0.98] gap-2 border-none ring-2 ring-[#00d1a0]/50 ring-offset-2 ring-offset-[#0b0f1a]"
+            className="w-full h-12 bg-accent text-accent-foreground hover:opacity-90 rounded-2xl font-black text-sm shadow-[0_0_20px_rgba(16,185,129,0.3)] dark:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all hover:scale-[1.02] active:scale-[0.98] gap-2 border-none ring-1 ring-accent/30 ring-offset-2 ring-offset-card"
           >
             <RefreshCcw size={16} className="font-bold" />
             J'AI FINI L'INSTALLATION
           </Button>
-          <p className="text-[9px] text-zinc-600 font-mono tracking-tighter uppercase">
+          <p className="text-[9px] text-muted-foreground font-mono tracking-tighter uppercase">
             v1.0.0 Stable · Connexion locale sécurisée · Prospecta AI
           </p>
         </div>
