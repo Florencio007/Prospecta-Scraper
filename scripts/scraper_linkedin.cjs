@@ -1,4 +1,5 @@
 const { chromium } = require('playwright');
+const { getOrCreateContext, openNewTab, closeTab, isLinkedInLoggedIn } = require('./browser-manager.cjs');
 const fs = require('fs');
 const readline = require('readline');
 
@@ -895,29 +896,23 @@ async function scrapeFullProfile(page, person) {
 async function main() {
   emitLog('🚀 Démarrage du Scraper LinkedIn — Playwright\n');
 
-  const browser = await chromium.launch({
-    headless: CONFIG.headless,
-    args: [
-      '--lang=fr-FR', 
-      '--disable-blink-features=AutomationControlled',
-      '--no-sandbox', 
-      '--disable-setuid-sandbox', 
-      '--disable-dev-shm-usage',
-      '--disable-gpu',
-      '--no-zygote'
-    ],
-  });
-
-  const context = await browser.newContext({
-    viewport: { width: 1280, height: 900 },
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    locale: 'fr-FR',
-  });
-
-  const page = await context.newPage();
+  // ── Navigateur persistant (réutilise la session si elle existe) ──
+  const context = await getOrCreateContext({ headless: CONFIG.headless });
+  const page    = await openNewTab(context);
 
   try {
-    await login(page);
+    // Vérification si déjà connecté (cookies persistés)
+    emitLog('🔐 Vérification de la session LinkedIn existante...');
+    const alreadyLoggedIn = await isLinkedInLoggedIn(page);
+    if (alreadyLoggedIn) {
+      emitLog('✅ Session existante détectée — pas besoin de se reconnecter !');
+    } else if (CONFIG.email && CONFIG.password) {
+      emitLog('⚠️  Session expirée ou absente — connexion avec les identifiants fournis...');
+      await login(page);
+    } else {
+      emitLog('ERROR: Pas de session active et aucun identifiant fourni.');
+      process.exit(1);
+    }
 
     emitLog(`── PHASE : SCRAPING ${CONFIG.searchType.toUpperCase()} ─────────────────────────────────────────`);
 
@@ -1039,8 +1034,10 @@ async function main() {
     emitLog(`\n💾 Rapport sauvegardé → ${CONFIG.outputFile}`);
 
   } finally {
+    await closeTab(context, page);
+    emitLog('\n🏁 Onglet fermé — navigateur toujours actif.');
+    // Fermer le contexte proprement (la session est sauvegardée sur disque)
     await context.close();
-    await browser.close();
     emitLog('\n🏁 Session terminée.');
   }
 }

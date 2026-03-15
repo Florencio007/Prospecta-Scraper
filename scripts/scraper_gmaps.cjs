@@ -1,4 +1,5 @@
 const { chromium } = require('playwright');
+const { getOrCreateContext, openNewTab, closeTab } = require('./browser-manager.cjs');
 const fs = require('fs');
 
 /**
@@ -230,29 +231,15 @@ async function scrapeHotelDetail(page, url) {
 async function main() {
   console.log('🚀 Démarrage du scraper Google Maps (Playwright)...\n');
 
-  const browser = await chromium.launch({
-    headless: CONFIG.headless,
-    args: [
-      '--no-sandbox', 
-      '--disable-setuid-sandbox', 
-      '--lang=fr-FR',
-      '--disable-blink-features=AutomationControlled'
-    ],
-  });
-
-  const context = await browser.newContext({
-    viewport: { width: 1280, height: 900 },
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    locale: 'fr-FR',
-    javaScriptEnabled: true,
-  });
+  // ── Navigateur persistant partagé (tab uniquement, pas de nouvel onglet navigateur) ──
+  const context = await getOrCreateContext({ headless: CONFIG.headless });
 
   await context.addInitScript(() => {
     Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
     window.chrome = { runtime: {} };
   });
 
-  const page = await context.newPage();
+  const page = await openNewTab(context);
 
   page.on('console', msg => {
     if (msg.type() === 'log') console.log(`[PAGE LOG] ${msg.text()}`);
@@ -345,7 +332,9 @@ async function main() {
     fs.writeFileSync(CONFIG.outputFile, JSON.stringify(output, null, 2), 'utf8');
 
   } finally {
-    await browser.close();
+    await closeTab(context, page);
+    emitLog('🏁 Onglet fermé — navigateur toujours actif.');
+    await context.close();
     emitLog('🏁 Navigateur fermé.');
   }
 }
