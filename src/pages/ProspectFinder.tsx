@@ -41,11 +41,9 @@ import { triggerN8nWorkflow, type Channel } from "@/integrations/n8n";
 import { logProspectAdded } from "@/lib/activityLogger";
 import { useApiKeys } from "@/hooks/useApiKeys";
 import { LoadingLogo } from "@/components/LoadingLogo";
-declare global {
-  interface Window {
-    __PROSPECTA_EXTENSION__?: any;
-  }
-}
+import { AgentInstallModal } from "@/components/dashboard/AgentInstallModal";
+
+const AGENT_PORT = 3001;
 
 const industryOptions = [
   { key: "software", label: "Logiciels & SaaS" },
@@ -91,6 +89,17 @@ const ProspectFinder = () => {
   const [facebookOptions, setFacebookOptions] = useState({ maxPosts: 10, activityType: 'all' });
   const [facebookCredentials, setFacebookCredentials] = useState({ email: "", password: "" });
   const [showFacebookPassword, setShowFacebookPassword] = useState(false);
+
+  // ── DÉTECTEUR AGENT LOCAL (ping unique au montage) ────────────────────
+  const [agentOnline, setAgentOnline] = useState<boolean | null>(null);
+  const [showInstallModal, setShowInstallModal] = useState(false);
+
+  useEffect(() => {
+    const CHECK_URL = `http://localhost:${AGENT_PORT}/health`;
+    fetch(CHECK_URL, { signal: AbortSignal.timeout(2000) })
+      .then(r => { if (r.ok) { setAgentOnline(true); } else { setAgentOnline(false); setShowInstallModal(true); } })
+      .catch(() => { setAgentOnline(false); setShowInstallModal(true); });
+  }, []);
 
   /**
    * Ajoute un log dans la console "rétro" de l'interface
@@ -416,51 +425,9 @@ const ProspectFinder = () => {
             });
           };
 
-          // --- MODE AGENT LOCAL (Playwright Serveur) ---
-          // On n'utilise plus l'extension Chrome, mais les scripts locaux du serveur.
+          // --- MODE AGENT LOCAL (Playwright Serveur via HTTP) ---
           const localPlaywrightChannels = ["linkedin", "facebook", "google_maps"];
-          const extensionChannels = ["pages_jaunes", "pappers", "societe", "infogreffe"];
           
-          if (window.__PROSPECTA_EXTENSION__ && extensionChannels.includes(channel) && !localPlaywrightChannels.includes(channel)) {
-            addLog(`🚀 Agent Extension: Lancement du canal ${channel}...`, "system");
-            
-            const unsubscribe = window.__PROSPECTA_EXTENSION__.onProgress((msg: any) => {
-              if (msg.type === "SCRAPE_PROGRESS") {
-                updateChannelPct(msg.progress, msg.message);
-                addLog(msg.message, msg.status || 'process');
-              } else if (msg.type === "PROSPECT_FOUND") {
-                setPendingProspects(prev => {
-                  const exists = prev.some(p => 
-                    (p.id === msg.prospect.id) || 
-                    (p.name === msg.prospect.name && p.company === msg.prospect.company)
-                  );
-                  if (exists) return prev;
-                  return [...prev, msg.prospect];
-                });
-                setSelectedProspectIds(prev => new Set(prev).add(msg.prospect.id));
-                addLog(`👤 Trouvé (${channel}): ${msg.prospect.name}`, 'success');
-              }
-            });
-
-            try {
-              const res = await window.__PROSPECTA_EXTENSION__.startSearch({
-                keyword: filters.keyword,
-                location: locationQuery,
-                type: filters.type,
-                channel: channel,
-                maxLimit: filters.channelLimits[channel as keyof typeof filters.channelLimits] || 10
-              });
-              updateChannelPct(100, "Terminé");
-              unsubscribe();
-              resolveChannel();
-              return; // On stoppe ici si l'extension a géré le canal
-            } catch (err: any) {
-              addLog(`⚠️ Repli Serveur [${channel}]: ${err.message}`, 'process');
-              unsubscribe();
-              // On continue vers la logique EventSource ci-dessous
-            }
-          }
-
           if (channel === "govcon") {
             try {
               addLog("🔎 Recherche d'opportunités fédérales (GovCon)...", "system");
@@ -1277,6 +1244,21 @@ const ProspectFinder = () => {
 
               <div className="space-y-2 pt-4">
                 <div className="flex flex-col gap-2">
+                  {/* Statut agent local */}
+                  <div className="flex items-center justify-between text-xs px-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className={`w-1.5 h-1.5 rounded-full ${agentOnline === null ? 'bg-yellow-500 animate-pulse' : agentOnline ? 'bg-green-500' : 'bg-red-500'}`} />
+                      <span className="text-muted-foreground font-mono">
+                        {agentOnline === null ? 'Vérification agent...' : agentOnline ? 'Agent local: actif' : 'Agent local: hors-ligne'}
+                      </span>
+                    </div>
+                    {agentOnline === false && (
+                      <button onClick={() => setShowInstallModal(true)} className="text-amber-500 hover:underline text-xs font-mono">
+                        → Installer
+                      </button>
+                    )}
+                  </div>
+
                   <Button
                     className="w-full bg-accent text-accent-foreground hover:bg-accent/90"
                     onClick={handleSearch}
@@ -1573,6 +1555,12 @@ const ProspectFinder = () => {
           setSelectedProspectIds(new Set());
           setPendingProspects([]);
         }}
+      />
+
+      {/* Popup installation agent local */}
+      <AgentInstallModal
+        open={showInstallModal}
+        onOpenChange={setShowInstallModal}
       />
     </div>
   );
