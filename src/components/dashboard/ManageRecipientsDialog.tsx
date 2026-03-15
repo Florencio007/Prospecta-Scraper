@@ -13,9 +13,9 @@ import {
     X, 
     Mail, 
     Building2, 
-    MapPin,
-    Loader2
+    MapPin
 } from "lucide-react";
+import { LoadingLogo } from "@/components/LoadingLogo";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -101,7 +101,7 @@ export default function ManageRecipientsDialog({ isOpen, onClose, campaign, getR
                     <ScrollArea className="h-full">
                         {loading ? (
                             <div className="flex flex-col items-center justify-center py-20 gap-4">
-                                <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+                                <LoadingLogo size="md" />
                                 <p className="text-sm font-medium text-slate-500 uppercase tracking-tighter">Chargement des destinataires...</p>
                             </div>
                         ) : filtered.length === 0 ? (
@@ -147,7 +147,7 @@ export default function ManageRecipientsDialog({ isOpen, onClose, campaign, getR
                                             disabled={deletingId === r.id}
                                             className="h-9 w-9 text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10"
                                         >
-                                            {deletingId === r.id ? <Loader2 size={14} className="animate-spin" /> : <Trash2 size={14} />}
+                                            {deletingId === r.id ? <LoadingLogo size="xs" compact /> : <Trash2 size={14} />}
                                         </Button>
                                     </div>
                                 ))}

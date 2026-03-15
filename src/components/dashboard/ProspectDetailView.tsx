@@ -472,7 +472,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                     {!currentProspect ? (
                         <div className="flex-1 flex items-center justify-center p-12 text-muted-foreground">
                             <div className="text-center space-y-4">
-                                <Loader2 className="mx-auto h-12 w-12 animate-spin opacity-20" />
+                                <LoadingLogo size="lg" className="opacity-40" />
                                 <p>{t("loading")}</p>
                             </div>
                         </div>
@@ -517,7 +517,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                             className="w-full border-border text-foreground hover:bg-muted rounded-xl transition-all py-6"
                                             variant="outline"
                                         >
-                                            {isEnriching ? <Loader2 size={18} className="animate-spin" /> : <Sparkles className="mr-2" size={18} />}
+                                            {isEnriching ? <LoadingLogo size="xs" compact /> : <Sparkles className="mr-2" size={18} />}
                                             <span className="font-medium">{isEnriching ? t("verifying") : t("extractIntelligence")}</span>
                                         </Button>
                                         <Button
@@ -526,7 +526,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                             className="w-full border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/5 rounded-xl transition-all py-6"
                                             variant="outline"
                                         >
-                                            {isAnalyzing ? <Loader2 size={18} className="animate-spin" /> : <Zap className="mr-2" size={18} />}
+                                            {isAnalyzing ? <LoadingLogo size="xs" compact /> : <Zap className="mr-2" size={18} />}
                                             <span className="font-bold">{isAnalyzing ? t("analyzing") : t("aiStrategy")}</span>
                                         </Button>
                                     </div>
@@ -1005,7 +1005,8 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
 
                                                         // Vue d'ensemble / About
                                                         const overview = cd?.about || cd?.description || cd?.overview || currentProspect.summary || '';
-                                                        if (overview) parts.push(overview.substring(0, 400));
+                                                        if (overview && typeof overview === 'string') parts.push(overview.substring(0, 400));
+                                                        else if (overview) parts.push(String(overview).substring(0, 400));
 
                                                         // Données structurées
                                                         const sector = cd?.industry || cd?.category || cd?.sector || '';

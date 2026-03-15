@@ -9,7 +9,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Settings, Save, X, Loader2, Clock, CheckCircle, Zap } from "lucide-react";
+import { Settings, Save, X, Clock, CheckCircle, Zap } from "lucide-react";
+import { LoadingLogo } from "@/components/LoadingLogo";
 import { useLanguage } from "@/hooks/useLanguage";
 
 interface EditCampaignDialogProps {
@@ -218,7 +219,7 @@ export default function EditCampaignDialog({ isOpen, onClose, campaign, onSave }
                         disabled={isSaving || !!emailError || !form.from_email}
                         className="bg-emerald-600 hover:bg-emerald-700 text-white font-black h-11 px-8 gap-2 shadow-lg shadow-emerald-500/20 transition-all active:scale-95 font-outfit disabled:opacity-50"
                     >
-                        {isSaving ? <Loader2 className="animate-spin h-4 w-4" /> : <Save size={16} />}
+                        {isSaving ? <LoadingLogo size="xs" compact /> : <Save size={16} />}
                         Sauvegarder les modifications
                     </Button>
                 </DialogFooter>

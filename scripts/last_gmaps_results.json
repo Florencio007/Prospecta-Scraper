@@ -1,19 +1,91 @@
 [
   {
-    "name": "Antsirabe Hotel",
-    "category": "3-star hotel",
+    "name": "Le Grand Hotel",
+    "category": "4-star hotel",
     "address": "",
-    "phone": "0346635074",
-    "website": "https://www.google.com/travel/clk?pc=AA80OszphJWAS1cUc0RG2rgRBeySieh9TtanHzXuEbj31WelKbF0jL_cvuAOj2J0Kxn4nziGTjmPKD8njDd0EdyyQ29H3randoo0sKX8mRyOFJJUpoye__yff8wU2IgVhdHXQRPUU2ofcguMnePnBFpie0_TyC04T8PYoTVl4LCndpU46xpyPoUmzmHDHYXjet46XsHh1Q&pcurl=https://www.booking.com/searchresults.en.html?dest_id%3D1739734%26highlighted_hotels%3D1739734%26dest_type%3Dhotel%26checkin%3D2026-03-16%26checkout%3D2026-03-17%26group_adults%3D2%26req_adults%3D2%26show_room%3D173973404_201421889_0_2_0%26lang%3Den%26selected_currency%3DMGA%26exrt%3D4758.98486328%26ext_price_total%3D95179.70%26ext_price_tax%3D32638.55%26xfc%3DEUR%26hca%3Dm%26group_children%3D0%26req_children%3D0%26%26ts%3D1773436471%26no_rooms%3D1%26%26utm_source%3Dmetagha%26utm_medium%3Dmapresults%26utm_campaign%3DMG%26utm_term%3Dhotel-1739734%26utm_content%3Ddev-desktop_los-1_bw-1_dow-Monday_defdate-1_room-0_gstadt-2_rateid-0_aud-0_gacid-_mcid-10_ppa-0_clrid-0_ad-0_gstkid-0_checkin-20260316_ppt-%26aid%3D2127708%26label%3Dmetagha-link-MRMG-hotel-1739734_dev-desktop_los-1_bw-1_dow-Monday_defdate-1_room-0_gstadt-2_rateid-0_aud-0_gacid-_mcid-10_ppa-0_clrid-0_ad-0_gstkid-0_checkin-20260316_ppt-&s=AD1XQnl1lROywHZ9lpq4JoJSyPNl",
+    "phone": "0324088143",
+    "website": "https://www.facebook.com/grandhoteldiego/",
     "rating": 0,
     "totalScore": "",
-    "mapsUrl": "https://www.google.com/maps/place/Antsirabe+Hotel/data=!4m10!3m9!1s0x21e50e4ff810e0f5:0xce651ec476f38cb5!5m2!4m1!1i2!8m2!3d-19.8534455!4d47.0290808!16s%2Fg%2F11c1xqh79s!19sChIJ9eAQ-E8O5SERtYzzdsQeZc4?authuser=0&hl=en&rclk=1",
+    "mapsUrl": "https://www.google.com/maps/place/Le+Grand+Hotel/data=!4m10!3m9!1s0x226b1c8786d847a9:0x8606b0f34263f5e9!5m2!4m1!1i2!8m2!3d-12.276542!4d49.29211!16s%2Fg%2F1tdr5ljg!19sChIJqUfYhoccayIR6fVjQvOwBoY?authuser=0&hl=en&rclk=1",
     "gps": null,
-    "platform": "Booking.com",
+    "platform": "Site propre",
     "hours": null,
     "about": {
       "amenities": [],
-      "description": "Ar 95,180"
+      "description": "Ar 344,361"
+    },
+    "reviews": []
+  },
+  {
+    "name": "LOTUS HOTEL",
+    "category": "Hotel",
+    "address": "",
+    "phone": "0349190705",
+    "website": "https://www.google.com/travel/clk?pc=AA80OswginyfQ3zrzip2TeWt7FkU-1l_O5_BKWLhedGBwav2BmQJAVQFCBT2k7_yb4Rs3P6dhR2CGq2wYieynMQFpD_SIoFJk25F8jLkN64rSBLdE2BlQlyp8hDCDvXfhP2_LH_UoLmjCQ_nwzOEW_0LIeeKazELT4b8cGrkXHjYCEkio33c1e8nDJQN1XWbZQ&pcurl=https://www.agoda.com/partners/partnersearch.aspx?site_id%3D1917614%26CkInDay%3D15%26CkInMonth%3D03%26CkInYear%3D2026%26CkOutDay%3D16%26campaignid%3D%26CkOutMonth%3D03%26CkOutYear%3D2026%26SearchDateType%3Ddefault%26NumberOfAdults%3D2%26LT%3D0%26NumberOfChildren%3D0%26childages%3D%26NumberOfRooms%3D1%26gsite%3Dmapresults%26los%3D1%26PartnerCurrency%3DMGA%26hid%3D34660638%26RoomID%3D675856139%26masterRoomId%3D675856139%26PriceTax%3D18651.74%26PriceTotal%3D92277.03%26RatePlan%3Dfb8b93e2-1e3c-31c7-0fe6-587fe2799e46%26UserCountry%3DMG%26Currency%3DMGA%26UserDevice%3Ddesktop%26Verif%3Dfalse%26rr%3Drow_desktop%26audience_list%3D%26mcid%3D3038%26booking_source%3Dcpc%26adType%3D0%26mpt%3Db2IrNWVFK2c5Ky96Z3EwemVuWnRYZzQvUm5LV2txaHp2NGhEVXhGWEhCNCt0cFBjSkM1RTU1cFNVMFp4Wmw3V2N0ckR4MTF6bUtQYy93PT0%26original_rr%3D&s=AD1XQnl671ROCFT0riONWOUE0Byl",
+    "rating": 0,
+    "totalScore": "",
+    "mapsUrl": "https://www.google.com/maps/place/LOTUS+HOTEL/data=!4m10!3m9!1s0x226b1c7d75cbf887:0x554d4dfcf72bb3aa!5m2!4m1!1i2!8m2!3d-12.277206!4d49.2917077!16s%2Fg%2F11td3f4wvc!19sChIJh_jLdX0cayIRqrMr9_xNTVU?authuser=0&hl=en&rclk=1",
+    "gps": null,
+    "platform": "Site propre",
+    "hours": null,
+    "about": {
+      "amenities": [],
+      "description": "Ar 89,339"
+    },
+    "reviews": []
+  },
+  {
+    "name": "Hôtel Le Petit Paradis",
+    "category": "3-star hotel",
+    "address": "",
+    "phone": "0324789113",
+    "website": "https://www.google.com/travel/clk?pc=AA80Osx5JF5fe1-K9XSTzoWUm_zvd7mYtyjbrJ1DBS1gN1pTL6ESO1ZN3KKetCYm8GjP54Amizv6Xkf1lWCessnZt2YezaPhuEWVsQ0_rkng667OlfZjoqODM6HU-n9Pv6r39oxFZ2wIYDaXCHJ3_tGPuf6ZhIFDcvY1Dip3ySGX1SZNYqM5usP3CX96lTsDzA&pcurl=https://www.agoda.com/partners/partnersearch.aspx?site_id%3D1917614%26CkInDay%3D15%26CkInMonth%3D03%26CkInYear%3D2026%26CkOutDay%3D16%26campaignid%3D%26CkOutMonth%3D03%26CkOutYear%3D2026%26SearchDateType%3Ddefault%26NumberOfAdults%3D2%26LT%3D0%26NumberOfChildren%3D0%26childages%3D%26NumberOfRooms%3D1%26gsite%3Dmapresults%26los%3D1%26PartnerCurrency%3DMGA%26hid%3D2536542%26RoomID%3D599482129%26masterRoomId%3D599482129%26PriceTax%3D26995.94%26PriceTotal%3D116966.04%26RatePlan%3Dd2626af7-89c8-8085-fccb-71172a25f2d7%26UserCountry%3DMG%26Currency%3DMGA%26UserDevice%3Ddesktop%26Verif%3Dfalse%26rr%3Drow_desktop%26audience_list%3D%26mcid%3D3038%26booking_source%3Dcpc%26adType%3D0%26mpt%3DRXl5YkE0U0M2Wkdpamx1TXFRb0FTYTBFMFd1QmgyKy9ObS83eXhvZi9Edm5sVERVUlk4b2VTd3R3NTNacXFUOFcxV3ZRdlFYSEFJNzBRPT0%26original_rr%3D&s=AD1XQnkInaHX-wyPtOlwYN7G2WkZ",
+    "rating": 0,
+    "totalScore": "",
+    "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel+Le+Petit+Paradis/data=!4m10!3m9!1s0x226b1c636f625f21:0x8bdef65f2f4c3373!5m2!4m1!1i2!8m2!3d-12.2821293!4d49.2963033!16s%2Fg%2F1tl6n6cm!19sChIJIV9ib2McayIRczNML1_23os?authuser=0&hl=en&rclk=1",
+    "gps": null,
+    "platform": "Site propre",
+    "hours": null,
+    "about": {
+      "amenities": [],
+      "description": "Ar 113,251"
+    },
+    "reviews": []
+  },
+  {
+    "name": "Le Valiha",
+    "category": "4-star hotel",
+    "address": "",
+    "phone": "0320778995",
+    "website": "https://www.tripadvisor.com/ShowUserReviews-g298270-d9776648-r490157317?m=68573&staydates=2026_03_29_2026_03_30&uguests=1_2_0&supdv=desktop&supuc=MG&supul=en",
+    "rating": 0,
+    "totalScore": "",
+    "mapsUrl": "https://www.google.com/maps/place/Le+Valiha/data=!4m10!3m9!1s0x226b1c866cc2d411:0xd52c3fdb9d36ee76!5m2!4m1!1i2!8m2!3d-12.2730039!4d49.2928128!16s%2Fg%2F1tfz7lg9!19sChIJEdTCbIYcayIRdu42nds_LNU?authuser=0&hl=en&rclk=1",
+    "gps": null,
+    "platform": "TripAdvisor",
+    "hours": null,
+    "about": {
+      "amenities": [],
+      "description": "Ar 72,442"
+    },
+    "reviews": []
+  },
+  {
+    "name": "Hotel De La Poste",
+    "category": "Hotel",
+    "address": "",
+    "phone": "0320478575",
+    "website": "http://www.diego-hoteldelaposte.com/",
+    "rating": 0,
+    "totalScore": "",
+    "mapsUrl": "https://www.google.com/maps/place/Hotel+De+La+Poste/data=!4m10!3m9!1s0x226b1c852701d2df:0x94e0cc848182f9be!5m2!4m1!1i2!8m2!3d-12.2688338!4d49.2917689!16s%2Fg%2F1wck04zn!19sChIJ39IBJ4UcayIRvvmCgYTM4JQ?authuser=0&hl=en&rclk=1",
+    "gps": null,
+    "platform": "Site propre",
+    "hours": null,
+    "about": {
+      "amenities": [],
+      "description": "Ar 171,578"
     },
     "reviews": []
   }

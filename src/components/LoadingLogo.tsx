@@ -2,17 +2,20 @@ import React from "react";
 import { Logo } from "./Logo";
 
 interface LoadingLogoProps {
-  size?: "sm" | "md" | "lg" | "xl";
+  size?: "xs" | "sm" | "md" | "lg" | "xl";
   message?: string;
   className?: string;
+  compact?: boolean; // If true, removes vertical spacing/container
 }
 
 export function LoadingLogo({ 
   size = "md", 
   message, 
-  className = "" 
+  className = "",
+  compact = false
 }: LoadingLogoProps) {
   const containerSizeMap = {
+    xs: "h-5 w-5",
     sm: "h-16 w-16",
     md: "h-24 w-24",
     lg: "h-32 w-32",
@@ -20,6 +23,7 @@ export function LoadingLogo({
   };
 
   const logoSizeMap = {
+    xs: "sm" as const, // Use smallest logo for xs
     sm: "sm" as const,
     md: "md" as const,
     lg: "lg" as const,
@@ -27,17 +31,25 @@ export function LoadingLogo({
   };
 
   return (
-    <div className={`flex flex-col items-center justify-center space-y-4 ${className}`}>
+    <div className={`${compact ? 'inline-flex' : 'flex flex-col'} items-center justify-center ${compact ? '' : 'space-y-4'} ${className}`}>
       <div className={`relative flex items-center justify-center ${containerSizeMap[size]}`}>
-        {/* Animated outer ring - gradient border effect */}
-        <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-accent border-r-accent/30 animate-spin" style={{ animationDuration: '1.5s' }} />
+        {/* Animated outer ring */}
+        <div 
+          className={`absolute inset-0 rounded-full border-transparent border-t-accent border-r-accent/30 animate-spin`} 
+          style={{ 
+            animationDuration: '1.5s',
+            borderWidth: size === 'xs' ? '1.5px' : '2px'
+          }} 
+        />
         
-        {/* Secondary inner pulse ring */}
-        <div className="absolute inset-2 rounded-full border border-accent/10 animate-pulse" />
+        {/* Secondary inner pulse ring - only for larger sizes */}
+        {size !== 'xs' && (
+          <div className="absolute inset-2 rounded-full border border-accent/10 animate-pulse" />
+        )}
         
         {/* The Prospecta Logo in the center */}
-        <div className="relative z-10 transition-transform duration-500 hover:scale-110">
-          <Logo size={logoSizeMap[size]} />
+        <div className={`relative z-10 transition-transform duration-500 ${size === 'xs' ? '' : 'hover:scale-110'}`}>
+          <Logo size={logoSizeMap[size]} className={size === 'xs' ? 'h-3' : ''} />
         </div>
       </div>
       

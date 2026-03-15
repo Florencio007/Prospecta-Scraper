@@ -8,7 +8,8 @@ import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { Eye, EyeOff, ExternalLink, Loader2, CheckCircle2, XCircle, Clock, AlertTriangle, Key, Server } from 'lucide-react';
+import { Eye, EyeOff, ExternalLink, CheckCircle2, XCircle, Clock, AlertTriangle, Key, Server } from 'lucide-react';
+import { LoadingLogo } from '@/components/LoadingLogo';
 import { testEmailSend, testSmtpConnection } from '@/services/emailService';
 
 const PROVIDERS_CONFIG = [
@@ -282,7 +283,7 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                                 disabled={isSendingTest || !testEmail}
                                 className="whitespace-nowrap font-medium text-xs bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
                             >
-                                {isSendingTest ? <Loader2 className="w-3 h-3 animate-spin mr-2" /> : null}
+                                {isSendingTest ? <LoadingLogo size="xs" compact className="mr-2" /> : null}
                                 Envoyer
                             </Button>
                         </div>
@@ -296,10 +297,10 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                         <Button variant="ghost" size="sm" onClick={handleDelete} disabled={isDeleting} className="text-destructive hover:bg-destructive/10">Supprimer</Button>
                     )}
                     <Button variant="outline" size="sm" onClick={handleTest} disabled={isTesting || !host}>
-                        {isTesting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Tester la connexion'}
+                        {isTesting ? <LoadingLogo size="xs" compact /> : 'Tester la connexion'}
                     </Button>
                     <Button size="sm" onClick={handleSave} disabled={isSaving || !host} className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                        {isSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null} Sauvegarder
+                        {isSaving ? <LoadingLogo size="xs" compact className="mr-2" /> : null} Sauvegarder
                     </Button>
                 </div>
             </CardFooter>
@@ -466,12 +467,12 @@ const ApiKeyCard = ({ providerConfig, existingKey, onUpdate }: { providerConfig:
                                 Supprimer
                             </Button>
                             <Button variant="outline" size="sm" onClick={handleTest} disabled={isTesting || !apiKey}>
-                                {isTesting ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Tester'}
+                                {isTesting ? <LoadingLogo size="xs" compact /> : 'Tester'}
                             </Button>
                         </>
                     )}
                     <Button variant="default" size="sm" onClick={handleSave} disabled={isSaving || !apiKey} className="bg-accent hover:bg-accent/90">
-                        {isSaving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
+                        {isSaving ? <LoadingLogo size="xs" compact className="mr-2" /> : null}
                         Sauvegarder
                     </Button>
                 </div>
@@ -524,7 +525,7 @@ export const ApiKeysSettings = () => {
 
             {loading ? (
                 <div className="flex justify-center p-12">
-                    <Loader2 className="w-8 h-8 animate-spin text-accent" />
+                    <LoadingLogo size="md" message="Chargement..." />
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

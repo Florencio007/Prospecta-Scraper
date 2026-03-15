@@ -165,6 +165,31 @@ async function scrapePersonList(page) {
 
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await sleep(4000);
+
+  // Force clicking the filter in the sidebar if not active
+  try {
+    const filterLabel = CONFIG.searchType === 'pages' ? 'Pages' : 'Personnes';
+    emitLog(`   🎯 Recherche du filtre "${filterLabel}"...`);
+    
+    // Attempt to click the specific filter link in the sidebar
+    const filterLink = page.locator(`role=link[name="${filterLabel}" i], role=tab[name="${filterLabel}" i], a:has-text("${filterLabel}")`).first();
+    if (await filterLink.isVisible({ timeout: 5000 }).catch(() => false)) {
+      emitLog(`   🖱️ Activation du filtre "${filterLabel}"...`);
+      await filterLink.click();
+      await sleep(3000);
+    } else {
+      emitLog(`   ⚠️ Filtre "${filterLabel}" non trouvé via locator direct, tentative par texte...`);
+      await page.evaluate((txt) => {
+        const links = Array.from(document.querySelectorAll('a, div[role="button"], span'));
+        const target = links.find(l => l.textContent?.trim().toLowerCase() === txt.toLowerCase());
+        if (target) target.click();
+      }, filterLabel);
+      await sleep(3000);
+    }
+  } catch (err) {
+    emitLog(`   ⚠️ Erreur lors de l'application du filtre : ${err.message}`);
+  }
+
   for (let i = 0; i < 5; i++) { await page.evaluate(() => window.scrollBy(0, 800)); await sleep(1000); }
 
   const people = await page.evaluate((searchType) => {
@@ -173,7 +198,7 @@ async function scrapePersonList(page) {
     const SKIP = ['https://www.facebook.com/', '/search/', '/groups/', '/watch', '/marketplace',
       '/gaming', '/help', '/privacy', '/terms', '/events', '/friends', '/photos', '/videos', '/reel', '/reels', '/stories'];
 
-    const cards = document.querySelectorAll('[role="article"], [data-testid="browse-result-content"] > div, [data-testid="search-result"]');
+    const cards = document.querySelectorAll('[role="article"], [data-testid="browse-result-content"] > div, [data-testid="search-result"], .x1yzt60f.x1n2onr6.xh8yej3, div.x9f619.x1n2onr6.x1ja2u2z.x78zum5.x2lah0s.x1nh9869.x1qjc9v5.xozqiw3.x1q0g3np.xieb3on.x193iq5w');
     cards.forEach(card => {
       let linkEl = null;
       card.querySelectorAll('a[href]').forEach(a => {
@@ -190,7 +215,7 @@ async function scrapePersonList(page) {
       const name = spans[0] || linkEl.textContent?.trim() || '';
       const subtitle = spans.find(t => t !== name && t.length > 2) || '';
       const photo = card.querySelector('img[src*="scontent"]')?.src || card.querySelector('img')?.src || '';
-      if (name && name.length < 120) results.push({ name, title: subtitle, profileUrl: href, photo });
+      if (name && name.length < 120 && name.length > 1) results.push({ name, title: subtitle, profileUrl: href, photo });
     });
 
     if (!results.length) {

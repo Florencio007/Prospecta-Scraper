@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Search, Loader2, Users, Check, Plus, UserPlus } from "lucide-react";
+import { Search, Users, Check, Plus, UserPlus } from "lucide-react";
+import { LoadingLogo } from "@/components/LoadingLogo";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -178,7 +179,7 @@ export default function AddRecipientDialog({ isOpen, onClose, onSelected, onManu
                         <div className="flex-1 overflow-y-auto px-6 py-2 scrollbar-hide">
                             {loading ? (
                                 <div className="flex flex-col items-center justify-center py-20 gap-3">
-                                    <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+                                    <LoadingLogo size="md" />
                                     <p className="text-sm text-slate-500 font-medium">Récupération de vos prospects...</p>
                                 </div>
                             ) : filteredProspects.length === 0 ? (
@@ -288,7 +289,7 @@ export default function AddRecipientDialog({ isOpen, onClose, onSelected, onManu
                                     disabled={isSaving || !manualData.email}
                                     className="bg-emerald-600 hover:bg-emerald-700 text-white font-black px-8 gap-2"
                                 >
-                                    {isSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus size={16} />}
+                                    {isSaving ? <LoadingLogo size="xs" compact /> : <Plus size={16} />}
                                     Ajouter manuellement
                                 </Button>
                             </div>

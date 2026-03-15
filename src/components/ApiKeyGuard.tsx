@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useApiKeys, ApiProvider } from '@/hooks/useApiKeys';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Key, Settings, AlertCircle, Loader2 } from 'lucide-react';
+import { Key, Settings, AlertCircle } from 'lucide-react';
+import { LoadingLogo } from '@/components/LoadingLogo';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useAuth } from '@/hooks/useAuth';
 
@@ -29,7 +30,7 @@ export const ApiKeyGuard: React.FC<ApiKeyGuardProps> = ({ provider, children, fe
     if (hasKey === null) {
         return (
             <div className="flex flex-col items-center justify-center p-12 min-h-[300px]">
-                <Loader2 className="h-8 w-8 animate-spin text-accent mb-4" />
+                <LoadingLogo size="md" className="mb-4" />
                 <p className="text-muted-foreground">Vérification de la configuration...</p>
             </div>
         );

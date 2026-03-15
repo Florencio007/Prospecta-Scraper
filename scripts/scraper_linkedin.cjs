@@ -145,22 +145,49 @@ async function scrapePersonList(page) {
 
     const people = await page.evaluate((searchType) => {
       const linkSel = searchType === 'companies' ? 'a[href*="/company/"]' : 'a[href*="/in/"]';
-      let cards = document.querySelectorAll('[data-view-name="search-entity-result-universal-template"]');
-      if (!cards.length) cards = document.querySelectorAll('.reusable-search__result-container, li.reusable-search__result-container');
-      if (!cards.length) cards = document.querySelectorAll('ul.reusable-search__entity-result-list > li, .search-results-container ul > li');
+      
+      // Select all candidate items
+      let cards = Array.from(document.querySelectorAll('.reusable-search__result-container, li.reusable-search__result-container, [data-view-name="search-entity-result-universal-template"]'));
+      
+      // If no cards found via standard classes, try looking for containers that HAVE the appropriate link
       if (!cards.length) {
-        return Array.from(document.querySelectorAll(linkSel)).map(a => ({
-          name: a.querySelector('span[aria-hidden="true"]')?.textContent?.trim() || a.textContent?.trim()?.substring(0, 60) || '',
-          title: '', profileUrl: a.href?.split('?')[0] || '', photo: '',
-        })).filter(p => p.name && p.profileUrl && !p.profileUrl.includes('undefined'));
+        const links = Array.from(document.querySelectorAll(linkSel));
+        cards = links.map(a => a.closest('li, div.mb1, div.pb3, .artdeco-entity-lockup') || a.parentElement).filter(Boolean);
       }
-      return Array.from(cards).map(card => {
-        const linkEl = card.querySelector(linkSel);
-        if (!linkEl) return null;
-        const name = linkEl.querySelector('span[aria-hidden="true"]')?.textContent?.trim() || linkEl.textContent?.trim()?.substring(0, 60) || '';
-        const allText = Array.from(card.querySelectorAll('span[aria-hidden="true"]')).map(s => s.textContent?.trim()).filter(t => t && t.length > 2 && t !== name);
-        return { name, title: allText[0] || '', location: allText[1] || '', profileUrl: linkEl.href?.split('?')[0] || '', photo: card.querySelector('img')?.src || '' };
-      }).filter(p => p && p.name && p.profileUrl && !p.profileUrl.includes('undefined'));
+
+      const results = [];
+      const seenUrls = new Set();
+
+      cards.forEach(card => {
+        const linkEl = card.querySelector(linkSel) || (card.tagName === 'A' ? card : null);
+        if (!linkEl) return;
+
+        const href = (linkEl.href || '').split('?')[0];
+        if (!href || seenUrls.has(href) || href.includes('/search/')) return;
+        seenUrls.add(href);
+
+        let name = '';
+        const nameEl = linkEl.querySelector('span[aria-hidden="true"], .entity-result__title-text') || linkEl;
+        name = nameEl.textContent?.trim() || '';
+        // Clean LinkedIn name (sometimes includes 'View profile', etc)
+        name = name.split('\n')[0].replace(/\s+/g, ' ').trim();
+
+        let title = '';
+        const titleEl = card.querySelector('.entity-result__primary-subtitle, .t-14.t-black.t-normal, div.t-14.t-black--light');
+        title = titleEl?.textContent?.trim() || '';
+
+        let loc = '';
+        const locEl = card.querySelector('.entity-result__secondary-subtitle, .t-14.t-black--light');
+        loc = locEl?.textContent?.trim() || '';
+
+        let photo = card.querySelector('img')?.src || '';
+
+        if (name && name !== 'LinkedIn Member' && name !== 'Membre LinkedIn') {
+          results.push({ name, title, location: loc, profileUrl: href, photo });
+        }
+      });
+
+      return results;
     }, CONFIG.searchType);
 
     if (people.length === 0) break;

@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Sparkles, Copy, Save, Check, Wand2, Type, MessageSquare, Flame, Info, Briefcase, Loader2 } from "lucide-react";
+import { Sparkles, Copy, Save, Check, Wand2, Type, MessageSquare, Flame, Info, Briefcase } from "lucide-react";
+import { LoadingLogo } from "@/components/LoadingLogo";
 import Header from "@/components/dashboard/Header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -172,7 +173,7 @@ const Templates = () => {
                 className="w-full h-14 bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl text-base gap-3 shadow-[0_10px_30px_rgba(16,185,129,0.2)] transition-all active:scale-95"
               >
                 {isGenerating ? (
-                  <Loader2 className="animate-spin" size={20} />
+                  <LoadingLogo size="xs" compact />
                 ) : (
                   <Wand2 size={20} />
                 )}

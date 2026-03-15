@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { Search, Loader2, Users, Check, Plus } from "lucide-react";
+import { Search, Users, Check, Plus } from "lucide-react";
+import { LoadingLogo } from "@/components/LoadingLogo";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -121,7 +122,7 @@ export default function ProspectSelectionDialog({ isOpen, onClose, onSelected, a
                 <div className="flex-1 overflow-y-auto px-6 py-2 scrollbar-hide">
                     {loading ? (
                         <div className="flex flex-col items-center justify-center py-20 gap-3">
-                            <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
+                            <LoadingLogo size="md" message="Recherche..." />
                             <p className="text-sm text-slate-500 font-medium">Récupération de vos prospects...</p>
                         </div>
                     ) : filteredProspects.length === 0 ? (

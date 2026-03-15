@@ -3,7 +3,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CreditCard, Smartphone, Wallet, Lock, Check, Loader2, AlertCircle } from "lucide-react";
+import { CreditCard, Smartphone, Wallet, Lock, Check, AlertCircle } from "lucide-react";
+import { LoadingLogo } from "@/components/LoadingLogo";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useToast } from "@/hooks/use-toast";
 import { CinetPayService } from "@/lib/cinetpay"; // Add this
@@ -186,10 +187,7 @@ const PaymentModal = ({ open, onOpenChange, planName, price, onSuccess }: Paymen
                             )}
 
                             {method === "paypal" && (
-                                <div className="text-center py-8">
-                                    <Loader2 className="h-8 w-8 animate-spin mx-auto text-accent mb-2" />
-                                    <p className="text-sm text-muted-foreground">{t("processing")}</p>
-                                </div>
+                                    <LoadingLogo size="md" className="mx-auto mb-2" />
                             )}
 
                             <Button
@@ -199,7 +197,7 @@ const PaymentModal = ({ open, onOpenChange, planName, price, onSuccess }: Paymen
                             >
                                 {processing ? (
                                     <>
-                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        <LoadingLogo size="xs" compact className="mr-2" />
                                         {t("processing")}
                                     </>
                                 ) : (

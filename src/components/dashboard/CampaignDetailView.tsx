@@ -14,9 +14,9 @@ import {
     Filter,
     ArrowUpRight,
     ExternalLink,
-    Loader2,
     Phone
 } from "lucide-react";
+import { LoadingLogo } from "@/components/LoadingLogo";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -209,7 +209,7 @@ const CampaignDetailView = ({ campaign, isOpen, onOpenChange }: CampaignDetailVi
                         <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-sm">
                             {isLoadingProspects ? (
                                 <div className="flex flex-col items-center justify-center py-20 space-y-4">
-                                    <Loader2 className="h-10 w-10 animate-spin text-accent" />
+                                    <LoadingLogo size="lg" message="Chargement des détails..." />
                                     <p className="text-slate-500 text-sm animate-pulse">{t("loadingProspects")}</p>
                                 </div>
                             ) : filteredProspects.length === 0 ? (

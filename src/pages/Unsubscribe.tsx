@@ -3,7 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { CheckCircle, XCircle, Loader2 } from 'lucide-react';
+import { CheckCircle, XCircle } from 'lucide-react';
+import { LoadingLogo } from '@/components/LoadingLogo';
 import { logSimpleAudit } from '@/lib/privacy/utils';
 
 const Unsubscribe = () => {
@@ -80,7 +81,7 @@ const Unsubscribe = () => {
                 </CardHeader>
                 <CardContent className="text-center">
                     {status === 'loading' && (
-                        <Loader2 className="h-12 w-12 animate-spin text-accent mx-auto" />
+                        <LoadingLogo size="xl" message="Traitement de votre demande..." />
                     )}
 
                     {status === 'success' && (

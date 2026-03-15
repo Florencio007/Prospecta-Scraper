@@ -1222,7 +1222,7 @@ const ProspectFinder = () => {
                     onClick={handleSearch}
                     disabled={isSearching}
                   >
-                    {isSearching ? <Loader2 className="animate-spin mr-2" size={18} /> : <Search size={18} className="mr-2" />}
+                    {isSearching ? <LoadingLogo size="xs" compact className="mr-2" /> : <Search size={18} className="mr-2" />}
                     {isSearching ? t("loading") : t("rechercher")}
                   </Button>
 
@@ -1364,7 +1364,7 @@ const ProspectFinder = () => {
                       className="border-accent text-accent hover:bg-accent/10"
                       disabled={selectedProspectIds.size === 0 || isSavingForCampaign}
                     >
-                      {isSavingForCampaign ? <Loader2 className="animate-spin mr-2" size={16} /> : <Plus className="mr-2" size={16} />}
+                      {isSavingForCampaign ? <LoadingLogo size="xs" compact className="mr-2" /> : <Plus className="mr-2" size={16} />}
                       {t("addToCampaign")} ({selectedProspectIds.size})
                     </Button>
                     <Button size="sm" onClick={handleSaveSelected} className="bg-accent" disabled={selectedProspectIds.size === 0}>
