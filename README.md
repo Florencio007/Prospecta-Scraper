@@ -9,7 +9,7 @@
 ## 🎯 À propos
 
 Prospecta est un SaaS innovant qui aide les entreprises malgaches à:
-- 🔍 Trouver automatiquement des prospects sur **6 canaux** (Google, Facebook, LinkedIn, Instagram, TikTok, WhatsApp)
+- 🔍 Trouver automatiquement des prospects sur **6 canaux** (Google, Facebook, LinkedIn,Pages Jaunes France, Pappers France, Societe.com, Infogreffe )
 - 📊 **Centraliser** tous les prospects en un seul endroit
 - 📈 **Gérer** et **analyser** vos prospects facilement
 - 💼 **Exporter** vos données en multiple formats
