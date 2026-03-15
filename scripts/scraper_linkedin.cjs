@@ -21,7 +21,7 @@ const CONFIG = {
   maxPosts: parseInt(argMaxPosts, 10) || 30,
   activityType: (argActivityType === 'posts' || argActivityType === 'comments') ? argActivityType : 'all',
   outputFile: 'linkedin-results.json',
-  headless: true,
+  headless: false, // On ordinateur utilisateur (local), on veut voir le navigateur
   delay: 1000,
 };
 

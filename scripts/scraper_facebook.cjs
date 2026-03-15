@@ -45,7 +45,7 @@ const CONFIG = {
   maxPosts: parseInt(argMaxPosts, 10) || 10,
   activityType: (argActivityType === 'posts' || argActivityType === 'comments') ? argActivityType : 'all',
   outputFile: 'facebook-results.json',
-  headless: isPlatform ? true : false,
+  headless: false, // On ordinateur utilisateur (local), on veut voir le navigateur
   delay: 2500,
 };
 
