@@ -1248,13 +1248,13 @@ const ProspectFinder = () => {
                   <div className="flex items-center justify-between text-xs px-1">
                     <div className="flex items-center gap-1.5">
                       <span className={`w-1.5 h-1.5 rounded-full ${agentOnline === null ? 'bg-yellow-500 animate-pulse' : agentOnline ? 'bg-green-500' : 'bg-red-500'}`} />
-                      <span className="text-muted-foreground font-mono">
-                        {agentOnline === null ? 'Vérification agent...' : agentOnline ? 'Agent local: actif' : 'Agent local: hors-ligne'}
+                      <span className="text-muted-foreground font-mono text-[10px]">
+                        {agentOnline === null ? 'Vérification moteur...' : agentOnline ? 'Moteur Prospecta: actif' : 'Moteur Prospecta: hors-ligne'}
                       </span>
                     </div>
                     {agentOnline === false && (
-                      <button onClick={() => setShowInstallModal(true)} className="text-amber-500 hover:underline text-xs font-mono">
-                        → Installer
+                      <button onClick={() => setShowInstallModal(true)} className="text-accent hover:underline text-[10px] font-mono font-bold">
+                        → INSTALLER
                       </button>
                     )}
                   </div>

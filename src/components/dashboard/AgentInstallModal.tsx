@@ -6,15 +6,26 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Download, RefreshCcw, AlertTriangle, Terminal } from "lucide-react";
+import { Download, RefreshCcw, Monitor, Apple } from "lucide-react";
+import { Logo } from "@/components/Logo";
 
 const RELEASE_URL = "https://github.com/Florencio007/Prospecta-Scraper/releases/tag/v1.0.0";
 
 const downloads = [
-  { os: "Windows", filename: "ProspectaAgent-Setup.exe", icon: "🪟" },
-  { os: "Mac",     filename: "ProspectaAgent.dmg",       icon: "🍎" },
-  { os: "Linux",   filename: "ProspectaAgent.AppImage",  icon: "🐧" },
+  { 
+    os: "Windows", 
+    filename: "Prospecta.Agent.Setup.1.0.0.exe", 
+    icon: "/windows-logo.jpg",
+    description: "Version 1.0.0 - Windows 10/11",
+    label: "Télécharger pour Windows"
+  },
+  { 
+    os: "macOS", 
+    filename: "Prospecta.Agent-1.0.0.dmg", 
+    icon: "/apple-logo.png",
+    description: "Intel & Apple Silicon (M1/M2/M3)",
+    label: "Télécharger pour Mac"
+  },
 ];
 
 interface Props {
@@ -24,72 +35,78 @@ interface Props {
 
 export const AgentInstallModal = ({ open, onOpenChange }: Props) => (
   <Dialog open={open} onOpenChange={onOpenChange}>
-    <DialogContent className="sm:max-w-[500px] bg-[#0d1117] border border-green-500/30 text-green-400 font-mono shadow-[0_0_40px_rgba(34,197,94,0.15)]">
-      <DialogHeader className="space-y-2">
-        <div className="flex items-center gap-3">
-          <Terminal size={20} className="text-green-500" />
-          <DialogTitle className="text-green-400 font-mono text-lg">
-            [PROSPECTA] Agent Local Requis
-          </DialogTitle>
-        </div>
-        <Badge variant="outline" className="w-fit border-yellow-500/50 text-yellow-400 gap-1.5">
-          <AlertTriangle size={12} />
-          Agent non détecté sur ce PC
-        </Badge>
-        <DialogDescription className="text-green-600 font-mono text-sm">
-          Le moteur de scraping Playwright doit tourner localement pour lancer les scans.
-        </DialogDescription>
-      </DialogHeader>
-
-      {/* Steps */}
-      <div className="space-y-3 my-2">
-        {[
-          { n: "01", label: "Téléchargez et installez l'agent ci-dessous" },
-          { n: "02", label: "Lancez l'agent (il démarre automatiquement)" },
-          { n: "03", label: "Rechargez cette page → le scan sera disponible" },
-        ].map(({ n, label }) => (
-          <div key={n} className="flex items-center gap-3 text-sm">
-            <span className="text-green-500 font-bold text-xs bg-green-500/10 border border-green-500/20 rounded px-1.5 py-0.5">
-              {n}
-            </span>
-            <span className="text-green-300">{label}</span>
+    <DialogContent className="sm:max-w-[550px] p-0 overflow-hidden border-none shadow-2xl bg-background text-foreground">
+      <div className="p-8 space-y-8">
+        {/* Header with Logo */}
+        <div className="flex flex-col items-center text-center space-y-4">
+          <Logo size="xl" className="mb-2" />
+          <div className="space-y-2">
+            <DialogTitle className="text-2xl font-bold tracking-tight">
+              Activez la puissance de Prospecta
+            </DialogTitle>
+            <DialogDescription className="text-base text-muted-foreground max-w-[400px] mx-auto leading-relaxed">
+              Le moteur de recherche Prospecta nécessite l'agent local pour garantir une extraction ultra-rapide et sécurisée directement sur votre machine.
+            </DialogDescription>
           </div>
-        ))}
-      </div>
+        </div>
 
-      {/* Download buttons */}
-      <div className="grid grid-cols-3 gap-2 my-2">
-        {downloads.map(({ os, filename, icon }) => (
-          <a
-            key={os}
-            href={`${RELEASE_URL}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex flex-col items-center gap-2 p-3 rounded-lg border border-green-500/20 bg-green-500/5 hover:bg-green-500/10 hover:border-green-500/40 transition-all group"
-          >
-            <span className="text-2xl">{icon}</span>
-            <span className="text-xs font-bold text-green-400 group-hover:text-green-300">{os}</span>
-            <div className="flex items-center gap-1 text-green-600 text-[10px]">
-              <Download size={10} />
-              {filename}
+        {/* Steps */}
+        <div className="grid grid-cols-3 gap-4 pb-4">
+          {[
+            { n: "1", title: "Télécharger", desc: "Choisissez votre système" },
+            { n: "2", title: "Installer", desc: "Lancez l'exécutable" },
+            { n: "3", title: "Scanner", desc: "Rechargez la page" },
+          ].map(({ n, title, desc }) => (
+            <div key={n} className="flex flex-col items-center text-center space-y-1">
+              <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-accent font-bold text-sm mb-1">
+                {n}
+              </div>
+              <p className="font-semibold text-sm">{title}</p>
+              <p className="text-[11px] text-muted-foreground leading-tight">{desc}</p>
             </div>
-          </a>
-        ))}
-      </div>
+          ))}
+        </div>
 
-      <div className="flex justify-between items-center pt-2 border-t border-green-500/10">
-        <span className="text-green-700 text-xs">
-          v1.0.0 · ~100MB · Node.js inclus
-        </span>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => window.location.reload()}
-          className="text-green-500 hover:text-green-300 hover:bg-green-500/10 gap-2 font-mono text-xs"
-        >
-          <RefreshCcw size={12} />
-          Recharger la page
-        </Button>
+        {/* Download Buttons */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {downloads.map(({ os, filename, icon, description, label }) => (
+            <a
+              key={os}
+              href={RELEASE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-col items-center p-5 rounded-2xl border bg-card hover:bg-accent/5 hover:border-accent/40 transition-all duration-300 group text-center space-y-3"
+            >
+              <div className="w-12 h-12 bg-muted rounded-xl flex items-center justify-center overflow-hidden group-hover:scale-110 transition-transform duration-300">
+                <img src={icon} alt={os} className="w-8 h-8 object-contain mix-blend-multiply dark:mix-blend-normal" />
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm font-bold">{os}</p>
+                <p className="text-[10px] text-muted-foreground line-clamp-1">{description}</p>
+              </div>
+              <div className="flex items-center gap-2 text-xs font-semibold text-accent pt-1">
+                <Download size={14} />
+                <span>{label}</span>
+              </div>
+            </a>
+          ))}
+        </div>
+
+        {/* Footer actions */}
+        <div className="flex flex-col items-center space-y-4 pt-4 border-t">
+          <Button
+            size="lg"
+            variant="default"
+            onClick={() => window.location.reload()}
+            className="w-full sm:w-auto px-10 rounded-full font-bold shadow-lg shadow-accent/20 transition-all hover:scale-105 active:scale-95 gap-2"
+          >
+            <RefreshCcw size={18} />
+            J'ai fini l'installation, recharger
+          </Button>
+          <p className="text-[11px] text-muted-foreground">
+            Version 1.0.0 Stable · Connexion sécurisée locale · Support 24/7
+          </p>
+        </div>
       </div>
     </DialogContent>
   </Dialog>
