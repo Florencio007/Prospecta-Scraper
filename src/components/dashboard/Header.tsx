@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useNavigate, useLocation } from "react-router-dom";
-import { LogOut, Menu, X } from "lucide-react";
+import { LogOut, Menu, X, Mail } from "lucide-react";
 import { Logo } from "@/components/Logo";
 import { DarkModeToggle } from "@/components/DarkModeToggle";
+import { useInbox } from "@/hooks/useInbox";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,12 +25,14 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { totalUnread } = useInbox();
 
   // Configuration des éléments de navigation
   const navItems = [
     { label: t("dashboard"), path: "/dashboard" },
     { label: t("prospects"), path: "/prospects" },
     { label: t("campaigns"), path: "/campaigns" },
+    { label: "Inbox", path: "/inbox", badge: totalUnread },
     { label: t("reports"), path: "/reports" },
     { label: t("settings"), path: "/settings" },
   ];
@@ -61,13 +64,18 @@ const Header = () => {
             <button
               key={item.path}
               onClick={() => navigate(item.path)}
-              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1.5 ${
                 (location.pathname === item.path || (item.path === "/prospects" && location.pathname === "/finder"))
                 ? "text-emerald-500 bg-emerald-500/10 shadow-sm shadow-emerald-500/10"
                 : "text-muted-foreground hover:text-emerald-500 hover:bg-emerald-500/5"
                 }`}
             >
               {item.label}
+              {"badge" in item && (item.badge as number) > 0 && (
+                <span className="inline-flex items-center justify-center bg-accent text-white text-[9px] font-bold rounded-full w-4 h-4">
+                  {item.badge}
+                </span>
+              )}
             </button>
           ))}
         </nav>
@@ -121,12 +129,17 @@ const Header = () => {
                 navigate(item.path);
                 setMobileOpen(false);
               }}
-              className={`block w-full text-left px-3 py-2 rounded-md text-sm font-medium ${location.pathname === item.path
+              className={`flex items-center justify-between w-full text-left px-3 py-2 rounded-md text-sm font-medium ${location.pathname === item.path
                 ? "text-emerald-500 bg-emerald-500/10"
                 : "text-muted-foreground"
                 }`}
             >
-              {item.label}
+              <span>{item.label}</span>
+              {"badge" in item && (item.badge as number) > 0 && (
+                <span className="inline-flex items-center justify-center bg-accent text-white text-[9px] font-bold rounded-full w-4 h-4">
+                  {item.badge}
+                </span>
+              )}
             </button>
           ))}
         </nav>

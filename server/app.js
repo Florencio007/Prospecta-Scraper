@@ -12,9 +12,10 @@ import { spawn, exec } from 'child_process';
 import fs from 'fs';
 import { createRequire } from 'module';
 
-import fetch from 'node-fetch';
 import nodemailer from 'nodemailer';
 import cron from 'node-cron';
+import { createClient } from '@supabase/supabase-js';
+import fetch from 'node-fetch';
 
 // Initialize background campaign scheduled jobs
 import './campaignCron.js';
@@ -57,6 +58,17 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
+
+// ─── Supabase Client Helper ──────────────────────────────────────────────────
+function getSupabase() {
+    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    if (!supabaseUrl || !supabaseKey) {
+        console.error('[SERVER] Supabase URL or Key is missing.');
+        return null;
+    }
+    return createClient(supabaseUrl, supabaseKey);
+}
 
 // ─── Utility for Scraping Endpoints ──────────────────────────────────────────
 
@@ -512,6 +524,173 @@ app.get('/api/scrape/facebook', (req, res) => {
     res.end();
   });
   req.on('close', () => child.kill());
+});
+
+// ─── Routes INBOX ──────────────────────────────────────────────────────────
+
+// ── Route 1 : Envoyer une réponse via SMTP ─────────────────────────────────
+app.post('/api/inbox/send', async (req, res) => {
+  const { messageId, threadId, body, userId } = req.body;
+  if (!messageId || !threadId || !body || !userId) {
+    return res.status(400).json({ error: 'Paramètres manquants' });
+  }
+
+  const supabase = getSupabase();
+  if (!supabase) return res.status(500).json({ error: 'Supabase non disponible' });
+
+  try {
+    const [{ data: thread }, { data: smtpCfg }] = await Promise.all([
+      supabase.from('email_threads').select('*').eq('id', threadId).single(),
+      supabase.from('smtp_settings').select('*').eq('user_id', userId).maybeSingle(),
+    ]);
+
+    if (!thread)   return res.status(404).json({ error: 'Fil introuvable' });
+    if (!smtpCfg)  return res.status(404).json({ error: 'Config SMTP introuvable' });
+
+    const { data: lastReceived } = await supabase
+      .from('email_messages')
+      .select('message_id_header, references_header')
+      .eq('thread_id', threadId)
+      .eq('direction', 'received')
+      .order('received_at', { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    const transporter = createTransporter(smtpCfg);
+    const info = await transporter.sendMail({
+      from:     `"${smtpCfg.from_name || ''}" <${smtpCfg.from_email || smtpCfg.username}>`,
+      to:       thread.prospect_email,
+      subject:  'Re: ' + thread.subject,
+      text:     body,
+      headers: {
+        'In-Reply-To': lastReceived?.message_id_header ? `<${lastReceived.message_id_header}>` : undefined,
+        'References': lastReceived?.references_header ? `${lastReceived.references_header} <${lastReceived.message_id_header}>` : (lastReceived?.message_id_header ? `<${lastReceived.message_id_header}>` : undefined),
+      },
+    });
+
+    const sentMessageId = info.messageId?.replace(/^<|>$/g, '') || null;
+    if (sentMessageId) {
+      await supabase
+        .from('email_messages')
+        .update({ message_id_header: sentMessageId, from_email: smtpCfg.from_email || smtpCfg.username })
+        .eq('id', messageId);
+
+      if (!thread.initial_message_id) {
+        await supabase.from('email_threads').update({ initial_message_id: sentMessageId }).eq('id', threadId);
+      }
+    }
+
+    console.log(`[INBOX SEND] Email envoyé à ${thread.prospect_email} — Message-ID: ${sentMessageId}`);
+    res.json({ ok: true, messageId: sentMessageId });
+
+  } catch (err) {
+    console.error('[INBOX SEND] Erreur:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Route 2 : Générer un draft IA ─────────────────────────────────────────
+app.post('/api/inbox/ai-draft', async (req, res) => {
+  const { messageId, threadId, userId } = req.body;
+  if (!messageId || !threadId || !userId) {
+    return res.status(400).json({ error: 'Paramètres manquants' });
+  }
+
+  const supabase = getSupabase();
+  if (!supabase) return res.status(500).json({ error: 'Supabase non disponible' });
+
+  try {
+    const [
+      { data: message },
+      { data: thread },
+      { data: history },
+      { data: apiKeyRow },
+      { data: serviceDesc },
+    ] = await Promise.all([
+      supabase.from('email_messages').select('*').eq('id', messageId).single(),
+      supabase.from('email_threads').select('*, prospects(name, company, position, industry)').eq('id', threadId).single(),
+      supabase.from('email_messages').select('direction, body_text, received_at')
+        .eq('thread_id', threadId).order('received_at', { ascending: true }).limit(10),
+      supabase.from('api_keys').select('key_value').eq('user_id', userId).eq('provider', 'openai').maybeSingle(),
+      supabase.from('user_service_description').select('description').eq('user_id', userId).maybeSingle(),
+    ]);
+
+    const openaiKey = apiKeyRow?.key_value || process.env.OPENAI_API_KEY;
+    if (!openaiKey) return res.status(400).json({ error: 'Clé OpenAI non configurée' });
+
+    const conversationHistory = (history || [])
+      .map(m => `[${m.direction === 'sent' ? 'VOUS' : 'PROSPECT'}] ${m.body_text.slice(0, 300)}`)
+      .join('\n---\n');
+
+    const prospect = thread?.prospects;
+    const intent   = message?.ai_detected_intent;
+
+    const intentContext = {
+      demo_request:    "Le prospect demande une démonstration ou un rendez-vous.",
+      price_objection: "Le prospect exprime une réticence par rapport au prix ou au budget.",
+      product_question:"Le prospect pose une question sur votre service ou vos fonctionnalités.",
+    }[intent] || "Le prospect a répondu à votre email de prospection.";
+
+    const prompt = `Tu es un assistant commercial expert. Rédige une réponse professionnelle, personnalisée et concise (3-5 phrases maximum) à l'email ci-dessous.
+
+CONTEXTE :
+- Service proposé : ${serviceDesc?.description || 'Non renseigné'}
+- Prospect : ${prospect?.name || 'Inconnu'}, ${prospect?.position || ''} chez ${prospect?.company || ''}
+- Secteur : ${prospect?.industry || 'Non renseigné'}
+- Situation : ${intentContext}
+
+HISTORIQUE DE LA CONVERSATION :
+${conversationHistory}
+
+DERNIER MESSAGE REÇU DU PROSPECT :
+${message?.body_text || ''}
+
+CONSIGNES :
+- Réponds directement à la question ou à l'objection du prospect
+- Sois chaleureux mais professionnel
+- Propose une action concrète (RDV, démo, lien, etc.) si pertinent
+- N'utilise pas de formule de politesse générique au début
+- Écris uniquement le corps du message, sans objet ni signature`;
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${openaiKey}`,
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        max_tokens: 300,
+        temperature: 0.7,
+        messages: [
+          { role: 'system', content: 'Tu es un expert en prospection B2B. Tu rédiges des réponses email courtes, personnalisées et efficaces. Tu réponds uniquement avec le contenu de l\'email, sans formatage markdown.' },
+          { role: 'user', content: prompt },
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+      const err = await response.text();
+      throw new Error(`OpenAI error: ${err}`);
+    }
+
+    const data  = await response.json();
+    const draft = data.choices?.[0]?.message?.content?.trim();
+
+    if (!draft) throw new Error('Draft vide retourné par l\'IA');
+
+    await supabase
+      .from('email_messages')
+      .update({ ai_status: 'draft_ready', ai_draft_body: draft, ai_draft_prompt: prompt })
+      .eq('id', messageId);
+
+    console.log(`[INBOX AI] Draft généré pour message ${messageId} (intent: ${intent})`);
+    res.json({ draft });
+
+  } catch (err) {
+    console.error('[INBOX AI] Erreur:', err.message);
+    res.status(500).json({ error: err.message });
+  }
 });
 
 app.listen(PORT, () => {

@@ -27,6 +27,7 @@ const Unsubscribe = lazy(() => import("./pages/Unsubscribe"));
 const Templates = lazy(() => import("./pages/Templates"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Admin = lazy(() => import("./pages/Admin"));
+const Inbox = lazy(() => import("./pages/Inbox"));
 
 const queryClient = new QueryClient();
 
@@ -138,6 +139,14 @@ const App = () => (
                       element={
                         <ProtectedRoute requireAdmin={true}>
                           <Admin />
+                        </ProtectedRoute>
+                      }
+                    />
+                    <Route
+                      path="/inbox"
+                      element={
+                        <ProtectedRoute>
+                          <Inbox />
                         </ProtectedRoute>
                       }
                     />
