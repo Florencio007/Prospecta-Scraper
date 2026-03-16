@@ -47,9 +47,15 @@ const cors = require('cors');
 const rootDir = path.resolve(__dirname, '..');
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 7842;
 
-app.use(cors());
+// Configuration CORS assouplie pour l'agent local
+app.use(cors({
+  origin: '*', // Autorise toutes les origines car l'agent tourne localement sur le PC de l'utilisateur
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+  credentials: true
+}));
 app.use(express.json());
 
 // ─── Utility for Scraping Endpoints ──────────────────────────────────────────

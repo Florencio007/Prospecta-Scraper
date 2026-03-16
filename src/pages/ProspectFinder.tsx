@@ -43,7 +43,8 @@ import { useApiKeys } from "@/hooks/useApiKeys";
 import { LoadingLogo } from "@/components/LoadingLogo";
 import { AgentInstallModal } from "@/components/dashboard/AgentInstallModal";
 
-const AGENT_PORT = 3001;
+const AGENT_PORT = 7842;
+const LOCAL_AGENT_URL = `http://localhost:${AGENT_PORT}`;
 
 const industryOptions = [
   { key: "software", label: "Logiciels & SaaS" },
@@ -95,11 +96,18 @@ const ProspectFinder = () => {
   const [showInstallModal, setShowInstallModal] = useState(false);
 
   useEffect(() => {
-    const CHECK_URL = `http://localhost:${AGENT_PORT}/health`;
+    const CHECK_URL = `${LOCAL_AGENT_URL}/api/health`;
     fetch(CHECK_URL, { signal: AbortSignal.timeout(2000) })
       .then(r => { if (r.ok) { setAgentOnline(true); } else { setAgentOnline(false); setShowInstallModal(true); } })
       .catch(() => { setAgentOnline(false); setShowInstallModal(true); });
   }, []);
+
+  const getApiUrl = (endpoint: string) => {
+    // Si l'agent est en ligne, on l'appelle directement sur localhost:3001
+    // Sinon on passe par le proxy /api (utile en dev ou si configuré sur le serveur)
+    const base = agentOnline ? LOCAL_AGENT_URL : "";
+    return `${base}${endpoint}`;
+  };
 
   /**
    * Ajoute un log dans la console "rétro" de l'interface
@@ -356,6 +364,18 @@ const ProspectFinder = () => {
       return;
     }
 
+    // Vérification de l'agent local si un canal de scraping est sélectionné
+    const needsAgent = filters.channels.some(c => c !== "govcon");
+    if (needsAgent && !agentOnline) {
+      setShowInstallModal(true);
+      toast({
+        title: "Agent Prospecta requis",
+        description: "L'agent de scraping doit être actif sur votre ordinateur.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     // Sauvegarde des identifiants dans Supabase si utilisés
     if (filters.channels.includes("linkedin") && linkedinCredentials.email) {
       saveKey('linkedin', linkedinCredentials.email, 'LinkedIn Account', linkedinCredentials.password);
@@ -471,7 +491,7 @@ const ProspectFinder = () => {
           } 
           else if (channel === "google_maps") {
             addLog("🛰️ Scan Google Maps en cours...", "system");
-            const url = `/api/scrape/gmaps?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || 'Antananarivo')}&limit=${filters.channelLimits.google_maps}&userId=${user?.id || ""}&type=${filters.type}`;
+            const url = getApiUrl(`/api/scrape/gmaps?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || 'Antananarivo')}&limit=${filters.channelLimits.google_maps}&userId=${user?.id || ""}&type=${filters.type}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -504,7 +524,7 @@ const ProspectFinder = () => {
           }
           else if (channel === "linkedin") {
             addLog("🛡️ Protocoles LinkedIn (Local)...", "system");
-            const url = `/api/scrape/linkedin?q=${encodeURIComponent(filters.keyword)}&email=${encodeURIComponent(linkedinCredentials.email)}&password=${encodeURIComponent(linkedinCredentials.password)}&maxProfiles=${filters.channelLimits.linkedin}&maxPosts=${linkedinOptions.maxPosts}&type=${filters.type}&activityType=${linkedinOptions.activityType}`;
+            const url = getApiUrl(`/api/scrape/linkedin?q=${encodeURIComponent(filters.keyword)}&email=${encodeURIComponent(linkedinCredentials.email)}&password=${encodeURIComponent(linkedinCredentials.password)}&maxProfiles=${filters.channelLimits.linkedin}&maxPosts=${linkedinOptions.maxPosts}&type=${filters.type}&activityType=${linkedinOptions.activityType}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -532,7 +552,7 @@ const ProspectFinder = () => {
           }
           else if (channel === "facebook") {
             addLog("👥 Protocoles Facebook (Local)...", "system");
-            const url = `/api/scrape/facebook?q=${encodeURIComponent(filters.keyword)}&email=${encodeURIComponent(facebookCredentials.email)}&password=${encodeURIComponent(facebookCredentials.password)}&limit=${filters.channelLimits.facebook}&maxPosts=${facebookOptions.maxPosts}&type=${filters.type}&activityType=${facebookOptions.activityType}`;
+            const url = getApiUrl(`/api/scrape/facebook?q=${encodeURIComponent(filters.keyword)}&email=${encodeURIComponent(facebookCredentials.email)}&password=${encodeURIComponent(facebookCredentials.password)}&limit=${filters.channelLimits.facebook}&maxPosts=${facebookOptions.maxPosts}&type=${filters.type}&activityType=${facebookOptions.activityType}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -560,7 +580,7 @@ const ProspectFinder = () => {
           }
           else if (channel === "pages_jaunes") {
              addLog("📖 Pages Jaunes France...", "system");
-             const url = `/api/scrape/pj?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || '')}&limit=${filters.channelLimits.pages_jaunes}&userId=${user?.id || ""}&type=${filters.type}`;
+             const url = getApiUrl(`/api/scrape/pj?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || '')}&limit=${filters.channelLimits.pages_jaunes}&userId=${user?.id || ""}&type=${filters.type}`);
              const es = new EventSource(url);
              activeEventSources.current.push(es);
              es.onmessage = (e) => {
@@ -583,7 +603,7 @@ const ProspectFinder = () => {
           }
           else if (channel === "pappers") {
             addLog("📥 Pappers.fr...", "system");
-            const url = `/api/scrape/pappers?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || '')}&limit=${filters.channelLimits.pappers}&userId=${user?.id || ""}&type=${filters.type}`;
+            const url = getApiUrl(`/api/scrape/pappers?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || '')}&limit=${filters.channelLimits.pappers}&userId=${user?.id || ""}&type=${filters.type}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -606,7 +626,7 @@ const ProspectFinder = () => {
           }
           else if (channel === "societe") {
             addLog("💼 Societe.com...", "system");
-            const url = `/api/scrape/societe?q=${encodeURIComponent(filters.keyword)}&limit=${filters.channelLimits.societe}&type=${filters.type}`;
+            const url = getApiUrl(`/api/scrape/societe?q=${encodeURIComponent(filters.keyword)}&limit=${filters.channelLimits.societe}&type=${filters.type}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -629,7 +649,7 @@ const ProspectFinder = () => {
           }
           else if (channel === "infogreffe") {
             addLog("📜 Infogreffe...", "system");
-            const url = `/api/scrape/infogreffe?q=${encodeURIComponent(filters.keyword)}&limit=${filters.channelLimits.infogreffe}&type=${filters.type}`;
+            const url = getApiUrl(`/api/scrape/infogreffe?q=${encodeURIComponent(filters.keyword)}&limit=${filters.channelLimits.infogreffe}&type=${filters.type}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -706,7 +726,7 @@ const ProspectFinder = () => {
   const handleStopSearch = async () => {
     try {
       // 1. Send stop signal to backend (lock file)
-      const res = await fetch('/api/scrape/stop');
+      const res = await fetch(getApiUrl('/api/scrape/stop'));
       const data = await res.json();
       
       // 2. Client-side termination: Abort all fetch and close EventSources
@@ -1544,6 +1564,8 @@ const ProspectFinder = () => {
         prospect={selectedViewProspect}
         isOpen={isDetailViewOpen}
         onOpenChange={setIsDetailViewOpen}
+        agentOnline={agentOnline}
+        onAgentOffline={() => setShowInstallModal(true)}
       />
 
       <CampaignSelectionDialog

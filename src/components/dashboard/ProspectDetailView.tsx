@@ -33,9 +33,11 @@ interface ProspectDetailViewProps {
     prospect: Prospect | null;
     isOpen: boolean;
     onOpenChange: (open: boolean) => void;
+    agentOnline?: boolean;
+    onAgentOffline?: () => void;
 }
 
-const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailViewProps) => {
+const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAgentOffline }: ProspectDetailViewProps) => {
     const { t } = useLanguage();
     const { toast } = useToast();
     const { getKeyByProvider } = useApiKeys();
@@ -116,6 +118,17 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
     const handleEnrich = async () => {
         if (!currentProspect) return;
 
+        // Check for local agent if required
+        if (!agentOnline && onAgentOffline) {
+            onAgentOffline();
+            toast({
+                title: "Agent Prospecta requis",
+                description: "L'agent de scraping doit être actif sur votre ordinateur pour l'enrichissement.",
+                variant: "destructive"
+            });
+            return;
+        }
+
         // Ensure saved before enriching to have a valid UUID for updates
         const savedId = await ensureProspectSaved();
         if (!savedId) return;
@@ -149,7 +162,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
             });
 
             const endpoint = hasWebsite ? '/api/scrape/enrich-website' : '/api/scrape/enrich-google';
-            const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:3001';
+            const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:7842';
             const eventSource = new EventSource(`${serverUrl}${endpoint}?${queryParams.toString()}`);
 
             eventSource.onmessage = async (event) => {
