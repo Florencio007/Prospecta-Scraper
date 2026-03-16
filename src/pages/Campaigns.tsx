@@ -4,6 +4,7 @@ import EmailCampaignManager, { Campaign as PremiumCampaign } from "@/components/
 import CreateCampaignDialog from "@/components/dashboard/CreateCampaignDialog";
 import CampaignsSubNav from "@/components/dashboard/CampaignsSubNav";
 import EmailTemplateGenerator from "@/components/dashboard/EmailTemplateGenerator";
+import Inbox from "@/pages/Inbox";
 import { Button } from "@/components/ui/button";
 import { Plus, Mail, Layout } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
@@ -27,7 +28,7 @@ const Campaigns = () => {
 
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
-  const [activeTab, setActiveTab] = useState<"campaigns" | "templates">("campaigns");
+  const [activeTab, setActiveTab] = useState<"campaigns" | "templates" | "inbox">("campaigns");
   const { getKeyByProvider } = useApiKeys();
 
   // Hook unifié pour les campagnes
@@ -240,8 +241,12 @@ const Campaigns = () => {
                 onRefineAI={handleRefineAI}
               />
             </div>
-          ) : (
+          ) : activeTab === "templates" ? (
             <EmailTemplateGenerator />
+          ) : (
+            <div className="animate-in fade-in duration-700 slide-in-from-bottom-2">
+              <Inbox />
+            </div>
           )}
         </ApiKeyGuard>
       </main>

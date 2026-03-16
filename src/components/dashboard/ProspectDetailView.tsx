@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, Globe, MessageCircle, ExternalLink, ShieldCheck, Zap, Linkedin, Facebook, Instagram, Twitter, Youtube, Pin, Share2, Copy, Save, X, MapPin, Sparkles, Loader2, Plus, Clock, Users, MessageSquare, ThumbsUp, Star, Info } from "lucide-react";
+import { Mail, Phone, Globe, MessageCircle, ExternalLink, ShieldCheck, Zap, Linkedin, Facebook, Instagram, Twitter, Youtube, Pin, Share2, Copy, Save, X, MapPin, Sparkles, Loader2, Plus, Clock, Users, MessageSquare, ThumbsUp, Star, Info, Building2, User } from "lucide-react";
 import { Prospect } from "@/data/mockData";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useToast } from "@/hooks/use-toast";
@@ -324,6 +324,12 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
             lowerUrl.includes("tiktok.com");
     };
 
+    const getTypeIcon = (type?: string) => {
+        const iconProps = { size: 12, className: "inline-block mr-1" };
+        if (type === "company") return <Building2 {...iconProps} />;
+        return <User {...iconProps} />;
+    };
+
     const getUrlIcon = (url: string) => {
         const lowerUrl = url.toLowerCase();
         if (lowerUrl.includes("facebook.com")) return { icon: <Facebook size={14} />, color: "text-blue-500", bgColor: "bg-blue-500/10", borderColor: "hover:border-blue-500/30", label: "Facebook" };
@@ -446,7 +452,10 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                     phone: currentProspect.phone,
                     initials: currentProspect.initials,
                     website: currentProspect.website,
-                    contract_details: currentProspect.contractDetails || null,
+                    contract_details: {
+                        ...(currentProspect.contractDetails || {}),
+                        prospect_type: currentProspect.prospect_type || (currentProspect.contractDetails as any)?.prospect_type || 'person'
+                    },
                     ai_intelligence: currentProspect.aiIntelligence || null
                 }] as any);
 
@@ -531,6 +540,15 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                     )}
                                                 </div>
                                             )}
+                                            <div className="flex justify-center mt-3">
+                                                <Badge
+                                                    variant="outline"
+                                                    className="bg-accent/5 border-accent/20 text-[10px] font-bold py-1 px-3 rounded-full flex items-center gap-1.5"
+                                                >
+                                                    {getTypeIcon(currentProspect.prospect_type || (currentProspect.contractDetails as any)?.prospect_type)}
+                                                    {(currentProspect.prospect_type || (currentProspect.contractDetails as any)?.prospect_type) === "company" ? "Entreprise" : "Personne"}
+                                                </Badge>
+                                            </div>
                                         </div>
                                     </div>
 

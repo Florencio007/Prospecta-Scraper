@@ -1,0 +1,77 @@
+{
+  "name": "prospecta-agent",
+  "version": "1.0.0",
+  "description": "Prospectator — Prospecta Motor",
+  "main": "src/main.js",
+  "author": "Prospectator",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build:mac": "electron-builder --mac --x64 --arm64",
+    "build:win": "electron-builder --win --x64",
+    "build:linux": "electron-builder --linux --x64",
+    "build:all": "electron-builder --mac --win --linux"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.0.0"
+  },
+  "build": {
+    "appId": "ai.prospecta.agent",
+    "productName": "Prospectator",
+    "copyright": "Copyright © 2025 Prospectator",
+    "directories": {
+      "output": "dist",
+      "buildResources": "assets"
+    },
+    "files": [
+      "src/**/*",
+      "scripts/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "scripts/",
+        "to": "scripts/",
+        "filter": ["**/*"]
+      }
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        { "target": "dmg", "arch": ["x64", "arm64"] }
+      ],
+      "icon": "assets/icon.png"
+    },
+    "dmg": {
+      "title": "Prospectator",
+      "backgroundColor": "#0f0f23",
+      "window": { "width": 540, "height": 380 },
+      "contents": [
+        { "x": 130, "y": 190, "type": "file" },
+        { "x": 410, "y": 190, "type": "link", "path": "/Applications" }
+      ]
+    },
+    "win": {
+      "target": [
+        { "target": "nsis", "arch": ["x64"] }
+      ],
+      "icon": "assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Prospectator",
+      "license": "assets/LICENSE.txt",
+      "language": "1036"
+    },
+    "linux": {
+      "target": ["AppImage", "deb"],
+      "icon": "assets/icons",
+      "category": "Network"
+    }
+  }
+}

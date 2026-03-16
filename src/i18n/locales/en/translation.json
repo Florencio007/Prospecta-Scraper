@@ -616,5 +616,6 @@
   "error404": "404",
   "metaTitle": "Prospecta",
   "metaDescription": "Multi-channel prospecting platform for Malagasy companies",
-  "ogDescription": "Find your future customers across all networks."
+  "ogDescription": "Find your future customers across all networks.",
+  "inbox": "Inbox"
 }

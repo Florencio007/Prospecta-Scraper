@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { Plus, Search, Filter, Mail, Linkedin, Facebook, MessageCircle, Globe, Instagram, Music, Zap, CheckCircle2, XCircle, MoreVertical, Trash2, Phone, ExternalLink, Loader2 } from "lucide-react";
+import { Plus, Search, Filter, Mail, Linkedin, Facebook, MessageCircle, Globe, Instagram, Music, Zap, CheckCircle2, XCircle, MoreVertical, Trash2, Phone, ExternalLink, Loader2, Building2, User } from "lucide-react";
 import Header from "@/components/dashboard/Header";
-import ProspectsSubNav from "@/components/dashboard/ProspectsSubNav";
 import ProspectDetailView from "@/components/dashboard/ProspectDetailView";
 import CampaignSelectionDialog from "@/components/dashboard/CampaignSelectionDialog";
 import { Button } from "@/components/ui/button";
@@ -69,6 +68,7 @@ const Prospects = () => {
   const [filterPhone, setFilterPhone] = useState(false);
   const [filterLinkedin, setFilterLinkedin] = useState(false);
   const [filterWebsite, setFilterWebsite] = useState(false);
+  const [activeTypeTab, setActiveTypeTab] = useState<string>("all");
   const [isBulkDeleteConfirmOpen, setIsBulkDeleteConfirmOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
@@ -100,6 +100,12 @@ const Prospects = () => {
       case "tiktok": return <Music {...iconProps} />;
       default: return <Globe {...iconProps} />;
     }
+  };
+
+  const getTypeIcon = (type: string) => {
+    const iconProps = { size: 14, className: "inline-block mr-1.5" };
+    if (type === "company") return <Building2 {...iconProps} />;
+    return <User {...iconProps} />;
   };
 
   const getScoreVariant = (score: number) => {
@@ -146,9 +152,10 @@ const Prospects = () => {
           name: pd.name || p.name || 'Nom inconnu',
           company: pd.company || p.company || 'Entreprise inconnue',
           position: pd.position || p.position || '',
-          email: pd.email || p.email || '',
+           email: pd.email || p.email || '',
           photoUrl: pd.photo_url || p.photoUrl || '',
-          initials: pd.initials || p.initials || (pd.name || p.name || 'N').substring(0, 2).toUpperCase()
+          initials: pd.initials || p.initials || (pd.name || p.name || 'N').substring(0, 2).toUpperCase(),
+          prospect_type: pd.contract_details?.prospect_type || 'person'
         };
       }) || [];
 
@@ -284,7 +291,10 @@ const Prospects = () => {
         website: formData.website_url || null,
         address: formData.address || null,
         summary: formData.summary || null,
-        social_links: formData.linkedin_url ? { linkedin: formData.linkedin_url } : null
+        social_links: formData.linkedin_url ? { linkedin: formData.linkedin_url } : null,
+        contract_details: {
+          prospect_type: (formData as any).prospect_type // Save the type
+        }
       }]);
 
       if (pdError) throw pdError;
@@ -303,6 +313,7 @@ const Prospects = () => {
         linkedin_url: "",
         address: "",
         summary: "",
+        prospect_type: "person", // Default to person for manual add
       });
       loadProspects(true);
     } catch (error: any) {
@@ -400,20 +411,14 @@ const Prospects = () => {
     const matchesPhone = filterPhone ? !!p.phone : true;
     const matchesLinkedin = filterLinkedin ? !!(p.socialLinks?.linkedin || p.social_links?.linkedin) : true;
     const matchesWebsite = filterWebsite ? !!(p.website_url || p.websiteUrl) : true;
-    return matchesSearch && matchesSource && matchesEmail && matchesPhone && matchesLinkedin && matchesWebsite;
-  }), [prospects, debouncedSearch, filterSource, filterEmail, filterPhone, filterLinkedin, filterWebsite]);
+    const matchesType = activeTypeTab === "all" ? true : p.prospect_type === activeTypeTab;
+    return matchesSearch && matchesSource && matchesEmail && matchesPhone && matchesLinkedin && matchesWebsite && matchesType;
+  }), [prospects, debouncedSearch, filterSource, filterEmail, filterPhone, filterLinkedin, filterWebsite, activeTypeTab]);
 
   return (
     <div className="min-h-screen bg-secondary">
       <Header />
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">{t("myProspects")}</h1>
-            <p className="text-muted-foreground font-light">{t("manageProspects")}</p>
-          </div>
-          <ProspectsSubNav onNewManual={() => setIsDialogOpen(true)} />
-        </div>
+      <main className="pt-24 pb-12 px-4 sm:px-6 max-w-7xl mx-auto">
 
         <div
           className={`rounded-lg border bg-card/80 backdrop-blur-md p-4 shadow-sm mb-6 sticky z-30 transition-all duration-300 ${isVisible ? "top-16 opacity-100 translate-y-0" : "-top-20 opacity-0 -translate-y-4"
@@ -480,6 +485,41 @@ const Prospects = () => {
               <span className="hidden md:inline">Nettoyer doublons</span>
             </Button>
           </div>
+
+          <div className="flex items-center gap-1 mt-4 border-t pt-4">
+            <button
+              onClick={() => setActiveTypeTab("all")}
+              className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${
+                activeTypeTab === "all"
+                ? "bg-accent text-white shadow-sm"
+                : "text-muted-foreground hover:bg-accent/10"
+              }`}
+            >
+              Tous
+            </button>
+            <button
+              onClick={() => setActiveTypeTab("person")}
+              className={`px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
+                activeTypeTab === "person"
+                ? "bg-accent text-white shadow-sm"
+                : "text-muted-foreground hover:bg-accent/10"
+              }`}
+            >
+              <User size={14} />
+              Personnes
+            </button>
+            <button
+              onClick={() => setActiveTypeTab("company")}
+              className={`px-4 py-2 text-sm font-medium rounded-md transition-all flex items-center gap-2 ${
+                activeTypeTab === "company"
+                ? "bg-accent text-white shadow-sm"
+                : "text-muted-foreground hover:bg-accent/10"
+              }`}
+            >
+              <Building2 size={14} />
+              Entreprises
+            </button>
+          </div>
         </div>
 
         <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
@@ -516,7 +556,7 @@ const Prospects = () => {
                         onCheckedChange={() => toggleSelect(p.id)}
                       />
                     </TableCell>
-                    <TableCell><div className="flex items-center gap-3"><div className="h-9 w-9 rounded-full bg-accent/10 flex items-center justify-center font-bold text-accent">{p.initials}</div><div><div className="font-bold">{p.name}</div><div className="text-xs text-muted-foreground">{p.company}</div></div></div></TableCell>
+                    <TableCell><div className="flex items-center gap-3"><div className="h-9 w-9 rounded-full bg-accent/10 flex items-center justify-center font-bold text-accent">{p.initials}</div><div><div className="font-bold flex items-center gap-2">{getTypeIcon(p.prospect_type)} {p.name}</div><div className="text-xs text-muted-foreground">{p.company}</div></div></div></TableCell>
                     <TableCell className="text-sm">{p.position}</TableCell>
                     <TableCell><Badge variant="outline" className="font-normal">{getSourceIcon(p.source)} {p.source}</Badge></TableCell>
                     <TableCell><Badge variant={getScoreVariant(p.score)}>{p.score}%</Badge></TableCell>
@@ -597,6 +637,27 @@ const Prospects = () => {
             </div>
             <div className="space-y-2"><Label>{t("address")}</Label><Input value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} /></div>
             <div className="space-y-2"><Label>{t("summary")}</Label><Input value={formData.summary} onChange={e => setFormData({ ...formData, summary: e.target.value })} placeholder={t("notes") || "Notes..."} /></div>
+            <div className="space-y-2">
+              <Label>{t("prospectType") || "Type de prospect"}</Label>
+              <div className="flex gap-2">
+                <Button 
+                  type="button"
+                  variant={(formData as any).prospect_type === "person" ? "default" : "outline"}
+                  className="flex-1 h-9 text-xs font-bold"
+                  onClick={() => setFormData({ ...formData, prospect_type: "person" } as any)}
+                >
+                  Personne
+                </Button>
+                <Button 
+                  type="button"
+                  variant={(formData as any).prospect_type === "company" ? "default" : "outline"}
+                  className="flex-1 h-9 text-xs font-bold"
+                  onClick={() => setFormData({ ...formData, prospect_type: "company" } as any)}
+                >
+                  Entreprise
+                </Button>
+              </div>
+            </div>
             <DialogFooter><Button type="submit" className="w-full bg-accent">{t("save")}</Button></DialogFooter>
           </form>
         </DialogContent>

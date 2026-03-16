@@ -179,6 +179,7 @@ export interface Prospect {
   name: string;
   initials: string;
   summary?: string;
+  prospect_type?: string; 
   position: string;
   company: string;
   source: string;

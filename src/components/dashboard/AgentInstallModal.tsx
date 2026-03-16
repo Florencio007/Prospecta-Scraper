@@ -14,14 +14,14 @@ const RELEASE_URL = "https://github.com/Florencio007/Prospecta-Scraper/releases/
 const downloads = [
   { 
     os: "Windows", 
-    filename: "Prospecta.Agent.Setup.1.0.0.exe", 
+    filename: "Prospectator Setup 1.0.0.exe", 
     icon: "/windows-logo.jpg",
     description: "Version 1.0.0 - Windows 10/11",
     label: "Télécharger pour Windows"
   },
   { 
     os: "macOS", 
-    filename: "Prospecta.Agent-1.0.0.dmg", 
+    filename: "Prospectator-1.0.0.dmg", 
     icon: "/apple-logo.png",
     description: "Intel & Apple Silicon (M1/M2/M3)",
     label: "Télécharger pour Mac"
@@ -31,9 +31,10 @@ const downloads = [
 interface Props {
   open: boolean;
   onOpenChange: (v: boolean) => void;
+  onConfirm?: () => void;
 }
 
-export const AgentInstallModal = ({ open, onOpenChange }: Props) => (
+export const AgentInstallModal = ({ open, onOpenChange, onConfirm }: Props) => (
   <Dialog open={open} onOpenChange={onOpenChange}>
     <DialogContent className="sm:max-w-[500px] p-0 overflow-hidden border border-border/50 shadow-2xl bg-card text-card-foreground max-h-[90vh] overflow-y-auto rounded-[2rem] font-outfit">
       <div className="p-5 space-y-4">
@@ -71,7 +72,7 @@ export const AgentInstallModal = ({ open, onOpenChange }: Props) => (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* Windows */}
           <a
-            href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospecta.Agent.Setup.1.0.0.exe"
+            href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospectator Setup 1.0.0.exe"
             target="_blank"
             rel="noopener noreferrer"
             className="flex flex-col items-center p-3.5 rounded-2xl border border-border/50 bg-secondary/50 hover:bg-accent/10 hover:border-accent/40 transition-all duration-300 group text-center space-y-2"
@@ -108,7 +109,7 @@ export const AgentInstallModal = ({ open, onOpenChange }: Props) => (
                 M1/M2/M3
               </a>
               <a
-                href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospecta.Agent-1.0.0.dmg"
+                href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospectator-1.0.0.dmg"
                 className="text-[9px] bg-card text-muted-foreground font-black py-1.5 rounded-lg transition-all hover:bg-secondary flex items-center justify-center gap-1 border border-border/50"
               >
                 INTEL
@@ -120,14 +121,22 @@ export const AgentInstallModal = ({ open, onOpenChange }: Props) => (
         {/* Footer actions */}
         <div className="flex flex-col items-center space-y-3 pt-4">
           <Button
-            onClick={() => window.location.reload()}
+            onClick={() => {
+              // Persiste la confirmation de l'agent dans localStorage
+              localStorage.setItem('prospecta_agent_confirmed', 'true');
+              if (onConfirm) {
+                onConfirm();
+              } else {
+                window.location.reload();
+              }
+            }}
             className="w-full h-12 bg-accent text-accent-foreground hover:opacity-90 rounded-2xl font-black text-sm shadow-[0_0_20px_rgba(16,185,129,0.3)] dark:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all hover:scale-[1.02] active:scale-[0.98] gap-2 border-none ring-1 ring-accent/30 ring-offset-2 ring-offset-card"
           >
             <RefreshCcw size={16} className="font-bold" />
             J'AI FINI L'INSTALLATION
           </Button>
           <p className="text-[9px] text-muted-foreground font-mono tracking-tighter uppercase">
-            v1.0.0 Stable · Connexion locale sécurisée · Prospecta AI
+            v1.0.0 Stable · Connexion locale sécurisée · Prospecta Motor
           </p>
         </div>
       </div>

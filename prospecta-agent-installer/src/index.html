@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+  <title>Prospectator</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ═══════════════════════════════════════════════
+       TOKENS — Premium Light Mode
+    ═══════════════════════════════════════════════ */
+    :root {
+      --bg:           #F8FAFC;
+      --bg-card:      #FFFFFF;
+      --bg-card2:     #F1F5F9;
+      --bg-input:     #FFFFFF;
+      --border:       rgba(15, 23, 42, 0.08);
+      --border-em:    rgba(16, 185, 129, 0.25);
+      --emerald:      #059669;
+      --emerald2:     #10B981;
+      --emerald-bg:   rgba(16, 185, 129, 0.05);
+      --emerald-dim:  #ECFDF5;
+      --red:          #E11D48;
+      --red-bg:       rgba(225, 29, 72, 0.05);
+      --amber:        #D97706;
+      --text-1:       #0F172A;
+      --text-2:       #475569;
+      --text-3:       #94A3B8;
+      --radius:       12px;
+      --radius-sm:    8px;
+      --shadow:       0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      --shadow-lg:    0 10px 15px -3px rgba(0, 0, 0, 0.03), 0 4px 6px -4px rgba(0, 0, 0, 0.03);
+      --logo-src:     url('../assets/logo_prospecta_dark.png');
+    }
+
+    /* ═══════════════════════════════════════════════
+       Base
+    ═══════════════════════════════════════════════ */
+    body {
+      font-family: 'Outfit', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-1);
+      height: 100vh;
+      overflow: hidden;
+      user-select: none;
+      -webkit-app-region: drag;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    button, a, input { -webkit-app-region: no-drag; }
+
+    /* Glow haut de page (dark only) */
+    [data-theme="dark"] body::after {
+      content: '';
+      position: fixed;
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      width: 380px; height: 200px;
+      background: radial-gradient(ellipse, rgba(16,185,129,0.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    /* ═══════════════════════════════════════════════
+       Header
+    ═══════════════════════════════════════════════ */
+    .header {
+      padding: 18px 24px 16px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .logo {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      flex-shrink: 0;
+      transition: opacity 0.3s;
+    }
+
+    .header-text { flex: 1; }
+
+    .header-text h1 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-1);
+      letter-spacing: -0.2px;
+      line-height: 1;
+    }
+
+    .header-text span {
+      font-size: 11px;
+      font-weight: 300;
+      color: var(--text-3);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Toggle thème */
+    .theme-toggle {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--bg-card2);
+      color: var(--text-2);
+      font-size: 13px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      -webkit-app-region: no-drag;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--border-em);
+      color: var(--emerald);
+    }
+
+    .version-pill {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 1px solid var(--border-em);
+      color: var(--emerald);
+      background: var(--emerald-bg);
+      letter-spacing: 0.4px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       Content
+    ═══════════════════════════════════════════════ */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 24px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--bg-card2) transparent;
+    }
+
+    .content::-webkit-scrollbar { width: 3px; }
+    .content::-webkit-scrollbar-thumb { background: var(--bg-card2); border-radius: 2px; }
+
+    /* ═══════════════════════════════════════════════
+       Status card
+    ═══════════════════════════════════════════════ */
+    .status-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      margin-bottom: 18px;
+      transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
+      box-shadow: var(--shadow);
+    }
+
+    .status-card.running  { border-color: var(--border-em); }
+    .status-card.error    { border-color: rgba(239,68,68,0.25); }
+
+    .status-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: var(--bg-card2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.3s;
+      position: relative;
+    }
+
+    .status-icon svg {
+      width: 20px; height: 20px;
+      stroke-width: 2; fill: none;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    .status-icon.pulse-ring::after {
+      content: '';
+      position: absolute; inset: -5px;
+      border-radius: 14px;
+      border: 1.5px solid var(--emerald);
+      animation: ring-pulse 2s ease-out infinite;
+      opacity: 0;
+    }
+
+    @keyframes ring-pulse {
+      0%  { transform: scale(0.9); opacity: 0.6; }
+      100%{ transform: scale(1.3); opacity: 0; }
+    }
+
+    .status-text h2 { font-size: 13px; font-weight: 600; margin-bottom: 2px; color: var(--text-1); }
+    .status-text p  { font-size: 11px; font-weight: 300; color: var(--text-2); }
+
+    /* ═══════════════════════════════════════════════
+       Progress
+    ═══════════════════════════════════════════════ */
+    .progress-section { display: none; margin-bottom: 16px; }
+    .progress-section.visible { display: block; }
+
+    .progress-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 7px;
+    }
+
+    .progress-msg {
+      font-size: 11px; color: var(--text-2);
+      max-width: 78%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+
+    .progress-pct { font-size: 11px; font-weight: 700; color: var(--emerald); font-variant-numeric: tabular-nums; }
+
+    .progress-track {
+      height: 3px; background: var(--bg-card2);
+      border-radius: 2px; overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--emerald), var(--emerald2));
+      border-radius: 2px; width: 0%;
+      transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+      position: relative;
+    }
+
+    .progress-bar::after {
+      content: '';
+      position: absolute; right: 0; top: -1px;
+      width: 6px; height: 5px;
+      background: var(--emerald2);
+      border-radius: 3px;
+      box-shadow: 0 0 6px var(--emerald);
+    }
+
+    /* ═══════════════════════════════════════════════
+       Terminal
+    ═══════════════════════════════════════════════ */
+    .terminal { display: none; border-radius: var(--radius); margin-bottom: 16px; overflow: hidden; border: 1px solid var(--border); }
+    .terminal.visible { display: block; }
+
+    .terminal-bar {
+      display: flex; align-items: center; gap: 5px;
+      padding: 7px 11px;
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card);
+    }
+
+    [data-theme="dark"] .terminal-bar { background: rgba(13,21,33,0.8); }
+
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot-r { background: #ff5f57; }
+    .dot-y { background: #ffbd2e; }
+    .dot-g { background: #28c840; }
+
+    .terminal-title {
+      font-size: 10px; font-weight: 500;
+      color: var(--text-3);
+      margin: 0 auto;
+      letter-spacing: 0.5px;
+    }
+
+    .terminal-body {
+      padding: 9px 13px;
+      max-height: 95px;
+      overflow-y: auto;
+      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-size: 10.5px; line-height: 1.65;
+      background: #000000;
+      color: #00ff00;
+      scrollbar-width: none;
+    }
+
+    .terminal-body::-webkit-scrollbar { display: none; }
+
+    .log-line          { color: #00ff00; }
+    .log-line.ok       { color: #00ff00; }
+    .log-line.err      { color: #ff5f57; }
+    .log-line.info     { color: #00ff00; }
+    .log-line::before  { content: '› '; opacity: 0.45; }
+
+    /* ═══════════════════════════════════════════════
+       Port badge
+    ═══════════════════════════════════════════════ */
+    .port-badge {
+      display: none; align-items: center; gap: 8px;
+      padding: 8px 13px;
+      background: var(--emerald-bg);
+      border: 1px solid var(--border-em);
+      border-radius: var(--radius);
+      font-size: 11px; font-weight: 400;
+      color: var(--text-2);
+      margin-bottom: 18px;
+    }
+
+    .port-badge.visible { display: flex; }
+
+    .port-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--emerald);
+      box-shadow: 0 0 5px var(--emerald);
+      animation: blink 2s ease-in-out infinite;
+    }
+
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+    .port-badge code {
+      font-family: 'SF Mono','Fira Code',monospace;
+      font-size: 10.5px; color: var(--emerald);
+      background: rgba(16,185,129,0.1);
+      padding: 1px 6px; border-radius: 4px;
+    }
+
+    /* ═══════════════════════════════════════════════
+       Steps
+    ═══════════════════════════════════════════════ */
+    .section-label {
+      font-size: 10px; font-weight: 600;
+      color: var(--text-3);
+      text-transform: uppercase; letter-spacing: 1px;
+      margin-bottom: 9px;
+    }
+
+    .steps { display: flex; flex-direction: column; gap: 7px; margin-bottom: 18px; }
+
+    .step {
+      display: flex; align-items: center; gap: 11px;
+      padding: 12px 14px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      transition: border-color 0.25s, background 0.25s;
+      box-shadow: var(--shadow);
+    }
+
+    .step.done       { border-color: var(--border-em); background: var(--emerald-bg); }
+    .step.active     { border-color: var(--border-em); }
+    .step.error-step { border-color: rgba(239,68,68,0.2); background: var(--red-bg); }
+
+    .step-ico {
+      width: 28px; height: 28px;
+      border-radius: 7px;
+      background: var(--bg-card2);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background 0.25s;
+    }
+
+    .step.done       .step-ico { background: var(--emerald-dim); }
+    .step.active     .step-ico { background: rgba(16,185,129,0.12); }
+    .step.error-step .step-ico { background: rgba(239,68,68,0.1); }
+
+    .step-ico svg {
+      width: 13px; height: 13px;
+      stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round;
+      fill: none; stroke: var(--text-3);
+      transition: stroke 0.25s;
+    }
+
+    .step.done       .step-ico svg { stroke: var(--emerald); }
+    .step.active     .step-ico svg { stroke: var(--emerald2); }
+    .step.error-step .step-ico svg { stroke: var(--red); }
+
+    .step-body { flex: 1; }
+    .step-body h3 { font-size: 12px; font-weight: 600; color: var(--text-1); line-height: 1; }
+    .step-body p  { font-size: 11px; font-weight: 300; color: var(--text-3); margin-top: 2px; }
+
+    .step-badge {
+      width: 19px; height: 19px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      font-size: 9px; font-weight: 700;
+      background: var(--bg-card2);
+      color: var(--text-3);
+      border: 1px solid var(--border);
+      transition: all 0.25s;
+    }
+
+    .step.done .step-badge       { background: var(--emerald); color: #fff; border-color: var(--emerald); font-size: 10px; }
+    .step.error-step .step-badge { background: var(--red); color: #fff; border-color: var(--red); }
+
+    /* ═══════════════════════════════════════════════
+       Buttons
+    ═══════════════════════════════════════════════ */
+    .actions { display: flex; gap: 8px; }
+
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      border: none;
+      font-family: 'Outfit', sans-serif;
+      font-size: 12px; font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: -0.1px;
+      -webkit-app-region: no-drag;
+    }
+
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn svg {
+      width: 13px; height: 13px;
+      stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
+      fill: none; stroke: currentColor; flex-shrink: 0;
+    }
+
+    .btn-primary {
+      background: var(--emerald);
+      color: #fff; flex: 1;
+      box-shadow: 0 3px 12px rgba(16,185,129,0.3);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--emerald2);
+      box-shadow: 0 4px 16px rgba(16,185,129,0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-danger {
+      background: var(--red-bg);
+      color: var(--red);
+      border: 1px solid rgba(239,68,68,0.2);
+      flex: 1;
+    }
+
+    .btn-danger:hover:not(:disabled) { background: rgba(239,68,68,0.14); }
+
+    .btn-ghost {
+      background: var(--bg-card);
+      color: var(--text-2);
+      border: 1px solid var(--border);
+      flex: 2;
+    }
+
+    .btn-ghost:hover:not(:disabled) {
+      color: var(--emerald);
+      border-color: var(--border-em);
+    }
+
+    /* spinner */
+    .spinner {
+      width: 12px; height: 12px;
+      border: 2px solid rgba(255,255,255,0.2);
+      border-top-color: currentColor;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+
+    [data-theme="light"] .spinner { border-color: rgba(0,0,0,0.1); border-top-color: var(--emerald); }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ═══════════════════════════════════════════════
+       Footer
+    ═══════════════════════════════════════════════ */
+    .footer {
+      padding: 11px 24px;
+      border-top: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--bg);
+      transition: background 0.3s;
+    }
+
+    .footer-link {
+      font-size: 11px; font-weight: 400;
+      color: var(--text-3);
+      cursor: pointer; text-decoration: none;
+      transition: color 0.2s;
+      display: flex; align-items: center; gap: 5px;
+    }
+
+    .footer-link:hover { color: var(--emerald); }
+
+    .footer-link svg {
+      width: 11px; height: 11px;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+    }
+
+    /* ═══════════════════════════════════════════════
+       Animations entrée
+    ═══════════════════════════════════════════════ */
+    .status-card, .steps, .actions { animation: fadeUp 0.3s ease both; }
+    .steps   { animation-delay: 0.04s; }
+    .actions { animation-delay: 0.08s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(6px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <header class="header">
+    <img class="logo" id="logoImg" src="../assets/logo_prospecta_dark.png" alt="Prospecta">
+    <div class="header-text">
+      <h1>Prospectator</h1>
+      <span>Prospecta Motor</span>
+    </div>
+    <div class="header-right">
+      <div class="version-pill">v1.1.0</div>
+    </div>
+  </header>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- Status -->
+    <div class="status-card" id="statusCard">
+      <div class="status-icon" id="statusIcon"></div>
+      <div class="status-text">
+        <h2 id="statusTitle">Vérification...</h2>
+        <p id="statusDesc">Connexion à l'agent local</p>
+      </div>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-section" id="progressSection">
+      <div class="progress-header">
+        <span class="progress-msg" id="progressMsg">Installation...</span>
+        <span class="progress-pct" id="progressPct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+
+    <!-- Terminal -->
+    <div class="terminal" id="terminal">
+      <div class="terminal-bar">
+        <div class="dot dot-r"></div>
+        <div class="dot dot-y"></div>
+        <div class="dot dot-g"></div>
+        <span class="terminal-title">prospectator — log</span>
+      </div>
+      <div class="terminal-body" id="terminalBody"></div>
+    </div>
+
+    <!-- Port badge -->
+    <div class="port-badge" id="portBadge">
+      <div class="port-dot"></div>
+      Agent actif sur <code>localhost:7842</code>
+    </div>
+
+    <!-- Steps -->
+    <p class="section-label">Configuration</p>
+    <div class="steps">
+
+      <div class="step pending" id="stepNode">
+        <div class="step-ico">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="9" stroke-dasharray="3 3"/></svg>
+        </div>
+        <div class="step-body">
+          <h3>Node.js</h3>
+          <p id="nodeStepDesc">Environnement d'exécution JavaScript</p>
+        </div>
+        <div class="step-badge" id="badgeNode">?</div>
+      </div>
+
+      <div class="step pending" id="stepPlaywright">
+        <div class="step-ico">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="14" rx="2"/><line x1="7" y1="21" x2="17" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="step-body">
+          <h3>Playwright + Chromium</h3>
+          <p>Navigateur automatisé pour le scraping</p>
+        </div>
+        <div class="step-badge" id="badgePlaywright">?</div>
+      </div>
+
+      <div class="step pending" id="stepServer">
+        <div class="step-ico">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="5" rx="1"/><rect x="2" y="10" width="20" height="5" rx="1"/><rect x="2" y="17" width="20" height="5" rx="1"/><circle cx="18" cy="5.5" r="1" fill="currentColor" stroke="none"/><circle cx="18" cy="12.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <div class="step-body">
+          <h3>Serveur local</h3>
+          <p>Écoute sur le port 7842</p>
+        </div>
+        <div class="step-badge" id="badgeServer">?</div>
+      </div>
+
+    </div>
+
+    <!-- Actions -->
+    <div class="actions" id="mainActions"></div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <a class="footer-link" onclick="window.agent.openLogs()">
+      <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Logs
+    </a>
+    <a class="footer-link" onclick="window.agent.openProspecta()">
+      ouvrir prospecta
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </footer>
+
+</div>
+
+<script>
+// ── Thème (Forçage Mode Clair) ─────────────────────────────────────────────
+document.documentElement.setAttribute('data-theme', 'light');
+const logoImg = document.getElementById('logoImg');
+logoImg.src = '../assets/logo_prospecta_dark.png';
+
+// ── SVG Icons ──────────────────────────────────────────────────────────────
+const IC = {
+  warning: `<svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:#f59e0b;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+  check:   `<svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:#10B981;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round"><polyline points="20 6 9 17 4 12"/></svg>`,
+  pause:   `<svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:var(--text-3);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>`,
+  gear:    `<svg viewBox="0 0 24 24" style="width:20px;height:20px;stroke:#60a5fa;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;animation:spin 1.5s linear infinite"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>`,
+  play:    `<svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:currentColor;stroke:none"><polygon points="5 3 19 12 5 21 5 3"/></svg>`,
+  stop:    `<svg viewBox="0 0 24 24" style="width:13px;height:13px;fill:currentColor;stroke:none"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>`,
+  rocket:  `<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/></svg>`,
+  dl:      `<svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`,
+};
+
+// ── State ──────────────────────────────────────────────────────────────────
+let state = {
+  nodeInstalled: false, nodeIsLocal: false,
+  playwrightInstalled: false, serverExists: false,
+  agentRunning: false, installing: false,
+};
+
+// ── Refs ───────────────────────────────────────────────────────────────────
+const statusCard      = document.getElementById('statusCard');
+const statusIcon      = document.getElementById('statusIcon');
+const statusTitle     = document.getElementById('statusTitle');
+const statusDesc      = document.getElementById('statusDesc');
+const stepNode        = document.getElementById('stepNode');
+const stepPlaywright  = document.getElementById('stepPlaywright');
+const stepServer      = document.getElementById('stepServer');
+const badgeNode       = document.getElementById('badgeNode');
+const badgePlaywright = document.getElementById('badgePlaywright');
+const badgeServer     = document.getElementById('badgeServer');
+const progressSection = document.getElementById('progressSection');
+const progressMsg     = document.getElementById('progressMsg');
+const progressPct     = document.getElementById('progressPct');
+const progressBar     = document.getElementById('progressBar');
+const terminal        = document.getElementById('terminal');
+const terminalBody    = document.getElementById('terminalBody');
+const portBadge       = document.getElementById('portBadge');
+const mainActions     = document.getElementById('mainActions');
+
+// ── Helpers ────────────────────────────────────────────────────────────────
+function setStep(el, badge, status) {
+  el.className = `step ${status}`;
+  if      (status === 'done')       badge.textContent = '✓';
+  else if (status === 'active')     badge.innerHTML = '<div class="spinner"></div>';
+  else if (status === 'error-step') badge.textContent = '✕';
+  else                              badge.textContent = '?';
+}
+
+function log(msg, type = 'info') {
+  terminal.classList.add('visible');
+  const line = document.createElement('div');
+  line.className = `log-line ${type}`;
+  line.textContent = msg;
+  terminalBody.appendChild(line);
+  terminalBody.scrollTop = terminalBody.scrollHeight;
+}
+
+function setProgress(pct, msg) {
+  progressSection.classList.add('visible');
+  progressBar.style.width = `${pct}%`;
+  progressPct.textContent = `${pct}%`;
+  progressMsg.textContent = msg;
+}
+
+function renderActions() {
+  mainActions.innerHTML = '';
+  if (state.installing) return;
+  const allInstalled = state.playwrightInstalled && state.serverExists;
+  if (!allInstalled) {
+    const label = !state.nodeInstalled
+      ? `${IC.dl} Installer Node.js + l'agent`
+      : `${IC.dl} Installer l'agent`;
+    mainActions.innerHTML = `<button class="btn btn-primary" onclick="installAgent()" style="flex:1">${label}</button>`;
+    return;
+  }
+  if (state.agentRunning) {
+    mainActions.innerHTML = `
+      <button class="btn btn-danger" onclick="stopAgent()">${IC.stop} Arrêter</button>
+      <button class="btn btn-ghost" onclick="window.agent.openProspecta()">${IC.rocket} Ouvrir Prospecta AI</button>`;
+  } else {
+    mainActions.innerHTML = `<button class="btn btn-primary" onclick="startAgent()" style="flex:1">${IC.play} Démarrer l'agent</button>`;
+  }
+}
+
+function renderStatus() {
+  statusCard.className = 'status-card';
+  portBadge.classList.remove('visible');
+  statusIcon.className = 'status-icon';
+  const allInstalled = state.playwrightInstalled && state.serverExists;
+
+  if (state.installing) {
+    statusIcon.innerHTML = IC.gear;
+    statusTitle.textContent = 'Installation en cours...';
+    statusDesc.textContent = "Patientez 2 à 4 minutes";
+    setStep(stepNode, badgeNode, state.nodeInstalled ? 'done' : 'active');
+    setStep(stepPlaywright, badgePlaywright, state.nodeInstalled ? 'active' : 'pending');
+    setStep(stepServer, badgeServer, 'pending');
+
+  } else if (state.agentRunning) {
+    statusCard.classList.add('running');
+    statusIcon.classList.add('pulse-ring');
+    statusIcon.innerHTML = IC.check;
+    statusTitle.textContent = 'Agent actif';
+    statusDesc.textContent = 'En écoute sur localhost:7842';
+    portBadge.classList.add('visible');
+    setStep(stepNode, badgeNode, 'done');
+    setStep(stepPlaywright, badgePlaywright, 'done');
+    setStep(stepServer, badgeServer, 'done');
+
+  } else if (allInstalled) {
+    statusIcon.innerHTML = IC.pause;
+    statusTitle.textContent = 'Agent prêt';
+    statusDesc.textContent = "Cliquez Démarrer pour lancer";
+    setStep(stepNode, badgeNode, 'done');
+    setStep(stepPlaywright, badgePlaywright, 'done');
+    setStep(stepServer, badgeServer, 'pending');
+
+  } else if (!state.nodeInstalled) {
+    statusCard.classList.add('error');
+    statusIcon.innerHTML = IC.warning;
+    statusTitle.textContent = 'Node.js absent';
+    statusDesc.textContent = "Sera téléchargé automatiquement (~45 MB)";
+    document.getElementById('nodeStepDesc').textContent = 'Sera téléchargé automatiquement';
+    setStep(stepNode, badgeNode, 'error-step');
+    setStep(stepPlaywright, badgePlaywright, 'pending');
+    setStep(stepServer, badgeServer, 'pending');
+
+  } else {
+    statusCard.classList.add('error');
+    statusIcon.innerHTML = IC.warning;
+    statusTitle.textContent = 'Installation requise';
+    statusDesc.textContent = 'Playwright + Chromium doivent être installés';
+    setStep(stepNode, badgeNode, 'done');
+    setStep(stepPlaywright, badgePlaywright, 'pending');
+    setStep(stepServer, badgeServer, 'pending');
+  }
+
+  renderActions();
+}
+
+// ── Actions ────────────────────────────────────────────────────────────────
+async function checkStatus() {
+  const s = await window.agent.checkStatus();
+  state = { ...state, ...s };
+  renderStatus();
+}
+
+async function installAgent() {
+  state.installing = true;
+  renderStatus();
+  log("Démarrage de l'installation...", 'info');
+
+  window.agent.onInstallProgress(({ pct, msg }) => {
+    setProgress(pct, msg);
+    log(msg, pct === 100 ? 'ok' : 'info');
+  });
+
+  const result = await window.agent.install();
+  state.installing = false;
+
+  if (result.success) {
+    state.playwrightInstalled = true;
+    state.serverExists = true;
+    log('Installation terminée !', 'ok');
+    progressSection.classList.remove('visible');
+    renderStatus();
+    setTimeout(() => startAgent(), 800);
+  } else {
+    log(`Erreur : ${result.error}`, 'err');
+    renderStatus();
+  }
+}
+
+async function startAgent() {
+  log('Démarrage du serveur local...', 'info');
+  await window.agent.start();
+  setTimeout(checkStatus, 2000);
+}
+
+async function stopAgent() {
+  await window.agent.stop();
+  state.agentRunning = false;
+  renderStatus();
+  log('Agent arrêté.', 'info');
+}
+
+window.agent.onStatusChange(({ running }) => {
+  state.agentRunning = running;
+  if (running) log('Serveur démarré sur le port 7842', 'ok');
+  renderStatus();
+});
+
+window.agent.onError((msg) => log(`Erreur: ${msg}`, 'err'));
+
+checkStatus();
+</script>
+</body>
+</html>

@@ -30,9 +30,9 @@ const Header = () => {
   // Configuration des éléments de navigation
   const navItems = [
     { label: t("dashboard"), path: "/dashboard" },
-    { label: t("prospects"), path: "/prospects" },
+    { label: t("findProspects"), path: "/finder" },
+    { label: "Mes prospects", path: "/prospects" },
     { label: t("campaigns"), path: "/campaigns" },
-    { label: "Inbox", path: "/inbox", badge: totalUnread },
     { label: t("reports"), path: "/reports" },
     { label: t("settings"), path: "/settings" },
   ];
@@ -65,7 +65,7 @@ const Header = () => {
               key={item.path}
               onClick={() => navigate(item.path)}
               className={`px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center gap-1.5 ${
-                (location.pathname === item.path || (item.path === "/prospects" && location.pathname === "/finder"))
+                location.pathname === item.path
                 ? "text-emerald-500 bg-emerald-500/10 shadow-sm shadow-emerald-500/10"
                 : "text-muted-foreground hover:text-emerald-500 hover:bg-emerald-500/5"
                 }`}

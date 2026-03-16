@@ -193,7 +193,7 @@ export default function EditTemplateDialog({
                                         }`}>
                                             <div className="flex items-center gap-2 mb-1 opacity-70">
                                                 {m.role === 'user' ? <User size={12} /> : <Bot size={12} />}
-                                                <span className="uppercase tracking-widest font-black text-[9px]">{m.role === 'user' ? 'Vous' : 'Prospecta AI'}</span>
+                                                <span className="uppercase tracking-widest font-black text-[9px]">{m.role === 'user' ? 'Vous' : 'Prospectator (Prospecta Motor)'}</span>
                                             </div>
                                             {m.content}
                                         </div>

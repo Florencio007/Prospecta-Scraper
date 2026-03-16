@@ -1,0 +1,31 @@
+PROSPECTA AI AGENT — LICENCE D'UTILISATION
+
+Copyright © 2025 Prospectator. Tous droits réservés.
+
+Ce logiciel (« Prospectator ») est distribué exclusivement pour une utilisation 
+avec la plateforme Prospectator (https://app.prospecta.ai).
+
+CONDITIONS D'UTILISATION :
+
+1. USAGE PERSONNEL — Vous êtes autorisé à installer et utiliser ce logiciel sur 
+   votre machine personnelle ou professionnelle dans le cadre de votre abonnement 
+   Prospectator actif.
+
+2. RESTRICTIONS — Il est interdit de : redistribuer, vendre, louer, ou sous-licencier 
+   ce logiciel ; d'effectuer de l'ingénierie inverse ; d'utiliser ce logiciel à des 
+   fins illégales ou contraires aux conditions d'utilisation des plateformes tierces 
+   (LinkedIn, Facebook, Google).
+
+3. DONNÉES — Ce logiciel traite des données localement sur votre machine. Les 
+   résultats de scraping sont transmis à votre compte Prospectator uniquement.
+
+4. RESPONSABILITÉ — L'utilisation de ce logiciel est à vos risques. Prospectator 
+   ne peut être tenu responsable de l'utilisation non conforme aux CGU des 
+   plateformes tierces.
+
+5. RÉSILIATION — Cette licence prend fin automatiquement si vous violez l'une 
+   de ses conditions ou si votre abonnement Prospectator expire.
+
+En installant ce logiciel, vous acceptez ces conditions d'utilisation.
+
+Pour toute question : support@prospecta.ai

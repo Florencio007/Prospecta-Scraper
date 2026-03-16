@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { Search, MapPin, Globe, Loader2, Sparkles, Filter, Database, Plus, ChevronRight, CheckCircle2, AlertCircle, X, SlidersHorizontal, Square, XCircle, Info, Eye, EyeOff, ShieldAlert } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import Header from "@/components/dashboard/Header";
-import ProspectsSubNav from "@/components/dashboard/ProspectsSubNav";
 import ProspectDetailView from "@/components/dashboard/ProspectDetailView";
 import CampaignSelectionDialog from "@/components/dashboard/CampaignSelectionDialog";
 import { Logo } from "@/components/Logo";
@@ -91,16 +90,30 @@ const ProspectFinder = () => {
   const [facebookCredentials, setFacebookCredentials] = useState({ email: "", password: "" });
   const [showFacebookPassword, setShowFacebookPassword] = useState(false);
 
-  // ── DÉTECTEUR AGENT LOCAL (ping unique au montage) ────────────────────
+  // ── DÉTECTEUR AGENT LOCAL ────────────────────────────────────────────────
   const [agentOnline, setAgentOnline] = useState<boolean | null>(null);
   const [showInstallModal, setShowInstallModal] = useState(false);
 
   useEffect(() => {
+    // 1. Vérifier d'abord le localStorage (évite le blocage Mixed Content)
+    const alreadyConfirmed = localStorage.getItem('prospecta_agent_confirmed') === 'true';
+    if (alreadyConfirmed) {
+      setAgentOnline(true);
+      return;
+    }
+    // 2. Essayer le fetch direct (fonctionne uniquement en HTTP ou avec extension CORS)
     const CHECK_URL = `${LOCAL_AGENT_URL}/api/health`;
     fetch(CHECK_URL, { signal: AbortSignal.timeout(2000) })
       .then(r => { if (r.ok) { setAgentOnline(true); } else { setAgentOnline(false); setShowInstallModal(true); } })
       .catch(() => { setAgentOnline(false); setShowInstallModal(true); });
   }, []);
+
+  // Callback appelé quand l'utilisateur confirme manuellement que l'agent est actif
+  const handleAgentConfirmed = () => {
+    localStorage.setItem('prospecta_agent_confirmed', 'true');
+    setAgentOnline(true);
+    setShowInstallModal(false);
+  };
 
   const getApiUrl = (endpoint: string) => {
     // Si l'agent est en ligne, on l'appelle directement sur localhost:3001
@@ -868,6 +881,7 @@ const ProspectFinder = () => {
           social_links: p.socialLinks || null,
           contract_details: {
             ...(p.contractDetails || {}),
+            prospect_type: p.prospect_type || filters.type, // Persist the type
             photo: p.photo || null,
             // LinkedIn scraper stores these fields at the root level of the prospect (not inside contractDetails)
             // We explicitly persist them here so they are accessible via contractDetails in the detail view
@@ -923,14 +937,7 @@ const ProspectFinder = () => {
       <Header />
 
       <main className="mx-auto max-w-7xl px-4 sm:px-6 pt-20 pb-8">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">{t("myProspects")}</h1>
-            <p className="text-muted-foreground font-light mt-2">
-              {t("manageProspects")}
-            </p>
-          </div>
-          <ProspectsSubNav />
+        <div className="mb-0">
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
@@ -1267,9 +1274,9 @@ const ProspectFinder = () => {
                   {/* Statut agent local */}
                   <div className="flex items-center justify-between text-xs px-1">
                     <div className="flex items-center gap-1.5">
-                      <span className={`w-1.5 h-1.5 rounded-full ${agentOnline === null ? 'bg-yellow-500 animate-pulse' : agentOnline ? 'bg-green-500' : 'bg-red-500'}`} />
-                      <span className="text-muted-foreground font-mono text-[10px]">
-                        {agentOnline === null ? 'Vérification moteur...' : agentOnline ? 'Moteur Prospecta: actif' : 'Moteur Prospecta: hors-ligne'}
+                      <span className={`w-1.5 h-1.5 rounded-full ${agentOnline === null ? 'bg-yellow-500 animate-pulse' : agentOnline ? 'bg-green-500' : 'bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.5)]'}`} />
+                      <span className={`font-mono text-[10px] ${agentOnline === false ? 'text-red-400 bg-red-500/10 px-1.5 py-0.5 rounded border border-red-500/20' : 'text-muted-foreground'}`}>
+                        {agentOnline === null ? 'Vérification moteur...' : agentOnline ? 'Prospecta Motor: actif' : 'prospecta motor (prospectator) inactif'}
                       </span>
                     </div>
                     {agentOnline === false && (
@@ -1583,6 +1590,7 @@ const ProspectFinder = () => {
       <AgentInstallModal
         open={showInstallModal}
         onOpenChange={setShowInstallModal}
+        onConfirm={handleAgentConfirmed}
       />
     </div>
   );

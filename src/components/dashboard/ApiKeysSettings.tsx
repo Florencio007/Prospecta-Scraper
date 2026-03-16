@@ -149,9 +149,9 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                 smtpUser: user,
                 smtpPass: pass,
                 to: [{ email: testEmail, name: 'Test User' }],
-                sender: { email: existingConfig?.api_key ? parseSmtp(existingConfig.api_key).user : user, name: 'Prospecta AI' },
+                sender: { email: existingConfig?.api_key ? parseSmtp(existingConfig.api_key).user : user, name: 'Prospectator (Prospecta Motor)' },
                 subject: 'Test de configuration SMTP - Prospecta',
-                htmlContent: '<h1>Félicitations !</h1><p>Votre configuration SMTP fonctionne parfaitement sur Prospecta AI.</p>'
+                htmlContent: '<h1>Félicitations !</h1><p>Votre configuration SMTP fonctionne parfaitement sur Prospectator (Prospecta Motor).</p>'
             };
 
             // Re-use testEmailSend but pass the smtp id since it now handles both internally given the provider logic

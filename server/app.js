@@ -50,13 +50,32 @@ const rootDir = path.resolve(__dirname, '..');
 const app = express();
 const PORT = process.env.PORT || 7842;
 
-// Configuration CORS assouplie pour l'agent local
-app.use(cors({
-  origin: '*', // Autorise toutes les origines car l'agent tourne localement sur le PC de l'utilisateur
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
-  credentials: true
-}));
+// Configuration CORS pour l'agent local
+// L'agent tourne sur localhost — on autorise toutes les origines (y compris prospecta.soamibango.com)
+const ALLOWED_ORIGINS = [
+  'https://prospecta.soamibango.com',
+  'http://localhost:5173',
+  'http://localhost:3000',
+  'http://localhost:4173',
+];
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  // Autoriser l'origine exacte si connue, sinon wildcard
+  if (origin && ALLOWED_ORIGINS.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept, Origin');
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  // Répondre immédiatement aux preflight OPTIONS
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(204);
+  }
+  next();
+});
 app.use(express.json());
 
 // ─── Supabase Client Helper ──────────────────────────────────────────────────

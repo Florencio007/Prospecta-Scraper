@@ -668,5 +668,6 @@
   "skipStepWarningTitle": "Ignorer cette étape ?",
   "skipStepWarningDesc": "En ignorant cette étape, Prospecta aura moins d'informations pour personnaliser votre stratégie et vos scripts d'approche. Cela peut réduire l'efficacité de vos campagnes.",
   "continueAnyway": "Continuer quand même",
-  "goBackAndFill": "Annuler"
+  "goBackAndFill": "Annuler",
+  "inbox": "Inbox"
 }
