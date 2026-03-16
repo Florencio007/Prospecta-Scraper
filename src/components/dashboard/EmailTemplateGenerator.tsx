@@ -110,7 +110,7 @@ const EmailTemplateGenerator = () => {
         name: templateName.trim(),
       });
       
-      const { error } = await supabase.from('email_library').insert({
+      const { error } = await (supabase.from('email_library') as any).insert({
         user_id: user.id,
         name: templateName.trim(),
         subject: generatedTemplate.subject,

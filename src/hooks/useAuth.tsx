@@ -7,12 +7,17 @@ import { useNavigate } from "react-router-dom";
  * Interface représentant le profil utilisateur stocké dans la base de données
  */
 interface Profile {
-  full_name: string;
-  initials: string;
+  id: string;
+  user_id: string;
+  full_name: string | null;
+  avatar_url: string | null;
+  email: string | null;
+  initials?: string;
   plan_type?: string;
   search_limit?: number;
   search_usage?: number;
   onboarding_completed?: boolean;
+  company_name?: string;
   company_type?: string;
   industry?: string;
   company_size?: string;
@@ -21,10 +26,12 @@ interface Profile {
   target_channel?: string;
   value_prop?: string;
   communication_tone?: string;
-  company_name?: string;
   objectives?: string;
   expectations?: string;
   business_activity?: string;
+  user_service_description?: string;
+  role?: string;
+  created_at?: string;
 }
 
 /**

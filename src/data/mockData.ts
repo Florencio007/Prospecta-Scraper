@@ -178,6 +178,7 @@ export interface Prospect {
   id?: string;
   name: string;
   initials: string;
+  summary?: string;
   position: string;
   company: string;
   source: string;
@@ -186,6 +187,8 @@ export interface Prospect {
   phone?: string;
   website?: string;
   city?: string;
+  address?: string | null;
+  industry?: string | null;
   tags?: string[];
   photo?: string;
   createdAt?: Date;
@@ -247,25 +250,39 @@ export interface Prospect {
     content: string;
   }[];
   contractDetails?: {
-    // GovCon specific
-    notice_id?: string;
-    solicitation_number?: string;
-    set_aside_type?: string;
-    award_amount?: number;
-    awardee_name?: string;
-    posted_date?: string;
-    response_deadline?: string;
-    description_text?: string;
-    sam_url?: string;
+    // LinkedIn / Company specific
+    industry?: string;
+    foundedYear?: string;
+    employeeCount?: string;
+    companySize?: string;
+    companyType?: string;
+    plusCode?: string;
+    checkIn?: string;
+    rating?: number;
+    totalScore?: number;
+    category?: string;
+    reviews?: any[];
+    specialties?: string[];
+    experiences?: any[];
+    education?: any[];
+    skills?: any[];
+    certifications?: any[];
+    recommendations?: any[];
+    about?: any;
 
     // Google Maps specific
     address?: string;
     googleMapsUrl?: string;
+    mapsUrl?: string;
     openingHours?: any[];
     priceLevel?: string;
     latitude?: number;
     longitude?: number;
     placeId?: string;
     postalCode?: string;
+    starRating?: number;
+    price?: string;
+    platformLinks?: any[];
+    photo?: string;
   };
 }

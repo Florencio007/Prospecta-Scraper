@@ -28,11 +28,11 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
   const { profile, user } = useAuth();
   const { getKeyByProvider } = useApiKeys();
   const { toast } = useToast();
-  
+
   const [activeMode, setActiveMode] = useState<"message" | "analysis">(initialMode);
   const [generating, setGenerating] = useState(false);
   const [analysisReport, setAnalysisReport] = useState("");
-  
+
   // Chat States
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [userInput, setUserInput] = useState("");
@@ -89,7 +89,7 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
 
   const fetchDashboardData = async () => {
     if (!user?.id) return null;
-    
+
     // Total Prospects
     const { count: totalProspects } = await supabase
       .from('prospects')
@@ -159,8 +159,8 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
     try {
       const stats = await fetchDashboardData();
       const aiResponse = await chatAgent(openaiKey, newMessages, {
-          profile,
-          stats: stats || { totalProspects: 0, responseRate: 0, messagesSent: 0 }
+        profile,
+        stats: stats || { totalProspects: 0, responseRate: 0, messagesSent: 0 }
       });
 
       setChatMessages([...newMessages, { role: 'assistant', content: aiResponse }]);
@@ -199,13 +199,13 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
       const { data: prospects } = await supabase.from('prospects').select('source').eq('user_id', user?.id);
       const sourceCounts: Record<string, number> = {};
       (prospects as { source?: string }[])?.forEach(p => { if (p.source) sourceCounts[p.source] = (sourceCounts[p.source] || 0) + 1; });
-      
+
       const stats = await fetchDashboardData();
       const data = {
         ...stats,
         topSources: Object.entries(sourceCounts).map(([name, count]) => ({ name, count }))
       };
-      
+
       const report = await analysteAgent(openaiKey, data);
       setAnalysisReport(report);
     } catch (err: unknown) {
@@ -235,13 +235,13 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
       </div>
 
       <div className="px-6 py-4 border-b bg-secondary/10">
-        <Tabs value={activeMode} onValueChange={(v: string) => setActiveMode(v)} className="w-full">
+        <Tabs value={activeMode} onValueChange={(v: string) => setActiveMode(v as "message" | "analysis")} className="w-full">
           <TabsList className="grid w-full grid-cols-2 h-11 p-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
             <TabsTrigger value="message" className="rounded-lg font-bold text-xs gap-2">
               <MessageSquare size={14} /> {t("chatAssistant")}
             </TabsTrigger>
             <TabsTrigger value="analysis" className="rounded-lg font-bold text-xs gap-2">
-              <BarChart3 size={14} /> {t("analysis", "Analyse")}
+              <BarChart3 size={14} /> {t("analysis")}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -256,7 +256,7 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
                   <Loader2 className="h-4 w-4 animate-spin text-accent" />
                 </div>
               )}
-              
+
               {chatMessages.length === 0 && !loadingHistory && (
                 <div className="text-center py-8 space-y-4">
                   <div className="h-16 w-16 rounded-full bg-accent/10 flex items-center justify-center mx-auto text-accent">
@@ -283,13 +283,12 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
                     <div className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 ${msg.role === 'user' ? 'bg-primary text-white' : 'bg-accent text-white'}`}>
                       {msg.role === 'user' ? <User size={16} /> : <Sparkles size={16} />}
                     </div>
-                    <div className={`p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${
-                      msg.role === 'user' 
-                      ? 'bg-primary text-primary-foreground rounded-tr-none' 
-                      : 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-tl-none whitespace-pre-wrap'
-                    }`}>
+                    <div className={`p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === 'user'
+                        ? 'bg-primary text-primary-foreground rounded-tr-none'
+                        : 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-tl-none whitespace-pre-wrap'
+                      }`}>
                       {msg.role === 'assistant' ? (
-                        <div dangerouslySetInnerHTML={{ 
+                        <div dangerouslySetInnerHTML={{
                           __html: (msg.content || "")
                             .replace(/\*\*(.*?)\*\*/g, '<strong class="text-accent font-bold">$1</strong>')
                             .replace(/^\s*[-*]\s+/gm, '• ')
@@ -305,6 +304,7 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
 
               {generating && (
                 <div className="flex justify-start animate-pulse">
+<<<<<<< Updated upstream
                    <div className="max-w-[85%] flex gap-3">
                       <div className="h-8 w-8 rounded-lg bg-accent flex items-center justify-center text-white shrink-0">
                         <Sparkles size={16} />
@@ -313,12 +313,22 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
                         <Loader2 className="h-4 w-4 animate-spin" />
                       </div>
                    </div>
+=======
+                  <div className="max-w-[85%] flex gap-3">
+                    <div className="h-8 w-8 rounded-lg bg-accent flex items-center justify-center text-white shrink-0">
+                      <Sparkles size={16} />
+                    </div>
+                    <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-tl-none">
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    </div>
+                  </div>
+>>>>>>> Stashed changes
                 </div>
               )}
             </div>
 
             <div className="p-4 border-t bg-white dark:bg-slate-900 mt-auto">
-              <form 
+              <form
                 onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}
                 className="flex gap-2"
               >
@@ -329,8 +339,8 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
                   className="rounded-xl border-slate-200 focus-visible:ring-accent h-12"
                   disabled={generating}
                 />
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   disabled={!userInput.trim() || generating}
                   className="rounded-xl h-12 w-12 p-0 bg-accent hover:bg-accent/90 shrink-0"
                 >
@@ -352,8 +362,8 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
                     L'IA va analyser vos performances de campagne et vos sources de prospects pour vous donner des recommandations stratégiques.
                   </p>
                 </div>
-                <Button 
-                  onClick={handleAnalyze} 
+                <Button
+                  onClick={handleAnalyze}
                   className="bg-emerald-600 hover:bg-emerald-700 text-white font-black rounded-xl px-10 h-12 shadow-lg shadow-emerald-500/20"
                 >
                   <Sparkles size={18} className="mr-2" /> Analyser maintenant
@@ -386,18 +396,18 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
                     {analysisReport}
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-2 gap-3 pb-8">
-                   <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
-                      <Sparkles className="text-amber-500 mb-2" size={20} />
-                      <span className="text-[10px] font-black uppercase opacity-60">Score IA</span>
-                      <span className="text-lg font-black text-primary">Excellent</span>
-                   </div>
-                   <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
-                      <TrendingUp className="text-emerald-500 mb-2" size={20} />
-                      <span className="text-[10px] font-black uppercase opacity-60">Croissance</span>
-                      <span className="text-lg font-black text-primary">+12%</span>
-                   </div>
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
+                    <Sparkles className="text-amber-500 mb-2" size={20} />
+                    <span className="text-[10px] font-black uppercase opacity-60">Score IA</span>
+                    <span className="text-lg font-black text-primary">Excellent</span>
+                  </div>
+                  <div className="p-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-100 dark:border-slate-800 flex flex-col items-center text-center">
+                    <TrendingUp className="text-emerald-500 mb-2" size={20} />
+                    <span className="text-[10px] font-black uppercase opacity-60">Croissance</span>
+                    <span className="text-lg font-black text-primary">+12%</span>
+                  </div>
                 </div>
               </div>
             )}

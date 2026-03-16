@@ -4,11 +4,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import type { Tables } from "@/integrations/supabase/types";
+import { Prospect } from "@/types/prospect";
 import { useLanguage } from "@/hooks/useLanguage";
 
 interface Props {
-  prospect: Tables<"prospects"> | null;
+  prospect: Prospect | null;
   onClose: () => void;
 }
 

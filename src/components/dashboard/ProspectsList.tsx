@@ -3,9 +3,10 @@ import { Sparkles, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import type { Tables } from "@/integrations/supabase/types";
-import ProspectAnalysisModal from "./ProspectAnalysisModal";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useToast } from "@/hooks/use-toast";
+import { Prospect } from "@/types/prospect";
+import ProspectAnalysisModal from "./ProspectAnalysisModal";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,7 +18,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 
-type Prospect = Tables<"prospects">;
+// Local Prospect type removed in favor of shared type in src/types/prospect.ts
 
 const ProspectsList = () => {
   const { user } = useAuth();
@@ -41,11 +42,21 @@ const ProspectsList = () => {
           .order("created_at", { ascending: false })
           .limit(10);
 
-        const flattenedData = data?.map(p => ({
-          ...p,
-          ...(p.prospect_data?.[0] || p.prospect_data || {}),
-          id: p.id
-        })) || [];
+        type RawProspect = Tables<"prospects"> & {
+          prospect_data?: Tables<"prospect_data"> | Tables<"prospect_data">[] | null;
+        };
+        const rows = (data as unknown as RawProspect[] | null) ?? [];
+        const flattenedData: Prospect[] = rows.map(p => {
+          const extra = Array.isArray(p.prospect_data)
+            ? (p.prospect_data[0] ?? {})
+            : (p.prospect_data ?? {});
+          // Ensure all required fields from Prospect are present
+          return {
+            ...p,
+            ...extra,
+            id: p.id, // Ensure we use the prospect id, not the data id
+          } as Prospect;
+        });
 
         setProspects(flattenedData);
       } catch (error) {

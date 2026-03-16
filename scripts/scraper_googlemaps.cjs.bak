@@ -1,0 +1,369 @@
+const { chromium } = require('playwright');
+const fs = require('fs');
+
+/**
+ * Google Maps Hotel Scraper - Antananarivo (Playwright version)
+ * Données récupérées par hôtel :
+ *   - Nom, Téléphone, Site web, Plateforme
+ *   - Heures d'ouverture, Coordonnées GPS
+ *   - À propos, Avis (note + commentaires)
+ *
+ * Usage  : node scraper_googlemaps.cjs
+ * Output : hotels.json
+ */
+
+const QUERY = process.argv[2] || 'hotel';
+const LOCATION = process.argv[3] || 'Antananarivo';
+const MAX_RESULTS = parseInt(process.argv[4] || '20', 10);
+const USER_ID = process.argv[5] || null;
+const TYPE = process.argv[6] || 'tous';
+
+const CONFIG = {
+  searchQuery: `${QUERY} ${LOCATION}`.trim(),
+  maxHotels: MAX_RESULTS,
+  outputFile: 'last_gmaps_results.json',
+  headless: false,
+  delayBetweenHotels: 1000,
+};
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+function emitLog(msg, pct = undefined) {
+  console.log(msg);
+  process.stdout.write(`PROGRESS:${JSON.stringify({ percentage: pct, message: msg })}\n`);
+}
+
+function emitResult(result) {
+  process.stdout.write(`RESULT:${JSON.stringify(result)}\n`);
+}
+
+// ── Scroll la liste latérale pour charger plus de cartes ─────────────────────
+async function scrollList(page) {
+  await page.evaluate(async () => {
+    const feed = document.querySelector('[role="feed"]');
+    if (!feed) return;
+    await new Promise(resolve => {
+      let last = 0;
+      const timer = setInterval(() => {
+        feed.scrollBy(0, 400);
+        if (feed.scrollTop === last) { clearInterval(timer); resolve(); }
+        last = feed.scrollTop;
+      }, 400);
+    });
+  });
+}
+
+// ── Récupérer les liens de toutes les cartes dans la liste ───────────────────
+async function getHotelLinks(page) {
+  try {
+    const selector = page.locator('[role="feed"] .Nv2PK a').first();
+    await selector.waitFor({ state: 'attached', timeout: 15000 });
+  } catch (_) {
+    emitLog("   ⚠️ Feed non trouvé ou timeout.");
+  }
+
+  // Scroll plusieurs fois pour charger un max de résultats
+  for (let i = 0; i < 6; i++) {
+    await scrollList(page);
+    await sleep(1200);
+  }
+
+  const links = await page.evaluate(() => {
+    const cards = document.querySelectorAll('[role="feed"] .Nv2PK a[href*="/maps/place/"]');
+    const seen = new Set();
+    const result = [];
+    cards.forEach(a => {
+      const clean = a.href.split('?')[0];
+      if (!seen.has(clean)) { seen.add(clean); result.push(a.href); }
+    });
+    return result;
+  });
+
+  emitLog(`🔗 ${links.length} liens trouvés dans la liste`);
+  return links;
+}
+
+// ── Scraper les détails d'une fiche hôtel ────────────────────────────────────
+async function scrapeHotelDetail(page, url) {
+  await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  try { await page.waitForSelector('h1', { state: 'attached', timeout: 15000 }); } catch (e) { console.log("⚠️ Nom non trouvé, attente prolongée."); }
+  const earlyName = await page.evaluate(() => { const el = document.querySelector('h1'); return el ? el.textContent.trim() : ''; });
+  console.log('DEBUG H1s:', earlyName);
+  await sleep(2000);
+
+  // Ouvrir le panneau "Heures d'ouverture" s'il est réduit
+  try {
+    const hoursBtn = page.locator('[data-section-id="hours"] [jsaction*="pane.openhours"]').first();
+    if (await hoursBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+      await hoursBtn.click();
+      await sleep(800);
+    }
+  } catch (_) { }
+
+  // Ouvrir l'onglet "À propos"
+  try {
+    // Chercher le bouton "À propos" dans la barre d'onglets (Présentation / Prix / Avis / À propos)
+    const tabs = await page.locator('[role="tab"], button.hh2c6, .m6QErb button').all();
+    for (const tab of tabs) {
+      const text = await tab.textContent();
+      if (text && (text.includes('À propos') || text.includes('About'))) {
+        await tab.click();
+        await sleep(1200);
+        break;
+      }
+    }
+  } catch (_) { }
+
+  const data = await page.evaluate((eName) => {
+
+    // ── Nom ──────────────────────────────────────────────────────────────────
+    const name = eName || '';
+
+    // ── Coordonnées GPS (dans l'URL de la page) ───────────────────────────────
+    const gpsMatch = window.location.href.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+    const gps = gpsMatch
+      ? { lat: parseFloat(gpsMatch[1]), lng: parseFloat(gpsMatch[2]) }
+      : null;
+
+    // ── Note globale & Stars ───────────────────────────────────────────────────
+    const rating = document.querySelector('.F7nice span[aria-hidden="true"]')?.textContent?.trim() || '';
+    const reviewCount = document.querySelector('.F7nice span[aria-label*="avis"]')?.textContent?.trim()?.replace(/[()]/g, '').trim() || '';
+
+    // Star rating (ex: "Hôtel 3 étoiles")
+    const starsEl = Array.from(document.querySelectorAll('.fontBodyMedium, span')).find(el =>
+      /Hôtel \d étoiles|Hotel \d stars/i.test(el.textContent)
+    );
+    const starRating = starsEl ? starsEl.textContent.trim() : '';
+
+    // Price if available
+    const priceEl = document.querySelector('.x88Sre, .WC7frf');
+    const price = priceEl ? priceEl.textContent.trim() : '';
+
+    // ── Téléphone ────────────────────────────────────────────────────────────
+    let phone = '';
+    const phoneEl = Array.from(document.querySelectorAll('.Io6YTe, button[aria-label*="Téléphone"], [data-tooltip*="téléphone"]')).find(el =>
+      /(\+?\d[\d\s.-]{7,}\d)/.test(el.textContent)
+    );
+    if (phoneEl) {
+      phone = (phoneEl.getAttribute('aria-label') || phoneEl.textContent).replace(/.*:/, '').trim();
+    } else {
+      // Fallback: chercher n'importe quel élément avec un format de téléphone
+      const allText = document.body.innerText;
+      const phoneMatch = allText.match(/(\+?\d[\d\s.-]{7,}\d)/);
+      if (phoneMatch) phone = phoneMatch[0].trim();
+    }
+
+    // ── Site web + plateforme ─────────────────────────────────────────────────
+    const officialSiteEl = document.querySelector('a[data-item-id*="authority"], a[aria-label*="site"]');
+    const website = officialSiteEl ? officialSiteEl.href : '';
+
+    const platformLinks = [];
+    const allLinks = Array.from(document.querySelectorAll('a[href*="booking.com"], a[href*="tripadvisor"], a[href*="airbnb"], a[href*="expedia"], a[href*="hotels.com"], a[href*="agoda"], a[href*="kayak"]'));
+    allLinks.forEach(link => {
+      const url = link.href;
+      let pName = '';
+      if (url.includes('booking.com')) pName = 'Booking.com';
+      else if (url.includes('tripadvisor')) pName = 'TripAdvisor';
+      else if (url.includes('airbnb')) pName = 'Airbnb';
+      else if (url.includes('expedia')) pName = 'Expedia';
+      else if (url.includes('hotels.com')) pName = 'Hotels.com';
+      else if (url.includes('agoda')) pName = 'Agoda';
+
+      if (pName && !platformLinks.some(pl => pl.name === pName)) {
+        platformLinks.push({ name: pName, url });
+      }
+    });
+
+    let platform = platformLinks.length > 0 ? platformLinks[0].name : 'Site propre';
+
+    // ── Heures d'ouverture ────────────────────────────────────────────────────
+    const hoursRows = document.querySelectorAll('.t39EBf tr, [data-section-id="hours"] tr');
+    const hours = {};
+    hoursRows.forEach(row => {
+      const day = row.querySelector('td:first-child, .ylH6lf')?.textContent?.trim();
+      const time = row.querySelector('td:last-child, .mxowUb li')?.textContent?.trim();
+      if (day && time) hours[day] = time;
+    });
+
+    // Fallback : texte condensé si tableau vide
+    const hoursText = Object.keys(hours).length === 0
+      ? document.querySelector('.t39EBf, [data-section-id="hours"]')?.textContent?.trim() || ''
+      : null;
+
+    // ── À propos (équipements + description) ─────────────────────────────────
+    const aboutItems = [];
+    const amenityEls = document.querySelectorAll('.OyY9Kc span, .fontBodyLarge li span, .m6QErb .fontBodyMedium span');
+    amenityEls.forEach(el => {
+      const t = el.textContent?.trim();
+      if (t && t.length > 1 && t.length < 60 && !aboutItems.includes(t)) {
+        aboutItems.push(t);
+      }
+    });
+
+    const descEl = document.querySelector('.OoXEc, .QoXOEc, [jslog*="metadata"] span, .m6QErb .fontBodySmall span, .PYv6f div');
+    const descText = descEl?.textContent?.trim() || '';
+
+    const about = {
+      amenities: aboutItems,
+      description: descText,
+      fullText: document.querySelector('.m6QErb.XiKgde')?.innerText?.trim() || ''
+    };
+
+    const reviews = []; // Placeholder for reviews to avoid ReferenceError
+
+    // ── Adresse ───────────────────────────────────────────────────────────────
+    let address = '';
+    const potentialAddressItems = Array.from(document.querySelectorAll('.Io6YTe, .fontBodyMedium'));
+    const addressItem = potentialAddressItems.find(el => {
+      const text = el.textContent.trim();
+      return text.length > 5 && text.length < 200 && /\d/.test(text) && text.includes(',') && !text.includes('·') && !text.includes('étoiles');
+    });
+
+    if (addressItem) {
+      address = addressItem.textContent.trim();
+    } else {
+      const addressEl = document.querySelector('[data-item-id*="address"], [aria-label*="Adresse"]');
+      if (addressEl) address = addressEl.textContent.replace(/.*:/, '').trim();
+    }
+
+    // ── Catégorie ─────────────────────────────────────────────────────────────
+    let category = '';
+    const catEl = document.querySelector('button[jsaction*="pane.rating.category"], .DkEaL');
+    if (catEl) category = catEl.textContent.trim();
+    else if (starRating) category = starRating;
+
+    return {
+      name, gps, phone, website, platform, platformLinks,
+      price, starRating,
+      hours: Object.keys(hours).length > 0 ? hours : hoursText,
+      rating, reviewCount,
+      reviews: reviews.slice(0, 5),
+      about, address, category,
+      url: window.location.href,
+    };
+  }, earlyName);
+
+  return data;
+}
+
+// ── MAIN ─────────────────────────────────────────────────────────────────────
+async function main() {
+  console.log('🚀 Démarrage du scraper Google Maps (Playwright)...\n');
+
+  const browser = await chromium.launch({
+    headless: CONFIG.headless,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--lang=fr-FR',
+      '--disable-blink-features=AutomationControlled'
+    ],
+  });
+
+  const context = await browser.newContext({
+    viewport: { width: 1280, height: 900 },
+    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+    locale: 'fr-FR',
+    javaScriptEnabled: true,
+  });
+
+  await context.addInitScript(() => {
+    Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
+    window.chrome = { runtime: {} };
+  });
+
+  const page = await context.newPage();
+
+  try {
+    // 1. Aller sur la page de recherche Google Maps
+    const searchUrl = `https://www.google.com/maps/search/${encodeURIComponent(CONFIG.searchQuery)}`;
+    await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await sleep(3000);
+
+    // 2. Accepter les cookies si présents
+    try {
+      const btn = page.locator('form[action*="consent"] button, button[aria-label*="Accepter"], button[aria-label*="Accept"]').first();
+      if (await btn.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await btn.click();
+        await sleep(1500);
+      }
+    } catch (_) { }
+
+    // 3. Collecter tous les liens de la liste
+    emitLog(`🛰️ Recherche de "${CONFIG.searchQuery}" sur Maps...`, 10);
+    const links = await getHotelLinks(page);
+    const toScrape = links.slice(0, CONFIG.maxHotels);
+    emitLog(`📋 ${links.length} résultats trouvés, analyse détaillée de ${toScrape.length} fiches...`, 30);
+
+    // 4. Visiter chaque fiche et extraire les données
+    const hotels = [];
+    for (let i = 0; i < toScrape.length; i++) {
+      const url = toScrape[i];
+      const progress = 30 + Math.floor((i / toScrape.length) * 60);
+      emitLog(`📍 Analyse de la fiche [${i + 1}/${toScrape.length}]`, progress);
+
+      try {
+        const detail = await scrapeHotelDetail(page, url);
+
+        // Construction du payload aligné sur la logique Prospecta
+        const payload = {
+          name: detail.name,
+          category: detail.category,
+          address: detail.address,
+          phone: detail.phone,
+          website: detail.website || '',
+          rating: detail.rating,
+          totalScore: detail.reviewCount || '',
+          mapsUrl: detail.url || url,
+          gps: detail.gps,
+          platform: detail.platform,
+          hours: detail.hours,
+          about: detail.about,
+          reviews: detail.reviews,
+
+          contractDetails: detail,
+          aiIntelligence: {
+            activities: {
+              posts: [],
+              comments: [],
+            },
+            contactInfo: {
+              phones: detail.phone ? [detail.phone] : [],
+              emails: [],
+              addresses: detail.address ? [detail.address] : []
+            },
+            executiveSummary: detail.about?.description ||
+              (detail.category ? `${detail.name} est un établissement de type "${detail.category}".` : `Établissement professionnel listé sur Google Maps.`),
+            companyCulture: {
+              mission: detail.about?.amenities?.length ? `Équipements et services : ${detail.about.amenities.join(', ')}` : ''
+            }
+          }
+        };
+
+        hotels.push(payload);
+        emitResult(payload);
+      } catch (err) {
+        emitLog(`❌ Erreur sur la fiche ${i + 1}: ${err.message}`, progress);
+        hotels.push({ url, error: err.message });
+      }
+      await sleep(CONFIG.delayBetweenHotels);
+    }
+
+    emitLog(`🏁 Fin de l'extraction. ${hotels.length} fiches analysées.`, 100);
+
+    // 5. Sauvegarde JSON
+    const output = {
+      scrapedAt: new Date().toISOString(),
+      query: CONFIG.searchQuery,
+      total: hotels.length,
+      hotels,
+    };
+    fs.writeFileSync(CONFIG.outputFile, JSON.stringify(output, null, 2), 'utf8');
+
+  } finally {
+    await browser.close();
+    emitLog('🏁 Navigateur fermé.');
+  }
+}
+
+main().catch(console.error);

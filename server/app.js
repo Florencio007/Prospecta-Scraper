@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 
-import { spawn } from 'child_process';
+import { spawn, exec } from 'child_process';
 import fs from 'fs';
 import { createRequire } from 'module';
 
@@ -22,14 +22,9 @@ import './campaignCron.js';
 const require = createRequire(import.meta.url);
 
 // ─── URL publique pour le tracking d'ouverture ───────────────────────────────
-// Lit dynamiquement l'URL depuis :
-//  1. Le fichier .tunnel-url (généré par server/tunnel.js avec localtunnel)
-//  2. La variable d'environnement SERVER_PUBLIC_URL (.env)
-//  3. Fallback localhost (tracking ne fonctionnera qu'en local)
 const TUNNEL_URL_FILE = path.resolve(__dirname, '../.tunnel-url');
 
 function getPublicUrl() {
-  // Priorité 1 : fichier tunnel (mis à jour dynamiquement)
   try {
     if (fs.existsSync(TUNNEL_URL_FILE)) {
       const url = fs.readFileSync(TUNNEL_URL_FILE, 'utf-8').trim();
@@ -37,16 +32,13 @@ function getPublicUrl() {
     }
   } catch { }
 
-  // Priorité 2 : variable d'environnement explicite
   if (process.env.SERVER_PUBLIC_URL) return process.env.SERVER_PUBLIC_URL.replace(/\/$/, '');
 
-  // Priorité 3 : détection automatique Vercel
   if (process.env.VERCEL_URL) {
     const url = process.env.VERCEL_URL.startsWith('http') ? process.env.VERCEL_URL : `https://${process.env.VERCEL_URL}`;
     return url.replace(/\/$/, '');
   }
 
-  // Fallback
   return `http://localhost:${process.env.PORT || 3001}`;
 }
 // ─────────────────────────────────────────────────────────────────────────────
@@ -60,11 +52,10 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// --- Utility for Scraping Endpoints ---
+// ─── Utility for Scraping Endpoints ──────────────────────────────────────────
 
 function setupScraperEndpoint(app, endpoint, scriptName, getArgs) {
   app.get(endpoint, (req, res) => {
-    // Cleanup lock file
     const lockPath = path.resolve(rootDir, 'scripts', 'cancel_scrape.lock');
     if (fs.existsSync(lockPath)) {
       try { fs.unlinkSync(lockPath); } catch (e) { }
@@ -83,17 +74,17 @@ function setupScraperEndpoint(app, endpoint, scriptName, getArgs) {
 
     const child = spawn('node', [scriptPath, ...args]);
 
+    // ── Streaming en temps réel ──────────────────────────────────────────────
     child.stdout.on('data', (data) => {
       const lines = data.toString().split('\n');
       for (const line of lines) {
-        if (line.trim()) {
-          if (line.startsWith('PROGRESS:')) {
-            res.write(`data: ${line.substring(9)}\n\n`);
-          } else if (line.startsWith('RESULT:')) {
-            res.write(`data: ${JSON.stringify({ result: JSON.parse(line.substring(7)) })}\n\n`);
-          } else if (line.startsWith('ERROR:')) {
-            res.write(`data: ${JSON.stringify({ error: line.substring(6).trim() })}\n\n`);
-          }
+        if (!line.trim()) continue;
+        if (line.startsWith('PROGRESS:')) {
+          res.write(`data: ${line.substring(9)}\n\n`);
+        } else if (line.startsWith('RESULT:')) {
+          res.write(`data: ${JSON.stringify({ result: JSON.parse(line.substring(7)) })}\n\n`);
+        } else if (line.startsWith('ERROR:')) {
+          res.write(`data: ${JSON.stringify({ error: line.substring(6).trim() })}\n\n`);
         }
       }
     });
@@ -102,24 +93,74 @@ function setupScraperEndpoint(app, endpoint, scriptName, getArgs) {
       console.error(`[Scraper Error ${scriptName}] ${data.toString()}`);
     });
 
+    // ── Finalisation à la fermeture du processus enfant ──────────────────────
     child.on('close', (code) => {
       console.log(`[Express API] ${scriptName} finished with code ${code}`);
       if (fs.existsSync(lockPath)) {
         try { fs.unlinkSync(lockPath); } catch (e) { }
       }
 
-      // Specific handling for GMaps output      // Google Maps passe en Playwright, donc il faut nettoyer différemment si nécessaire
+      // ── GMaps : lit last_gmaps_results.json ──────────────────────────────
+      // Renvoie chaque hôtel comme RESULT individuel (filet de sécurité
+      // si certains ont été manqués pendant le streaming temps réel).
       if (scriptName === 'scraper_googlemaps.cjs') {
-        exec('pkill -f "Chromium" || true'); // Simplification pour Playwright
+        exec('pkill -f "Chromium" || true');
         const outputPath = path.resolve(rootDir, 'scripts', 'last_gmaps_results.json');
         if (fs.existsSync(outputPath)) {
           try {
-            const results = JSON.parse(fs.readFileSync(outputPath, 'utf-8'));
-            res.write(`data: ${JSON.stringify({ percentage: 100, message: 'Terminé', results })}\n\n`);
-          } catch (e) { }
+            const output = JSON.parse(fs.readFileSync(outputPath, 'utf-8'));
+            const hotels = output.hotels || output.results || [];
+            hotels.forEach(hotel => {
+              if (hotel && !hotel.error) {
+                res.write(`data: ${JSON.stringify({ result: hotel })}\n\n`);
+              }
+            });
+            res.write(`data: ${JSON.stringify({
+              percentage: 100,
+              message: `Terminé — ${hotels.length} fiche(s) extraite(s)`,
+              total: hotels.length,
+            })}\n\n`);
+          } catch (e) {
+            console.error('[GMaps] Erreur lecture JSON final:', e.message);
+            res.write(`data: ${JSON.stringify({ percentage: 100, message: 'Terminé' })}\n\n`);
+          }
+        } else {
+          res.write(`data: ${JSON.stringify({ percentage: 100, message: 'Terminé' })}\n\n`);
         }
+        res.end();
+        return; // évite le double res.end()
       }
 
+      // ── Pappers : lit last_pappers_results.json ──────────────────────────
+      // Renvoie companies + directors comme RESULT individuels.
+      if (scriptName === 'scraper_pappers.cjs') {
+        const outputPath = path.resolve(rootDir, 'scripts', 'last_pappers_results.json');
+        if (fs.existsSync(outputPath)) {
+          try {
+            const output = JSON.parse(fs.readFileSync(outputPath, 'utf-8'));
+            const all = [...(output.companies || []), ...(output.directors || [])];
+            all.forEach(item => {
+              if (item && !item.error) {
+                res.write(`data: ${JSON.stringify({ result: item })}\n\n`);
+              }
+            });
+            res.write(`data: ${JSON.stringify({
+              percentage: 100,
+              message: `Terminé — ${all.length} résultat(s)`,
+              total: all.length,
+            })}\n\n`);
+          } catch (e) {
+            console.error('[Pappers] Erreur lecture JSON final:', e.message);
+            res.write(`data: ${JSON.stringify({ percentage: 100, message: 'Terminé' })}\n\n`);
+          }
+        } else {
+          res.write(`data: ${JSON.stringify({ percentage: 100, message: 'Terminé' })}\n\n`);
+        }
+        res.end();
+        return; // évite le double res.end()
+      }
+
+      // ── Générique (tous les autres scrapers) ─────────────────────────────
       res.write(`data: ${JSON.stringify({ percentage: 100, message: 'Terminé' })}\n\n`);
       res.end();
     });
@@ -131,13 +172,12 @@ function setupScraperEndpoint(app, endpoint, scriptName, getArgs) {
   });
 }
 
-// --- Endpoints ---
+// ─── Endpoints ────────────────────────────────────────────────────────────────
 
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', message: 'Le serveur Express de Prospecta est en ligne' });
 });
 
-// Stop endpoint
 app.get('/api/scrape/stop', (req, res) => {
   console.log(`[Express API] Signal d'arrêt reçu.`);
   const lockPath = path.resolve(rootDir, 'scripts', 'cancel_scrape.lock');
@@ -149,10 +189,8 @@ app.get('/api/scrape/stop', (req, res) => {
   }
 });
 
+// ─── SMTP ─────────────────────────────────────────────────────────────────────
 
-// ==================== SMTP (No external API) ====================
-
-// Build a nodemailer transporter from config
 function createTransporter(cfg) {
   return nodemailer.createTransport({
     host: cfg.host,
@@ -163,7 +201,6 @@ function createTransporter(cfg) {
   });
 }
 
-// Test SMTP connection
 app.post('/api/email/smtp-test', async (req, res) => {
   const { host, port, user, pass } = req.body;
   console.log(`[SMTP] Testing connection to ${host}:${port}...`);
@@ -178,7 +215,6 @@ app.post('/api/email/smtp-test', async (req, res) => {
   }
 });
 
-// Send email via SMTP (with automatic open-tracking pixel injection)
 app.post('/api/email/send-smtp', async (req, res) => {
   const { smtpHost, smtpPort, smtpUser, smtpPass, to, from, replyTo, subject, htmlContent, recipientId } = req.body;
 
@@ -188,7 +224,6 @@ app.post('/api/email/send-smtp', async (req, res) => {
 
   console.log(`[SMTP] Sending to ${to.email} via ${smtpHost}...`);
 
-  // Inject tracking pixel into HTML
   const serverPublicUrl = getPublicUrl();
   const unsubscribeLink = recipientId
     ? `<br><br><div style="text-align:center;font-size:11px;color:#999;"><a href="${serverPublicUrl}/api/email/unsubscribe/${recipientId}" style="color:#999;text-decoration:underline;">Se désabonner</a></div>`
@@ -199,7 +234,7 @@ app.post('/api/email/send-smtp', async (req, res) => {
   const trackedHtml = (htmlContent || '') + trackingPixel + unsubscribeLink;
 
   if (serverPublicUrl.includes('localhost')) {
-    console.warn('[SMTP] ⚠️  SERVER_PUBLIC_URL pointe vers localhost — le tracking d\'ouverture ne fonctionnera que si le destinataire est sur la même machine.');
+    console.warn('[SMTP] ⚠️  SERVER_PUBLIC_URL pointe vers localhost — tracking désactivé hors machine locale.');
     console.warn('[SMTP]    → Lancez `npm run backend:tunnel` pour activer le tracking public.');
   } else {
     console.log(`[SMTP] 🔗 Pixel de tracking injecté : ${serverPublicUrl}/api/email/track/open/${recipientId}`);
@@ -207,15 +242,13 @@ app.post('/api/email/send-smtp', async (req, res) => {
 
   try {
     const transporter = createTransporter({ host: smtpHost, port: smtpPort, user: smtpUser, pass: smtpPass });
-
     const info = await transporter.sendMail({
       from: `"${from.name}" <${from.email}>`,
       to: to.email,
       replyTo: replyTo || from.email,
-      subject: subject,
+      subject,
       html: trackedHtml,
     });
-
     console.log(`[SMTP] Email sent. MessageID: ${info.messageId}`);
     res.json({ messageId: info.messageId, success: true });
   } catch (err) {
@@ -224,8 +257,8 @@ app.post('/api/email/send-smtp', async (req, res) => {
   }
 });
 
-// Open-tracking pixel endpoint
-// Returns a transparent 1x1 GIF and updates recipient status in Supabase
+// ─── Tracking pixel ───────────────────────────────────────────────────────────
+
 const TRACKING_PIXEL = Buffer.from(
   'R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==',
   'base64'
@@ -234,317 +267,171 @@ const TRACKING_PIXEL = Buffer.from(
 app.get('/api/email/track/open/:recipientId', async (req, res) => {
   const { recipientId } = req.params;
 
-  // #region agent log
-  fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Debug-Session-Id': 'ef6e8d',
-    },
-    body: JSON.stringify({
-      sessionId: 'ef6e8d',
-      runId: 'pre-fix',
-      hypothesisId: 'OR1',
-      location: 'server/app.js:394',
-      message: 'open-tracking endpoint hit',
-      data: { recipientId },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => { });
-  // #endregion agent log
-
-  // Respond with pixel immediately
   res.set('Content-Type', 'image/gif');
   res.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
   res.send(TRACKING_PIXEL);
 
-  if (recipientId) {
-    try {
-      const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-      const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  if (!recipientId) return;
 
-      if (supabaseUrl && supabaseKey) {
-        // 1. Fetch current status to avoid double-counting
-        const getRes = await fetch(`${supabaseUrl}/rest/v1/campaign_recipients?select=status,campaign_id&id=eq.${recipientId}`, {
-          headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
+  try {
+    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    if (!supabaseUrl || !supabaseKey) return;
+
+    const getRes = await fetch(
+      `${supabaseUrl}/rest/v1/campaign_recipients?select=status,campaign_id&id=eq.${recipientId}`,
+      { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } }
+    );
+    if (!getRes.ok) return;
+
+    const recipient = (await getRes.json())[0];
+    if (!recipient || recipient.status === 'opened') return;
+
+    await fetch(`${supabaseUrl}/rest/v1/campaign_recipients?id=eq.${recipientId}`, {
+      method: 'PATCH',
+      headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+      body: JSON.stringify({ status: 'opened', opened_at: new Date().toISOString() }),
+    });
+
+    if (recipient.campaign_id) {
+      const campRes = await fetch(
+        `${supabaseUrl}/rest/v1/email_campaigns?select=opened_count&id=eq.${recipient.campaign_id}`,
+        { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } }
+      );
+      if (campRes.ok) {
+        const camp = (await campRes.json())[0];
+        const newCount = (camp?.opened_count || 0) + 1;
+        await fetch(`${supabaseUrl}/rest/v1/email_campaigns?id=eq.${recipient.campaign_id}`, {
+          method: 'PATCH',
+          headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ opened_count: newCount }),
         });
-
-        if (!getRes.ok) {
-          // #region agent log
-          fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Debug-Session-Id': 'ef6e8d',
-            },
-            body: JSON.stringify({
-              sessionId: 'ef6e8d',
-              runId: 'pre-fix',
-              hypothesisId: 'OR2',
-              location: 'server/app.js:413',
-              message: 'failed to fetch recipient for open tracking',
-              data: { recipientId, httpStatus: getRes.status },
-              timestamp: Date.now(),
-            }),
-          }).catch(() => { });
-          // #endregion agent log
-          return;
-        }
-        const recipient = (await getRes.json())[0];
-        if (!recipient) {
-          // #region agent log
-          fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Debug-Session-Id': 'ef6e8d',
-            },
-            body: JSON.stringify({
-              sessionId: 'ef6e8d',
-              runId: 'pre-fix',
-              hypothesisId: 'OR3',
-              location: 'server/app.js:415',
-              message: 'no recipient found for open tracking',
-              data: { recipientId },
-              timestamp: Date.now(),
-            }),
-          }).catch(() => { });
-          // #endregion agent log
-          return;
-        }
-
-        // 2. Only update and increment if not already opened
-        if (recipient.status !== 'opened') {
-          // Update recipient
-          await fetch(`${supabaseUrl}/rest/v1/campaign_recipients?id=eq.${recipientId}`, {
-            method: 'PATCH',
-            headers: {
-              'apikey': supabaseKey,
-              'Authorization': `Bearer ${supabaseKey}`,
-              'Content-Type': 'application/json',
-              'Prefer': 'return=minimal',
-            },
-            body: JSON.stringify({
-              status: 'opened',
-              opened_at: new Date().toISOString(),
-            }),
-          });
-
-          // Increment campaign total
-          if (recipient.campaign_id) {
-            const campRes = await fetch(`${supabaseUrl}/rest/v1/email_campaigns?select=opened_count&id=eq.${recipient.campaign_id}`, {
-              headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
-            });
-            if (campRes.ok) {
-              const camp = (await campRes.json())[0];
-              const newCount = (camp?.opened_count || 0) + 1;
-              await fetch(`${supabaseUrl}/rest/v1/email_campaigns?id=eq.${recipient.campaign_id}`, {
-                method: 'PATCH',
-                headers: {
-                  'apikey': supabaseKey,
-                  'Authorization': `Bearer ${supabaseKey}`,
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ opened_count: newCount }),
-              });
-              // #region agent log
-              fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'X-Debug-Session-Id': 'ef6e8d',
-                },
-                body: JSON.stringify({
-                  sessionId: 'ef6e8d',
-                  runId: 'pre-fix',
-                  hypothesisId: 'OR4',
-                  location: 'server/app.js:441',
-                  message: 'campaign opened_count incremented',
-                  data: {
-                    recipientId,
-                    campaignId: recipient.campaign_id,
-                    newOpenedCount: newCount,
-                  },
-                  timestamp: Date.now(),
-                }),
-              }).catch(() => { });
-              // #endregion agent log
-            }
-          }
-          console.log(`[Tracking] Email opened by recipient ${recipientId} (Campaign: ${recipient.campaign_id})`);
-        } else {
-          // #region agent log
-          fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-Debug-Session-Id': 'ef6e8d',
-            },
-            body: JSON.stringify({
-              sessionId: 'ef6e8d',
-              runId: 'pre-fix',
-              hypothesisId: 'OR5',
-              location: 'server/app.js:453',
-              message: 'open pixel called but recipient already marked opened',
-              data: {
-                recipientId,
-                campaignId: recipient.campaign_id,
-              },
-              timestamp: Date.now(),
-            }),
-          }).catch(() => { });
-          // #endregion agent log
-        }
       }
-    } catch (err) {
-      console.error('[Tracking] Error updating open status:', err.message);
-      // #region agent log
-      fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Debug-Session-Id': 'ef6e8d',
-        },
-        body: JSON.stringify({
-          sessionId: 'ef6e8d',
-          runId: 'pre-fix',
-          hypothesisId: 'OR6',
-          location: 'server/app.js:457',
-          message: 'exception during open-tracking update',
-          data: {
-            recipientId,
-            errorMessage: err?.message ?? String(err),
-          },
-          timestamp: Date.now(),
-        }),
-      }).catch(() => { });
-      // #endregion agent log
     }
+    console.log(`[Tracking] Email opened by recipient ${recipientId} (Campaign: ${recipient.campaign_id})`);
+  } catch (err) {
+    console.error('[Tracking] Error updating open status:', err.message);
   }
 });
 
-// Unsubscribe endpoint
+// ─── Unsubscribe ──────────────────────────────────────────────────────────────
+
 app.get('/api/email/unsubscribe/:recipientId', async (req, res) => {
   const { recipientId } = req.params;
-
   if (!recipientId) return res.status(400).send('ID manquant');
 
   try {
     const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    if (!supabaseUrl || !supabaseKey) return res.status(500).send('Configuration backend manquante.');
 
-    if (supabaseUrl && supabaseKey) {
-      const updateRes = await fetch(
-        `${supabaseUrl}/rest/v1/campaign_recipients?id=eq.${recipientId}`,
-        {
-          method: 'PATCH',
-          headers: {
-            'apikey': supabaseKey,
-            'Authorization': `Bearer ${supabaseKey}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=representation', // get the updated row back to find campaign_id
-          },
-          body: JSON.stringify({
-            status: 'unsubscribed',
-            unsubscribed_at: new Date().toISOString(),
-          }),
-        }
-      );
-      if (updateRes.ok) {
-        const recipients = await updateRes.json();
-        const campaignId = recipients && recipients.length > 0 ? recipients[0].campaign_id : null;
-
-        if (campaignId) {
-          // Fetch current campaign to get unsubscribed_count
-          const campRes = await fetch(`${supabaseUrl}/rest/v1/email_campaigns?select=unsubscribed_count&id=eq.${campaignId}`, {
-            headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` }
-          });
-          if (campRes.ok) {
-            const campData = await campRes.json();
-            const currentUnsubCount = campData && campData.length > 0 ? (campData[0].unsubscribed_count || 0) : 0;
-            await fetch(`${supabaseUrl}/rest/v1/email_campaigns?id=eq.${campaignId}`, {
-              method: 'PATCH',
-              headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json' },
-              body: JSON.stringify({ unsubscribed_count: currentUnsubCount + 1 })
-            });
-          }
-        }
-
-        console.log(`[Unsubscribe] Recipient ${recipientId} unsubscribed successfully`);
-        // Return a simple HTML page confirming the unsubscription
-        res.send(`
-          <html>
-            <head>
-              <title>Désabonnement confirmé</title>
-              <meta charset="utf-8">
-              <style>
-                body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f8fafc; margin: 0; }
-                .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); text-align: center; max-width: 400px; }
-                h1 { color: #0f172a; margin-top: 0; }
-                p { color: #64748b; line-height: 1.5; }
-                .icon { font-size: 3rem; margin-bottom: 1rem; }
-              </style>
-            </head>
-            <body>
-              <div class="card">
-                <div class="icon">✅</div>
-                <h1>Désabonnement confirmé</h1>
-                <p>Vous avez bien été désabonné. Vous ne recevrez plus d'emails de notre part.</p>
-              </div>
-            </body>
-          </html>
-        `);
-      } else {
-        console.error(`[Unsubscribe] DB update failed for ${recipientId}: ${updateRes.status}`);
-        res.status(500).send('Erreur lors du désabonnement, veuillez réessayer ultérieurement.');
+    const updateRes = await fetch(
+      `${supabaseUrl}/rest/v1/campaign_recipients?id=eq.${recipientId}`,
+      {
+        method: 'PATCH',
+        headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+        body: JSON.stringify({ status: 'unsubscribed', unsubscribed_at: new Date().toISOString() }),
       }
-    } else {
-      res.status(500).send('Configuration backend manquante.');
+    );
+
+    if (!updateRes.ok) {
+      console.error(`[Unsubscribe] DB update failed for ${recipientId}: ${updateRes.status}`);
+      return res.status(500).send('Erreur lors du désabonnement, veuillez réessayer ultérieurement.');
     }
+
+    const recipients = await updateRes.json();
+    const campaignId = recipients?.[0]?.campaign_id || null;
+
+    if (campaignId) {
+      const campRes = await fetch(
+        `${supabaseUrl}/rest/v1/email_campaigns?select=unsubscribed_count&id=eq.${campaignId}`,
+        { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } }
+      );
+      if (campRes.ok) {
+        const campData = await campRes.json();
+        const currentUnsub = campData?.[0]?.unsubscribed_count || 0;
+        await fetch(`${supabaseUrl}/rest/v1/email_campaigns?id=eq.${campaignId}`, {
+          method: 'PATCH',
+          headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ unsubscribed_count: currentUnsub + 1 }),
+        });
+      }
+    }
+
+    console.log(`[Unsubscribe] Recipient ${recipientId} unsubscribed successfully`);
+    res.send(`
+      <html>
+        <head>
+          <title>Désabonnement confirmé</title>
+          <meta charset="utf-8">
+          <style>
+            body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f8fafc; margin: 0; }
+            .card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); text-align: center; max-width: 400px; }
+            h1 { color: #0f172a; margin-top: 0; }
+            p { color: #64748b; line-height: 1.5; }
+            .icon { font-size: 3rem; margin-bottom: 1rem; }
+          </style>
+        </head>
+        <body>
+          <div class="card">
+            <div class="icon">✅</div>
+            <h1>Désabonnement confirmé</h1>
+            <p>Vous avez bien été désabonné. Vous ne recevrez plus d'emails de notre part.</p>
+          </div>
+        </body>
+      </html>
+    `);
   } catch (err) {
     console.error('[Unsubscribe] Error:', err.message);
     res.status(500).send('Erreur interne serveur');
   }
 });
 
-// ── GMAPS SCRAPER ─────────────────────────────────────────────────────────────
+// ─── Scrapers ─────────────────────────────────────────────────────────────────
+
+// Google Maps
 setupScraperEndpoint(app, '/api/scrape/gmaps', 'scraper_googlemaps.cjs', (req) => [
   req.query.q || '',
   req.query.l || '',
   req.query.limit || '20',
-  req.query.userId || "",
-  req.query.type || "tous"
+  req.query.userId || '',
+  req.query.type || 'tous',
 ]);
 
-// PagesJaunes — ordre: q (mots-clés), l (ville), limit, type (entreprise/personne/tous)
+// PagesJaunes
 setupScraperEndpoint(app, '/api/scrape/pj', 'scraper_pj.cjs', (req) => [
-  req.query.q || "restaurant",
-  req.query.l || "Paris",
-  req.query.limit || "5",
-  req.query.type || "tous"
+  req.query.q || 'restaurant',
+  req.query.l || 'Paris',
+  req.query.limit || '5',
+  req.query.type || 'tous',
 ]);
 
 // Societe.com
 setupScraperEndpoint(app, '/api/scrape/societe', 'scraper_societe.cjs', (req) => [
-  req.query.type || "entreprise",
-  req.query.q || "",
-  req.query.limit || "5"
+  req.query.type || 'entreprise',
+  req.query.q || '',
+  req.query.limit || '5',
 ]);
 
 // Infogreffe
 setupScraperEndpoint(app, '/api/scrape/infogreffe', 'scraper_infogreffe.cjs', (req) => [
-  req.query.type || "entreprise",
-  req.query.q || "",
-  req.query.limit || "5"
+  req.query.type || 'entreprise',
+  req.query.q || '',
+  req.query.limit || '5',
 ]);
 
 // Pappers
+// Ordre des args : query, location, limit, apiToken, type
+// Token résolu dans l'ordre :
+//   1. req.query.apiToken  (passé par le frontend)
+//   2. process.env.PAPPERS_API_TOKEN  (défini dans .env)
+//   3. '' → mode Playwright sans API
 setupScraperEndpoint(app, '/api/scrape/pappers', 'scraper_pappers.cjs', (req) => [
-  req.query.q || "TOTALENERGIES",
-  req.query.l || "",
-  req.query.limit || "5",
-  "", // token placeholder if needed
-  req.query.type || "tous"
+  req.query.q || 'hotel',
+  req.query.l || '',
+  req.query.limit || '5',
+  req.query.apiToken || process.env.PAPPERS_API_TOKEN || '',
+  req.query.type || 'entreprise',
 ]);
 
 // LinkedIn
@@ -560,30 +447,6 @@ app.get('/api/scrape/linkedin', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
 
   const scriptPath = path.resolve(rootDir, 'scripts', 'scraper_linkedin.cjs');
-  // #region agent log
-  fetch('http://127.0.0.1:7525/ingest/d5461618-61cd-4a83-9f42-892bccf07283', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Debug-Session-Id': 'ef6e8d',
-    },
-    body: JSON.stringify({
-      sessionId: 'ef6e8d',
-      runId: 'linkedin-limit-pre-fix',
-      hypothesisId: 'L3',
-      location: 'server/app.js:722',
-      message: 'Spawning LinkedIn scraper',
-      data: {
-        maxProfilesParam: maxProfiles || '10',
-        maxPostsParam: maxPosts || '30',
-        typeParam: type || 'tous',
-        activityTypeParam: activityType || 'all',
-      },
-      timestamp: Date.now(),
-    }),
-  }).catch(() => { });
-  // #endregion agent log
-
   const child = spawn('node', [scriptPath, email, password, q || '', maxProfiles || '10', maxPosts || '30', type || 'tous', activityType || 'all']);
 
   child.stdout.on('data', (data) => {
@@ -601,7 +464,7 @@ app.get('/api/scrape/linkedin', (req, res) => {
   req.on('close', () => child.kill());
 });
 
-// Enrichment - Google (No website)
+// Enrichment - Google (sans site web)
 setupScraperEndpoint(app, '/api/scrape/enrich-google', 'enricher_google.cjs', (req) => {
   const { name, company, l, id, openAiKey } = req.query;
   const prospect = { name, company, city: l, id: id || 'temp' };
@@ -610,10 +473,10 @@ setupScraperEndpoint(app, '/api/scrape/enrich-google', 'enricher_google.cjs', (r
   return args;
 });
 
-// Enrichment - Website (Website provided)
+// Enrichment - Website (site web fourni)
 setupScraperEndpoint(app, '/api/scrape/enrich-website', 'scraper_website_enrich.cjs', (req) => {
   const { website, name, company, openAiKey } = req.query;
-  return [website, name || "Inconnu", company || "Inconnue", openAiKey];
+  return [website, name || 'Inconnu', company || 'Inconnue', openAiKey];
 });
 
 // Facebook
@@ -623,8 +486,8 @@ app.get('/api/scrape/facebook', (req, res) => {
     return res.status(400).json({ error: 'Email et mot de passe Facebook requis.' });
   }
 
-  const resLockPath = path.resolve(rootDir, 'scripts', 'cancel_scrape.lock');
-  if (fs.existsSync(resLockPath)) fs.unlinkSync(resLockPath);
+  const lockPath = path.resolve(rootDir, 'scripts', 'cancel_scrape.lock');
+  if (fs.existsSync(lockPath)) fs.unlinkSync(lockPath);
 
   res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
 

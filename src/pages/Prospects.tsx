@@ -132,14 +132,12 @@ const Prospects = () => {
       }
 
       const flattenedData = data?.map((p: any) => {
-        // En fonction de si c'est un tableau (relation to-many temporaire) ou un objet (to-one)
         const pd = Array.isArray(p.prospect_data) ? (p.prospect_data[0] || {}) : (p.prospect_data || {});
 
         return {
           ...p,
           ...pd,
           id: p.id,
-          // Support both snake_case from DB and camelCase from Search
           contractDetails: pd.contract_details || p.contractDetails || {},
           webIntelligence: pd.web_intelligence || p.webIntelligence || {},
           aiIntelligence: pd.ai_intelligence || p.aiIntelligence || {},
@@ -164,7 +162,6 @@ const Prospects = () => {
 
   useEffect(() => {
     if (user) loadProspects();
-    // Auto-open modal if URL says so
     const params = new URLSearchParams(location.search);
     if (params.get("action") === "new") {
       setIsDialogOpen(true);
@@ -208,7 +205,6 @@ const Prospects = () => {
     e.preventDefault();
     if (!user) return;
 
-    // Anti-duplicate check
     const isDuplicate = prospects.some(p =>
       (formData.company && p.company?.toLowerCase() === formData.company.toLowerCase()) ||
       (formData.email && p.email?.toLowerCase() === formData.email.toLowerCase())
@@ -223,7 +219,6 @@ const Prospects = () => {
       return;
     }
 
-    // Database check (more robust)
     try {
       if (formData.email) {
         const { data: dbExistingEmail } = await supabase
@@ -276,8 +271,9 @@ const Prospects = () => {
       }]).select().single();
 
       if (pError) throw pError;
+      if (!newProspect) throw new Error("Failed to create prospect record");
 
-      const { error: pdError } = await supabase.from("prospect_data").insert([{
+      const { error: pdError } = await (supabase.from("prospect_data") as any).insert([{
         prospect_id: newProspect.id,
         name: formData.name,
         company: formData.company,
@@ -334,9 +330,9 @@ const Prospects = () => {
         .delete()
         .in("id", Array.from(selectedIds));
       if (error) throw error;
-      toast({ 
-        title: t("success"), 
-        description: t("bulkDeleteSuccess", { count: selectedIds.size }) 
+      toast({
+        title: t("success"),
+        description: t("bulkDeleteSuccess", { count: selectedIds.size })
       });
       setSelectedIds(new Set());
       setIsBulkDeleteConfirmOpen(false);
@@ -354,13 +350,11 @@ const Prospects = () => {
       const seen = new Set<string>();
       const toDelete: string[] = [];
 
-      // Sort by created_at descending to keep the most recent ones (optional)
       const sorted = [...prospects].sort((a, b) =>
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       );
 
       for (const p of sorted) {
-        // Create unique keys for comparison
         const emailKey = p.email ? `email:${p.email.toLowerCase()}` : null;
         const nameKey = (p.name && p.company) ? `name:${p.name.toLowerCase()}|co:${p.company.toLowerCase()}` : null;
 
@@ -381,7 +375,6 @@ const Prospects = () => {
         return;
       }
 
-      // Perform deletion
       const { error } = await supabase.from("prospects").delete().in("id", toDelete);
 
       if (error) throw error;
@@ -421,10 +414,9 @@ const Prospects = () => {
           <ProspectsSubNav onNewManual={() => setIsDialogOpen(true)} />
         </div>
 
-        <div 
-          className={`rounded-lg border bg-card/80 backdrop-blur-md p-4 shadow-sm mb-6 sticky z-30 transition-all duration-300 ${
-            isVisible ? "top-16 opacity-100 translate-y-0" : "-top-20 opacity-0 -translate-y-4"
-          }`}
+        <div
+          className={`rounded-lg border bg-card/80 backdrop-blur-md p-4 shadow-sm mb-6 sticky z-30 transition-all duration-300 ${isVisible ? "top-16 opacity-100 translate-y-0" : "-top-20 opacity-0 -translate-y-4"
+            }`}
         >
           <div className="flex gap-4">
             <div className="relative flex-1">
@@ -461,8 +453,8 @@ const Prospects = () => {
                 {(filterEmail || filterPhone || filterLinkedin || filterWebsite) && (
                   <>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem 
-                      className="text-destructive justify-center" 
+                    <DropdownMenuItem
+                      className="text-destructive justify-center"
                       onClick={() => {
                         setFilterEmail(false);
                         setFilterPhone(false);
@@ -492,8 +484,8 @@ const Prospects = () => {
         <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
           {isLoading ? (
             <div className="p-20 text-center flex flex-col items-center justify-center gap-4">
-                <Loader2 className="h-10 w-10 animate-spin text-accent" />
-                <p className="text-sm text-slate-500 font-medium">{t("cloudSync")}</p>
+              <Loader2 className="h-10 w-10 animate-spin text-accent" />
+              <p className="text-sm text-slate-500 font-medium">{t("cloudSync")}</p>
             </div>
           ) : filteredProspects.length === 0 ? (
             <div className="p-20 text-center text-muted-foreground">{t("noProspectsFound")}</div>
