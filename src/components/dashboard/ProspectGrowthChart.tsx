@@ -6,6 +6,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 interface GrowthData {
   date: string;
   count: number;
+  openRate: number;
 }
 
 interface ProspectGrowthChartProps {
@@ -20,12 +21,16 @@ export function ProspectGrowthChart({ data }: ProspectGrowthChartProps) {
       label: t("prospects"),
       color: "hsl(var(--accent))",
     },
+    openRate: {
+      label: "Taux d'ouverture (%)",
+      color: "#10b981",
+    }
   };
 
   return (
     <Card className="border-none shadow-none bg-transparent">
       <CardHeader className="px-0 pt-0">
-        <CardTitle className="text-xl font-bold">{t("conversionRate")}</CardTitle>
+        <CardTitle className="text-xl font-bold">Activité & Croissance</CardTitle>
         <CardDescription>{t("last30Days")}</CardDescription>
       </CardHeader>
       <CardContent className="px-0 pb-0">
@@ -53,6 +58,18 @@ export function ProspectGrowthChart({ data }: ProspectGrowthChartProps) {
                   stopOpacity={0}
                 />
               </linearGradient>
+              <linearGradient id="fillOpenRate" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="#10b981"
+                  stopOpacity={0.2}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="#10b981"
+                  stopOpacity={0}
+                />
+              </linearGradient>
             </defs>
             <CartesianGrid vertical={false} strokeDasharray="3 3" opacity={0.1} />
             <XAxis
@@ -69,19 +86,30 @@ export function ProspectGrowthChart({ data }: ProspectGrowthChartProps) {
                 });
               }}
             />
-            <YAxis hide />
+            <YAxis yAxisId="left" hide />
+            <YAxis yAxisId="right" hide domain={[0, 100]} />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="dot" />}
             />
             <Area
+              yAxisId="left"
               dataKey="count"
               type="natural"
               fill="url(#fillCount)"
               fillOpacity={0.4}
               stroke="hsl(var(--accent))"
               strokeWidth={2}
-              stackId="a"
+            />
+            <Area
+              yAxisId="right"
+              dataKey="openRate"
+              type="monotone"
+              fill="url(#fillOpenRate)"
+              fillOpacity={0.2}
+              stroke="#10b981"
+              strokeWidth={1.5}
+              strokeDasharray="4 4"
             />
           </AreaChart>
         </ChartContainer>

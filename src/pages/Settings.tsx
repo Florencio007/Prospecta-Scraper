@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Save, LogOut, Bell, Shield, Palette, Key, Upload, Camera, ExternalLink, Loader2 } from "lucide-react";
+import { Save, LogOut, Bell, Shield, Palette, Key, Upload, Camera, ExternalLink } from "lucide-react";
 import Header from "@/components/dashboard/Header";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -34,7 +34,7 @@ const Settings = () => {
 
   const [profileSettings, setProfileSettings] = useState({
     fullName: profile?.full_name || "",
-    photoUrl: profile?.avatar_url || "",
+    photoUrl: (profile as any)?.avatar_url || "",
     userServiceDescription: "",
   });
 
@@ -138,7 +138,7 @@ const Settings = () => {
     if (profile?.full_name) {
       setProfileSettings((prev) => ({
         ...prev,
-        photoUrl: profile?.avatar_url || "",
+        photoUrl: (profile as any)?.avatar_url || "",
         fullName: profile.full_name,
       }));
     }
@@ -626,7 +626,7 @@ const Settings = () => {
                     disabled={isLoading}
                     className="bg-accent text-accent-foreground hover:bg-accent/90"
                   >
-                    {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save size={18} className="mr-2" />}
+                    <Save size={18} className="mr-2" />
                     {isLoading ? t("saving") : t("saveChanges")}
                   </Button>
                 </div>
@@ -682,7 +682,7 @@ const Settings = () => {
                   disabled={isLoading}
                   className="w-full bg-accent text-accent-foreground mt-4"
                 >
-                  {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save size={18} className="mr-2" />}
+                  <Save size={18} className="mr-2" />
                   {isLoading ? "Enregistrement..." : "Enregistrer les credentials LinkedIn"}
                 </Button>
 

@@ -50,7 +50,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
         // Try to load enriched data from localStorage first - user requirement
         const cacheKey = `enrichment_${prospect.id}`;
         const cachedData = localStorage.getItem(cacheKey);
-        
+
         if (cachedData) {
             try {
                 const parsed = JSON.parse(cachedData);
@@ -133,9 +133,9 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
         setIsEnriching(true);
 
         try {
-            const hasWebsite = !!currentProspect.website && 
-                             !currentProspect.website.toLowerCase().includes("google.com/maps") && 
-                             !currentProspect.website.toLowerCase().includes("goo.gl/maps");
+            const hasWebsite = !!currentProspect.website &&
+                !currentProspect.website.toLowerCase().includes("google.com/maps") &&
+                !currentProspect.website.toLowerCase().includes("goo.gl/maps");
 
             console.log(hasWebsite ? "Starting Website Enrichment..." : "Starting Google Search Enrichment...");
 
@@ -155,7 +155,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
             eventSource.onmessage = async (event) => {
                 try {
                     const data = JSON.parse(event.data);
-                    
+
                     if (data.message) {
                         // Progress update
                         console.log(`Enrichment Progress: ${data.percentage}% - ${data.message}`);
@@ -192,19 +192,19 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                         // DB Persistence (Supabase)
                         if (currentProspect.id) {
                             try {
-                                await supabase
-                                    .from("prospects")
-                                    .update({ score: updatedProspect.score } as any)
+                                await (supabase
+                                    .from("prospects") as any)
+                                    .update({ score: updatedProspect.score })
                                     .eq("id", currentProspect.id);
 
-                                await supabase
-                                    .from("prospect_data")
+                                await (supabase
+                                    .from("prospect_data") as any)
                                     .update({
                                         phone: updatedProspect.phone,
                                         email: updatedProspect.email,
                                         summary: updatedProspect.aiIntelligence?.executiveSummary,
                                         ai_intelligence: updatedProspect.aiIntelligence
-                                    } as any)
+                                    })
                                     .eq("prospect_id", currentProspect.id);
                             } catch (pErr) {
                                 console.error("DB Update error:", pErr);
@@ -380,7 +380,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
             // 0. Check if prospect already exists by email OR name+company to avoid unique constraint error
             if (currentProspect.email || (currentProspect.name && currentProspect.company)) {
                 let existing = null;
-                
+
                 // Try by email first
                 if (currentProspect.email) {
                     const { data: byEmail } = await supabase
@@ -391,7 +391,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                         .maybeSingle();
                     if (byEmail) existing = byEmail;
                 }
-                
+
                 // Fallback to name + company
                 if (!existing && currentProspect.name && currentProspect.company) {
                     const { data: byName } = await supabase
@@ -403,7 +403,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                         .maybeSingle();
                     if (byName) existing = byName;
                 }
-                
+
                 if (existing) {
                     console.log("Prospect already exists in DB. Using existing ID:", existing.prospect_id);
                     const updated = { ...currentProspect, id: existing.prospect_id as string };
@@ -418,7 +418,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                 score: currentProspect.score,
                 user_id: user.id,
                 status: 'new'
-            }]).select().single() as any;
+            }] as any).select().single() as any;
 
             if (pErr) throw pErr;
 
@@ -434,8 +434,8 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                     initials: currentProspect.initials,
                     website: currentProspect.website,
                     contract_details: currentProspect.contractDetails || null,
-                    web_intelligence: currentProspect.aiIntelligence || null
-                }]);
+                    ai_intelligence: currentProspect.aiIntelligence || null
+                }] as any);
 
                 if (pdErr) throw pdErr;
 
@@ -448,14 +448,15 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
         } catch (error: any) {
             console.error("Error auto-saving prospect:", error);
             const errorMessage = error.message || error.details || t("errorSavingProspect");
-            toast({ 
-                title: t("error"), 
-                description: `${t("errorSavingProspect")}: ${errorMessage}`, 
-                variant: "destructive" 
+            toast({
+                title: t("error"),
+                description: `${t("errorSavingProspect")}: ${errorMessage}`,
+                variant: "destructive"
             });
             return null;
         }
     };
+
 
     if (!isOpen) return null;
 
@@ -484,8 +485,8 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                     <div className="text-center">
                                         <div className="relative inline-block mb-4">
                                             {currentProspect.photo || (currentProspect.contractDetails as any)?.photo ? (
-                                                <img 
-                                                    src={currentProspect.photo || (currentProspect.contractDetails as any)?.photo} 
+                                                <img
+                                                    src={currentProspect.photo || (currentProspect.contractDetails as any)?.photo}
                                                     alt={currentProspect.name}
                                                     className="h-24 w-24 rounded-full border-4 border-accent/20 object-cover shadow-lg"
                                                 />
@@ -662,7 +663,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                     <span className="text-xs font-semibold text-muted-foreground group-hover:text-pink-400 transition-colors">Instagram</span>
                                                 </a>
                                             )}
-                                            
+
                                             {/* Plateformes Google Maps Additionnelles */}
                                             {currentProspect.contractDetails?.platformLinks && Array.isArray(currentProspect.contractDetails.platformLinks) && currentProspect.contractDetails.platformLinks.map((pl: any, idx: number) => (
                                                 <a key={idx} href={pl.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-secondary/20 rounded-xl border border-border/30 hover:border-accent/40 hover:bg-secondary/40 transition-all group">
@@ -670,7 +671,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                     <span className="text-xs font-semibold text-muted-foreground group-hover:text-accent transition-colors">{pl.name}</span>
                                                 </a>
                                             ))}
-                                            
+
                                             {((currentProspect.socialLinks?.twitter) || (currentProspect.website && (currentProspect.website.toLowerCase().includes("twitter.com") || currentProspect.website.toLowerCase().includes("x.com")))) && (
                                                 <a href={currentProspect.socialLinks?.twitter || currentProspect.website} target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 p-3 bg-secondary/20 rounded-xl border border-border/30 hover:border-blue-300/40 hover:bg-secondary/40 transition-all group">
                                                     <Twitter size={16} className="text-blue-300" />
@@ -778,11 +779,10 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                                 {(currentProspect.aiIntelligence as any).ai_suggestions.map((s: any, i: number) => (
                                                                     <div key={i} className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all">
                                                                         <div className="flex items-center gap-2 mb-2">
-                                                                            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${
-                                                                                s.type === 'email' ? 'bg-blue-100 text-blue-600' :
-                                                                                s.type === 'linkedin' ? 'bg-indigo-100 text-indigo-600' :
-                                                                                'bg-orange-100 text-orange-600'
-                                                                            }`}>
+                                                                            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${s.type === 'email' ? 'bg-blue-100 text-blue-600' :
+                                                                                    s.type === 'linkedin' ? 'bg-indigo-100 text-indigo-600' :
+                                                                                        'bg-orange-100 text-orange-600'
+                                                                                }`}>
                                                                                 {s.type}
                                                                             </span>
                                                                         </div>
@@ -830,7 +830,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                     {currentProspect.aiIntelligence.keyPeople && currentProspect.aiIntelligence.keyPeople.length > 0 && (
                                                         <div className="space-y-4">
                                                             <h4 className="text-sm font-bold flex items-center gap-2">
-                                                                <Users size={18} className="text-blue-500" /> Personnes Clés
+                                                                <Users size={18} className="text-blue-500" /> {t("keyPeople")}
                                                             </h4>
                                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                                                 {currentProspect.aiIntelligence.keyPeople.map((person, idx) => (
@@ -850,7 +850,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                     {currentProspect.aiIntelligence.activities && (Object.keys(currentProspect.aiIntelligence.activities).length > 0) && (
                                                         <div className="space-y-4">
                                                             <h4 className="text-sm font-bold flex items-center gap-2">
-                                                                <Zap size={18} className="text-amber-500" /> Activités & Spécialités
+                                                                <Zap size={18} className="text-amber-500" /> {t("activitiesSpecialties")}
                                                             </h4>
                                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                                 {currentProspect.aiIntelligence.activities.services && currentProspect.aiIntelligence.activities.services.length > 0 && (
@@ -891,7 +891,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                     {currentProspect.aiIntelligence.recentNews && currentProspect.aiIntelligence.recentNews.length > 0 && (
                                                         <div className="space-y-4">
                                                             <h4 className="text-sm font-bold flex items-center gap-2">
-                                                                <Globe size={18} className="text-blue-400" /> Actualités Récentes
+                                                                <Globe size={18} className="text-blue-400" /> {t("recentNewsLabel")}
                                                             </h4>
                                                             <div className="space-y-3">
                                                                 {currentProspect.aiIntelligence.recentNews.map((news, idx) => (
@@ -910,7 +910,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                     {currentProspect.aiIntelligence.companyCulture && (currentProspect.aiIntelligence.companyCulture.mission || (currentProspect.aiIntelligence.companyCulture.values && currentProspect.aiIntelligence.companyCulture.values.length > 0)) && (
                                                         <div className="space-y-4">
                                                             <h4 className="text-sm font-bold flex items-center gap-2">
-                                                                <ShieldCheck size={18} className="text-emerald-500" /> Vision & Valeurs
+                                                                <ShieldCheck size={18} className="text-emerald-500" /> {t("visionValues")}
                                                             </h4>
                                                             <div className="p-4 bg-emerald-500/5 rounded-2xl border border-emerald-500/10 space-y-3">
                                                                 {currentProspect.aiIntelligence.companyCulture.mission && (
@@ -981,11 +981,13 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                     <div className="flex items-center justify-between">
                                                         <h3 className="text-lg font-bold flex items-center gap-2">
                                                             <Users className="text-primary" size={20} /> Profil {
-                                                                currentProspect.source === 'facebook' || currentProspect.source === 'facebook_page' ? 'Facebook' : 
-                                                                currentProspect.source === 'google_maps' ? 'Google Maps' : 'LinkedIn'
+                                                                currentProspect.source === 'facebook' || currentProspect.source === 'facebook_page' ? 'Facebook' :
+                                                                    currentProspect.source === 'google_maps' ? 'Google Maps' :
+                                                                        currentProspect.source === 'pappers' ? 'Pappers' :
+                                                                            'LinkedIn'
                                                             }
                                                         </h3>
-                                                        
+
                                                         {/* Profile URL links */}
                                                         <div className="flex gap-2">
                                                             {currentProspect.socialLinks?.linkedin && (
@@ -999,20 +1001,246 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                                     Voir le profil LinkedIn
                                                                 </a>
                                                             )}
-                                                            {currentProspect.socialLinks?.facebook && (
+
+                                                            {/* ── Lien vers la fiche Pappers ── */}
+                                                            {currentProspect.source === 'pappers' && (currentProspect.mapsUrl || (currentProspect.contractDetails as any)?.sourceUrl) && (
                                                                 <a
-                                                                    href={currentProspect.socialLinks.facebook}
+                                                                    href={currentProspect.mapsUrl || (currentProspect.contractDetails as any)?.sourceUrl}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="flex items-center gap-2 px-4 py-2 rounded-xl border border-blue-500/20 bg-blue-500/5 text-blue-400 text-sm hover:bg-blue-500/10 transition-colors w-fit"
+                                                                >
+                                                                    <Globe size={14} />
+                                                                    Voir la fiche Pappers
+                                                                    <ExternalLink size={12} />
+                                                                </a>
+                                                            )}
+                                                            {(currentProspect.socialLinks as any)?.facebook && (
+                                                                <a
+                                                                    href={(currentProspect.socialLinks as any).facebook}
                                                                     target="_blank"
                                                                     rel="noopener noreferrer"
                                                                     className="flex items-center gap-2 px-4 py-2 rounded-xl border border-blue-400/20 bg-blue-400/5 text-blue-400 text-sm hover:bg-blue-400/10 transition-colors w-fit"
                                                                 >
-                                                                    <span style={{fontSize:14}}>📘</span>
+                                                                    <span style={{ fontSize: 14 }}>📘</span>
                                                                     Voir le profil Facebook
                                                                 </a>
                                                             )}
                                                         </div>
                                                     </div>
-                                                    
+
+                                                    {currentProspect.source === 'pappers' && (() => {
+                                                        const cd = currentProspect.contractDetails as any;
+
+                                                        const legalFields = [
+                                                            { label: 'Statut', value: cd.status, special: 'status' },
+                                                            { label: 'SIREN', value: cd.siren },
+                                                            { label: 'SIRET (siège)', value: cd.siret },
+                                                            { label: 'Numéro de TVA', value: cd.numeroTVA },
+                                                            { label: 'Forme juridique', value: cd.formeJuridique },
+                                                            { label: 'Capital social', value: cd.capitalSocial },
+                                                            { label: 'Date de création', value: cd.dateCreation },
+                                                            { label: 'Date de radiation', value: cd.dateRadiation },
+                                                            { label: 'Inscription au RCS', value: cd.inscriptionRCS },
+                                                            { label: 'Inscription au RNE', value: cd.inscriptionRNE },
+                                                            { label: 'Numéro RCS', value: cd.numeroRCS },
+                                                            { label: 'Activité principale', value: cd.activitePrincipale },
+                                                            { label: 'Code NAF', value: cd.codeNAF },
+                                                            { label: "Domaine d'activité", value: cd.domaineActivite },
+                                                            { label: "Forme d'exercice", value: cd.formeExercice },
+                                                            { label: 'Convention collective', value: cd.conventionCollective },
+                                                            { label: "Clôture d'exercice", value: cd.dateCloture },
+                                                            { label: 'Effectif', value: cd.effectif },
+                                                        ].filter(f => f.value);
+
+                                                        const dirigeants = (cd.dirigeants || []) as any[];
+                                                        const entreprisesDirigees = (cd.entreprisesDirigees || []) as any[];
+                                                        const finances = (cd.finances || []) as any[];
+
+                                                        // Séparer actifs / anciens
+                                                        const dirigeantsActifs = dirigeants.filter((d: any) => d.actif !== false);
+                                                        const dirigeantsAnciens = dirigeants.filter((d: any) => d.actif === false);
+                                                        const entsActives = entreprisesDirigees.filter((e: any) => e.actif !== false);
+                                                        const entsAnciennes = entreprisesDirigees.filter((e: any) => e.actif === false);
+
+                                                        return (
+                                                            <div className="space-y-6">
+
+                                                                {/* ── Informations juridiques ────────────────────────────────────── */}
+                                                                {legalFields.length > 0 && (
+                                                                    <div className="space-y-3">
+                                                                        <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                                                            <ShieldCheck size={13} className="text-accent" /> Informations juridiques
+                                                                        </h5>
+                                                                        <div className="grid grid-cols-2 gap-2">
+                                                                            {legalFields.map((f, i) => (
+                                                                                <div key={i} className="p-3 bg-secondary/20 rounded-xl border border-border/30 flex flex-col gap-0.5">
+                                                                                    <span className="text-[10px] uppercase font-bold text-muted-foreground">{f.label}</span>
+                                                                                    <span className={`text-sm font-semibold ${f.special === 'status' && f.value === 'Active' ? 'text-emerald-500' :
+                                                                                            f.special === 'status' && f.value !== 'Active' ? 'text-red-400' :
+                                                                                                'text-foreground/90'
+                                                                                        }`}>{f.value}</span>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* ── Dirigeants actifs ─────────────────────────────────────────── */}
+                                                                {dirigeantsActifs.length > 0 && (
+                                                                    <div className="space-y-3">
+                                                                        <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                                                            <Users size={13} className="text-blue-400" />
+                                                                            Dirigeants et représentants ({dirigeantsActifs.length})
+                                                                        </h5>
+                                                                        <div className="flex flex-col gap-2">
+                                                                            {dirigeantsActifs.map((d: any, i: number) => (
+                                                                                <div key={i} className="p-3 bg-blue-500/5 rounded-xl border border-blue-500/10 flex items-start justify-between gap-2">
+                                                                                    <div className="min-w-0 flex-1">
+                                                                                        <p className="text-sm font-semibold text-foreground/90">{d.nom || d}</p>
+                                                                                        <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1">
+                                                                                            {d.qualite && <span className="text-[11px] font-medium text-blue-400">{d.qualite}</span>}
+                                                                                            {d.depuis && <span className="text-[10px] text-muted-foreground/70">Depuis le {d.depuis}</span>}
+                                                                                            {d.age && <span className="text-[10px] text-muted-foreground/60">{d.age}</span>}
+                                                                                            {d.siren && <span className="text-[10px] font-mono text-muted-foreground/50">SIREN {d.siren}</span>}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    {d.url && (
+                                                                                        <a href={d.url} target="_blank" rel="noopener noreferrer"
+                                                                                            className="shrink-0 mt-0.5 text-blue-400 hover:text-blue-300 transition-colors">
+                                                                                            <ExternalLink size={12} />
+                                                                                        </a>
+                                                                                    )}
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* ── Anciens dirigeants (collapsible) ──────────────────────────── */}
+                                                                {dirigeantsAnciens.length > 0 && (
+                                                                    <div className="space-y-2">
+                                                                        <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground/60 flex items-center gap-2">
+                                                                            <Users size={13} className="opacity-50" /> Anciens dirigeants ({dirigeantsAnciens.length})
+                                                                        </h5>
+                                                                        <div className="flex flex-col gap-1.5 opacity-60">
+                                                                            {dirigeantsAnciens.map((d: any, i: number) => (
+                                                                                <div key={i} className="p-2.5 bg-muted/10 rounded-lg border border-border/20 flex items-start justify-between gap-2">
+                                                                                    <div className="min-w-0">
+                                                                                        <p className="text-xs font-semibold text-foreground/70">{d.nom || d}</p>
+                                                                                        <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-0.5">
+                                                                                            {d.qualite && <span className="text-[10px] text-muted-foreground/60">{d.qualite}</span>}
+                                                                                            {d.depuis && <span className="text-[10px] text-muted-foreground/50">{d.depuis}</span>}
+                                                                                            {d.dateFin && <span className="text-[10px] text-muted-foreground/50">→ {d.dateFin}</span>}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    {d.url && (
+                                                                                        <a href={d.url} target="_blank" rel="noopener noreferrer"
+                                                                                            className="shrink-0 text-muted-foreground/40 hover:text-muted-foreground/70 transition-colors">
+                                                                                            <ExternalLink size={11} />
+                                                                                        </a>
+                                                                                    )}
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* ── Entreprises dirigées (actives) ────────────────────────────── */}
+                                                                {entsActives.length > 0 && (
+                                                                    <div className="space-y-3">
+                                                                        <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                                                            <Globe size={13} className="text-amber-400" /> Entreprises dirigées ({entsActives.length})
+                                                                        </h5>
+                                                                        <div className="flex flex-col gap-2">
+                                                                            {entsActives.map((e: any, i: number) => (
+                                                                                <div key={i} className="p-3 bg-emerald-500/5 rounded-xl border border-emerald-500/10 flex items-start justify-between gap-2">
+                                                                                    <div className="min-w-0 flex-1">
+                                                                                        <p className="text-sm font-semibold text-foreground/90">{e.nom}</p>
+                                                                                        <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1">
+                                                                                            {e.qualite && <span className="text-[11px] font-medium text-emerald-500">{e.qualite}</span>}
+                                                                                            {e.depuis && <span className="text-[10px] text-muted-foreground/70">Depuis le {e.depuis}</span>}
+                                                                                            {e.siren && <span className="text-[10px] font-mono text-muted-foreground/50">SIREN {e.siren}</span>}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    {e.url && (
+                                                                                        <a href={e.url} target="_blank" rel="noopener noreferrer"
+                                                                                            className="shrink-0 mt-0.5 text-amber-400 hover:text-amber-300 transition-colors">
+                                                                                            <ExternalLink size={12} />
+                                                                                        </a>
+                                                                                    )}
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* ── Anciens mandats ────────────────────────────────────────────── */}
+                                                                {entsAnciennes.length > 0 && (
+                                                                    <div className="space-y-2">
+                                                                        <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground/60 flex items-center gap-2">
+                                                                            <Globe size={13} className="opacity-50" /> Anciens mandats ({entsAnciennes.length})
+                                                                        </h5>
+                                                                        <div className="flex flex-col gap-1.5 opacity-60">
+                                                                            {entsAnciennes.map((e: any, i: number) => (
+                                                                                <div key={i} className="p-2.5 bg-muted/10 rounded-lg border border-border/20 flex items-start justify-between gap-2">
+                                                                                    <div className="min-w-0">
+                                                                                        <p className="text-xs font-semibold text-foreground/70">{e.nom}</p>
+                                                                                        <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-0.5">
+                                                                                            {e.qualite && <span className="text-[10px] text-muted-foreground/60">{e.qualite}</span>}
+                                                                                            {e.depuis && <span className="text-[10px] text-muted-foreground/50">{e.depuis}</span>}
+                                                                                            {e.dateFin && <span className="text-[10px] text-muted-foreground/50">→ {e.dateFin}</span>}
+                                                                                            {e.siren && <span className="text-[10px] font-mono text-muted-foreground/40">SIREN {e.siren}</span>}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    {e.url && (
+                                                                                        <a href={e.url} target="_blank" rel="noopener noreferrer"
+                                                                                            className="shrink-0 text-muted-foreground/40 hover:text-muted-foreground/70 transition-colors">
+                                                                                            <ExternalLink size={11} />
+                                                                                        </a>
+                                                                                    )}
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* ── Finances ──────────────────────────────────────────────────── */}
+                                                                {finances.length > 0 && (
+                                                                    <div className="space-y-3">
+                                                                        <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                                                            <Zap size={13} className="text-emerald-400" /> Finances
+                                                                        </h5>
+                                                                        <div className="overflow-x-auto rounded-xl border border-border/30">
+                                                                            <table className="w-full text-xs">
+                                                                                <thead className="bg-muted/20">
+                                                                                    <tr>
+                                                                                        {["Année", "Chiffre d'affaires", "Résultat net", "Effectifs"].map(h => (
+                                                                                            <th key={h} className="text-left py-2 px-3 font-bold text-muted-foreground">{h}</th>
+                                                                                        ))}
+                                                                                    </tr>
+                                                                                </thead>
+                                                                                <tbody>
+                                                                                    {finances.map((f: any, i: number) => (
+                                                                                        <tr key={i} className="border-t border-border/10 hover:bg-muted/10 transition-colors">
+                                                                                            <td className="py-2 px-3 font-semibold">{f.annee}</td>
+                                                                                            <td className="py-2 px-3 text-emerald-500 font-medium">{f.chiffreAffaires || '—'}</td>
+                                                                                            <td className={`py-2 px-3 font-medium ${(f.resultatNet || '').startsWith('-') ? 'text-red-400' : 'text-blue-400'}`}>
+                                                                                                {f.resultatNet || '—'}
+                                                                                            </td>
+                                                                                            <td className="py-2 px-3 text-muted-foreground">{f.effectifs || '—'}</td>
+                                                                                        </tr>
+                                                                                    ))}
+                                                                                </tbody>
+                                                                            </table>
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                            </div>
+                                                        );
+                                                    })()}
+
                                                     {/* Description IA générée automatiquement depuis les données disponibles */}
                                                     {(() => {
                                                         const cd = currentProspect.contractDetails as any;
@@ -1026,17 +1254,17 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                         let rawAbout = cd?.about;
                                                         let overview = '';
                                                         let amenities: string[] = [];
-                                                        
+
                                                         if (rawAbout && typeof rawAbout === 'object') {
                                                             overview = rawAbout.description || rawAbout.overview || '';
                                                             amenities = rawAbout.amenities || [];
                                                         } else {
                                                             overview = rawAbout || cd?.description || cd?.overview || currentProspect.summary || '';
                                                         }
-                                                        
+
                                                         const overviewStr = typeof overview === 'string' ? overview : String(overview || '');
 
-                                                         if (overviewStr) parts.push(overviewStr);
+                                                        if (overviewStr) parts.push(overviewStr);
 
                                                         // Données structurées
                                                         const sector = cd?.industry || cd?.category || cd?.sector || '';
@@ -1069,7 +1297,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                             if (specs) extras.push(`Spécialisations : ${specs}`);
                                                             if (extras.length > 0) parts.push(extras.join(' · '));
                                                         }
-                                                        
+
                                                         // Les équipements sont désormais affichés dans une grille de badges dédiée
 
                                                         if (parts.length === 0) return null;
@@ -1139,7 +1367,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                                     <div className="p-3 bg-secondary/20 rounded-xl border border-border/30 flex flex-col gap-1">
                                                                         <span className="text-[10px] uppercase font-bold text-muted-foreground">Note Google</span>
                                                                         <span className="text-sm font-semibold text-amber-500 flex items-center gap-1">
-                                                                            {currentProspect.contractDetails.rating} ⭐ 
+                                                                            {currentProspect.contractDetails.rating} ⭐
                                                                             <span className="text-muted-foreground text-[10px] font-normal">
                                                                                 ({currentProspect.contractDetails.totalScore || 0} avis)
                                                                             </span>
@@ -1158,8 +1386,8 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
 
                                                     {/* Équipements & Services (Amenities) */}
                                                     {(() => {
-                                                        const amenities = (currentProspect.contractDetails as any)?.about?.amenities || 
-                                                                         (currentProspect.contractDetails as any)?.amenities || [];
+                                                        const amenities = (currentProspect.contractDetails as any)?.about?.amenities ||
+                                                            (currentProspect.contractDetails as any)?.amenities || [];
                                                         if (!amenities || amenities.length === 0) return null;
                                                         return (
                                                             <div className="space-y-3 mt-6">
@@ -1255,10 +1483,10 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                             </div>
                                                         </div>
                                                     )}
-                                                    
+
                                                     {/* Skills */}
                                                     {currentProspect.contractDetails.skills?.length > 0 && (
-                                                            <div className="space-y-3">
+                                                        <div className="space-y-3">
                                                             <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Compétences</h5>
                                                             <div className="flex flex-wrap gap-2">
                                                                 {currentProspect.contractDetails.skills.slice(0, 15).map((skill: any, i: number) => (
@@ -1317,17 +1545,16 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                 const cd = currentProspect.contractDetails as any;
                                                 // LinkedIn scraper stores posts at: prospect.activity.posts (saved under contract_details)
                                                 // Facebook / LinkedIn via aiIntelligence: ai.activities.posts or ai.activity.posts
-                                                const posts: any[] = 
-                                                    ai?.activities?.posts || 
-                                                    ai?.activity?.posts || 
-                                                    cd?.activity?.posts || 
-                                                    (currentProspect as any)?.activity?.posts || 
+                                                const posts: any[] =
+                                                    ai?.activities?.posts ||
+                                                    (currentProspect as any)?.activity?.posts ||
+                                                    (currentProspect as any)?.linkedinPulse ||
                                                     [];
-                                                const comments: any[] = 
-                                                    ai?.activities?.comments || 
-                                                    ai?.activity?.comments || 
-                                                    cd?.activity?.comments || 
-                                                    (currentProspect as any)?.activity?.comments || 
+                                                const comments: any[] =
+                                                    ai?.activities?.comments ||
+                                                    ai?.activity?.comments ||
+                                                    cd?.activity?.comments ||
+                                                    (currentProspect as any)?.activity?.comments ||
                                                     [];
                                                 const isFacebook = currentProspect.source === 'facebook' || currentProspect.source === 'facebook_page';
 
@@ -1344,9 +1571,8 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                                         <div key={i} className="p-4 bg-muted/10 rounded-2xl border border-border/30">
                                                                             <div className="flex justify-between items-center mb-2">
                                                                                 <span className="text-xs font-semibold text-muted-foreground">{post.date}</span>
-                                                                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium uppercase ${
-                                                                                    isFacebook ? 'bg-blue-500/10 text-blue-500' : 'bg-blue-400/10 text-blue-400'
-                                                                                }`}>{post.actionType || 'Post'}</span>
+                                                                                <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium uppercase ${isFacebook ? 'bg-blue-500/10 text-blue-500' : 'bg-blue-400/10 text-blue-400'
+                                                                                    }`}>{post.actionType || 'Post'}</span>
                                                                             </div>
                                                                             {post.text && <p className="text-sm text-foreground/90 whitespace-pre-wrap leading-relaxed">{post.text}</p>}
                                                                             {post.image && (
@@ -1359,10 +1585,10 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                                                 </div>
                                                                             )}
                                                                             <div className="flex gap-4 mt-3 text-xs text-muted-foreground">
-                                                                                {post.likes !== undefined && <span className="flex items-center gap-1"><ThumbsUp size={12}/> {post.likes}</span>}
-                                                                                {post.comments !== undefined && <span className="flex items-center gap-1"><MessageCircle size={12}/> {post.comments}</span>}
-                                                                                {post.shares !== undefined && <span className="flex items-center gap-1"><Share2 size={12}/> {post.shares}</span>}
-                                                                                {post.postUrl && <a href={post.postUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-blue-500 hover:underline"><ExternalLink size={10}/> voir</a>}
+                                                                                {post.likes !== undefined && <span className="flex items-center gap-1"><ThumbsUp size={12} /> {post.likes}</span>}
+                                                                                {post.comments !== undefined && <span className="flex items-center gap-1"><MessageCircle size={12} /> {post.comments}</span>}
+                                                                                {post.shares !== undefined && <span className="flex items-center gap-1"><Share2 size={12} /> {post.shares}</span>}
+                                                                                {post.postUrl && <a href={post.postUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1 text-blue-500 hover:underline"><ExternalLink size={10} /> voir</a>}
                                                                             </div>
                                                                         </div>
                                                                     ))}
@@ -1387,7 +1613,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                                                     <p className="font-semibold mb-1 text-muted-foreground">{comment.originalPost?.author || comment.originalPostAuthor}</p>
                                                                                     <p className="text-muted-foreground/80 line-clamp-2">{comment.originalPost?.text || comment.originalPostText}</p>
                                                                                     {(comment.originalPost?.url || comment.originalPostUrl) && (
-                                                                                        <a href={comment.originalPost?.url || comment.originalPostUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline text-[10px] mt-1 flex items-center gap-1"><ExternalLink size={9}/> voir le post</a>
+                                                                                        <a href={comment.originalPost?.url || comment.originalPostUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline text-[10px] mt-1 flex items-center gap-1"><ExternalLink size={9} /> voir le post</a>
                                                                                     )}
                                                                                 </div>
                                                                             )}
@@ -1410,16 +1636,6 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                                     </>
                                                 );
                                             })()}
-                                            <h3 className="text-lg font-bold flex items-center gap-2">
-                                                {currentProspect?.source === 'facebook' || currentProspect?.source === 'facebook_page' ? (
-                                                    <><Facebook className="text-blue-500" size={20} /> Activité Facebook</>
-                                                ) : (
-                                                    <><Linkedin className="text-blue-500" size={20} /> {t("linkedinActivity")}</>
-                                                )}
-                                            </h3>
-
-
-
                                             {/* Le rendu des activités est maintenant géré par le bloc au-dessus */}
                                         </TabsContent>
 
@@ -1427,8 +1643,8 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange }: ProspectDetailVi
                                         <TabsContent value="ai" className="mt-0 space-y-6 animate-in fade-in slide-in-from-bottom-2">
                                             {isEnriching ? (
                                                 <div className="flex flex-col items-center justify-center py-20 text-center space-y-6 bg-emerald-500/5 rounded-3xl border border-emerald-500/20 animate-in fade-in zoom-in duration-500">
-                                                    <LoadingLogo 
-                                                        size="lg" 
+                                                    <LoadingLogo
+                                                        size="lg"
                                                         message={t("generatingScripts")}
                                                         className="mb-2"
                                                     />

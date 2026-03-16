@@ -80,6 +80,7 @@ const Prospects = () => {
     source: "LinkedIn",
     score: 75,
     email: "",
+    photoUrl: "",
     phone: "",
     website_url: "",
     linkedin_url: "",
@@ -146,7 +147,7 @@ const Prospects = () => {
           company: pd.company || p.company || 'Entreprise inconnue',
           position: pd.position || p.position || '',
           email: pd.email || p.email || '',
-          phone: pd.phone || p.phone || '',
+          photoUrl: pd.photo_url || p.photoUrl || '',
           initials: pd.initials || p.initials || (pd.name || p.name || 'N').substring(0, 2).toUpperCase()
         };
       }) || [];

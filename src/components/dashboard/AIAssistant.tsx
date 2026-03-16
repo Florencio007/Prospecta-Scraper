@@ -284,8 +284,8 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
                       {msg.role === 'user' ? <User size={16} /> : <Sparkles size={16} />}
                     </div>
                     <div className={`p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === 'user'
-                        ? 'bg-primary text-primary-foreground rounded-tr-none'
-                        : 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-tl-none whitespace-pre-wrap'
+                      ? 'bg-primary text-primary-foreground rounded-tr-none'
+                      : 'bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-tl-none whitespace-pre-wrap'
                       }`}>
                       {msg.role === 'assistant' ? (
                         <div dangerouslySetInnerHTML={{
@@ -304,16 +304,6 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
 
               {generating && (
                 <div className="flex justify-start animate-pulse">
-<<<<<<< Updated upstream
-                   <div className="max-w-[85%] flex gap-3">
-                      <div className="h-8 w-8 rounded-lg bg-accent flex items-center justify-center text-white shrink-0">
-                        <Sparkles size={16} />
-                      </div>
-                      <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-tl-none">
-                        <Loader2 className="h-4 w-4 animate-spin" />
-                      </div>
-                   </div>
-=======
                   <div className="max-w-[85%] flex gap-3">
                     <div className="h-8 w-8 rounded-lg bg-accent flex items-center justify-center text-white shrink-0">
                       <Sparkles size={16} />
@@ -322,7 +312,6 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
                       <Loader2 className="h-4 w-4 animate-spin" />
                     </div>
                   </div>
->>>>>>> Stashed changes
                 </div>
               )}
             </div>

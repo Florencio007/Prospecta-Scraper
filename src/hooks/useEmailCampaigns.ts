@@ -3,12 +3,12 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useApiKeys } from '@/hooks/useApiKeys';
 import { useToast } from '@/hooks/use-toast';
-import { sendSingleEmail, sendSingleEmailSmtp, personalizeTemplate, getWarmupLimit, randomThrottle } from '@/services/emailService';
+import { sendSingleEmailSmtp, personalizeTemplate, getWarmupLimit, randomThrottle } from '@/services/emailService';
 
 export interface EmailCampaign {
     id: string;
     name: string;
-    status: 'draft' | 'active' | 'paused' | 'completed' | 'failed';
+    status: string;
     from_name: string;
     from_email: string;
     reply_to?: string;
@@ -55,7 +55,7 @@ export function useEmailCampaigns() {
             if (error) {
                 setError(error.message);
             } else {
-                setCampaigns(data || []);
+                setCampaigns((data as unknown as EmailCampaign[]) || []);
             }
         } catch (err: unknown) {
             console.error("fetchCampaigns internal error:", err);
@@ -148,7 +148,7 @@ export function useEmailCampaigns() {
             .from('campaign_recipients')
             .select('prospect_id, email')
             .eq('campaign_id', campaignId);
-        
+
         if (eError) {
             console.error("[importFromProspects] Error checking existing recipients:", eError);
         }
@@ -167,7 +167,7 @@ export function useEmailCampaigns() {
             }
             const isAlreadyInById = p.prospect_id && existingProspectIds.has(p.prospect_id);
             const isAlreadyInByEmail = p.email && existingEmails.has(p.email.toLowerCase());
-            
+
             if (isAlreadyInById || isAlreadyInByEmail) {
                 skippedDuplicate++;
                 return false;
@@ -399,7 +399,7 @@ export function useEmailCampaigns() {
 
     const removeRecipient = useCallback(async (campaignId: string, recipientId: string) => {
         if (!user) return false;
-        
+
         const { error } = await supabase
             .from('campaign_recipients')
             .delete()
@@ -418,7 +418,7 @@ export function useEmailCampaigns() {
             .eq('campaign_id', campaignId);
 
         await updateCampaign(campaignId, { total_recipients: count || 0 });
-        
+
         return true;
     }, [user, updateCampaign]);
 

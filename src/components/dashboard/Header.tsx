@@ -34,6 +34,11 @@ const Header = () => {
     { label: t("settings"), path: "/settings" },
   ];
 
+  // Ajouter le lien Admin si l'utilisateur est administrateur
+  if (profile?.role === 'admin') {
+    navItems.push({ label: "Admin", path: "/admin" });
+  }
+
   /**
    * Gère la déconnexion de l'utilisateur
    */

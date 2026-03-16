@@ -1,6 +1,6 @@
 {
-  "scrapedAt": "2026-03-16T05:12:20.546Z",
-  "query": "hotel paris",
+  "scrapedAt": "2026-03-16T06:39:45.305Z",
+  "query": "hotel paris ",
   "mode": "Playwright HTML",
   "total": 20,
   "companies": [
@@ -8,14 +8,19 @@
       "name": "HOTEL PARIS LA DEFENSE PUTEAUX (BEST WESTERN SEINE WEST HOTEL)",
       "company": "HOTEL PARIS LA DEFENSE PUTEAUX (BEST WESTERN SEINE WEST HOTEL)",
       "score": 65,
-      "position": "AYMONIER INVESTISSEMENT",
+      "position": "Connexion",
       "address": "20 QUAI DE DION BOUTON, 92800 PUTEAUX",
       "phone": "",
       "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
+      "website": "https://data.inpi.fr/export/companies?format=pdf&ids=[%22408455103%22]",
       "source": "pappers",
       "platform": "Pappers",
       "mapsUrl": "https://www.pappers.fr/entreprise/hotel-paris-la-defense-puteaux-408455103",
+      "socialLinks": {
+        "linkedin": "https://www.linkedin.com/company/pappers/",
+        "facebook": "http://www.facebook.com/sharer.php?u=https://www.pappers.fr/",
+        "twitter": "https://twitter.com/get_pappers"
+      },
       "contractDetails": {
         "name": "HOTEL PARIS LA DEFENSE PUTEAUX (BEST WESTERN SEINE WEST HOTEL)",
         "enseigne": "",
@@ -40,17 +45,42 @@
         "effectif": "Entre 10 et 19 salariés (donnée 2022)",
         "dirigeants": [
           {
-            "nom": "AYMONIER INVESTISSEMENT",
-            "qualite": "",
-            "url": "https://www.pappers.fr/entreprise/aymonier-investissement-812247195"
+            "nom": "Connexion",
+            "qualite": "Mise à jour RCS : le 16/03/2026",
+            "depuis": "29/11/2018",
+            "dateDebut": "29/11/2018",
+            "dateFin": "29/11/2018",
+            "age": "",
+            "siren": "408",
+            "actif": false,
+            "url": "https://www.pappers.fr/connexion",
+            "type": "personne_morale"
+          },
+          {
+            "nom": "Inscription",
+            "qualite": "Voir 1 observation du greffe",
+            "depuis": "29/11/2018",
+            "dateDebut": "29/11/2018",
+            "dateFin": "29/11/2018",
+            "age": "",
+            "siren": "408",
+            "actif": false,
+            "url": "https://www.pappers.fr/inscription",
+            "type": "personne_morale"
           }
         ],
+        "entreprisesDirigees": [],
         "beneficiaires": [],
         "etablissements": [],
         "finances": [],
         "telephone": "",
         "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
+        "website": "https://data.inpi.fr/export/companies?format=pdf&ids=[%22408455103%22]",
+        "socialLinks": {
+          "linkedin": "https://www.linkedin.com/company/pappers/",
+          "facebook": "http://www.facebook.com/sharer.php?u=https://www.pappers.fr/",
+          "twitter": "https://twitter.com/get_pappers"
+        },
         "sourceUrl": "https://www.pappers.fr/entreprise/hotel-paris-la-defense-puteaux-408455103",
         "source": "HTML Playwright"
       },
@@ -73,1304 +103,99 @@
       }
     },
     {
-      "name": "HOTEL PARIS (HIPOTEL PARIS VOLTAIRE BASTILLE - HIPOTEL PARIS)",
-      "company": "HOTEL PARIS (HIPOTEL PARIS VOLTAIRE BASTILLE - HIPOTEL PARIS)",
-      "score": 65,
-      "position": "Wu Qin",
-      "address": "132 BOULEVARD VOLTAIRE, 75011 PARIS",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/hotel-paris-829487321",
-      "contractDetails": {
-        "name": "HOTEL PARIS (HIPOTEL PARIS VOLTAIRE BASTILLE - HIPOTEL PARIS)",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "829487321",
-        "siret": "82948732100012",
-        "formeJuridique": "SAS, société par actions simplifiée",
-        "capitalSocial": "700 000,00 €",
-        "numeroTVA": "FR16829487321",
-        "adresse": "132 BOULEVARD VOLTAIRE, 75011 PARIS",
-        "dateCreation": "01/04/2017",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de PARIS , le 15/05/2017 )",
-        "inscriptionRNE": "INSCRIT (le 15/05/2017)",
-        "numeroRCS": "829 487 321 R.C.S. Paris",
-        "activitePrincipale": "Hôtel",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Commerciale",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/03/2026",
-        "effectif": "Entre 6 et 9 salariés (donnée 2022)",
-        "dirigeants": [
-          {
-            "nom": "Wu Qin",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/qin_wu_1962-09"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/hotel-paris-829487321",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "132 BOULEVARD VOLTAIRE, 75011 PARIS"
-          ]
-        },
-        "executiveSummary": "HOTEL PARIS (HIPOTEL PARIS VOLTAIRE BASTILLE - HIPOTEL PARIS) · Activité : Hôtel · Forme : SAS, société par actions simplifiée · Créée le 01/04/2017 · Effectif : Entre 6 et 9 salariés (donnée 2022) · Capital : 700 000,00 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "829487321",
+      "error": "mouse.wheel: Target page, context or browser has been closed"
     },
     {
-      "name": "PARIS HOTEL CAPITAL (HOTEL DES DUCS DE BOURGOGNE)",
-      "company": "PARIS HOTEL CAPITAL (HOTEL DES DUCS DE BOURGOGNE)",
-      "score": 65,
-      "position": "CYBELE HOTELLERIE",
-      "address": "3 RUE DE LOGELBACH, 75017 PARIS",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/paris-hotel-capital-572183622",
-      "contractDetails": {
-        "name": "PARIS HOTEL CAPITAL (HOTEL DES DUCS DE BOURGOGNE)",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "572183622",
-        "siret": "57218362200057",
-        "formeJuridique": "SAS, société par actions simplifiée",
-        "capitalSocial": "20 000 000,00 €",
-        "numeroTVA": "FR78572183622",
-        "adresse": "3 RUE DE LOGELBACH, 75017 PARIS",
-        "dateCreation": "01/01/1957",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de PARIS , le 07/11/1957 )",
-        "inscriptionRNE": "INSCRIT (le 07/11/1957)",
-        "numeroRCS": "572 183 622 R.C.S. Paris",
-        "activitePrincipale": "L'exploitation de tous fonds de commerce d'hôtels, ainsi que toutes affaires ou opérations se rattachant à ce genre de commerce, la création, l'acquisition, l'exploitation, la prise ou mise en gérance,...Voir plus",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Commerciale",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/12/2026",
-        "effectif": "Entre 1 et 2 salariés (donnée 2022)",
-        "dirigeants": [
-          {
-            "nom": "CYBELE HOTELLERIE",
-            "qualite": "",
-            "url": "https://www.pappers.fr/entreprise/paris-hotel-capital-572183622#"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/paris-hotel-capital-572183622",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "3 RUE DE LOGELBACH, 75017 PARIS"
-          ]
-        },
-        "executiveSummary": "PARIS HOTEL CAPITAL (HOTEL DES DUCS DE BOURGOGNE) · Activité : L'exploitation de tous fonds de commerce d'hôtels, ainsi que toutes affaires ou opérations se rattachant à ce genre de commerce, la création, l'acquisition, l'exploitation, la prise ou mise en gérance,...Voir plus · Forme : SAS, société par actions simplifiée · Créée le 01/01/1957 · Effectif : Entre 1 et 2 salariés (donnée 2022) · Capital : 20 000 000,00 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "572183622",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "HOTEL BEIGE PARIS (HEVATEL)",
-      "company": "HOTEL BEIGE PARIS (HEVATEL)",
-      "score": 65,
-      "position": "HEVATEL HOLDING",
-      "address": "12 RUE DE MAUBEUGE, 75009 PARIS",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/hotel-beige-paris-479970998",
-      "contractDetails": {
-        "name": "HOTEL BEIGE PARIS (HEVATEL)",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "479970998",
-        "siret": "47997099800023",
-        "formeJuridique": "SAS, société par actions simplifiée",
-        "capitalSocial": "10 000,00 €",
-        "numeroTVA": "FR95479970998",
-        "adresse": "12 RUE DE MAUBEUGE, 75009 PARIS",
-        "dateCreation": "16/12/2004",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de PARIS , le 20/12/2004 )",
-        "inscriptionRNE": "INSCRIT (le 20/12/2004)",
-        "numeroRCS": "479 970 998 R.C.S. Paris",
-        "activitePrincipale": "Hôtel meublé et hôtel de tourisme.",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Commerciale",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/12/2026",
-        "effectif": "Entre 10 et 19 salariés (donnée 2022)",
-        "dirigeants": [
-          {
-            "nom": "HEVATEL HOLDING",
-            "qualite": "",
-            "url": "https://www.pappers.fr/entreprise/hevatel-holding-852298181"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/hotel-beige-paris-479970998",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "12 RUE DE MAUBEUGE, 75009 PARIS"
-          ]
-        },
-        "executiveSummary": "HOTEL BEIGE PARIS (HEVATEL) · Activité : Hôtel meublé et hôtel de tourisme. · Forme : SAS, société par actions simplifiée · Créée le 16/12/2004 · Effectif : Entre 10 et 19 salariés (donnée 2022) · Capital : 10 000,00 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "479970998",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "PARIS HOTEL (HÔTEL DES ROYS)",
-      "company": "PARIS HOTEL (HÔTEL DES ROYS)",
-      "score": 65,
-      "position": "VERSOTEL",
-      "address": "14 AVENUE DE PARIS, 78000 VERSAILLES",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/paris-hotel-304046071",
-      "contractDetails": {
-        "name": "PARIS HOTEL (HÔTEL DES ROYS)",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "304046071",
-        "siret": "30404607100011",
-        "formeJuridique": "SAS, société par actions simplifiée",
-        "capitalSocial": "1 106 820,00 €",
-        "numeroTVA": "FR83304046071",
-        "adresse": "14 AVENUE DE PARIS, 78000 VERSAILLES",
-        "dateCreation": "01/01/1900",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de VERSAILLES , le 03/10/1972 )",
-        "inscriptionRNE": "INSCRIT (le 03/10/1972)",
-        "numeroRCS": "304 046 071 R.C.S. Versailles",
-        "activitePrincipale": "Hôtel",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Commerciale",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/12/2026",
-        "effectif": "Entre 10 et 19 salariés (donnée 2022)",
-        "dirigeants": [
-          {
-            "nom": "VERSOTEL",
-            "qualite": "",
-            "url": "https://www.pappers.fr/entreprise/versotel-829648104"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/paris-hotel-304046071",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "14 AVENUE DE PARIS, 78000 VERSAILLES"
-          ]
-        },
-        "executiveSummary": "PARIS HOTEL (HÔTEL DES ROYS) · Activité : Hôtel · Forme : SAS, société par actions simplifiée · Créée le 01/01/1900 · Effectif : Entre 10 et 19 salariés (donnée 2022) · Capital : 1 106 820,00 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "304046071",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "HOTEL PARIS NICE (PARIS NICE)",
-      "company": "HOTEL PARIS NICE (PARIS NICE)",
-      "score": 76,
-      "position": "BARRIERE Andre",
-      "address": "38 CRS JEAN JAURES, 84000 AVIGNON",
-      "phone": "0432841267",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/hotel-paris-nice-328412671",
-      "contractDetails": {
-        "name": "HOTEL PARIS NICE (PARIS NICE)",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "328412671",
-        "siret": "32841267100013",
-        "formeJuridique": "SARL, société à responsabilité limitée",
-        "capitalSocial": "7 622,45 €",
-        "numeroTVA": "FR04328412671",
-        "adresse": "38 CRS JEAN JAURES, 84000 AVIGNON",
-        "dateCreation": "20/10/1983",
-        "dateRadiation": "",
-        "inscriptionRCS": "RADIÉ (du greffe d'AVIGNON, le 23/11/2017)",
-        "inscriptionRNE": "RADIÉ (le 23/11/2017)",
-        "numeroRCS": "328 412 671 R.C.S. Avignon",
-        "activitePrincipale": "Hôtels sans restaurant",
-        "codeNAF": "",
-        "domaineActivite": "Hôtels, cafés, restaurants",
-        "formeExercice": "",
-        "conventionCollective": "",
-        "dateCloture": "30 Juin",
-        "effectif": "0 salarié (donnée 1989)",
-        "dirigeants": [
-          {
-            "nom": "BARRIERE Andre",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/andre_huot_1945-02"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "0432841267",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/hotel-paris-nice-328412671",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "0432841267"
-          ],
-          "emails": [],
-          "addresses": [
-            "38 CRS JEAN JAURES, 84000 AVIGNON"
-          ]
-        },
-        "executiveSummary": "HOTEL PARIS NICE (PARIS NICE) · Activité : Hôtels sans restaurant · Forme : SARL, société à responsabilité limitée · Créée le 20/10/1983 · Effectif : 0 salarié (donnée 1989) · Capital : 7 622,45 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Hôtels sans restaurant"
-        }
-      }
+      "name": "",
+      "siren": "328412671",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "SCI PARIS HOTEL",
-      "company": "SCI PARIS HOTEL",
-      "score": 65,
-      "position": "Sellam Aaron",
-      "address": "72 RUE DE TURBIGO, 75003 PARIS",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/sci-paris-hotel-415099589",
-      "contractDetails": {
-        "name": "SCI PARIS HOTEL",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "415099589",
-        "siret": "41509958900020",
-        "formeJuridique": "SCI, société civile immobilière",
-        "capitalSocial": "1 524,49 €",
-        "numeroTVA": "FR72415099589",
-        "adresse": "72 RUE DE TURBIGO, 75003 PARIS",
-        "dateCreation": "10/01/1998",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de PARIS , le 13/01/1998 )",
-        "inscriptionRNE": "INSCRIT (le 13/01/1998)",
-        "numeroRCS": "415 099 589 R.C.S. Paris",
-        "activitePrincipale": "ACQUISITION, GESTION, MISE EN VALEUR, LOCATION OU VENTE D'UN LOCAL COMMERCIAL 72 RUE TURBIGO 75003 PARIS",
-        "codeNAF": "",
-        "domaineActivite": "Activités immobilières",
-        "formeExercice": "",
-        "conventionCollective": "Immobilier - IDCC 1527",
-        "dateCloture": "27/04/2009 et transféré vers un autre établissement",
-        "effectif": "0 salarié (donnée 2026)",
-        "dirigeants": [
-          {
-            "nom": "Sellam Aaron",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/aaron_sellam_1956-06"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/sci-paris-hotel-415099589",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "72 RUE DE TURBIGO, 75003 PARIS"
-          ]
-        },
-        "executiveSummary": "SCI PARIS HOTEL · Activité : ACQUISITION, GESTION, MISE EN VALEUR, LOCATION OU VENTE D'UN LOCAL COMMERCIAL 72 RUE TURBIGO 75003 PARIS · Forme : SCI, société civile immobilière · Créée le 10/01/1998 · Effectif : 0 salarié (donnée 2026) · Capital : 1 524,49 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Immobilier - IDCC 1527"
-        }
-      }
+      "name": "",
+      "siren": "415099589",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "PARIS HOTEL",
-      "company": "PARIS HOTEL",
-      "score": 80,
-      "position": "Selloum Faïza",
-      "address": "CHEZ SOFRADOM 118-130, 118 AV JEAN JAURES, 75019 PARIS 19",
-      "phone": "0257208721",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/paris-hotel-572087211",
-      "contractDetails": {
-        "name": "PARIS HOTEL",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "572087211",
-        "siret": "57208721100023",
-        "formeJuridique": "SARL, société à responsabilité limitée",
-        "capitalSocial": "Inconnu",
-        "numeroTVA": "FR02572087211",
-        "adresse": "CHEZ SOFRADOM 118-130, 118 AV JEAN JAURES, 75019 PARIS 19",
-        "dateCreation": "01/01/1957",
-        "dateRadiation": "",
-        "inscriptionRCS": "RADIÉ (du greffe de PARIS, le 27/10/2014)",
-        "inscriptionRNE": "RADIÉ (le 25/09/2014)",
-        "numeroRCS": "572 087 211 R.C.S. Paris",
-        "activitePrincipale": "Hôtels et hébergement similaire",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31 Décembre",
-        "effectif": "0 salarié (donnée 2014)",
-        "dirigeants": [
-          {
-            "nom": "Selloum Faïza",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/faiza_selloum_1976-05"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "0257208721",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/paris-hotel-572087211",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "0257208721"
-          ],
-          "emails": [],
-          "addresses": [
-            "CHEZ SOFRADOM 118-130, 118 AV JEAN JAURES, 75019 PARIS 19"
-          ]
-        },
-        "executiveSummary": "PARIS HOTEL · Activité : Hôtels et hébergement similaire · Forme : SARL, société à responsabilité limitée · Créée le 01/01/1957 · Effectif : 0 salarié (donnée 2014) · Capital : Inconnu · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "572087211",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "HOTEL PARIS SUD (IBIS STYLES)",
-      "company": "HOTEL PARIS SUD (IBIS STYLES)",
-      "score": 65,
-      "position": "Rollin Eric",
-      "address": "41 AVENUE ARISTIDE BRIAND, 92120 MONTROUGE",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/hotel-paris-sud-343178133",
-      "contractDetails": {
-        "name": "HOTEL PARIS SUD (IBIS STYLES)",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "343178133",
-        "siret": "34317813300017",
-        "formeJuridique": "SARL, société à responsabilité limitée",
-        "capitalSocial": "15 244,90 €",
-        "numeroTVA": "FR79343178133",
-        "adresse": "41 AVENUE ARISTIDE BRIAND, 92120 MONTROUGE",
-        "dateCreation": "03/12/1987",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de NANTERRE , le 31/12/1987 )",
-        "inscriptionRNE": "INSCRIT (le 31/12/1987)",
-        "numeroRCS": "343 178 133 R.C.S. Nanterre",
-        "activitePrincipale": "Hôtel meuble de tourisme -",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Commerciale",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/12/2026",
-        "effectif": "Entre 10 et 19 salariés (donnée 2023)",
-        "dirigeants": [
-          {
-            "nom": "Rollin Eric",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/eric_rollin_1984-09"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/hotel-paris-sud-343178133",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "41 AVENUE ARISTIDE BRIAND, 92120 MONTROUGE"
-          ]
-        },
-        "executiveSummary": "HOTEL PARIS SUD (IBIS STYLES) · Activité : Hôtel meuble de tourisme - · Forme : SARL, société à responsabilité limitée · Créée le 03/12/1987 · Effectif : Entre 10 et 19 salariés (donnée 2023) · Capital : 15 244,90 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "432164457",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "HOTEL PARIS VILLETTE",
-      "company": "HOTEL PARIS VILLETTE",
-      "score": 65,
-      "position": "Wang Hsueh",
-      "address": "6 RUE EMILE REYNAUD, 75019 PARIS",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/hotel-paris-villette-808609580",
-      "contractDetails": {
-        "name": "HOTEL PARIS VILLETTE",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "808609580",
-        "siret": "80860958000036",
-        "formeJuridique": "SAS, société par actions simplifiée",
-        "capitalSocial": "8 000 000,00 €",
-        "numeroTVA": "FR81808609580",
-        "adresse": "6 RUE EMILE REYNAUD, 75019 PARIS",
-        "dateCreation": "01/01/2015",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de PARIS , le 24/12/2014 )",
-        "inscriptionRNE": "INSCRIT (le 24/12/2014)",
-        "numeroRCS": "808 609 580 R.C.S. Paris",
-        "activitePrincipale": "Location de terrains et d'autres biens immobiliers",
-        "codeNAF": "",
-        "domaineActivite": "Activités immobilières",
-        "formeExercice": "Gestion de biens",
-        "conventionCollective": "Immobilier - IDCC 1527",
-        "dateCloture": "31/12/2026",
-        "effectif": "0 salarié (donnée 2026)",
-        "dirigeants": [
-          {
-            "nom": "Wang Hsueh",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/hsueh_wang_1965-02"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/hotel-paris-villette-808609580",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "6 RUE EMILE REYNAUD, 75019 PARIS"
-          ]
-        },
-        "executiveSummary": "HOTEL PARIS VILLETTE · Activité : Location de terrains et d'autres biens immobiliers · Forme : SAS, société par actions simplifiée · Créée le 01/01/2015 · Effectif : 0 salarié (donnée 2026) · Capital : 8 000 000,00 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Immobilier - IDCC 1527"
-        }
-      }
+      "name": "",
+      "siren": "343178133",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "HOTEL PARIS BELGRAND (HIPOTEL PARIS BELGRAND MAIRIE DU 20E - HIPOTEL PARIS)",
-      "company": "HOTEL PARIS BELGRAND (HIPOTEL PARIS BELGRAND MAIRIE DU 20E - HIPOTEL PARIS)",
-      "score": 65,
-      "position": "Wu Qin",
-      "address": "60 RUE BELGRAND, 75020 PARIS",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/hotel-paris-belgrand-823464664",
-      "contractDetails": {
-        "name": "HOTEL PARIS BELGRAND (HIPOTEL PARIS BELGRAND MAIRIE DU 20E - HIPOTEL PARIS)",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "823464664",
-        "siret": "82346466400015",
-        "formeJuridique": "SAS, société par actions simplifiée",
-        "capitalSocial": "191 000,00 €",
-        "numeroTVA": "FR41823464664",
-        "adresse": "60 RUE BELGRAND, 75020 PARIS",
-        "dateCreation": "30/09/2016",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de PARIS , le 31/10/2016 )",
-        "inscriptionRNE": "INSCRIT (le 31/10/2016)",
-        "numeroRCS": "823 464 664 R.C.S. Paris",
-        "activitePrincipale": "Hôtel",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Commerciale",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/03/2026",
-        "effectif": "Entre 3 et 5 salariés (donnée 2022)",
-        "dirigeants": [
-          {
-            "nom": "Wu Qin",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/qin_wu_1962-09"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/hotel-paris-belgrand-823464664",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "60 RUE BELGRAND, 75020 PARIS"
-          ]
-        },
-        "executiveSummary": "HOTEL PARIS BELGRAND (HIPOTEL PARIS BELGRAND MAIRIE DU 20E - HIPOTEL PARIS) · Activité : Hôtel · Forme : SAS, société par actions simplifiée · Créée le 30/09/2016 · Effectif : Entre 3 et 5 salariés (donnée 2022) · Capital : 191 000,00 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "808609580",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "AVALON HOTEL PARIS (HOTEL DE CHANTILLY)",
-      "company": "AVALON HOTEL PARIS (HOTEL DE CHANTILLY)",
-      "score": 80,
-      "position": "Chicheportiche Philippe",
-      "address": "133 BOULEVARD DE MAGENTA, 75010 PARIS",
-      "phone": "0855211345",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/avalon-hotel-paris-552113458",
-      "contractDetails": {
-        "name": "AVALON HOTEL PARIS (HOTEL DE CHANTILLY)",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "552113458",
-        "siret": "55211345800012",
-        "formeJuridique": "SAS, société par actions simplifiée",
-        "capitalSocial": "100 000,00 €",
-        "numeroTVA": "FR08552113458",
-        "adresse": "133 BOULEVARD DE MAGENTA, 75010 PARIS",
-        "dateCreation": "01/01/1955",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de PARIS , le 19/09/1955 )",
-        "inscriptionRNE": "INSCRIT (le 19/09/1955)",
-        "numeroRCS": "552 113 458 R.C.S. Paris",
-        "activitePrincipale": "Hôtels et hébergement similaire",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Libérale non réglementée",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/12/2026",
-        "effectif": "Entre 10 et 19 salariés (donnée 2022)",
-        "dirigeants": [
-          {
-            "nom": "Chicheportiche Philippe",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/philippe_chicheportiche_1963-12"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "0855211345",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/avalon-hotel-paris-552113458",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "0855211345"
-          ],
-          "emails": [],
-          "addresses": [
-            "133 BOULEVARD DE MAGENTA, 75010 PARIS"
-          ]
-        },
-        "executiveSummary": "AVALON HOTEL PARIS (HOTEL DE CHANTILLY) · Activité : Hôtels et hébergement similaire · Forme : SAS, société par actions simplifiée · Créée le 01/01/1955 · Effectif : Entre 10 et 19 salariés (donnée 2022) · Capital : 100 000,00 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "681071049",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "HOTEL PARIS ORLY",
-      "company": "HOTEL PARIS ORLY",
-      "score": 65,
-      "position": "TJC INVEST",
-      "address": "11 RUE GABRIEL PERI, 92120 MONTROUGE",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/hotel-paris-orly-552145765",
-      "contractDetails": {
-        "name": "HOTEL PARIS ORLY",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "552145765",
-        "siret": "55214576500012",
-        "formeJuridique": "SASU, société par actions simplifiée unipersonnelle",
-        "capitalSocial": "37 000,00 €",
-        "numeroTVA": "FR26552145765",
-        "adresse": "11 RUE GABRIEL PERI, 92120 MONTROUGE",
-        "dateCreation": "24/04/1992",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de NANTERRE , le 13/12/1955 )",
-        "inscriptionRNE": "INSCRIT (le 13/12/1955)",
-        "numeroRCS": "552 145 765 R.C.S. Nanterre",
-        "activitePrincipale": "Hôtel meuble",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Commerciale",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/12/2026",
-        "effectif": "Entre 6 et 9 salariés (donnée 2023)",
-        "dirigeants": [
-          {
-            "nom": "TJC INVEST",
-            "qualite": "",
-            "url": "https://www.pappers.fr/entreprise/tjc-invest-839264512"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/hotel-paris-orly-552145765",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "11 RUE GABRIEL PERI, 92120 MONTROUGE"
-          ]
-        },
-        "executiveSummary": "HOTEL PARIS ORLY · Activité : Hôtel meuble · Forme : SASU, société par actions simplifiée unipersonnelle · Créée le 24/04/1992 · Effectif : Entre 6 et 9 salariés (donnée 2023) · Capital : 37 000,00 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "823464664",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "HOTEL PARIS MAINE (HOTEL DE PARIS MONTPARNASSE)",
-      "company": "HOTEL PARIS MAINE (HOTEL DE PARIS MONTPARNASSE)",
-      "score": 80,
-      "position": "Petitgenêt Sophie",
-      "address": "51 AVENUE DU MAINE, 75014 PARIS",
-      "phone": "0751901072",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/hotel-paris-maine-344175369",
-      "contractDetails": {
-        "name": "HOTEL PARIS MAINE (HOTEL DE PARIS MONTPARNASSE)",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "344175369",
-        "siret": "34417536900018",
-        "formeJuridique": "SAS, société par actions simplifiée",
-        "capitalSocial": "10 023 216,00 €",
-        "numeroTVA": "FR16344175369",
-        "adresse": "51 AVENUE DU MAINE, 75014 PARIS",
-        "dateCreation": "01/03/1988",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de PARIS , le 12/04/1988 )",
-        "inscriptionRNE": "INSCRIT (le 12/04/1988)",
-        "numeroRCS": "344 175 369 R.C.S. Paris",
-        "activitePrincipale": "Hôtel meublé",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Commerciale",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/03/2026",
-        "effectif": "Entre 20 et 49 salariés (donnée 2022)",
-        "dirigeants": [
-          {
-            "nom": "Petitgenêt Sophie",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/sophie_petitgenet_1982-02"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "0751901072",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/hotel-paris-maine-344175369",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "0751901072"
-          ],
-          "emails": [],
-          "addresses": [
-            "51 AVENUE DU MAINE, 75014 PARIS"
-          ]
-        },
-        "executiveSummary": "HOTEL PARIS MAINE (HOTEL DE PARIS MONTPARNASSE) · Activité : Hôtel meublé · Forme : SAS, société par actions simplifiée · Créée le 01/03/1988 · Effectif : Entre 20 et 49 salariés (donnée 2022) · Capital : 10 023 216,00 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "552113458",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "HOTEL PARIS FLANDRE (KYRIAD - COTE A COTE - KYRIAD)",
-      "company": "HOTEL PARIS FLANDRE (KYRIAD - COTE A COTE - KYRIAD)",
-      "score": 65,
-      "position": "Vallée Laurent",
-      "address": "151 AVENUE DE FLANDRE, 75019 PARIS",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/hotel-paris-flandre-409471166",
-      "contractDetails": {
-        "name": "HOTEL PARIS FLANDRE (KYRIAD - COTE A COTE - KYRIAD)",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "409471166",
-        "siret": "40947116600028",
-        "formeJuridique": "Société en nom collectif",
-        "capitalSocial": "381 500,00 €",
-        "numeroTVA": "FR78409471166",
-        "adresse": "151 AVENUE DE FLANDRE, 75019 PARIS",
-        "dateCreation": "21/10/1996",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de PARIS , le 07/04/1998 )",
-        "inscriptionRNE": "INSCRIT (le 07/04/1998)",
-        "numeroRCS": "409 471 166 R.C.S. Paris",
-        "activitePrincipale": "HOTELLERIE - RESTAURATION",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Commerciale",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/12/2026",
-        "effectif": "Entre 50 et 99 salariés (donnée 2022)",
-        "dirigeants": [
-          {
-            "nom": "Vallée Laurent",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/laurent_vallee_1979-05"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/hotel-paris-flandre-409471166",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "151 AVENUE DE FLANDRE, 75019 PARIS"
-          ]
-        },
-        "executiveSummary": "HOTEL PARIS FLANDRE (KYRIAD - COTE A COTE - KYRIAD) · Activité : HOTELLERIE - RESTAURATION · Forme : Société en nom collectif · Créée le 21/10/1996 · Effectif : Entre 50 et 99 salariés (donnée 2022) · Capital : 381 500,00 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "528591340",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "HOTEL PARIS OLYMPIADES (HIPOTEL PARIS SACRE-COEUR OLYMPIADE - HIPOTEL PARIS)",
-      "company": "HOTEL PARIS OLYMPIADES (HIPOTEL PARIS SACRE-COEUR OLYMPIADE - HIPOTEL PARIS)",
-      "score": 65,
-      "position": "Wu Qin",
-      "address": "22 SQUARE DE CLIGNANCOURT, 75018 PARIS",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/hotel-paris-olympiades-829478858",
-      "contractDetails": {
-        "name": "HOTEL PARIS OLYMPIADES (HIPOTEL PARIS SACRE-COEUR OLYMPIADE - HIPOTEL PARIS)",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "829478858",
-        "siret": "82947885800014",
-        "formeJuridique": "SAS, société par actions simplifiée",
-        "capitalSocial": "1 200 000,00 €",
-        "numeroTVA": "FR41829478858",
-        "adresse": "22 SQUARE DE CLIGNANCOURT, 75018 PARIS",
-        "dateCreation": "01/04/2017",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de PARIS , le 15/05/2017 )",
-        "inscriptionRNE": "INSCRIT (le 15/05/2017)",
-        "numeroRCS": "829 478 858 R.C.S. Paris",
-        "activitePrincipale": "Hôtel",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Commerciale",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/03/2026",
-        "effectif": "Entre 6 et 9 salariés (donnée 2022)",
-        "dirigeants": [
-          {
-            "nom": "Wu Qin",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/qin_wu_1962-09"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/hotel-paris-olympiades-829478858",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "22 SQUARE DE CLIGNANCOURT, 75018 PARIS"
-          ]
-        },
-        "executiveSummary": "HOTEL PARIS OLYMPIADES (HIPOTEL PARIS SACRE-COEUR OLYMPIADE - HIPOTEL PARIS) · Activité : Hôtel · Forme : SAS, société par actions simplifiée · Créée le 01/04/2017 · Effectif : Entre 6 et 9 salariés (donnée 2022) · Capital : 1 200 000,00 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "344175369",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "LYRIC HOTEL PARIS",
-      "company": "LYRIC HOTEL PARIS",
-      "score": 65,
-      "position": "FRANCE HOSPITALITY INVESTMENT",
-      "address": "2 RUE DE GRAMONT, 75002 PARIS",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/lyric-hotel-paris-528591340",
-      "contractDetails": {
-        "name": "LYRIC HOTEL PARIS",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "528591340",
-        "siret": "52859134000021",
-        "formeJuridique": "SAS, société par actions simplifiée",
-        "capitalSocial": "71 021,00 €",
-        "numeroTVA": "FR87528591340",
-        "adresse": "2 RUE DE GRAMONT, 75002 PARIS",
-        "dateCreation": "16/11/2010",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de PARIS , le 29/11/2010 )",
-        "inscriptionRNE": "INSCRIT (le 29/11/2010)",
-        "numeroRCS": "528 591 340 R.C.S. Paris",
-        "activitePrincipale": "La création, l'acquisition, la vente, l'exploitation, par tous moyens et sous toutes formes, directement ou indirectement, et notamment par prise ou mise en location-gérance, de tous fonds de commerce,...Voir plus",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Commerciale",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/12/2026",
-        "effectif": "Entre 20 et 49 salariés (donnée 2023)",
-        "dirigeants": [
-          {
-            "nom": "FRANCE HOSPITALITY INVESTMENT",
-            "qualite": "",
-            "url": "https://www.pappers.fr/entreprise/france-hospitality-investment-835250077"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/lyric-hotel-paris-528591340",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "2 RUE DE GRAMONT, 75002 PARIS"
-          ]
-        },
-        "executiveSummary": "LYRIC HOTEL PARIS · Activité : La création, l'acquisition, la vente, l'exploitation, par tous moyens et sous toutes formes, directement ou indirectement, et notamment par prise ou mise en location-gérance, de tous fonds de commerce,...Voir plus · Forme : SAS, société par actions simplifiée · Créée le 16/11/2010 · Effectif : Entre 20 et 49 salariés (donnée 2023) · Capital : 71 021,00 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "409471166",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "HOTEL PARIS OUEST (BALLADINS)",
-      "company": "HOTEL PARIS OUEST (BALLADINS)",
-      "score": 65,
-      "position": "BERTIN François",
-      "address": "52 RUE MARCEL DASSAULT, 92100 BOULOGNE-BILLANCOURT",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/hotel-paris-ouest-432164457",
-      "contractDetails": {
-        "name": "HOTEL PARIS OUEST (BALLADINS)",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "432164457",
-        "siret": "43216445700041",
-        "formeJuridique": "SARL, société à responsabilité limitée",
-        "capitalSocial": "Inconnu",
-        "numeroTVA": "FR16432164457",
-        "adresse": "52 RUE MARCEL DASSAULT, 92100 BOULOGNE-BILLANCOURT",
-        "dateCreation": "06/07/2000",
-        "dateRadiation": "",
-        "inscriptionRCS": "RADIÉ (du greffe de NANTERRE, le 26/03/2012)",
-        "inscriptionRNE": "RADIÉ (le 23/12/2011)",
-        "numeroRCS": "432 164 457 R.C.S. Nanterre",
-        "activitePrincipale": "Hôtels et hébergement similaire",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31 Décembre",
-        "effectif": "0 salarié (donnée 2011)",
-        "dirigeants": [
-          {
-            "nom": "BERTIN François",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/francois_bertin_1947-07"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/hotel-paris-ouest-432164457",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "52 RUE MARCEL DASSAULT, 92100 BOULOGNE-BILLANCOURT"
-          ]
-        },
-        "executiveSummary": "HOTEL PARIS OUEST (BALLADINS) · Activité : Hôtels et hébergement similaire · Forme : SARL, société à responsabilité limitée · Créée le 06/07/2000 · Effectif : 0 salarié (donnée 2011) · Capital : Inconnu · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "829478858",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "HOTEL PARIS PRINTANIA (HIPOTEL PARIS PRINTANIA MARAICHERS - HIPOTEL PARIS)",
-      "company": "HOTEL PARIS PRINTANIA (HIPOTEL PARIS PRINTANIA MARAICHERS - HIPOTEL PARIS)",
-      "score": 65,
-      "position": "Wu Qin",
-      "address": "150 RUE D'AVRON, 75020 PARIS",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/hotel-paris-printania-823427489",
-      "contractDetails": {
-        "name": "HOTEL PARIS PRINTANIA (HIPOTEL PARIS PRINTANIA MARAICHERS - HIPOTEL PARIS)",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "823427489",
-        "siret": "82342748900013",
-        "formeJuridique": "SAS, société par actions simplifiée",
-        "capitalSocial": "2 500 000,00 €",
-        "numeroTVA": "FR66823427489",
-        "adresse": "150 RUE D'AVRON, 75020 PARIS",
-        "dateCreation": "30/09/2016",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de PARIS , le 27/10/2016 )",
-        "inscriptionRNE": "INSCRIT (le 27/10/2016)",
-        "numeroRCS": "823 427 489 R.C.S. Paris",
-        "activitePrincipale": "Hôtel",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Commerciale",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/03/2026",
-        "effectif": "Entre 6 et 9 salariés (donnée 2022)",
-        "dirigeants": [
-          {
-            "nom": "Wu Qin",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/qin_wu_1962-09"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/hotel-paris-printania-823427489",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "150 RUE D'AVRON, 75020 PARIS"
-          ]
-        },
-        "executiveSummary": "HOTEL PARIS PRINTANIA (HIPOTEL PARIS PRINTANIA MARAICHERS - HIPOTEL PARIS) · Activité : Hôtel · Forme : SAS, société par actions simplifiée · Créée le 30/09/2016 · Effectif : Entre 6 et 9 salariés (donnée 2022) · Capital : 2 500 000,00 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "534147210",
+      "error": "mouse.move: Target page, context or browser has been closed"
     },
     {
-      "name": "HOTEL PARIS VILLETTE",
-      "company": "HOTEL PARIS VILLETTE",
-      "score": 65,
-      "position": "Aït Amer Rachid",
-      "address": "56 RUE CURIAL, 75019 PARIS",
-      "phone": "",
-      "email": "",
-      "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-      "source": "pappers",
-      "platform": "Pappers",
-      "mapsUrl": "https://www.pappers.fr/entreprise/hotel-paris-villette-681071049",
-      "contractDetails": {
-        "name": "HOTEL PARIS VILLETTE",
-        "enseigne": "",
-        "status": "Active",
-        "siren": "681071049",
-        "siret": "68107104900016",
-        "formeJuridique": "SARL, société à responsabilité limitée",
-        "capitalSocial": "39 636,74 €",
-        "numeroTVA": "FR18681071049",
-        "adresse": "56 RUE CURIAL, 75019 PARIS",
-        "dateCreation": "01/01/1900",
-        "dateRadiation": "",
-        "inscriptionRCS": "INSCRIT (au greffe de PARIS , le 18/10/1957 )",
-        "inscriptionRNE": "INSCRIT (le 18/10/1957)",
-        "numeroRCS": "681 071 049 R.C.S. Paris",
-        "activitePrincipale": "GESTION D'HOTEL MEUBLE",
-        "codeNAF": "",
-        "domaineActivite": "Hébergement",
-        "formeExercice": "Commerciale",
-        "conventionCollective": "Hôtels, cafés, restaurants (HCR) - IDCC 1979",
-        "dateCloture": "31/12/2026",
-        "effectif": "Entre 10 et 19 salariés (donnée 2022)",
-        "dirigeants": [
-          {
-            "nom": "Aït Amer Rachid",
-            "qualite": "",
-            "url": "https://www.pappers.fr/dirigeant/rachid_ait%20amer_1964-08"
-          }
-        ],
-        "beneficiaires": [],
-        "etablissements": [],
-        "finances": [],
-        "telephone": "",
-        "email": "",
-        "website": "https://ec.europa.eu/taxation_customs/vies/?locale=fr",
-        "sourceUrl": "https://www.pappers.fr/entreprise/hotel-paris-villette-681071049",
-        "source": "HTML Playwright"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [],
-          "emails": [],
-          "addresses": [
-            "56 RUE CURIAL, 75019 PARIS"
-          ]
-        },
-        "executiveSummary": "HOTEL PARIS VILLETTE · Activité : GESTION D'HOTEL MEUBLE · Forme : SARL, société à responsabilité limitée · Créée le 01/01/1900 · Effectif : Entre 10 et 19 salariés (donnée 2022) · Capital : 39 636,74 € · Statut : Active",
-        "companyCulture": {
-          "mission": "Convention collective : Hôtels, cafés, restaurants (HCR) - IDCC 1979"
-        }
-      }
+      "name": "",
+      "siren": "501611453",
+      "error": "mouse.move: Target page, context or browser has been closed"
     }
   ],
   "directors": []

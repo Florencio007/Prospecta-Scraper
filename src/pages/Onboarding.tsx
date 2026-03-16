@@ -61,7 +61,7 @@ const Onboarding = () => {
             console.log("Submit blocked:", { noUser: !user, loading });
             return;
         }
-        
+
         console.log("Submitting onboarding data:", formData);
         setLoading(true);
 
@@ -70,14 +70,25 @@ const Onboarding = () => {
             const updatePromise = supabase
                 .from("profiles")
                 .update({
-                    ...formData,
+                    company_name: formData.company_name,
+                    company_type: formData.company_type,
+                    industry: formData.industry,
+                    company_size: formData.company_size,
+                    target_audience: formData.target_audience,
+                    target_city: formData.target_city,
+                    target_channel: formData.target_channel,
+                    value_prop: formData.value_prop,
+                    communication_tone: formData.communication_tone,
+                    objectives: formData.objectives,
+                    expectations: formData.expectations,
+                    user_service_description: formData.business_activity,
                     onboarding_completed: true,
                 })
                 .eq("user_id", user.id);
 
             const { error } = await Promise.race([
                 updatePromise,
-                new Promise((_, reject) => 
+                new Promise((_, reject) =>
                     setTimeout(() => reject(new Error("Update timeout")), 8000)
                 )
             ]) as any;
@@ -88,29 +99,29 @@ const Onboarding = () => {
             }
 
             console.log("Profile updated successfully");
-            
+
             // Try to refresh but don't let it block navigation if it's slow
             try {
                 await refreshProfile();
             } catch (err) {
                 console.warn("Refresh profile failed during submit:", err);
             }
-            
+
             toast({
                 title: "Bienvenue sur Prospecta !",
                 description: "Votre profil a été configuré avec succès.",
             });
-            
+
             console.log("Navigating to dashboard...");
             navigate("/dashboard");
         } catch (error: any) {
             console.error("Onboarding submission failed:", error);
-            
+
             const isTimeout = error.message === "Update timeout";
-            
+
             toast({
                 title: isTimeout ? "Connexion lente" : "Erreur",
-                description: isTimeout 
+                description: isTimeout
                     ? "La sauvegarde prend du temps, essayez de rafraîchir la page si vous n'êtes pas redirigé."
                     : error.message,
                 variant: "destructive",
@@ -188,9 +199,9 @@ const Onboarding = () => {
                                     </div>
                                     <div className="space-y-2">
                                         <Label>{t("businessActivity")}</Label>
-                                        <Textarea 
-                                            placeholder={t("businessActivityPlaceholder")} 
-                                            value={formData.business_activity} 
+                                        <Textarea
+                                            placeholder={t("businessActivityPlaceholder")}
+                                            value={formData.business_activity}
                                             onChange={(e) => updateField("business_activity", e.target.value)}
                                             className="min-h-[80px]"
                                         />
@@ -307,9 +318,9 @@ const Onboarding = () => {
                             )}
                         </CardContent>
                         <CardFooter className="flex justify-between gap-4 pt-6 border-t mt-4">
-                            <Button 
-                                variant="outline" 
-                                onClick={handleBack} 
+                            <Button
+                                variant="outline"
+                                onClick={handleBack}
                                 disabled={step === 1 || loading}
                                 className="border-accent/20 hover:bg-accent/5"
                             >
@@ -318,9 +329,9 @@ const Onboarding = () => {
                             <div className="flex gap-2">
                                 <AlertDialog>
                                     <AlertDialogTrigger asChild>
-                                        <Button 
-                                            variant="ghost" 
-                                            size="sm" 
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
                                             disabled={loading}
                                             className="text-muted-foreground mr-2 h-9 underline decoration-dotted underline-offset-4"
                                         >
@@ -336,7 +347,7 @@ const Onboarding = () => {
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
                                             <AlertDialogCancel>{t("goBackAndFill")}</AlertDialogCancel>
-                                            <AlertDialogAction 
+                                            <AlertDialogAction
                                                 onClick={() => {
                                                     console.log("Skip all confirmed");
                                                     handleSubmit();
@@ -364,7 +375,7 @@ const Onboarding = () => {
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
                                             <AlertDialogCancel>{t("goBackAndFill")}</AlertDialogCancel>
-                                            <AlertDialogAction 
+                                            <AlertDialogAction
                                                 onClick={() => {
                                                     console.log("Skip step confirmed, current step:", step);
                                                     if (step < 4) {

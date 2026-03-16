@@ -128,45 +128,113 @@ export interface Database {
                     created_at?: string
                 }
             },
+            ai_chat_messages: {
+                Row: {
+                    id: string
+                    user_id: string
+                    role: string
+                    content: string
+                    created_at: string
+                }
+                Insert: {
+                    id?: string
+                    user_id: string
+                    role: string
+                    content: string
+                    created_at?: string
+                }
+                Update: {
+                    id?: string
+                    user_id?: string
+                    role?: string
+                    content?: string
+                    created_at?: string
+                }
+            },
             profiles: {
                 Row: {
                     id: string
                     user_id: string | null
                     full_name: string | null
                     avatar_url: string | null
+                    initials: string | null
+                    onboarding_completed: boolean
+                    company_name: string | null
+                    company_type: string | null
+                    industry: string | null
+                    company_size: string | null
+                    target_audience: string | null
+                    target_city: string | null
+                    target_channel: string | null
+                    value_prop: string | null
+                    communication_tone: string | null
+                    objectives: string | null
+                    expectations: string | null
+                    user_service_description: string | null
+                    role: string
+                    created_at: string
+                    updated_at: string
                     email: string | null
                     plan_type: string
                     search_limit: number
                     search_usage: number
                     prospect_limit: number
-                    created_at: string
-                    user_service_description: string | null
                 }
                 Insert: {
                     id?: string
                     user_id?: string | null
                     full_name?: string | null
                     avatar_url?: string | null
+                    initials?: string | null
+                    onboarding_completed?: boolean
+                    company_name?: string | null
+                    company_type?: string | null
+                    industry?: string | null
+                    company_size?: string | null
+                    target_audience?: string | null
+                    target_city?: string | null
+                    target_channel?: string | null
+                    value_prop?: string | null
+                    communication_tone?: string | null
+                    objectives?: string | null
+                    expectations?: string | null
+                    user_service_description?: string | null
+                    role?: string
+                    created_at?: string
+                    updated_at?: string
                     email?: string | null
                     plan_type?: string
                     search_limit?: number
                     search_usage?: number
                     prospect_limit?: number
-                    created_at?: string
-                    user_service_description?: string | null
                 }
                 Update: {
                     id?: string
                     user_id?: string | null
                     full_name?: string | null
                     avatar_url?: string | null
+                    initials?: string | null
+                    onboarding_completed?: boolean
+                    company_name?: string | null
+                    company_type?: string | null
+                    industry?: string | null
+                    company_size?: string | null
+                    target_audience?: string | null
+                    target_city?: string | null
+                    target_channel?: string | null
+                    value_prop?: string | null
+                    communication_tone?: string | null
+                    objectives?: string | null
+                    expectations?: string | null
+                    user_service_description?: string | null
+                    role?: string
+                    created_at?: string
+                    updated_at?: string
                     email?: string | null
                     plan_type?: string
                     search_limit?: number
                     search_usage?: number
                     prospect_limit?: number
-                    created_at?: string
-                    user_service_description?: string | null
                 }
             },
             prospects: {

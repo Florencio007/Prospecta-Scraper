@@ -38,8 +38,10 @@ const Dashboard = () => {
     if (!user?.id) return;
 
     const fetchDashboardData = async () => {
-      // Récupération en parallèle des activités et des sources de prospects
-      const [{ data: activities }, { data: prospects }] = await Promise.all([
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      const [{ data: activities }, { data: prospects }, { data: events }] = await Promise.all([
         supabase
           .from('activity_log')
           .select('*')
@@ -49,7 +51,12 @@ const Dashboard = () => {
         supabase
           .from('prospects')
           .select('source, created_at')
+          .eq('user_id', user.id),
+        supabase
+          .from('email_events')
+          .select('event_type, created_at')
           .eq('user_id', user.id)
+          .gte('created_at', thirtyDaysAgo.toISOString())
       ]);
 
       if (activities) {
@@ -90,6 +97,16 @@ const Dashboard = () => {
         setRecentActivity(formattedActivities);
       }
 
+      const eventDaily: Record<string, { sent: number, opened: number }> = {};
+      if (events) {
+        (events as any[]).forEach(e => {
+          const dateStr = new Date(e.created_at).toISOString().split('T')[0];
+          if (!eventDaily[dateStr]) eventDaily[dateStr] = { sent: 0, opened: 0 };
+          if (e.event_type === 'sent') eventDaily[dateStr].sent++;
+          if (e.event_type === 'opened') eventDaily[dateStr].opened++;
+        });
+      }
+
       if (prospects) {
         const sourceCounts: Record<string, number> = {};
         (prospects as any[]).forEach(p => {
@@ -115,7 +132,7 @@ const Dashboard = () => {
         const days = 30;
         const growth: Record<string, number> = {};
         const now = new Date();
-        
+
         // Initialiser les derniers 30 jours à 0
         for (let i = days; i >= 0; i--) {
           const d = new Date();
@@ -131,11 +148,18 @@ const Dashboard = () => {
           }
         });
 
-        // Convertir en tableau cumulatif pour le graphique en aires
+        // Convertir en tableau cumulatif pour les prospects + ajouter l'open rate quotidien
         let cumulative = 0;
         const growthArray = Object.entries(growth).map(([date, count]) => {
           cumulative += count;
-          return { date, count: cumulative };
+          const dayEvents = eventDaily[date] || { sent: 0, opened: 0 };
+          const openRate = dayEvents.sent > 0 ? Math.round((dayEvents.opened / dayEvents.sent) * 100) : 0;
+          
+          return { 
+            date, 
+            count: cumulative,
+            openRate: openRate
+          };
         });
 
         setGrowthData(growthArray);
@@ -206,7 +230,7 @@ const Dashboard = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-3 shrink-0">
-                    <Button 
+                    <Button
                       onClick={() => navigate("/onboarding")}
                       className="bg-accent text-accent-foreground hover:bg-accent/90 shadow-md transform hover:scale-105 transition-all"
                     >
@@ -261,9 +285,9 @@ const Dashboard = () => {
           {/* Left Column - Prospects List */}
           <div className="lg:col-span-2 space-y-6">
             <Card className="bg-white border-none shadow-sm overflow-hidden">
-               <CardContent className="p-6">
-                 <ProspectGrowthChart data={growthData} />
-               </CardContent>
+              <CardContent className="p-6">
+                <ProspectGrowthChart data={growthData} />
+              </CardContent>
             </Card>
             <ProspectsList />
           </div>
@@ -275,7 +299,7 @@ const Dashboard = () => {
               <CardHeader className="flex flex-row items-center justify-between space-y-0">
                 <CardTitle className="text-lg">{t("recentActivity")}</CardTitle>
                 <Button variant="ghost" size="sm" onClick={() => handleOpenAi("analysis")} className="text-[10px] font-bold uppercase text-accent hover:text-accent hover:bg-accent/5 h-8">
-                   <Sparkles size={12} className="mr-1" /> Analyser
+                  <Sparkles size={12} className="mr-1" /> Analyser
                 </Button>
               </CardHeader>
               <CardContent>
@@ -302,19 +326,19 @@ const Dashboard = () => {
             {/* Top Sources */}
             <Card>
               <CardContent className="p-6">
-                <SourceDistributionChart 
+                <SourceDistributionChart
                   data={topSources.map((s, i) => ({
                     ...s,
                     color: [
-                      "hsl(var(--accent))", 
-                      "#3B82F6", 
-                      "#8B5CF6", 
-                      "#10B981", 
+                      "hsl(var(--accent))",
+                      "#3B82F6",
+                      "#8B5CF6",
+                      "#10B981",
                       "#F59E0B"
                     ][i % 5]
-                  }))} 
+                  }))}
                 />
-                
+
                 <div className="space-y-4 mt-6">
                   {topSources.length > 0 ? (
                     topSources.map((source, idx) => (
@@ -332,13 +356,13 @@ const Dashboard = () => {
                         <div className="w-full bg-secondary rounded-full h-1.5">
                           <div
                             className="bg-accent h-1.5 rounded-full transition-all duration-300"
-                            style={{ 
+                            style={{
                               width: `${source.percentage}%`,
                               backgroundColor: [
-                                "hsl(var(--accent))", 
-                                "#3B82F6", 
-                                "#8B5CF6", 
-                                "#10B981", 
+                                "hsl(var(--accent))",
+                                "#3B82F6",
+                                "#8B5CF6",
+                                "#10B981",
                                 "#F59E0B"
                               ][idx % 5]
                             }}
@@ -361,9 +385,9 @@ const Dashboard = () => {
         </div>
       </main>
 
-      <AIAssistant 
-        open={aiOpen} 
-        onClose={() => setAiOpen(false)} 
+      <AIAssistant
+        open={aiOpen}
+        onClose={() => setAiOpen(false)}
         initialMode={aiMode}
       />
     </div>

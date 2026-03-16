@@ -191,6 +191,7 @@ export interface Prospect {
   industry?: string | null;
   tags?: string[];
   photo?: string;
+  mapsUrl?: string; // Ajouté pour compatibilité Google Maps/Pappers
   createdAt?: Date;
   socialLinks?: {
     facebook?: string;

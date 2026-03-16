@@ -52,7 +52,7 @@ export interface SmtpEmailParams {
     recipientId?: string; // for open tracking
 }
 
-export async function sendSingleEmailSmtp(params: SmtpEmailParams): Promise<BrevoResponse> {
+export async function sendSingleEmailSmtp(params: SmtpEmailParams): Promise<SendEmailResponse> {
     console.log(`[sendSingleEmailSmtp] Calling /api/email/send-smtp...`);
     try {
         const response = await fetch('/api/email/send-smtp', {

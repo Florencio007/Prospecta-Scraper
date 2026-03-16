@@ -2,42 +2,23 @@ import { createContext, useContext, useEffect, useState, ReactNode, useRef } fro
 import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
+import { Tables } from "@/integrations/supabase/types";
 
 /**
  * Interface représentant le profil utilisateur stocké dans la base de données
  */
-interface Profile {
-  id: string;
-  user_id: string;
-  full_name: string | null;
-  avatar_url: string | null;
-  email: string | null;
-  initials?: string;
-  plan_type?: string;
-  search_limit?: number;
-  search_usage?: number;
-  onboarding_completed?: boolean;
-  company_name?: string;
-  company_type?: string;
-  industry?: string;
-  company_size?: string;
-  target_audience?: string;
-  target_city?: string;
-  target_channel?: string;
-  value_prop?: string;
-  communication_tone?: string;
-  objectives?: string;
-  expectations?: string;
-  business_activity?: string;
-  user_service_description?: string;
-  role?: string;
-  created_at?: string;
-}
+/**
+ * Interface représentant le profil utilisateur stocké dans la base de données
+ */
+export type Profile = Tables<"profiles">;
 
 /**
  * Type pour le contexte d'authentification
  */
-interface AuthContextType {
+/**
+ * Type pour le contexte d'authentification
+ */
+export interface AuthContextType {
   session: Session | null;
   user: User | null;
   profile: Profile | null;
