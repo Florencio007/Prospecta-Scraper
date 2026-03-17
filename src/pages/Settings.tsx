@@ -204,7 +204,7 @@ const Settings = () => {
         .from('avatars')
         .getPublicUrl(fileName);
 
-      setProfileSettings({ ...profileSettings, photoUrl: publicUrl });
+      setProfileSettings(prev => ({ ...prev, photoUrl: publicUrl }));
 
       toast({
         title: t("photoLoaded"),
@@ -235,17 +235,14 @@ const Settings = () => {
 
       if (error) throw error;
 
-      // Update public.profiles table as well if needed (trigger usually handles this for new users, but checks sync)
+      // Update public.profiles table as well if needed (sync avatar_url)
       if (profile?.id) {
         const { error: profileError } = await supabase
           .from('profiles')
           .update({
             full_name: profileSettings.fullName,
             user_service_description: profileSettings.userServiceDescription,
-            // avatar_url might not be in profiles table yet based on previous migration check,
-            // but usually good practice to sync if column exists.
-            // Based on 20260210001400 migration, profiles table DOES NOT have avatar_url.
-            // So we stick to auth.users metadata which is what we updated above.
+            avatar_url: profileSettings.photoUrl,
           })
           .eq('user_id', profile.id);
 

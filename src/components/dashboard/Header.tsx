@@ -100,8 +100,12 @@ const Header = () => {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-accent-foreground text-sm font-medium">
-                {profile?.initials || "?"}
+              <button className="flex h-9 w-9 items-center justify-center rounded-full bg-accent text-accent-foreground text-sm font-medium overflow-hidden border border-accent/20">
+                {profile?.avatar_url ? (
+                  <img src={profile.avatar_url} alt={profile?.full_name || "Profile"} className="h-full w-full object-cover" />
+                ) : (
+                  profile?.initials || "?"
+                )}
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
