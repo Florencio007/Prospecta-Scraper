@@ -45,13 +45,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const mounted = useRef(true);
+  const fetchingProfileFor = useRef<string | null>(null);
 
   /**
    * Récupère le profil utilisateur depuis Supabase
    */
-    const fetchProfile = async (userId: string) => {
-        if (!userId) return;
-        console.log('[Auth] Checking profile for:', userId);
+    const fetchProfile = async (userId: string, retryCount = 0) => {
+        if (!userId || !mounted.current) return;
+        
+        // Prevent duplicate parallel fetches for the same user
+        if (fetchingProfileFor.current === userId && retryCount === 0) {
+            console.log('[Auth] Already fetching profile for:', userId);
+            return;
+        }
+
+        fetchingProfileFor.current = userId;
+        console.log(`[Auth] Checking profile for: ${userId} (attempt ${retryCount + 1})`);
+        
         try {
             const { data, error } = await Promise.race([
                 supabase
@@ -61,22 +71,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     .limit(1)
                     .then(res => ({ data: res.data?.[0] || null, error: res.error })),
                 new Promise<any>((_, reject) => 
-                    setTimeout(() => reject(new Error("Profile fetch timeout")), 5000)
+                    setTimeout(() => reject(new Error("Profile fetch timeout")), 15000)
                 )
             ]);
 
             if (error) {
                 console.error("[Auth] Error fetching profile:", error);
-                return;
+                throw error;
             }
-            if (mounted.current && data) {
-                console.log('[Auth] Profile updated for:', userId);
-                setProfile(data);
-            } else if (mounted.current) {
-                console.log('[Auth] No profile found for:', userId);
+
+            if (mounted.current) {
+                if (data) {
+                    console.log('[Auth] Profile updated for:', userId);
+                    setProfile(data);
+                } else {
+                    console.log('[Auth] No profile found for:', userId);
+                }
             }
+            fetchingProfileFor.current = null;
         } catch (err) {
             console.error("[Auth] Profile fetch failed or timed out:", err);
+            
+            // Auto-retry once after 2 seconds if under retry limit
+            if (retryCount < 1 && mounted.current) {
+                console.log('[Auth] Retrying profile fetch in 2s...');
+                setTimeout(() => fetchProfile(userId, retryCount + 1), 2000);
+            } else {
+                fetchingProfileFor.current = null;
+            }
         }
     };
 
