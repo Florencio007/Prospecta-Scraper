@@ -368,40 +368,37 @@ app.get('/api/email/track/open/:recipientId', async (req, res) => {
 
   if (!recipientId) return;
 
+  const supabase = getSupabase();
+  if (!supabase) return;
+
   try {
-    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-    if (!supabaseUrl || !supabaseKey) return;
+    const { data: recipient, error: getError } = await supabase
+      .from('campaign_recipients')
+      .select('status, campaign_id')
+      .eq('id', recipientId)
+      .single();
 
-    const getRes = await fetch(
-      `${supabaseUrl}/rest/v1/campaign_recipients?select=status,campaign_id&id=eq.${recipientId}`,
-      { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } }
-    );
-    if (!getRes.ok) return;
+    if (getError || !recipient || recipient.status === 'opened') return;
 
-    const recipient = (await getRes.json())[0];
-    if (!recipient || recipient.status === 'opened') return;
-
-    await fetch(`${supabaseUrl}/rest/v1/campaign_recipients?id=eq.${recipientId}`, {
-      method: 'PATCH',
-      headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-      body: JSON.stringify({ status: 'opened', opened_at: new Date().toISOString() }),
-    });
+    await supabase
+      .from('campaign_recipients')
+      .update({ status: 'opened', opened_at: new Date().toISOString() })
+      .eq('id', recipientId);
 
     if (recipient.campaign_id) {
-      const campRes = await fetch(
-        `${supabaseUrl}/rest/v1/email_campaigns?select=opened_count&id=eq.${recipient.campaign_id}`,
-        { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } }
-      );
-      if (campRes.ok) {
-        const camp = (await campRes.json())[0];
-        const newCount = (camp?.opened_count || 0) + 1;
-        await fetch(`${supabaseUrl}/rest/v1/email_campaigns?id=eq.${recipient.campaign_id}`, {
-          method: 'PATCH',
-          headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ opened_count: newCount }),
-        });
-      }
+        const { data: camp, error: campError } = await supabase
+          .from('email_campaigns')
+          .select('opened_count')
+          .eq('id', recipient.campaign_id)
+          .single();
+          
+        if (!campError && camp) {
+          const newCount = (camp.opened_count || 0) + 1;
+          await supabase
+            .from('email_campaigns')
+            .update({ opened_count: newCount })
+            .eq('id', recipient.campaign_id);
+        }
     }
     console.log(`[Tracking] Email opened by recipient ${recipientId} (Campaign: ${recipient.campaign_id})`);
   } catch (err) {
@@ -423,45 +420,38 @@ app.get('/api/email/track/click/:recipientId', async (req, res) => {
     return res.redirect(302, originalUrl);
   }
 
-  try {
-    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-    
-    if (supabaseUrl && supabaseKey) {
-      const getRes = await fetch(
-        `${supabaseUrl}/rest/v1/campaign_recipients?select=status,campaign_id&id=eq.${recipientId}`,
-        { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } }
-      );
-      
-      if (getRes.ok) {
-        const recipients = await getRes.json();
-        const recipient = recipients[0];
-        
-        if (recipient) {
-          await fetch(`${supabaseUrl}/rest/v1/campaign_recipients?id=eq.${recipientId}`, {
-            method: 'PATCH',
-            headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
-            body: JSON.stringify({ status: 'clicked', clicked_at: new Date().toISOString() }),
-          });
+  const supabase = getSupabase();
+  if (!supabase) return res.redirect(302, originalUrl);
 
-          if (recipient.campaign_id) {
-            const campRes = await fetch(
-              `${supabaseUrl}/rest/v1/email_campaigns?select=clicked_count&id=eq.${recipient.campaign_id}`,
-              { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } }
-            );
-            if (campRes.ok) {
-              const camp = (await campRes.json())[0];
-              const newCount = (camp?.clicked_count || 0) + 1;
-              await fetch(`${supabaseUrl}/rest/v1/email_campaigns?id=eq.${recipient.campaign_id}`, {
-                method: 'PATCH',
-                headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ clicked_count: newCount }),
-              });
-            }
-          }
-          console.log(`[Tracking] Link clicked by recipient ${recipientId} -> ${originalUrl}`);
+  try {
+    const { data: recipient, error: getError } = await supabase
+      .from('campaign_recipients')
+      .select('status, campaign_id')
+      .eq('id', recipientId)
+      .single();
+    
+    if (!getError && recipient) {
+      await supabase
+        .from('campaign_recipients')
+        .update({ status: 'clicked', clicked_at: new Date().toISOString() })
+        .eq('id', recipientId);
+
+      if (recipient.campaign_id) {
+        const { data: camp, error: campError } = await supabase
+          .from('email_campaigns')
+          .select('clicked_count')
+          .eq('id', recipient.campaign_id)
+          .single();
+          
+        if (!campError && camp) {
+          const newCount = (camp.clicked_count || 0) + 1;
+          await supabase
+            .from('email_campaigns')
+            .update({ clicked_count: newCount })
+            .eq('id', recipient.campaign_id);
         }
       }
+      console.log(`[Tracking] Link clicked by recipient ${recipientId} -> ${originalUrl}`);
     }
   } catch (err) {
     console.error('[Tracking] Error updating click status:', err.message);
@@ -474,44 +464,38 @@ app.get('/api/email/track/click/:recipientId', async (req, res) => {
 // ─── Unsubscribe ──────────────────────────────────────────────────────────────
 
 app.get('/api/email/unsubscribe/:recipientId', async (req, res) => {
-  const { recipientId } = req.params;
   if (!recipientId) return res.status(400).send('ID manquant');
 
+  const supabase = getSupabase();
+  if (!supabase) return res.status(500).send('Configuration backend manquante.');
+
   try {
-    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
-    if (!supabaseUrl || !supabaseKey) return res.status(500).send('Configuration backend manquante.');
+    const { data: recipient, error: updateError } = await supabase
+      .from('campaign_recipients')
+      .update({ status: 'unsubscribed', unsubscribed_at: new Date().toISOString() })
+      .eq('id', recipientId)
+      .select('campaign_id')
+      .single();
 
-    const updateRes = await fetch(
-      `${supabaseUrl}/rest/v1/campaign_recipients?id=eq.${recipientId}`,
-      {
-        method: 'PATCH',
-        headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
-        body: JSON.stringify({ status: 'unsubscribed', unsubscribed_at: new Date().toISOString() }),
-      }
-    );
-
-    if (!updateRes.ok) {
-      console.error(`[Unsubscribe] DB update failed for ${recipientId}: ${updateRes.status}`);
+    if (updateError) {
+      console.error(`[Unsubscribe] DB update failed for ${recipientId}:`, updateError);
       return res.status(500).send('Erreur lors du désabonnement, veuillez réessayer ultérieurement.');
     }
 
-    const recipients = await updateRes.json();
-    const campaignId = recipients?.[0]?.campaign_id || null;
+    const campaignId = recipient?.campaign_id || null;
 
     if (campaignId) {
-      const campRes = await fetch(
-        `${supabaseUrl}/rest/v1/email_campaigns?select=unsubscribed_count&id=eq.${campaignId}`,
-        { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } }
-      );
-      if (campRes.ok) {
-        const campData = await campRes.json();
-        const currentUnsub = campData?.[0]?.unsubscribed_count || 0;
-        await fetch(`${supabaseUrl}/rest/v1/email_campaigns?id=eq.${campaignId}`, {
-          method: 'PATCH',
-          headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ unsubscribed_count: currentUnsub + 1 }),
-        });
+      const { data: camp, error: campError } = await supabase
+        .from('email_campaigns')
+        .select('unsubscribed_count')
+        .eq('id', campaignId)
+        .single();
+        
+      if (!campError && camp) {
+        await supabase
+          .from('email_campaigns')
+          .update({ unsubscribed_count: (camp.unsubscribed_count || 0) + 1 })
+          .eq('id', campaignId);
       }
     }
 
@@ -865,6 +849,20 @@ CONSIGNES :
     console.error('[INBOX AI] Erreur:', err.message);
     res.status(500).json({ error: err.message });
   }
+});
+
+// ─── Static Files & SPA Routing ──────────────────────────────────────────────
+
+// On sert les fichiers statiques du dossier dist/
+// Cela permet au serveur Node d'être autonome pour le frontend et le backend
+app.use(express.static(path.resolve(rootDir, 'dist')));
+
+// Redirection SPA : toutes les autres routes non-API renvoient l'app React
+app.get('*', (req, res) => {
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ error: 'Route API non trouvée' });
+  }
+  res.sendFile(path.resolve(rootDir, 'dist', 'index.html'));
 });
 
 app.listen(PORT, () => {
