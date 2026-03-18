@@ -65,6 +65,72 @@ const PROVIDERS_CONFIG = [
     },
 ];
 
+const MaintenanceCard = () => {
+    const [isClearing, setIsClearing] = useState(false);
+    const { toast } = useToast();
+
+    const handleClearCache = async () => {
+        setIsClearing(true);
+        try {
+            // Unregister all service workers
+            if ('serviceWorker' in navigator) {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (const registration of registrations) {
+                    await registration.unregister();
+                }
+            }
+
+            // Clear all caches
+            if ('caches' in window) {
+                const cacheNames = await caches.keys();
+                for (const cacheName of cacheNames) {
+                    await caches.delete(cacheName);
+                }
+            }
+
+            // Clear localStorage (optional but safer for "nuclear" fix)
+            // localStorage.clear(); // We might want to keep session, so maybe just specific keys or none.
+            
+            toast({
+                title: "Cache vidé",
+                description: "L'application va redémarrer pour appliquer les mises à jour.",
+            });
+
+            // Reload after a short delay
+            setTimeout(() => {
+                window.location.href = window.location.origin + '/?updated=' + Date.now();
+            }, 1500);
+        } catch (error) {
+            console.error("Failed to clear cache:", error);
+            window.location.reload();
+        }
+    };
+
+    return (
+        <Card className="border-amber-500/20 bg-amber-500/5 backdrop-blur-sm">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+                    <Zap size={20} /> Maintenance & Mise à jour
+                </CardTitle>
+                <CardDescription>
+                    Si vous rencontrez des erreurs de chargement ou si une mise à jour ne s'affiche pas, videz le cache local.
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Button 
+                    variant="outline" 
+                    className="w-full border-amber-500/50 hover:bg-amber-500/10 text-amber-700 dark:text-amber-300 font-bold"
+                    onClick={handleClearCache}
+                    disabled={isClearing}
+                >
+                    {isClearing ? "Nettoyage en cours..." : "Vider le cache et Forcer la mise à jour"}
+                </Button>
+            </CardContent>
+        </Card>
+    );
+};
+
+
 // ---- SMTP Configuration Card ----
 const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpdate: () => void }) => {
     const { saveKey, deleteKey } = useApiKeys();
@@ -855,6 +921,7 @@ export const ApiKeysSettings = () => {
                             onUpdate={fetchKeys}
                         />
                     ))}
+                    <MaintenanceCard />
                 </div>
             )}
         </div>

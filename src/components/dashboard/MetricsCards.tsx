@@ -9,7 +9,8 @@ const MetricsCards = () => {
   const { user } = useAuth();
   const [metrics, setMetrics] = useState({
     totalProspects: 0,
-    responseRate: 0,
+    openRate: 0,
+    clickRate: 0,
     messagesSent: 0,
   });
   const [loading, setLoading] = useState(true);
@@ -25,36 +26,33 @@ const MetricsCards = () => {
           .select('*', { count: 'exact', head: true })
           .eq('user_id', user.id);
 
-        // Count messages sent (from email_events)
-        let messagesSentCount = 0;
-        let openedCount = 0;
+        // Fetch aggregate campaign stats
+        const { data: campaigns, error: campaignError } = await supabase
+            .from('email_campaigns')
+            .select('sent_count, opened_count, clicked_count')
+            .eq('user_id', user.id);
 
-        try {
-          const { count: sent } = await supabase
-            .from('email_events')
-            .select('*', { count: 'exact', head: true })
-            .eq('user_id', user.id)
-            .eq('event_type', 'sent');
-          messagesSentCount = sent || 0;
+        let totalSent = 0;
+        let totalOpened = 0;
+        let totalClicked = 0;
 
-          const { count: opened } = await supabase
-            .from('email_events')
-            .select('*', { count: 'exact', head: true })
-            .eq('user_id', user.id)
-            .eq('event_type', 'opened');
-          openedCount = opened || 0;
-        } catch (e) {
-          console.warn('[Metrics] could not fetch email_events (table might be missing):', e);
+        if (campaigns) {
+            campaigns.forEach(c => {
+                totalSent += (c.sent_count || 0);
+                totalOpened += (c.opened_count || 0);
+                totalClicked += (c.clicked_count || 0);
+            });
         }
 
-        const responseRate = messagesSentCount > 0
-          ? (openedCount / messagesSentCount) * 100
-          : 0;
+        // Fallback or addition with email_events for real-time (optional, keeping it simple with aggregates)
+        const openRate = totalSent > 0 ? (totalOpened / totalSent) * 100 : 0;
+        const clickRate = totalSent > 0 ? (totalClicked / totalSent) * 100 : 0;
 
         setMetrics({
           totalProspects: prospectsCount || 0,
-          responseRate: responseRate,
-          messagesSent: messagesSentCount,
+          openRate: openRate,
+          clickRate: clickRate,
+          messagesSent: totalSent,
         });
       } catch (error) {
         console.error('Error fetching metrics:', error);
@@ -70,28 +68,27 @@ const MetricsCards = () => {
     {
       label: t("prospects"),
       value: loading ? "..." : metrics.totalProspects.toLocaleString(),
-      // trend: t("thisWeekTrend"), // Removed static trend
-      // trendUp: true,
       icon: TrendingUp,
     },
     {
-      label: t("responseRate"),
-      value: loading ? "..." : `${metrics.responseRate.toFixed(1)}%`,
-      // trend: t("industryAverage"), // Removed static trend
-      // trendUp: metrics.responseRate > 15,
+      label: "Taux d'ouverture",
+      value: loading ? "..." : `${metrics.openRate.toFixed(1)}%`,
       icon: MessageCircle,
+    },
+    {
+      label: "Taux de clic",
+      value: loading ? "..." : `${metrics.clickRate.toFixed(1)}%`,
+      icon: Send,
     },
     {
       label: t("messagesSent"),
       value: loading ? "..." : metrics.messagesSent.toLocaleString(),
-      // trend: t("openRate"), // Removed static trend
-      // trendUp: false,
-      icon: Send,
+      icon: ArrowUp,
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       {metricsData.map((m) => (
         <div
           key={m.label}

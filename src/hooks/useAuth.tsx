@@ -158,8 +158,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         if ((!profile?.full_name && googleName) || (!profile?.avatar_url && googlePhoto)) {
             console.log('[Auth] Syncing profile metadata from session...');
-            const { error: syncError } = await supabase
-                .from('profiles')
+            const { error: syncError } = await (supabase
+                .from('profiles') as any)
                 .update({
                     full_name: profile?.full_name || googleName,
                     avatar_url: profile?.avatar_url || googlePhoto
@@ -175,7 +175,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             await Promise.race([
                 fetchProfile(session.user.id),
                 new Promise((_, reject) => 
-                    setTimeout(() => reject(new Error("Refresh profile timeout")), 3000)
+                    setTimeout(() => reject(new Error("Refresh profile timeout")), 15000)
                 )
             ]);
         } catch (err) {

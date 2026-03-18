@@ -89,7 +89,7 @@ const Onboarding = () => {
             const { error } = await Promise.race([
                 updatePromise,
                 new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error("Update timeout")), 8000)
+                    setTimeout(() => reject(new Error("Update timeout")), 20000)
                 )
             ]) as any;
 
