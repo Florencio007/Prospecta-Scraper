@@ -314,7 +314,19 @@ app.post('/api/email/send-smtp', async (req, res) => {
   const trackingPixel = recipientId
     ? `<img src="${serverPublicUrl}/api/email/track/open/${recipientId}" width="1" height="1" style="display:none;" alt="" />`
     : '';
-  const trackedHtml = wrapInBrandedTemplate((htmlContent || '') + trackingPixel, serverPublicUrl, recipientId);
+
+  let processedHtml = htmlContent || '';
+  if (recipientId && serverPublicUrl) {
+    const urlRegex = /href=["'](https?:\/\/[^"']+)["']/gi;
+    processedHtml = processedHtml.replace(urlRegex, (match, url) => {
+      // Ne pas remplacer le lien de désabonnement s'il est déjà présent
+      if (url.includes('/api/email/unsubscribe')) return match;
+      const trackingUrl = `${serverPublicUrl}/api/email/track/click/${recipientId}?url=${encodeURIComponent(url)}`;
+      return `href="${trackingUrl}"`;
+    });
+  }
+
+  const trackedHtml = wrapInBrandedTemplate(processedHtml + trackingPixel, serverPublicUrl, recipientId);
 
   if (serverPublicUrl.includes('localhost')) {
     console.warn('[SMTP] ⚠️  SERVER_PUBLIC_URL pointe vers localhost — tracking désactivé hors machine locale.');
@@ -396,6 +408,68 @@ app.get('/api/email/track/open/:recipientId', async (req, res) => {
     console.error('[Tracking] Error updating open status:', err.message);
   }
 });
+
+// ─── Click Tracking ───────────────────────────────────────────────────────────
+
+app.get('/api/email/track/click/:recipientId', async (req, res) => {
+  const { recipientId } = req.params;
+  const originalUrl = req.query.url;
+
+  if (!originalUrl) {
+    return res.status(400).send('URL manquante');
+  }
+
+  if (!recipientId) {
+    return res.redirect(302, originalUrl);
+  }
+
+  try {
+    const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    
+    if (supabaseUrl && supabaseKey) {
+      const getRes = await fetch(
+        `${supabaseUrl}/rest/v1/campaign_recipients?select=status,campaign_id&id=eq.${recipientId}`,
+        { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } }
+      );
+      
+      if (getRes.ok) {
+        const recipients = await getRes.json();
+        const recipient = recipients[0];
+        
+        if (recipient) {
+          await fetch(`${supabaseUrl}/rest/v1/campaign_recipients?id=eq.${recipientId}`, {
+            method: 'PATCH',
+            headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+            body: JSON.stringify({ status: 'clicked', clicked_at: new Date().toISOString() }),
+          });
+
+          if (recipient.campaign_id) {
+            const campRes = await fetch(
+              `${supabaseUrl}/rest/v1/email_campaigns?select=clicked_count&id=eq.${recipient.campaign_id}`,
+              { headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}` } }
+            );
+            if (campRes.ok) {
+              const camp = (await campRes.json())[0];
+              const newCount = (camp?.clicked_count || 0) + 1;
+              await fetch(`${supabaseUrl}/rest/v1/email_campaigns?id=eq.${recipient.campaign_id}`, {
+                method: 'PATCH',
+                headers: { 'apikey': supabaseKey, 'Authorization': `Bearer ${supabaseKey}`, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ clicked_count: newCount }),
+              });
+            }
+          }
+          console.log(`[Tracking] Link clicked by recipient ${recipientId} -> ${originalUrl}`);
+        }
+      }
+    }
+  } catch (err) {
+    console.error('[Tracking] Error updating click status:', err.message);
+  }
+  
+  res.redirect(302, originalUrl);
+});
+
 
 // ─── Unsubscribe ──────────────────────────────────────────────────────────────
 

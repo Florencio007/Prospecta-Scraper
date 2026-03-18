@@ -47,6 +47,10 @@ export default defineConfig(({ mode }) => ({
     react(),
     VitePWA({
       registerType: "autoUpdate",
+      workbox: {
+        clientsClaim: true,
+        skipWaiting: true
+      },
       includeAssets: ["favicon.ico", "apple-touch-icon.png", "mask-icon.svg"],
       manifest: {
         name: "Prospecta",
