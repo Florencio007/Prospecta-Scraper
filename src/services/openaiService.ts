@@ -6,23 +6,51 @@ import { supabase } from "@/integrations/supabase/client";
  * pour ne pas exposer les clés API, mais ici nous utilisons le mécanisme existant de Prospecta.
  */
 export const fetchOpenAICompletion = async (apiKey: string, messages: any[]) => {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    let baseUrl = 'https://api.openai.com/v1';
+    let model = 'gpt-4o-mini';
+    let key = apiKey;
+
+    // Check if apiKey is actually a JSON config (multiple providers support)
+    if (apiKey && apiKey.startsWith('{')) {
+        try {
+            const config = JSON.parse(apiKey);
+            if (config.apiKey) key = config.apiKey;
+            if (config.baseUrl) baseUrl = config.baseUrl;
+            if (config.model) model = config.model;
+        } catch (e) {
+            console.error("Failed to parse AI config:", e);
+        }
+    }
+
+    // Adapt baseUrl if it doesn't end with /chat/completions
+    const endpoint = baseUrl.endsWith('/chat/completions') 
+        ? baseUrl 
+        : `${baseUrl.replace(/\/$/, '')}/chat/completions`;
+
+    const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${apiKey}`,
+            'Authorization': `Bearer ${key}`,
             'Content-Type': 'application/json',
+            // OpenRouter specific headers (optional but recommended)
+            ...(baseUrl.includes('openrouter.ai') ? {
+                'HTTP-Referer': window.location.origin,
+                'X-Title': 'Prospecta AI',
+            } : {})
         },
         body: JSON.stringify({
-            model: 'gpt-4o-mini', // Modèle performant et économique
+            model: model,
             messages,
             temperature: 0.7,
-            response_format: { type: "json_object" }
+            ...(model.includes('json') || messages.some(m => m.content.toLowerCase().includes('json')) 
+                ? { response_format: { type: "json_object" } } 
+                : {})
         }),
     });
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error?.message || 'Échec de la requête OpenAI');
+        throw new Error(errorData.error?.message || `Échec de la requête IA (${response.status})`);
     }
 
     const data = await response.json();

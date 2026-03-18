@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { Plus, Search, Filter, Mail, Linkedin, Facebook, MessageCircle, Globe, Instagram, Music, Zap, CheckCircle2, XCircle, MoreVertical, Trash2, Phone, ExternalLink, Loader2, Building2, User } from "lucide-react";
+import { Plus, Search, Filter, Mail, Linkedin, Facebook, MessageCircle, Globe, Instagram, Music, Zap, CheckCircle2, XCircle, MoreVertical, Trash2, Phone, ExternalLink, Loader2, Building2, User, Download } from "lucide-react";
 import Header from "@/components/dashboard/Header";
 import ProspectDetailView from "@/components/dashboard/ProspectDetailView";
 import CampaignSelectionDialog from "@/components/dashboard/CampaignSelectionDialog";
@@ -44,10 +44,17 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
+  DropdownMenuPortal,
 } from "@/components/ui/dropdown-menu";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useNavigate, useLocation } from "react-router-dom";
+import { calculateProspectScore } from "@/utils/scoring";
+import { enrichProspectLocally } from "@/services/enrichmentService";
+import { exportProspects } from "@/lib/exportUtils";
 
 const Prospects = () => {
   const { user } = useAuth();
@@ -70,12 +77,14 @@ const Prospects = () => {
   const [filterWebsite, setFilterWebsite] = useState(false);
   const [activeTypeTab, setActiveTypeTab] = useState<string>("all");
   const [isBulkDeleteConfirmOpen, setIsBulkDeleteConfirmOpen] = useState(false);
+  const [isCleanConfirmOpen, setIsCleanConfirmOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const lastScrollY = useRef(0);
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const [sortBy, setSortBy] = useState<string>("date");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [formData, setFormData] = useState({
     name: "",
-    position: "",
     company: "",
     source: "LinkedIn",
     score: 75,
@@ -86,19 +95,37 @@ const Prospects = () => {
     linkedin_url: "",
     address: "",
     summary: "",
+    prospect_type: "person",
   });
 
   const getSourceIcon = (source: string) => {
     const iconProps = { size: 16, className: "inline-block mr-1" };
     switch (source?.toLowerCase()) {
-      case "google": return <Globe {...iconProps} />;
+      case "google": 
+      case "google_maps": return <Globe {...iconProps} />;
       case "email": return <Mail {...iconProps} />;
       case "linkedin": return <Linkedin {...iconProps} />;
       case "facebook": return <Facebook {...iconProps} />;
       case "whatsapp": return <MessageCircle {...iconProps} />;
       case "instagram": return <Instagram {...iconProps} />;
       case "tiktok": return <Music {...iconProps} />;
+      case "pappers": return <Building2 {...iconProps} />;
       default: return <Globe {...iconProps} />;
+    }
+  };
+
+  const formatSource = (source: string) => {
+    if (!source) return "Source inconnue";
+    switch (source.toLowerCase()) {
+      case "google":
+      case "google_maps": return "Google Maps";
+      case "linkedin": return "LinkedIn";
+      case "facebook": return "Facebook";
+      case "instagram": return "Instagram";
+      case "pappers": return "Pappers";
+      case "societe.com": return "Société.com";
+      case "infogreffe": return "Infogreffe";
+      default: return source;
     }
   };
 
@@ -140,8 +167,8 @@ const Prospects = () => {
 
       const flattenedData = data?.map((p: any) => {
         const pd = Array.isArray(p.prospect_data) ? (p.prospect_data[0] || {}) : (p.prospect_data || {});
-
-        return {
+        
+        const enhancedProspect = {
           ...p,
           ...pd,
           id: p.id,
@@ -151,12 +178,20 @@ const Prospects = () => {
           socialLinks: pd.social_links || p.socialLinks || {},
           name: pd.name || p.name || 'Nom inconnu',
           company: pd.company || p.company || 'Entreprise inconnue',
-          position: pd.position || p.position || '',
-           email: pd.email || p.email || '',
+          email: pd.email || p.email || '',
           photoUrl: pd.photo_url || p.photoUrl || '',
+          phone: pd.phone || p.phone || pd.contract_details?.phone || pd.contractDetails?.phone || pd.contactInfo?.phones?.[0] || '',
+          website_url: pd.website_url || p.website_url || pd.websiteUrl || p.websiteUrl || pd.contract_details?.website || pd.contractDetails?.website || '',
           initials: pd.initials || p.initials || (pd.name || p.name || 'N').substring(0, 2).toUpperCase(),
-          prospect_type: pd.contract_details?.prospect_type || 'person'
+          prospect_type: pd.contract_details?.prospect_type || pd.prospect_type || p.prospect_type || ((p.source || "").toLowerCase().includes('maps') || (p.source || "").toLowerCase().includes('pappers') || (p.source || "").toLowerCase().includes('societe') || (p.source || "").toLowerCase().includes('infogreffe') ? 'company' : 'person')
         };
+        
+        // Ensure a score is present, calculate it dynamically if missing
+        if (typeof (enhancedProspect as any).score !== 'number') {
+            (enhancedProspect as any).score = calculateProspectScore(enhancedProspect);
+        }
+
+        return enhancedProspect;
       }) || [];
 
       setProspects(flattenedData);
@@ -271,7 +306,7 @@ const Prospects = () => {
     try {
       const initials = formData.name.split(" ").map(n => n[0]).join("").toUpperCase().slice(0, 2);
 
-      const { data: newProspect, error: pError } = await supabase.from("prospects").insert([{
+      const { data: newProspect, error: pError } = await (supabase.from("prospects") as any).insert([{
         source: formData.source,
         score: formData.score,
         user_id: user.id,
@@ -285,7 +320,6 @@ const Prospects = () => {
         prospect_id: newProspect.id,
         name: formData.name,
         company: formData.company,
-        position: formData.position,
         email: formData.email || null,
         initials,
         website: formData.website_url || null,
@@ -303,11 +337,11 @@ const Prospects = () => {
       setIsDialogOpen(false);
       setFormData({
         name: "",
-        position: "",
         company: "",
         source: "LinkedIn",
         score: 75,
         email: "",
+        photoUrl: "",
         phone: "",
         website_url: "",
         linkedin_url: "",
@@ -319,6 +353,93 @@ const Prospects = () => {
     } catch (error: any) {
       toast({ title: t("error"), description: error.message, variant: "destructive" });
     }
+  };
+
+  const handleBulkEnrich = async () => {
+    if (selectedIds.size === 0) return;
+    
+    let openai_api_key = "";
+    try {
+      const { data: profile } = (await supabase.from("profiles").select("openai_api_key").eq("id", user?.id).single()) as any;
+      if (!profile || !profile.openai_api_key) {
+        toast({
+          title: "Clé OpenAI manquante ⚠️",
+          description: "Veuillez configurer votre clé API dans les Paramètres pour utiliser l'enrichissement.",
+          variant: "destructive",
+        });
+        return;
+      }
+      openai_api_key = profile.openai_api_key;
+    } catch(e) { console.warn("Failed checking OpenAI API key:", e); }
+
+    toast({
+        title: "Enrichissement en cours 🚀",
+        description: `Enrichissement de ${selectedIds.size} prospect(s)... L'agent prend le relais !`,
+    });
+
+    let successCount = 0;
+    const idsToEnrich = Array.from(selectedIds);
+    setSearchTerm("");
+
+    for (const id of idsToEnrich) {
+      const prospect = prospects.find(p => p.id === id);
+      if (!prospect || !prospect.website_url) continue;
+      
+      try {
+        if (!openai_api_key) continue;
+
+        const enrichedData = await enrichProspectLocally(
+            prospect.website_url, 
+            openai_api_key, 
+            { name: prospect.name, company: prospect.company }
+        );
+        
+        if (enrichedData) {
+            const updatedProspectContext = {
+                ...prospect,
+                ...enrichedData,
+                email: enrichedData.email || prospect.email,
+                phone: enrichedData.phone || prospect.phone,
+                website_url: prospect.website_url, // enrichedData doesn't have it
+                social_links: {
+                    ...prospect.social_links,
+                    linkedin: (enrichedData as any).linkedinProfile || prospect.social_links?.linkedin
+                }
+            };
+            
+            const newScore = calculateProspectScore(updatedProspectContext);
+            
+            const { error: dbError } = await (supabase
+              .from('prospects') as any)
+              .update({
+                  score: newScore,
+                  prospect_data: {
+                      ...(prospect.prospect_data ? (Array.isArray(prospect.prospect_data) ? prospect.prospect_data[0] : prospect.prospect_data) : {}),
+                      ...enrichedData,
+                      score_global: newScore
+                  }
+              })
+              .eq('id', id);
+              
+            if (!dbError) {
+                successCount++;
+            } else {
+                console.error(`Failed to update prospect ${id} in DB:`, dbError);
+            }
+        }
+      } catch (error) {
+        console.error(`Failed to enrich prospect ${id}:`, error);
+      }
+    }
+
+    toast({
+        title: "Enrichissement terminé ✨",
+        description: `${successCount} sur ${idsToEnrich.length} prospects ont été enrichis avec succès !`,
+        variant: successCount > 0 ? "default" : "destructive",
+    });
+
+    setSelectedIds(new Set());
+    loadProspects(false);
   };
 
   const handleDeleteProspect = async () => {
@@ -403,17 +524,39 @@ const Prospects = () => {
     }
   };
 
-  const filteredProspects = useMemo(() => prospects.filter(p => {
-    const matchesSearch = (p.name || "").toLowerCase().includes(debouncedSearch.toLowerCase()) ||
-      (p.company || "").toLowerCase().includes(debouncedSearch.toLowerCase());
-    const matchesSource = filterSource ? p.source?.toLowerCase() === filterSource.toLowerCase() : true;
-    const matchesEmail = filterEmail ? !!p.email : true;
-    const matchesPhone = filterPhone ? !!p.phone : true;
-    const matchesLinkedin = filterLinkedin ? !!(p.socialLinks?.linkedin || p.social_links?.linkedin) : true;
-    const matchesWebsite = filterWebsite ? !!(p.website_url || p.websiteUrl) : true;
-    const matchesType = activeTypeTab === "all" ? true : p.prospect_type === activeTypeTab;
-    return matchesSearch && matchesSource && matchesEmail && matchesPhone && matchesLinkedin && matchesWebsite && matchesType;
-  }), [prospects, debouncedSearch, filterSource, filterEmail, filterPhone, filterLinkedin, filterWebsite, activeTypeTab]);
+  const filteredProspects = useMemo(() => {
+    const filtered = prospects.filter(p => {
+      const matchesSearch = (p.name || "").toLowerCase().includes(debouncedSearch.toLowerCase()) ||
+        (p.company || "").toLowerCase().includes(debouncedSearch.toLowerCase());
+      const matchesSource = filterSource ? formatSource(p.source || "").toLowerCase() === filterSource.toLowerCase() : true;
+      const matchesEmail = filterEmail ? !!p.email : true;
+      const matchesPhone = filterPhone ? !!p.phone : true;
+      const matchesLinkedin = filterLinkedin ? !!(p.socialLinks?.linkedin || p.social_links?.linkedin) : true;
+      const matchesWebsite = filterWebsite ? !!p.website_url : true;
+      const matchesType = activeTypeTab === "all" ? true : p.prospect_type === activeTypeTab;
+      return matchesSearch && matchesSource && matchesEmail && matchesPhone && matchesLinkedin && matchesWebsite && matchesType;
+    });
+
+    return [...filtered].sort((a, b) => {
+      let comparison = 0;
+      switch (sortBy) {
+        case "name":
+          comparison = (a.name || "").localeCompare(b.name || "");
+          break;
+        case "source":
+          comparison = (a.source || "").localeCompare(b.source || "");
+          break;
+        case "score":
+          comparison = (a.score || 0) - (b.score || 0);
+          break;
+        case "date":
+        default:
+          comparison = new Date(a.created_at || 0).getTime() - new Date(b.created_at || 0).getTime();
+          break;
+      }
+      return sortOrder === "asc" ? comparison : -comparison;
+    });
+  }, [prospects, debouncedSearch, filterSource, filterEmail, filterPhone, filterLinkedin, filterWebsite, activeTypeTab, sortBy, sortOrder]);
 
   return (
     <div className="min-h-screen bg-secondary">
@@ -431,12 +574,45 @@ const Prospects = () => {
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="flex items-center gap-2 h-10 min-w-[120px]">
+                  <Filter size={16} />
+                  <span className="hidden md:inline">{t("sortBy")}: {t(`sortBy${sortBy.charAt(0).toUpperCase() + sortBy.slice(1)}`)}</span>
+                  <span className="md:hidden">{t(`sortBy${sortBy.charAt(0).toUpperCase() + sortBy.slice(1)}`)}</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuLabel>{t("sortBy")}</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => { setSortBy("date"); setSortOrder("desc"); }}>
+                  {t("sortByDate")} ({t("orderDesc")})
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => { setSortBy("name"); setSortOrder("asc"); }}>
+                  {t("sortByName")} (A-Z)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => { setSortBy("source"); setSortOrder("asc"); }}>
+                  {t("sortBySource")} (A-Z)
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => { setSortBy("score"); setSortOrder("desc"); }}>
+                  {t("sortByScore")} ({t("orderDesc")})
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuCheckboxItem checked={sortOrder === "asc"} onCheckedChange={() => setSortOrder("asc")}>
+                  {t("orderAsc")}
+                </DropdownMenuCheckboxItem>
+                <DropdownMenuCheckboxItem checked={sortOrder === "desc"} onCheckedChange={() => setSortOrder("desc")}>
+                  {t("orderDesc")}
+                </DropdownMenuCheckboxItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="flex items-center gap-2 h-10">
                   <Filter size={16} />
                   <span className="hidden md:inline">{t("filters")}</span>
-                  {(filterEmail || filterPhone || filterLinkedin || filterWebsite) && (
+                  {(filterEmail || filterPhone || filterLinkedin || filterWebsite || filterSource) && (
                     <Badge variant="secondary" className="ml-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-[10px]">
-                      {[filterEmail, filterPhone, filterLinkedin, filterWebsite].filter(Boolean).length}
+                      {[filterEmail, filterPhone, filterLinkedin, filterWebsite, filterSource].filter(Boolean).length}
                     </Badge>
                   )}
                 </Button>
@@ -456,7 +632,29 @@ const Prospects = () => {
                 <DropdownMenuCheckboxItem checked={filterWebsite} onCheckedChange={setFilterWebsite}>
                   {t("hasWebsite")}
                 </DropdownMenuCheckboxItem>
-                {(filterEmail || filterPhone || filterLinkedin || filterWebsite) && (
+
+                <DropdownMenuSeparator />
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    <Globe size={14} className="mr-2" />
+                    {t("source")} {filterSource ? `(${filterSource})` : ""}
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      <DropdownMenuItem onClick={() => setFilterSource(null)}>
+                        {t("allSources")}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      {["LinkedIn", "Google Maps", "Facebook", "Instagram", "Pappers", "Societe.com", "Infogreffe"].map(s => (
+                        <DropdownMenuItem key={s} onClick={() => setFilterSource(s)}>
+                          {s}
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+
+                {(filterEmail || filterPhone || filterLinkedin || filterWebsite || filterSource) && (
                   <>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
@@ -466,6 +664,7 @@ const Prospects = () => {
                         setFilterPhone(false);
                         setFilterLinkedin(false);
                         setFilterWebsite(false);
+                        setFilterSource(null);
                       }}
                     >
                       {t("clearFilters")}
@@ -475,9 +674,26 @@ const Prospects = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" className="flex items-center gap-2 text-muted-foreground hover:text-accent h-10" title="Exporter les prospects">
+                  <Download size={16} />
+                  <span className="hidden md:inline">Exporter</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-48">
+                <DropdownMenuLabel>Format d'export</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => exportProspects(filteredProspects, "csv")}>CSV</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => exportProspects(filteredProspects, "xlsx")}>Excel</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => exportProspects(filteredProspects, "json")}>JSON</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => exportProspects(filteredProspects, "pdf")}>PDF</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+
             <Button
               variant="outline"
-              onClick={handleCleanDuplicates}
+              onClick={() => setIsCleanConfirmOpen(true)}
               className="flex items-center gap-2 text-muted-foreground hover:text-accent h-10"
               title="Nettoyer les doublons"
             >
@@ -541,7 +757,6 @@ const Prospects = () => {
                     />
                   </TableHead>
                   <TableHead>{t("nameAndEntity")}</TableHead>
-                  <TableHead>{t("position")}</TableHead>
                   <TableHead>{t("source")}</TableHead>
                   <TableHead>{t("score")}</TableHead>
                   <TableHead className="text-right">{t("actions")}</TableHead>
@@ -557,17 +772,17 @@ const Prospects = () => {
                       />
                     </TableCell>
                     <TableCell><div className="flex items-center gap-3"><div className="h-9 w-9 rounded-full bg-accent/10 flex items-center justify-center font-bold text-accent">{p.initials}</div><div><div className="font-bold flex items-center gap-2">{getTypeIcon(p.prospect_type)} {p.name}</div><div className="text-xs text-muted-foreground">{p.company}</div></div></div></TableCell>
-                    <TableCell className="text-sm">{p.position}</TableCell>
-                    <TableCell><Badge variant="outline" className="font-normal">{getSourceIcon(p.source)} {p.source}</Badge></TableCell>
+                    <TableCell><Badge variant="outline" className="font-normal">{getSourceIcon(p.source)} {formatSource(p.source)}</Badge></TableCell>
                     <TableCell><Badge variant={getScoreVariant(p.score)}>{p.score}%</Badge></TableCell>
                     <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreVertical size={16} /></Button></DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => { setSelectedViewProspect(p); setIsDetailViewOpen(true); }}>{t("view")}</DropdownMenuItem>
-                          <DropdownMenuItem className="text-destructive" onClick={() => setDeleteId(p.id)}><Trash2 className="mr-2 h-4 w-4" /> {t("delete")}</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="text-slate-400 hover:text-destructive hover:bg-destructive/10 transition-colors"
+                        onClick={(e) => { e.stopPropagation(); setDeleteId(p.id); }}
+                      >
+                        <Trash2 size={16} />
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -595,6 +810,14 @@ const Prospects = () => {
               >
                 <Plus size={14} className="mr-2" />
                 Ajouter à une campagne
+              </Button>
+
+              <Button
+                onClick={() => handleBulkEnrich()}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-full h-9 px-6 text-xs font-bold transition-all active:scale-95"
+              >
+                <Zap size={14} className="mr-2" />
+                Enrichir
               </Button>
 
               <Button
@@ -626,7 +849,7 @@ const Prospects = () => {
               <div className="space-y-2"><Label>{t("fullName")}</Label><Input value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required /></div>
               <div className="space-y-2"><Label>{t("company")}</Label><Input value={formData.company} onChange={e => setFormData({ ...formData, company: e.target.value })} required /></div>
             </div>
-            <div className="space-y-2"><Label>{t("position")}</Label><Input value={formData.position} onChange={e => setFormData({ ...formData, position: e.target.value })} /></div>
+
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2"><Label>{t("email")}</Label><Input type="email" value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} /></div>
               <div className="space-y-2"><Label>{t("phone")}</Label><Input value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} /></div>
@@ -691,6 +914,24 @@ const Prospects = () => {
             <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
             <AlertDialogAction onClick={handleBulkDelete} className="bg-destructive">
               {t("delete")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={isCleanConfirmOpen} onOpenChange={setIsCleanConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Nettoyer les doublons ? 🧹</AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action va rechercher et supprimer automatiquement les prospects en double (basé sur l'email ou le nom/entreprise). 
+              Le doublon le plus récent sera conservé.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
+            <AlertDialogAction onClick={() => { setIsCleanConfirmOpen(false); handleCleanDuplicates(); }} className="bg-accent">
+              Démarrer le nettoyage
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

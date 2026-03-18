@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vous êtes invité sur Prospecta !</title>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background-color: #f0f4f8; font-family: 'Outfit', Arial, sans-serif; color: #1a2f4d; }
+    .wrapper { max-width: 600px; margin: 40px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(26,47,77,0.10); }
+    .header { background: linear-gradient(135deg, #1a2f4d 0%, #1e3a5f 100%); padding: 32px 40px; text-align: center; }
+    .header img { height: 44px; }
+    .body { padding: 48px 40px; }
+    .badge { display: inline-block; background: #e8fdf5; color: #13b981; font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; border-radius: 20px; padding: 4px 14px; margin-bottom: 20px; }
+    h1 { font-size: 26px; font-weight: 700; color: #1a2f4d; margin-bottom: 16px; line-height: 1.3; }
+    p { font-size: 15px; line-height: 1.7; color: #4a5f7a; margin-bottom: 16px; }
+    .benefit-list { list-style: none; margin: 24px 0; padding: 0; }
+    .benefit-list li { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 14px; color: #4a5f7a; }
+    .benefit-list li::before { content: "✓"; color: #13b981; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+    .cta-wrap { text-align: center; margin: 36px 0; }
+    .cta { display: inline-block; background-color: #13b981; color: #ffffff; font-family: 'Outfit', Arial, sans-serif; font-size: 16px; font-weight: 600; text-decoration: none; padding: 15px 40px; border-radius: 8px; letter-spacing: 0.3px; }
+    .divider { border: none; border-top: 1px solid #e8edf4; margin: 32px 0; }
+    .fallback { font-size: 12px; color: #8a9ab0; line-height: 1.6; }
+    .fallback a { color: #13b981; word-break: break-all; }
+    .footer { background-color: #f8fafc; border-top: 1px solid #e8edf4; padding: 24px 40px; text-align: center; }
+    .footer p { font-size: 12px; color: #8a9ab0; margin: 0; }
+    .footer a { color: #13b981; text-decoration: none; }
+    .tagline { font-size: 13px; color: #13b981; font-weight: 600; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <!-- Header -->
+    <div class="header">
+      <img src="https://prospecta.soamibango.com/logo_prospecta_claire.png" alt="Prospecta" />
+    </div>
+
+    <!-- Body -->
+    <div class="body">
+      <div class="badge">🎉 Invitation</div>
+      <h1>Vous êtes invité sur Prospecta !</h1>
+      <p>
+        Un membre de l'équipe vous a invité à rejoindre Prospecta, la plateforme de prospection multicanale intelligente. Créez votre compte gratuitement et commencez à trouver vos futurs clients dès aujourd'hui.
+      </p>
+      <ul class="benefit-list">
+        <li>Recherche de prospects sur LinkedIn, Google Maps et plus</li>
+        <li>Enrichissement IA de vos fiches prospects</li>
+        <li>Campagnes emails personnalisées et automatisées</li>
+        <li>Tableau de bord analytique en temps réel</li>
+      </ul>
+      <div class="cta-wrap">
+        <a href="{{ .ConfirmationURL }}" class="cta">🚀 &nbsp;Créer mon compte Prospecta</a>
+      </div>
+      <p style="font-size: 13px;">Ce lien d'invitation expire dans <strong>24 heures</strong>.</p>
+      <hr class="divider" />
+      <p class="fallback">Si le bouton ne fonctionne pas, copiez et collez ce lien dans votre navigateur :<br />
+        <a href="{{ .ConfirmationURL }}">{{ .ConfirmationURL }}</a>
+      </p>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p class="tagline">Prospecta — Trouvez vos futurs clients sur tous les réseaux.</p>
+      <p>© 2026 Varatraza Tech · <a href="https://prospecta.soamibango.com">prospecta.soamibango.com</a></p>
+    </div>
+  </div>
+</body>
+</html>

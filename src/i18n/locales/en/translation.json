@@ -617,5 +617,19 @@
   "metaTitle": "Prospecta",
   "metaDescription": "Multi-channel prospecting platform for Malagasy companies",
   "ogDescription": "Find your future customers across all networks.",
-  "inbox": "Inbox"
+  "inbox": "Inbox",
+  "cookieConsentTitle": "Control your privacy",
+  "cookieConsentDescription": "We use cookies to improve your experience, analyze site traffic, and personalize ads. By clicking 'Accept', you consent to our use of cookies.",
+  "cookieConsentAccept": "Accept",
+  "cookieConsentDecline": "Decline",
+  "cookieConsentReadMore": "Read policy",
+  "privacyPolicyContent": "This privacy policy explains how Prospecta collects, uses, and protects your personal data when you use our prospecting services.",
+  "termsOfUseContent": "Our terms of use define the rules for using our automated prospecting platform.",
+  "sortBy": "Sort by",
+  "sortByName": "Name",
+  "sortBySource": "Source",
+  "sortByDate": "Date Added",
+  "sortByScore": "Score",
+  "orderAsc": "Ascending",
+  "orderDesc": "Descending"
 }

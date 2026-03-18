@@ -30,7 +30,7 @@ function getPublicUrl() {
     return url.replace(/\/$/, '');
   }
   
-  return `http://localhost:${process.env.PORT || 3001}`;
+  return `http://localhost:${process.env.PORT || 7842}`;
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -46,11 +46,16 @@ function getSupabase() {
 }
 
 function createTransporter(cfg) {
+  const host = cfg?.host || process.env.SMTP_HOST;
+  const port = parseInt(cfg?.port || process.env.SMTP_PORT, 10) || 587;
+  const user = cfg?.user || process.env.SMTP_USER;
+  const pass = cfg?.pass || process.env.SMTP_PASS;
+
   return nodemailer.createTransport({
-    host: cfg.host,
-    port: parseInt(cfg.port, 10) || 587,
-    secure: parseInt(cfg.port, 10) === 465,
-    auth: { user: cfg.user, pass: cfg.pass },
+    host: host,
+    port: port,
+    secure: port === 465,
+    auth: { user: user, pass: pass },
     tls: { rejectUnauthorized: false },
   });
 }
@@ -68,6 +73,45 @@ function personalizeTemplate(template, vars) {
 
 async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function wrapInBrandedTemplate(content, serverPublicUrl, recipientId) {
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background-color: #f0f4f8; font-family: 'Outfit', Arial, sans-serif; color: #1a2f4d; }
+    .wrapper { max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(26,47,77,0.10); }
+    .header { background-color: #1a2f4d; padding: 24px 30px; text-align: center; }
+    .header img { height: 32px; }
+    .body { padding: 32px; font-size: 15px; line-height: 1.7; color: #4a5f7a; }
+    .footer { background-color: #f8fafc; border-top: 1px solid #e8edf4; padding: 20px; text-align: center; font-size: 11px; color: #8a9ab0; }
+    .footer a { color: #13b981; text-decoration: underline; }
+    .tagline { font-size: 12px; color: #13b981; font-weight: 600; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <img src="https://prospecta.soamibango.com/logo_prospecta_claire.png" alt="Prospecta" />
+    </div>
+    <div class="body">
+      ${content}
+    </div>
+    <div class="footer">
+      <p class="tagline">Prospecta — Trouvez vos futurs clients sur tous les réseaux.</p>
+      <p>© 2026 Varatraza Tech · <a href="https://prospecta.soamibango.com">prospecta.soamibango.com</a></p>
+      <div style="margin-top: 12px;">
+        <a href="${serverPublicUrl}/api/email/unsubscribe/${recipientId}">Se désabonner</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
 }
 
 async function processCampaigns() {
@@ -155,19 +199,20 @@ async function processCampaigns() {
                 console.warn('[CRON]    → Lancez `npm run backend:tunnel` pour activer le tracking.');
             }
             const trackingPixel = `<img src="${serverPublicUrl}/api/email/track/open/${recipient.id}" width="1" height="1" style="display:none;" alt="" />`;
-            const unsubscribeLink = `<br><br><div style="text-align:center; font-size: 11px; color:#999;"><a href="${serverPublicUrl}/api/email/unsubscribe/${recipient.id}" style="color:#999; text-decoration:underline;">Se désabonner</a></div>`;
-            
-            const finalHtml = htmlContentBase + trackingPixel + unsubscribeLink;
+            const finalHtml = wrapInBrandedTemplate(htmlContentBase + trackingPixel, serverPublicUrl, recipient.id);
 
             let success = false;
             let errorMessage = '';
 
+            const senderEmail = campaign.from_email || process.env.DEFAULT_SENDER_EMAIL || process.env.SMTP_USER;
+            const senderName = campaign.from_name || process.env.DEFAULT_SENDER_NAME || 'Prospecta';
+
             try {
                 const transporter = createTransporter({ host: smtpConfig.host, port: smtpConfig.port, user: smtpConfig.user, pass: smtpConfig.pass });
                 await transporter.sendMail({
-                    from: `"${campaign.from_name}" <${campaign.from_email}>`,
+                    from: `"${senderName}" <${senderEmail}>`,
                     to: recipient.email,
-                    replyTo: campaign.reply_to || campaign.from_email,
+                    replyTo: campaign.reply_to || senderEmail,
                     subject: campaign.subject,
                     html: finalHtml,
                 });
@@ -178,6 +223,55 @@ async function processCampaigns() {
 
             if (success) {
                 console.log(`[CRON] Sent email to ${recipient.email}`);
+                
+                // --- INBOX LINKING ---
+                try {
+                    // 1. Check if a thread already exists for this prospect/user/campaign
+                    let { data: thread } = await supabase
+                        .from('email_threads')
+                        .select('id')
+                        .eq('prospect_id', recipient.prospect_id || recipient.id) // Fallback if prospect_id is missing
+                        .eq('user_id', campaign.user_id)
+                        .maybeSingle();
+
+                    if (!thread) {
+                        // Create new thread
+                        const { data: newThread, error: tErr } = await supabase
+                            .from('email_threads')
+                            .insert({
+                                user_id: campaign.user_id,
+                                prospect_id: recipient.prospect_id || recipient.id,
+                                campaign_id: campaign.id,
+                                subject: campaign.subject,
+                                prospect_email: recipient.email
+                            })
+                            .select()
+                            .single();
+                        if (!tErr) thread = newThread;
+                    }
+
+                    if (thread) {
+                        // 2. Insert the sent message into email_messages
+                        await supabase.from('email_messages').insert({
+                            thread_id: thread.id,
+                            user_id: campaign.user_id,
+                            direction: 'sent',
+                            from_email: campaign.from_email,
+                            from_name: campaign.from_name,
+                            to_email: recipient.email,
+                            subject: campaign.subject,
+                            body_text: finalHtml.replace(/<[^>]*>?/gm, '').slice(0, 1000), // Clean text version
+                            body_html: finalHtml,
+                            is_read: true,
+                            message_id_header: success ? (errorMessage || '') : '', // reusing for temporary ID if needed
+                            received_at: new Date().toISOString()
+                        });
+                    }
+                } catch (inboxErr) {
+                    console.error('[CRON] Failed to link to inbox:', inboxErr.message);
+                }
+                // ---------------------
+
                 await supabase.from('campaign_recipients').update({ status: 'sent', sent_at: new Date().toISOString() }).eq('id', recipient.id);
                 currentSentToday++;
                 sentCountTotal++;

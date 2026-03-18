@@ -22,6 +22,13 @@ const ProtectedRoute = ({ children, showOnboarding = true, requireAdmin = false 
     return <Navigate to="/dashboard" replace />;
   }
 
+  // Redirect to onboarding if not completed and required for this route
+  if (showOnboarding && profile && !profile.onboarding_completed) {
+    if (location.pathname !== '/onboarding') {
+      return <Navigate to="/onboarding" replace />;
+    }
+  }
+
   return <>{children}</>;
 };
 

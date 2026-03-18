@@ -27,13 +27,19 @@ const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { totalUnread } = useInbox();
 
+  // Interface pour les éléments de navigation
+  interface NavItem {
+    label: string;
+    path: string;
+    badge?: number;
+  }
+
   // Configuration des éléments de navigation
-  const navItems = [
+  const navItems: NavItem[] = [
     { label: t("dashboard"), path: "/dashboard" },
     { label: t("findProspects"), path: "/finder" },
     { label: "Mes prospects", path: "/prospects" },
     { label: t("campaigns"), path: "/campaigns" },
-    { label: t("reports"), path: "/reports" },
     { label: t("settings"), path: "/settings" },
   ];
 
@@ -71,7 +77,7 @@ const Header = () => {
                 }`}
             >
               {item.label}
-              {"badge" in item && (item.badge as number) > 0 && (
+              {item.badge !== undefined && item.badge > 0 && (
                 <span className="inline-flex items-center justify-center bg-accent text-white text-[9px] font-bold rounded-full w-4 h-4">
                   {item.badge}
                 </span>
@@ -139,7 +145,7 @@ const Header = () => {
                 }`}
             >
               <span>{item.label}</span>
-              {"badge" in item && (item.badge as number) > 0 && (
+              {item.badge !== undefined && item.badge > 0 && (
                 <span className="inline-flex items-center justify-center bg-accent text-white text-[9px] font-bold rounded-full w-4 h-4">
                   {item.badge}
                 </span>

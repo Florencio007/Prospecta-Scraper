@@ -12,18 +12,11 @@ import { Eye, EyeOff, ExternalLink, CheckCircle2, XCircle, Clock, AlertTriangle,
 import { LoadingLogo } from '@/components/LoadingLogo';
 import { ConfirmDialog } from './ConfirmDialog';
 import { testEmailSend, testSmtpConnection } from '@/services/emailService';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Sparkles, Brain, Cpu, Zap } from 'lucide-react';
 
 const PROVIDERS_CONFIG = [
-    {
-        id: 'openai' as ApiProvider,
-        name: 'OpenAI',
-        icon: '🤖',
-        description: 'Moteur de l\'assistant IA et génération de contenu email',
-        keyLabel: 'Clé API OpenAI',
-        keyPlaceholder: 'sk-...',
-        docsUrl: 'https://platform.openai.com/api-keys',
-        required: false,
-    },
+    /* openai is now handled by AiModelCard */
     {
         id: 'google_maps' as ApiProvider,
         name: 'Google Maps / Places',
@@ -511,6 +504,293 @@ const ApiKeyCard = ({ providerConfig, existingKey, onUpdate }: { providerConfig:
     );
 };
 
+// ---- AI Model Configuration Card ----
+const AI_MODEL_PROVIDERS = [
+    {
+        id: 'openai',
+        name: 'OpenAI',
+        icon: <img src="/chatgpt-logo.png" className="w-4 h-4 object-contain" alt="OpenAI" />,
+        description: 'Solution standard puissante',
+        baseUrl: 'https://api.openai.com/v1',
+        models: [
+            { id: 'gpt-4o-mini', name: 'GPT-4o Mini (Éco)', paid: true },
+            { id: 'gpt-4o', name: 'GPT-4o (Premium)', paid: true }
+        ],
+        docsUrl: 'https://platform.openai.com/api-keys'
+    },
+    {
+        id: 'openrouter',
+        name: 'OpenRouter',
+        icon: <img src="/openrouter-logo.png" className="w-4 h-4 object-contain" alt="OpenRouter" />,
+        description: 'Accédez à tous les modèles (Gemini, Claude, etc.)',
+        baseUrl: 'https://openrouter.ai/api/v1',
+        models: [
+            { id: 'google/gemini-2.0-flash-exp:free', name: 'Gemini 2.0 Flash', free: true },
+            { id: 'deepseek/deepseek-r1:free', name: 'DeepSeek R1', free: true },
+            { id: 'mistralai/mistral-7b-instruct:free', name: 'Mistral 7B', free: true },
+            { id: 'anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet', paid: true }
+        ],
+        docsUrl: 'https://openrouter.ai/keys'
+    },
+    {
+        id: 'gemini',
+        name: 'Google Gemini',
+        icon: <img src="/gemini-logo.png" className="w-4 h-4 object-contain" alt="Gemini" />,
+        description: 'Modèles Google via API directe',
+        baseUrl: 'https://generativelanguage.googleapis.com/v1beta/openai',
+        models: [
+            { id: 'gemini-1.5-flash', name: 'Gemini 1.5 Flash', free: true },
+            { id: 'gemini-1.5-pro', name: 'Gemini 1.5 Pro', free: true }
+        ],
+        docsUrl: 'https://aistudio.google.com/app/apikey'
+    },
+    {
+        id: 'groq',
+        name: 'Groq',
+        icon: <img src="/grok-logo.png" className="w-5 h-5 object-contain" alt="Groq" />,
+        description: 'Ultra-rapide, Llama 3 & Mixtral',
+        baseUrl: 'https://api.groq.com/openai/v1',
+        models: [
+            { id: 'llama-3.3-70b-versatile', name: 'Llama 3.3 70B', free: true },
+            { id: 'mixtral-8x7b-32768', name: 'Mixtral 8x7B', free: true }
+        ],
+        docsUrl: 'https://console.groq.com/keys'
+    },
+    {
+        id: 'anthropic',
+        name: 'Anthropic Claude',
+        icon: <img src="/claud-logo.png" className="w-4 h-4 object-contain" alt="Claude" />,
+        description: 'Intelligence supérieure, raisonnement complexe',
+        baseUrl: 'https://api.anthropic.com/v1',
+        models: [
+            { id: 'claude-3-5-sonnet-20240620', name: 'Claude 3.5 Sonnet', paid: true },
+            { id: 'claude-3-haiku-20240307', name: 'Claude 3 Haiku', paid: true }
+        ],
+        docsUrl: 'https://console.anthropic.com/settings/keys'
+    }
+];
+
+const AiModelCard = ({ existingKey, onUpdate }: { existingKey?: ApiKey, onUpdate: () => void }) => {
+    const { saveKey, deleteKey } = useApiKeys();
+    const { toast } = useToast();
+
+    const parseConfig = (raw?: string) => {
+        if (!raw) return { provider: 'openai', model: 'gpt-4o-mini', apiKey: '', baseUrl: '' };
+        if (!raw.startsWith('{')) return { provider: 'openai', model: 'gpt-4o-mini', apiKey: raw, baseUrl: 'https://api.openai.com/v1' };
+        try { return JSON.parse(raw); } catch { return { provider: 'openai', model: 'gpt-4o-mini', apiKey: raw, baseUrl: '' }; }
+    };
+
+    const config = parseConfig(existingKey?.api_key);
+    const [providerId, setProviderId] = useState(config.provider || 'openai');
+    const [modelId, setModelId] = useState(config.model || 'gpt-4o-mini');
+    const [apiKey, setApiKey] = useState(config.apiKey || '');
+    const [showKey, setShowKey] = useState(false);
+    const [isSaving, setIsSaving] = useState(false);
+    const [isTesting, setIsTesting] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+    const provider = AI_MODEL_PROVIDERS.find(p => p.id === providerId) || AI_MODEL_PROVIDERS[0];
+
+    useEffect(() => {
+        // Keep model valid when provider changes
+        if (!provider.models.find(m => m.id === modelId)) {
+            setModelId(provider.models[0].id);
+        }
+    }, [providerId]);
+
+    const handleSave = async () => {
+        if (!apiKey.trim()) {
+            toast({ title: "Erreur", description: "La clé API est requise.", variant: "destructive" });
+            return;
+        }
+        setIsSaving(true);
+        const fullConfig = JSON.stringify({
+            provider: providerId,
+            model: modelId,
+            apiKey: apiKey,
+            baseUrl: provider.baseUrl
+        });
+        const success = await saveKey('openai' as ApiProvider, fullConfig, `AI: ${provider.name} - ${modelId}`);
+        setIsSaving(false);
+
+        if (success) {
+            toast({ title: "Modèle IA Configuré", description: `Utilisation de ${modelId} via ${provider.name}.` });
+            onUpdate();
+        }
+    };
+
+    const handleTest = async () => {
+        if (!apiKey.trim()) {
+            toast({ title: "Erreur", description: "Veuillez entrer une clé API pour tester.", variant: "destructive" });
+            return;
+        }
+        
+        setIsTesting(true);
+        try {
+            // Temporarily save to test with the latest values even if not saved to DB
+            const fullConfig = JSON.stringify({
+                provider: providerId,
+                model: modelId,
+                apiKey: apiKey,
+                baseUrl: provider.baseUrl
+            });
+            
+            // We need to save it first because testKey reads from DB
+            await saveKey('openai' as ApiProvider, fullConfig, `AI: ${provider.name} - ${modelId}`);
+            
+            const result = await testKey('openai' as ApiProvider);
+            
+            if (result.ok) {
+                toast({ title: "✅ Test réussi !", description: result.message });
+            } else {
+                toast({ title: "❌ Échec du test", description: result.message, variant: "destructive" });
+            }
+        } catch (error: any) {
+            console.error("Test error:", error);
+            toast({ title: "❌ Erreur imprévue", description: error.message || "Une erreur est survenue lors du test.", variant: "destructive" });
+        } finally {
+            setIsTesting(false);
+            onUpdate();
+        }
+    };
+
+    const handleDelete = async () => {
+        setIsDeleteDialogOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        setIsDeleting(true);
+        await deleteKey('openai' as ApiProvider);
+        setIsDeleting(false);
+        setIsDeleteDialogOpen(false);
+        setApiKey('');
+        onUpdate();
+        toast({ title: "Configuration IA réinitialisée" });
+    };
+
+    return (
+        <Card className="border-2 border-accent/30 shadow-[0_0_15px_rgba(var(--accent-rgb),0.08)] col-span-1 md:col-span-2">
+            <CardHeader className="pb-3 bg-accent/5 rounded-t-lg">
+                <div className="flex justify-between items-start">
+                    <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-xl bg-accent flex items-center justify-center">
+                            <Brain size={20} className="text-white" />
+                        </div>
+                        <div>
+                            <CardTitle className="text-lg flex items-center gap-2">
+                                Assistant IA & Modèles
+                                <Badge className="bg-accent text-white text-[10px] h-5">Intelligence</Badge>
+                            </CardTitle>
+                            <CardDescription className="text-xs">Choisissez votre fournisseur LLM et votre modèle préféré</CardDescription>
+                        </div>
+                    </div>
+                </div>
+            </CardHeader>
+            <CardContent className="space-y-6 pt-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label className="text-xs font-semibold">Fournisseur d'IA</Label>
+                        <Select value={providerId} onValueChange={setProviderId}>
+                            <SelectTrigger className="bg-slate-50 dark:bg-slate-900">
+                                <SelectValue placeholder="Choisir un fournisseur" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {AI_MODEL_PROVIDERS.map(p => (
+                                    <SelectItem key={p.id} value={p.id}>
+                                        <div className="flex items-center gap-2">
+                                            {p.icon}
+                                            <span className="font-medium">{p.name}</span>
+                                        </div>
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Label className="text-xs font-semibold">Modèle sélectionné</Label>
+                        <Select value={modelId} onValueChange={setModelId}>
+                            <SelectTrigger className="bg-slate-50 dark:bg-slate-900 font-mono text-xs">
+                                <SelectValue placeholder="Choisir un modèle" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                {provider.models.map(m => (
+                                    <SelectItem key={m.id} value={m.id}>
+                                        <div className="flex items-center justify-between w-full gap-4">
+                                            <span className="text-xs">{m.name}</span>
+                                            {m.free ? (
+                                                <Badge className="bg-emerald-500/10 text-emerald-600 border-none text-[9px] h-4">GRATUIT</Badge>
+                                            ) : (
+                                                <span className="text-[9px] opacity-50 uppercase tracking-tighter">Premium</span>
+                                            )}
+                                        </div>
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
+
+                <div className="space-y-2">
+                    <div className="flex justify-between">
+                        <Label className="text-xs font-semibold">Clé API {provider.name}</Label>
+                        <a href={provider.docsUrl} target="_blank" rel="noopener noreferrer" className="text-[10px] text-accent hover:underline flex items-center">
+                            Obtenir une clé <ExternalLink className="w-3 h-3 ml-1" />
+                        </a>
+                    </div>
+                    <div className="relative">
+                        <Input
+                            type={showKey ? "text" : "password"}
+                            placeholder={`Coller votre clé API ${provider.name} ici...`}
+                            value={apiKey}
+                            onChange={(e) => setApiKey(e.target.value)}
+                            className="pr-10 bg-slate-50 dark:bg-slate-900 font-mono text-sm"
+                        />
+                        <Button type="button" variant="ghost" size="icon" className="absolute right-0 top-0 h-full px-3" onClick={() => setShowKey(!showKey)}>
+                            {showKey ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                        </Button>
+                    </div>
+                </div>
+
+                <div className="bg-accent/5 p-3 rounded-lg border border-accent/10 text-[11px] text-muted-foreground leading-relaxed">
+                    <p className="font-medium text-accent mb-1 flex items-center gap-1">
+                        <Sparkles size={11} /> Astuce :
+                    </p>
+                    {providerId === 'openrouter' 
+                        ? "OpenRouter vous permet d'utiliser des modèles gratuits (Gemini Flash, DeepSeek) sans CB." 
+                        : providerId === 'gemini' 
+                        ? "L'API Gemini est gratuite jusqu'à un certain quota par minute." 
+                        : "Utilisez un modèle léger comme GPT-4o Mini pour un coût quasi nul."
+                    }
+                </div>
+            </CardContent>
+            <CardFooter className="bg-slate-50 dark:bg-slate-900/50 flex justify-between rounded-b-lg border-t px-6 py-4">
+                {existingKey ? (
+                    <div className="flex gap-2">
+                        <Button variant="ghost" size="sm" onClick={handleDelete} disabled={isDeleting} className="text-destructive hover:bg-destructive/10">Réinitialiser</Button>
+                        <Button variant="outline" size="sm" onClick={handleTest} disabled={isTesting || !apiKey}>
+                            {isTesting ? <LoadingLogo size="sm" /> : null} Tester la configuration
+                        </Button>
+                    </div>
+                ) : <div />}
+                <Button size="sm" onClick={handleSave} disabled={isSaving || !apiKey} className="bg-accent hover:bg-accent/90 text-white">
+                    {isSaving ? <LoadingLogo size="sm" /> : null} Sauvegarder la configuration
+                </Button>
+            </CardFooter>
+
+            <ConfirmDialog
+                isOpen={isDeleteDialogOpen}
+                onOpenChange={setIsDeleteDialogOpen}
+                onConfirm={confirmDelete}
+                title="Supprimer la configuration IA ?"
+                description="L'intelligence artificielle sera désactivée tant qu'une nouvelle clé n'est pas configurée."
+                confirmText="Supprimer"
+            />
+        </Card>
+    );
+};
+
 export const ApiKeysSettings = () => {
     const { getKeys } = useApiKeys();
     const [keys, setKeys] = useState<ApiKey[]>([]);
@@ -561,6 +841,10 @@ export const ApiKeysSettings = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <SmtpCard
                         existingConfig={keys.find(k => k.provider === 'smtp')}
+                        onUpdate={fetchKeys}
+                    />
+                    <AiModelCard 
+                        existingKey={keys.find(k => k.provider === 'openai')}
                         onUpdate={fetchKeys}
                     />
                     {PROVIDERS_CONFIG.map((config) => (

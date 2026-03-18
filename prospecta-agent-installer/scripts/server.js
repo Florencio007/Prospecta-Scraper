@@ -18,14 +18,18 @@ const VERSION = '1.1.0';
 
 // Détection intelligente du dossier des scripts
 let SCRIPTS_DIR = __dirname;
-if (!fs.existsSync(path.join(SCRIPTS_DIR, 'scraper_linkedin.cjs'))) {
+// Dans l'app Electron, server.js est à la racine de 'agent/', les scrapers sont dans 'agent/scripts/'
+if (fs.existsSync(path.join(__dirname, 'scripts'))) {
+    SCRIPTS_DIR = path.join(__dirname, 'scripts');
+} else if (!fs.existsSync(path.join(SCRIPTS_DIR, 'scraper_linkedin.cjs'))) {
+    // Fallback si on est lancé depuis un dossier parent ou autre
     const fallback = path.join(__dirname, 'scripts');
     if (fs.existsSync(path.join(fallback, 'scraper_linkedin.cjs'))) {
         SCRIPTS_DIR = fallback;
     }
 }
 
-const CANCEL_FILE = path.join(SCRIPTS_DIR, 'cancel_scrape.lock');
+const CANCEL_FILE = path.join(path.dirname(__dirname), 'cancel_scrape.lock');
 
 // ── CORS Headers (Robustes) ───────────────────────────────────────────────────
 function setCORSHeaders(req, res) {
@@ -132,7 +136,7 @@ function setupScraperEndpoint(res, scriptName, args = []) {
       }
     }
 
-    res.write(`data: ${JSON.stringify({ done: true, code })}\n\n`);
+    res.write(`data: ${JSON.stringify({ percentage: 100, message: 'Terminé', done: true, code })}\n\n`);
     res.end();
   });
 
@@ -181,12 +185,13 @@ const server = http.createServer((req, res) => {
   
   // LinkedIn
   if (pathname === '/api/scrape/linkedin' || pathname === '/scrape/linkedin') {
-    const { email, password, q, max, maxProfiles, maxPosts, type, activityType } = query;
+    const { email, password, q, l, max, maxProfiles, maxPosts, type, activityType } = query;
     const finalMax = maxProfiles || max || '10';
+    const finalQuery = (l && q && !q.includes(l)) ? `${q} ${l}` : q;
     setupScraperEndpoint(res, 'scraper_linkedin.cjs', [
       email || '', 
       password || '', 
-      q || '', 
+      finalQuery || '', 
       finalMax,
       maxPosts || '30', 
       type || 'people',
@@ -212,30 +217,51 @@ const server = http.createServer((req, res) => {
   }
 
   // Facebook
-  if (pathname === '/api/scrape/facebook') {
-    const { email, password, q, max } = query;
+  if (pathname === '/api/scrape/facebook' || pathname === '/scrape/facebook') {
+    const { email, password, q, l, max, limit } = query;
+    const finalQuery = (l && q && !q.includes(l)) ? `${q} ${l}` : q;
     setupScraperEndpoint(res, 'scraper_facebook.cjs', [
-      email || '', password || '', q || '', max || '10',
+      email || '', password || '', finalQuery || '', limit || max || '10',
     ]);
     return;
   }
 
   // Pappers
-  if (pathname === '/api/scrape/pappers') {
-    const { q, max } = query;
-    setupScraperEndpoint(res, 'scraper_pappers.cjs', [q || '', max || '10']);
+  if (pathname === '/api/scrape/pappers' || pathname === '/scrape/pappers') {
+    const { q, max, limit, l, location } = query;
+    setupScraperEndpoint(res, 'scraper_pappers.cjs', [
+        q || '', 
+        limit || max || '10',
+        l || location || ''
+    ]);
     return;
   }
 
   // Pages Jaunes (PJ)
-  if (pathname === '/api/scrape/pj') {
-    const { q, location, max } = query;
-    setupScraperEndpoint(res, 'scraper_pj.cjs', [q || '', location || '', max || '10']);
+  if (pathname === '/api/scrape/pj' || pathname === '/scrape/pj') {
+    const { q, l, location, max, limit } = query;
+    const finalLimit = limit || max || '10';
+    const finalLocation = l || location || '';
+    setupScraperEndpoint(res, 'scraper_pj.cjs', [q || '', finalLocation, finalLimit]);
+    return;
+  }
+
+  // Societe.com
+  if (pathname === '/api/scrape/societe' || pathname === '/scrape/societe') {
+    const { q, limit, max } = query;
+    setupScraperEndpoint(res, 'scraper_societe.cjs', [q || '', limit || max || '10']);
+    return;
+  }
+
+  // Infogreffe
+  if (pathname === '/api/scrape/infogreffe' || pathname === '/scrape/infogreffe') {
+    const { q, limit, max } = query;
+    setupScraperEndpoint(res, 'scraper_infogreffe.cjs', [q || '', limit || max || '10']);
     return;
   }
 
   // Enrichers
-  if (pathname === '/enrich/google') {
+  if (pathname === '/api/enrich/google' || pathname === '/enrich/google') {
     const { name, company, location, email } = query;
     const q = [name, company, location].filter(Boolean).join(' ');
     setupScraperEndpoint(res, 'enricher_google.cjs', [
@@ -261,31 +287,35 @@ const server = http.createServer((req, res) => {
   res.end(JSON.stringify({ error: 'Route inconnue', path: pathname }));
 });
 
-// ── Démarrage ─────────────────────────────────────────────────────────────────
-// On écoute sur 0.0.0.0 pour accepter les connexions externes si besoin (comme Express)
-server.listen(PORT, '0.0.0.0', () => {
-  console.log('');
-  console.log('╔════════════════════════════════════════╗');
-  console.log('║   Prospecta AI — Agent Local v' + VERSION + '   ║');
-  console.log('╠════════════════════════════════════════╣');
-  console.log('║  ✅ Serveur démarré sur port ' + PORT + '      ║');
-  console.log('║  🖥️  Plateforme : ' + os.platform().padEnd(22) + '║');
-  console.log('║  📁 Scripts : ' + SCRIPTS_DIR.slice(-25).padEnd(25) + '║');
-  console.log('╚════════════════════════════════════════╝');
-  console.log('');
-  console.log('  Mode Agent Electron Actif');
-  console.log('');
-});
+// ── Démarrage avec résolution de conflit de port ──────────────────────────────
+function startServer(portAttempt) {
+  const srv = server.listen(portAttempt, '0.0.0.0', () => {
+    console.log('');
+    console.log('╔════════════════════════════════════════╗');
+    console.log('║   Prospecta AI — Agent Local v' + VERSION + '   ║');
+    console.log('╠════════════════════════════════════════╣');
+    console.log('║  ✅ Serveur démarré sur port ' + portAttempt + '      ║');
+    console.log('║  🖥️  Plateforme : ' + os.platform().padEnd(22) + '║');
+    console.log('║  📁 Scripts : ' + SCRIPTS_DIR.slice(-25).padEnd(25) + '║');
+    console.log('╚════════════════════════════════════════╝');
+    console.log('');
+    console.log('  Mode Agent Electron Actif');
+    console.log('');
+  });
 
-server.on('error', (err) => {
-  if (err.code === 'EADDRINUSE') {
-    console.error(`\n❌ Le port ${PORT} est déjà utilisé.`);
-    process.exit(1);
-  } else {
-    console.error('Erreur serveur:', err.message);
-  }
-  process.exit(1);
-});
+  srv.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.log(`\n⚠️  Port ${portAttempt} déjà utilisé. Tentative sur ${portAttempt + 1}...`);
+      srv.close();
+      startServer(portAttempt + 1);
+    } else {
+      console.error('Erreur serveur:', err.message);
+      process.exit(1);
+    }
+  });
+}
+
+startServer(PORT);
 
 process.on('SIGINT', () => {
   console.log('\n\n  👋 Agent arrêté. À bientôt !\n');

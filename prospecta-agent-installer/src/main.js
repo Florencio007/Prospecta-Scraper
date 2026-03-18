@@ -22,7 +22,7 @@ const NODE_VERSION = '20.11.1';
 const NODE_DOWNLOADS = {
   darwin_x64:   `https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-darwin-x64.tar.gz`,
   darwin_arm64: `https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-darwin-arm64.tar.gz`,
-  win32_x64:    `https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-win-x64.zip`,
+  win32_x64:    `https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-x64.msi`, // Using MSI instead of ZIP
   linux_x64:    `https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.gz`,
 };
 
@@ -53,12 +53,12 @@ function getEnv(extraBinDir) {
     `${home}/.fnm/aliases/default/bin`,
     `${home}/.nodenv/shims`,
     `${home}/.asdf/shims`,
-  ].filter(Boolean).join(':');
+  ].filter(Boolean).join(path.delimiter);
 
 
   return { 
     ...process.env, 
-    PATH: `${paths}:${process.env.PATH || ''}`, 
+    PATH: `${paths}${path.delimiter}${process.env.PATH || ''}`, 
     HOME: home,
     PLAYWRIGHT_BROWSERS_PATH: BROWSERS_PATH 
   };
@@ -116,30 +116,35 @@ function checkNodeInstalled() {
 function getLocalNodeBinDir() {
   try {
     if (!fs.existsSync(NODE_INSTALL_DIR)) return null;
-    const dirs = fs.readdirSync(NODE_INSTALL_DIR);
+    
+    const isWin = process.platform === 'win32';
+    const binaryName = isWin ? 'node.exe' : 'node';
 
-    const nodeDir = dirs.find(d => d.startsWith('node-v'));
-    if (!nodeDir) return null;
-
-    const baseDir = path.join(NODE_INSTALL_DIR, nodeDir);
-
-    if (process.platform === 'win32') {
-      // Windows : les binaires sont à la racine du dossier extrait
-      const nodeExe = path.join(baseDir, 'node.exe');
-      if (fs.existsSync(nodeExe)) {
-        dbg(`getLocalNodeBinDir (Win) → ${baseDir}`);
-        return baseDir;
-      }
-      // Parfois dans un sous-dossier selon l'unzip
-      const sub = path.join(NODE_INSTALL_DIR, 'extracted', nodeDir);
-      if (fs.existsSync(path.join(sub, 'node.exe'))) return sub;
-    } else {
-      // macOS / Linux : dossier /bin
-      const binDir = path.join(baseDir, 'bin');
-      if (fs.existsSync(path.join(binDir, 'node'))) {
-        dbg(`getLocalNodeBinDir (Unix) → ${binDir}`);
-        return binDir;
-      }
+    // Recherche récursive universelle
+    const findNodeBinary = (startDir) => {
+      try {
+        const files = fs.readdirSync(startDir);
+        for (const file of files) {
+          const fullPath = path.join(startDir, file);
+          const stat = fs.statSync(fullPath);
+          if (stat.isDirectory()) {
+            if (file === 'node_modules' || file === '.git' || file === 'browsers') continue;
+            // Prevent too deep recursion
+            if (startDir.split(path.sep).length > 15) continue;
+            const found = findNodeBinary(fullPath);
+            if (found) return found;
+          } else if (file.toLowerCase() === binaryName.toLowerCase()) {
+            return startDir;
+          }
+        }
+      } catch(e) { dbg(`Search error in ${startDir}: ${e.message}`); }
+      return null;
+    };
+    
+    const binDir = findNodeBinary(NODE_INSTALL_DIR);
+    if (binDir) {
+      dbg(`getLocalNodeBinDir (${process.platform}) → ${binDir}`);
+      return binDir;
     }
   } catch(e) {
     dbg(`getLocalNodeBinDir error: ${e.message}`);
@@ -207,24 +212,39 @@ async function installNodeLocally(onProgress) {
   dbg(`installNodeLocally: url=${url}`);
 
   fs.mkdirSync(NODE_INSTALL_DIR, { recursive: true });
-  const archivePath = path.join(NODE_INSTALL_DIR, `node.${platform === 'win32' ? 'zip' : 'tar.gz'}`);
+  const ext = platform === 'win32' ? 'msi' : 'tar.gz';
+  const archivePath = path.join(NODE_INSTALL_DIR, `node.${ext}`);
 
   // Télécharger
   await downloadFile(url, archivePath, (pct, msg) => {
     onProgress(5 + Math.round(pct * 0.4), msg); // 5% → 45%
   });
 
-  onProgress(45, 'Extraction de Node.js...');
+  onProgress(45, 'Installation de Node.js...');
 
-  // Extraire
+  // Extraire / Installer
   await new Promise((resolve, reject) => {
     if (platform === 'win32') {
-      // Windows : PowerShell pour unzip
-      const ps = spawn('powershell', [
-        '-Command',
-        `Expand-Archive -Path "${archivePath}" -DestinationPath "${path.join(NODE_INSTALL_DIR, 'extracted')}" -Force`
+      // Windows : Utilisation de msiexec pour une installation propre au lieu de unzip
+      const targetDir = path.join(NODE_INSTALL_DIR, 'node-win');
+      fs.mkdirSync(targetDir, { recursive: true });
+      dbg(`Installing MSI ${archivePath} quietly to ${targetDir}`);
+      
+      const ps = spawn('msiexec', [
+        '/a', `"${archivePath}"`,
+        '/qb',
+        `TARGETDIR="${targetDir}"`
       ], { shell: true });
-      ps.on('close', code => code === 0 ? resolve() : reject(new Error('Extraction échouée')));
+      
+      ps.on('close', code => {
+         if (code === 0) {
+             // The actual node.exe is usually in TARGETDIR\nodejs
+             dbg(`MSI extraction complete (code 0)`);
+             resolve();
+         } else {
+             reject(new Error(`Extraction MSI échouée (code ${code})`));
+         }
+      });
     } else {
       // macOS / Linux : tar
       const tar = spawn('tar', ['-xzf', archivePath, '-C', NODE_INSTALL_DIR], { shell: false });
@@ -237,14 +257,42 @@ async function installNodeLocally(onProgress) {
   try { fs.unlinkSync(archivePath); } catch(_) {}
 
   const binDir = getLocalNodeBinDir();
-  dbg(`installNodeLocally: binDir=${binDir}`);
+  const binaryName = platform === 'win32' ? 'node.exe' : 'node';
+  dbg(`installNodeLocally: binDir=${binDir}, binaryName=${binaryName}`);
 
-  if (!binDir || !fs.existsSync(path.join(binDir, 'node'))) {
+  if (!binDir || !fs.existsSync(path.join(binDir, binaryName))) {
     throw new Error('Node.js extrait mais binaire introuvable.');
   }
 
   onProgress(50, `Node.js v${NODE_VERSION} installé localement ✓`);
   return binDir;
+}
+
+// ── Synchronisation des scripts ──────────────────────────────────────────────
+function syncScripts() {
+  const resourcesScripts = app.isPackaged
+    ? path.join(process.resourcesPath, 'scripts')
+    : path.join(__dirname, '..', 'scripts');
+
+  dbg(`syncScripts: resourcesScripts=${resourcesScripts}`);
+  if (fs.existsSync(resourcesScripts)) {
+    fs.mkdirSync(SCRIPTS_DIR, { recursive: true });
+    const files = fs.readdirSync(resourcesScripts);
+    for (const file of files) {
+      const dst = file === 'server.js'
+        ? path.join(AGENT_DIR, 'server.js')
+        : path.join(SCRIPTS_DIR, file);
+      
+      try {
+        fs.copyFileSync(path.join(resourcesScripts, file), dst);
+        // dbg(`Sync: ${file} -> ${dst}`);
+      } catch (e) {
+        dbg(`Sync failed for ${file}: ${e.message}`);
+      }
+    }
+    return files.length;
+  }
+  return 0;
 }
 
 // ── Installation complète ─────────────────────────────────────────────────────
@@ -289,23 +337,12 @@ async function installDependencies(onProgress) {
   }
 
   // ── Étape 2 : Copier les scripts ──────────────────────────────────────────
-  fs.mkdirSync(SCRIPTS_DIR, { recursive: true });
-
-  const resourcesScripts = process.resourcesPath
-    ? path.join(process.resourcesPath, 'scripts')
-    : path.join(__dirname, '..', 'scripts');
-
-  if (fs.existsSync(resourcesScripts)) {
-    const files = fs.readdirSync(resourcesScripts);
-    for (const file of files) {
-      const dst = file === 'server.js'
-        ? path.join(AGENT_DIR, 'server.js')
-        : path.join(SCRIPTS_DIR, file);
-      fs.copyFileSync(path.join(resourcesScripts, file), dst);
-    }
-    onProgress(52, `${files.length} scripts copiés ✓`);
+  const count = syncScripts();
+  if (count > 0) {
+    onProgress(52, `${count} scripts copiés ✓`);
+  } else {
+    onProgress(52, `Aucun script trouvé pour la copie ⚠️`);
   }
-
   // ── Étape 3 : package.json ────────────────────────────────────────────────
   fs.writeFileSync(path.join(AGENT_DIR, 'package.json'), JSON.stringify({
     name: 'prospecta-agent-runtime',
@@ -320,10 +357,12 @@ async function installDependencies(onProgress) {
   // On utilise node + npm-cli.js directement pour éviter les problèmes de résolution
   const nodeBinForRun = findBin('node', localBinDir);
 
-  // Chercher npm-cli.js (dans lib/node_modules/npm/bin/)
+  // Chercher npm-cli.js
   let npmCliJs = null;
   if (localBinDir) {
-    const nodeRoot = path.dirname(localBinDir); // remonter de bin/ à la racine
+    // Sur Unix, localBinDir est souvent .../bin, sur Windows c'est la racine
+    const nodeRoot = localBinDir.endsWith('bin') ? path.dirname(localBinDir) : localBinDir;
+    
     const candidates = [
       path.join(nodeRoot, 'lib', 'node_modules', 'npm', 'bin', 'npm-cli.js'),
       path.join(nodeRoot, 'node_modules', 'npm', 'bin', 'npm-cli.js'),
@@ -340,7 +379,7 @@ async function installDependencies(onProgress) {
       proc = spawn(nodeBinForRun, [npmCliJs, ...args], { cwd, env, shell: false });
     } else {
       dbg(`runNpm via spawn directly: ${npmBin} ${args.join(' ')}`);
-      proc = spawn(npmBin, args, { cwd, env, shell: false });
+      proc = spawn(npmBin, args, { cwd, env, shell: process.platform === 'win32' });
     }
 
     proc.stdout.on('data', d => {
@@ -369,7 +408,7 @@ async function installDependencies(onProgress) {
   // npx aussi peut être un symlink — utiliser node + npx-cli.js ou npm exec
   let npxCliJs = null;
   if (localBinDir) {
-    const nodeRoot = path.dirname(localBinDir);
+    const nodeRoot = localBinDir.endsWith('bin') ? path.dirname(localBinDir) : localBinDir;
     const candidates = [
       path.join(nodeRoot, 'lib', 'node_modules', 'npm', 'bin', 'npx-cli.js'),
       path.join(nodeRoot, 'node_modules', 'npm', 'bin', 'npx-cli.js'),
@@ -388,7 +427,7 @@ async function installDependencies(onProgress) {
     } else {
       dbg(`playwright install via spawn directly: ${npxBin}`);
       proc = spawn(npxBin, ['playwright', 'install', 'chromium'], {
-        cwd: AGENT_DIR, env, shell: false,
+        cwd: AGENT_DIR, env, shell: process.platform === 'win32',
       });
     }
     proc.stdout.on('data', d => {
@@ -410,6 +449,9 @@ async function installDependencies(onProgress) {
 function startAgent() {
   if (isAgentRunning) return;
 
+  // On synchronise les scripts avant de démarrer pour être sûr d'avoir la dernière version
+  syncScripts();
+
   const serverPath = path.join(AGENT_DIR, 'server.js');
   if (!fs.existsSync(serverPath)) {
     mainWindow?.webContents.send('agent-error', "server.js introuvable. Cliquez 'Installer l'agent'.");
@@ -429,7 +471,14 @@ function startAgent() {
   agentProcess.stdout.on('data', (data) => {
     const line = data.toString();
     fs.appendFileSync(LOG_FILE, `[${new Date().toISOString()}] ${line}`);
-    if (line.includes('Serveur démarré') || line.includes('7842')) {
+    
+    // Détection du port (fixe ou dynamique)
+    const portMatch = line.match(/port\s+(\d+)/i);
+    if (portMatch) {
+      const actualPort = parseInt(portMatch[1], 10);
+      isAgentRunning = true;
+      mainWindow?.webContents.send('agent-status', { running: true, port: actualPort });
+    } else if (line.includes('Serveur démarré') && !isAgentRunning) {
       isAgentRunning = true;
       mainWindow?.webContents.send('agent-status', { running: true, port: PORT });
     }

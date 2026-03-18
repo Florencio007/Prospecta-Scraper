@@ -16,7 +16,9 @@ const Login = () => {
   const [fullName, setFullName] = useState("");
   const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [verificationSent, setVerificationSent] = useState(false); // Added state
+  const [verificationSent, setVerificationSent] = useState(false);
+  const [isResetMode, setIsResetMode] = useState(false);
+  const [resetSent, setResetSent] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { t } = useLanguage();
@@ -83,30 +85,46 @@ const Login = () => {
     }
   };
 
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/settings`,
+    });
+    setLoading(false);
+    if (error) {
+      toast({ title: t('error'), description: error.message, variant: 'destructive' });
+    } else {
+      setResetSent(true);
+    }
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-secondary px-4">
       <div className="w-full max-w-md animate-fade-in">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold tracking-tight text-primary">Prospecta</h2>
           <p className="mt-2 text-muted-foreground font-light">
-            {verificationSent
-              ? t("checkEmail")
-              : isSignUp
-                ? t("createAccountTitle")
-                : t("automateSales")}
+            {verificationSent || resetSent
+              ? t('checkEmail')
+              : isResetMode
+                ? 'Réinitialiser le mot de passe'
+                : isSignUp
+                  ? t('createAccountTitle')
+                  : t('automateSales')}
           </p>
         </div>
 
         <div className="rounded-lg border bg-card p-8 shadow-sm">
-          {verificationSent ? (
+          {verificationSent || resetSent ? (
             <div className="text-center space-y-6">
               <div className="mx-auto w-16 h-16 bg-accent/10 rounded-full flex items-center justify-center">
                 <Mail className="h-8 w-8 text-accent" />
               </div>
               <div className="space-y-2">
-                <h3 className="text-xl font-semibold">{t("accountCreated")}</h3>
+                <h3 className="text-xl font-semibold">{resetSent ? 'Email envoyé !' : t('accountCreated')}</h3>
                 <p className="text-muted-foreground text-sm">
-                  {t("checkEmail")}
+                  {resetSent ? `Un lien de réinitialisation a été envoyé à` : t('checkEmail')}
                 </p>
                 <p className="font-medium text-foreground">{email}</p>
               </div>
@@ -115,15 +133,39 @@ const Login = () => {
                 className="w-full"
                 onClick={() => {
                   setVerificationSent(false);
+                  setResetSent(false);
+                  setIsResetMode(false);
                   setIsSignUp(false);
                   setEmail("");
                   setPassword("");
                 }}
               >
                 <ArrowLeft className="mr-2 h-4 w-4" />
-                {t("signIn")}
+                {t('signIn')}
               </Button>
             </div>
+          ) : isResetMode ? (
+            <form onSubmit={handlePasswordReset} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email">{t('email')}</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder={t('emailPlaceholder')}
+                  required
+                  className="focus-visible:ring-accent"
+                />
+              </div>
+              <Button type="submit" disabled={loading} className="w-full bg-accent text-accent-foreground hover:bg-accent/90">
+                {loading ? 'Envoi...' : 'Envoyer le lien de réinitialisation'}
+              </Button>
+              <button type="button" onClick={() => setIsResetMode(false)} className="w-full text-sm text-muted-foreground hover:text-accent">
+                <ArrowLeft className="inline mr-1 h-3 w-3" />
+                Retour à la connexion
+              </button>
+            </form>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
               {isSignUp && (
@@ -166,15 +208,24 @@ const Login = () => {
               </div>
 
               {!isSignUp && (
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="remember"
-                    checked={remember}
-                    onCheckedChange={(v) => setRemember(v as boolean)}
-                  />
-                  <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">
-                    {t("rememberMe")}
-                  </Label>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      id="remember"
+                      checked={remember}
+                      onCheckedChange={(v) => setRemember(v as boolean)}
+                    />
+                    <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">
+                      {t("rememberMe")}
+                    </Label>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsResetMode(true)}
+                    className="text-sm text-accent hover:underline"
+                  >
+                    Mot de passe oublié ?
+                  </button>
                 </div>
               )}
 

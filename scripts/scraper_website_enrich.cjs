@@ -9,12 +9,15 @@ const { chromium } = require("playwright");
 const fs = require("fs");
 const path = require("path");
 
-// Arguments: websiteUrl name company openAiKey
+// Arguments: websiteUrl name company openAiKey userService userValueProp userIndustry
 const args = process.argv.slice(2);
 const websiteUrl = args[0];
 const personName = args[1] || "Inconnu";
 const companyName = args[2] || "Inconnue";
 const openAiKey = args[3];
+const userService = args[4] || "";
+const userValueProp = args[5] || "";
+const userIndustry = args[6] || "";
 
 if (!websiteUrl || !openAiKey) {
   process.stdout.write(`ERROR: websiteUrl and openAiKey are required.\n`);
@@ -106,7 +109,13 @@ Ta mission est d'analyser le contenu textuel collecté sur le site web d'un pros
 Le prospect est: ${personName} chez ${companyName}.
 
 Tu dois fournir un détail complet, NE RIEN MANQUER d'important (décideurs, services, opportunités).
-Donne des scripts de vente ultra-personnalisés basés sur le contenu trouvé.
+
+${userService ? `TON ENTREPRISE (L'utilisateur de Prospecta) :
+- Secteur : ${userIndustry || 'Non spécifié'}
+- Service : ${userService}
+- Proposition de valeur : ${userValueProp || 'Non spécifiée'}
+
+IMPORTANT : Lors de l'analyse, identifie spécifiquement les "prospecting_opportunities" et crée des "sales_scripts" (Icebreaker Email et Elevator Pitch) qui mettent en relation DIRECTE les besoins du prospect avec TON service pour maximiser l'intérêt.` : 'Donne des scripts de vente ultra-personnalisés basés sur le contenu trouvé.'}
 
 Renvoie UNIQUEMENT un objet JSON strictement formaté.
 Structure JSON:

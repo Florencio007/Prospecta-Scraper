@@ -100,14 +100,14 @@ function ThreadCard({
           </p>
         )}
 
-        <div className="flex items-center gap-1.5 mt-1">
+        <div className="flex items-center gap-1.5 mt-1.5">
           {thread.campaign_name && (
-            <span className="text-[10px] bg-muted px-1.5 py-0.5 rounded text-muted-foreground">
+            <span className="text-[10px] bg-accent/5 border border-accent/20 px-1.5 py-0.5 rounded text-accent font-medium uppercase tracking-wider">
               {thread.campaign_name}
             </span>
           )}
           {thread.has_pending_ai_draft && (
-            <span className="text-[10px] bg-accent/10 text-accent px-1.5 py-0.5 rounded flex items-center gap-0.5">
+            <span className="text-[10px] bg-amber-500/10 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium">
               <Sparkles size={9} /> Draft IA prêt
             </span>
           )}

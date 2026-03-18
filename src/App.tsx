@@ -12,13 +12,13 @@ import { lazy, Suspense, useState } from "react";
 import { Sparkles } from "lucide-react";
 import AIAssistant from "@/components/dashboard/AIAssistant";
 import { Button } from "@/components/ui/button";
+import CookieConsent from "@/components/CookieConsent";
 
 const Landing = lazy(() => import("./pages/Landing"));
 const Login = lazy(() => import("./pages/Login"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const Prospects = lazy(() => import("./pages/Prospects"));
 const Campaigns = lazy(() => import("./pages/Campaigns"));
-const Reports = lazy(() => import("./pages/Reports"));
 const Settings = lazy(() => import("./pages/Settings"));
 const ProspectFinder = lazy(() => import("./pages/ProspectFinder"));
 const Pricing = lazy(() => import("./pages/Pricing"));
@@ -93,14 +93,7 @@ const App = () => (
                         </ProtectedRoute>
                       }
                     />
-                    <Route
-                      path="/reports"
-                      element={
-                        <ProtectedRoute>
-                          <Reports />
-                        </ProtectedRoute>
-                      }
-                    />
+
                     <Route
                       path="/settings"
                       element={
@@ -157,6 +150,7 @@ const App = () => (
                     <Route path="*" element={<NotFound />} />
                   </Routes>
                   <GlobalAIAssistant />
+                  <CookieConsent />
                 </ErrorBoundary>
               </Suspense>
             </LanguageProvider>

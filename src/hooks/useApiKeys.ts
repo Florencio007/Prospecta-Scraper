@@ -106,12 +106,63 @@ export function useApiKeys() {
 
         try {
             if (provider === 'openai') {
-                const res = await fetch('https://api.openai.com/v1/models', {
-                    headers: { Authorization: `Bearer ${key}` }
-                });
-                result = res.ok
-                    ? { ok: true, message: 'Clé OpenAI valide' }
-                    : { ok: false, message: 'Clé OpenAI invalide ou quota dépassé' };
+                let actualKey = key;
+                let baseUrl = 'https://api.openai.com/v1';
+                let model = 'gpt-4o-mini';
+
+                // Handle JSON config format
+                if (key.startsWith('{')) {
+                    try {
+                        const cfg = JSON.parse(key);
+                        actualKey = cfg.apiKey;
+                        baseUrl = cfg.baseUrl || baseUrl;
+                        model = cfg.model || model;
+                    } catch (e) {
+                         console.error("Failed to parse AI config:", e);
+                    }
+                }
+
+                // If no key, fail early
+                if (!actualKey) return { ok: false, message: 'Clé API manquante dans la configuration' };
+
+                // Real test call with 1 token to verify quota/access
+                // Added a 10s timeout to prevent hanging UI
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+                try {
+                    const res = await fetch(`${baseUrl}/chat/completions`, {
+                        method: 'POST',
+                        headers: { 
+                            'Authorization': `Bearer ${actualKey}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            model: model,
+                            messages: [{ role: 'user', content: 'Say OK' }],
+                            max_tokens: 1
+                        }),
+                        signal: controller.signal
+                    });
+
+                    clearTimeout(timeoutId);
+
+                    if (res.ok) {
+                        result = { ok: true, message: `Connexion réussie (${model})` };
+                    } else {
+                        const errorData = await res.json().catch(() => ({}));
+                        const errMsg = errorData.error?.message || res.statusText || 'Erreur inconnue';
+                        result = { ok: false, message: `Échec: ${errMsg}` };
+                    }
+                } catch (e: any) {
+                    clearTimeout(timeoutId);
+                    if (e.name === 'AbortError') {
+                        result = { ok: false, message: 'Le test a expiré (timeout 10s)' };
+                    } else {
+                        // Likely a CORS or Network error
+                        result = { ok: false, message: `Erreur de connexion : ${e.message || 'Vérifiez votre connexion ou les restrictions CORS'}` };
+                    }
+                }
             } else if (provider === 'smtp') {
                 // SMTP connection is tested in ApiKeysSettings via testSmtpConnection in emailService
                 result = { ok: true, message: 'Configuration SMTP enregistrée' };

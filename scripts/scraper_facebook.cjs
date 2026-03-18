@@ -86,10 +86,20 @@ async function promptSearchType() {
 }
 
 async function login(page) {
-  emitLog('🔐 Connexion à Facebook...');
+  emitLog('🔐 Vérification de la session Facebook...');
   await page.goto('https://www.facebook.com/', { waitUntil: 'networkidle', timeout: 45000 });
   await sleep(3000);
 
+  // 1. Détection rapide de la session active
+  if (page.url().includes('/feed') || page.url().includes('facebook.com/?')) {
+    const hasNav = page.locator('[aria-label="Facebook"], [aria-label="Accueil"]');
+    if (await hasNav.isVisible({ timeout: 5000 }).catch(() => false)) {
+      emitLog('✅ Session déjà active — Utilisation du compte existant.\n');
+      return;
+    }
+  }
+
+  // 2. Gestion des bannières de consentement (si nécessaire sur la page login)
   try {
     const consentTexts = ['Accepter tout', 'Accept all', 'Allow all cookies', 'Tout accepter', 'OK', 'Accepter'];
     const buttons = page.locator('button, [role="button"]');
@@ -97,7 +107,7 @@ async function login(page) {
     for (let i = 0; i < count; i++) {
       const btn = buttons.nth(i);
       const txt = (await btn.textContent().catch(() => '') || '').trim();
-      if (consentTexts.some(t => txt.toLowerCase().includes(t.toLowerCase()))) {
+      if (txt && consentTexts.some(t => txt.toLowerCase().includes(t.toLowerCase()))) {
         await btn.click();
         emitLog(`   🍪 Banner GDPR fermé ("${txt}")`);
         await sleep(1500);
@@ -106,74 +116,66 @@ async function login(page) {
     }
   } catch (_) { }
 
-  if (page.url().includes('/feed') || page.url().includes('facebook.com/?')) {
-    const hasNav = page.locator('[aria-label="Facebook"], [aria-label="Accueil"]');
-    if (await hasNav.isVisible({ timeout: 2000 }).catch(() => false)) {
-      emitLog('✅ Déjà connecté !\n');
-      return;
-    }
-  }
-
+  emitLog('🔐 Navigation vers la page de connexion...');
   await page.goto('https://www.facebook.com/login', { waitUntil: 'networkidle', timeout: 45000 });
   await sleep(2500);
+
+  // Check again after redirect
+  if (page.url().includes('/feed')) {
+    emitLog('✅ Connecté automatiquement !');
+    return;
+  }
 
   let emailSel = null;
   for (const sel of ['#email', 'input[name="email"]', 'input[type="email"]']) {
     if (await page.locator(sel).first().isVisible({ timeout: 2000 }).catch(() => false)) { emailSel = sel; break; }
   }
+  
   if (!emailSel) {
-    if (isPlatform) {
-      emitLog('ERROR: Formulaire de connexion introuvable.');
-      process.exit(1);
+    emitLog('   ⚠️ Formulaire introuvable ou déjà passé — Vérification finale...');
+    await sleep(2000);
+    if (page.url().includes('/feed')) return;
+    emitLog('   💡 Résolvez la connexion manuellement dans Chromium si besoin...');
+  } else {
+    await page.locator(emailSel).first().fill(CONFIG.email);
+    await sleep(400);
+
+    let passSel = null;
+    for (const sel of ['#pass', 'input[name="pass"]', 'input[type="password"]']) {
+      if (await page.locator(sel).first().isVisible({ timeout: 2000 }).catch(() => false)) { passSel = sel; break; }
     }
-    emitLog('   ⚠️  Formulaire introuvable — complétez le login manuellement puis appuyez ENTRÉE...');
-    await askQuestion('');
-    return;
+    if (passSel) {
+      await page.locator(passSel).first().fill(CONFIG.password);
+      await sleep(400);
+      
+      let clicked = false;
+      for (const sel of ['[name="login"]', 'button[type="submit"]', '#loginbutton', '[data-testid="royal_login_button"]']) {
+        const btn = page.locator(sel).first();
+        if (await btn.isVisible({ timeout: 1000 }).catch(() => false)) { await btn.click(); clicked = true; break; }
+      }
+      if (!clicked) await page.keyboard.press('Enter');
+    }
   }
 
-  await page.locator(emailSel).first().fill(CONFIG.email);
-  await sleep(400);
-
-  let passSel = null;
-  for (const sel of ['#pass', 'input[name="pass"]', 'input[type="password"]']) {
-    if (await page.locator(sel).first().isVisible({ timeout: 2000 }).catch(() => false)) { passSel = sel; break; }
-  }
-  if (!passSel) {
-    emitLog('ERROR: Champ mot de passe introuvable');
-    process.exit(1);
-  }
-  await page.locator(passSel).first().fill(CONFIG.password);
-  await sleep(400);
-
-  let clicked = false;
-  for (const sel of ['[name="login"]', 'button[type="submit"]', '#loginbutton', '[data-testid="royal_login_button"]']) {
-    const btn = page.locator(sel).first();
-    if (await btn.isVisible({ timeout: 1000 }).catch(() => false)) { await btn.click(); clicked = true; break; }
-  }
-  if (!clicked) await page.keyboard.press('Enter');
-
+  // 3. Boucle de détection de succès ou challenge
   for (let i = 0; i < 30; i++) {
     await sleep(1000);
-    if (!page.url().includes('/login') && !page.url().includes('login.php')) break;
-  }
-
-  const finalUrl = page.url();
-  if (finalUrl.includes('checkpoint') || finalUrl.includes('two_step') || finalUrl.includes('recover') || finalUrl.includes('challenge')) {
-    if (CONFIG.headless) {
-      emitLog('ERROR: Vérification (2FA/checkpoint) requise. Connexion automatique impossible.');
-      process.exit(1);
-    } else {
-      emitLog('PROGRESS: ⚠️ Vérification de sécurité requise — Résolvez le 2FA/checkpoint dans Chromium...');
-      let isChallenged = true;
-      for (let i = 0; i < 300; i++) {
+    const url = page.url();
+    
+    if (url.includes('checkpoint') || url.includes('two_step') || url.includes('recover') || url.includes('challenge')) {
+      emitLog('PROGRESS: ⚠️ Vérification de sécurité Facebook (2FA/Captcha) — RÉSOLVEZ LE BLOCAGE MANUELLEMENT DANS CHROMIUM...');
+      let solved = false;
+      for (let j = 0; j < 300; j++) { // 5 minutes
         await sleep(1000);
-        const currentUrl = page.url();
-        if (!currentUrl.includes('checkpoint') && !currentUrl.includes('two_step') && !currentUrl.includes('recover') && !currentUrl.includes('challenge')) {
-          isChallenged = false; break;
+        if (!page.url().includes('checkpoint') && !page.url().includes('two_step') && !page.url().includes('challenge')) {
+          solved = true; break;
         }
       }
-      if (isChallenged) { emitLog('ERROR: Délai dépassé pour la vérification de sécurité Facebook.'); process.exit(1); }
+      if (!solved) { emitLog('ERROR: Délai dépassé pour la vérification Facebook.'); process.exit(1); }
+      break;
     }
+
+    if (url.includes('/feed') || url.includes('facebook.com/?') || url.includes('/search/')) break;
   }
 
   try {
@@ -794,24 +796,23 @@ async function main() {
     await promptSearchType();
   }
 
-  const browser = await chromium.launch({
+  const userDataDir = path.join(process.cwd(), '.prospecta-sessions', 'facebook');
+  
+  const context = await chromium.launchPersistentContext(userDataDir, {
     headless: CONFIG.headless,
-    args: ['--lang=fr-FR', '--disable-blink-features=AutomationControlled'],
-  });
-
-  const context = await browser.newContext({
     viewport: { width: 1280, height: 900 },
     userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
     locale: 'fr-FR',
-    javaScriptEnabled: true,
+    args: ['--lang=fr-FR', '--disable-blink-features=AutomationControlled'],
   });
+
+  const page = context.pages().length > 0 ? context.pages()[0] : await context.newPage();
 
   await context.addInitScript(() => {
     Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
     window.chrome = { runtime: {} };
   });
 
-  const page = await context.newPage();
 
   try {
     await login(page);
@@ -876,7 +877,6 @@ async function main() {
 
   } finally {
     await context.close();
-    await browser.close();
     emitLog('\n🏁 Session terminée.');
   }
 }

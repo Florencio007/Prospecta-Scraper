@@ -669,5 +669,19 @@
   "skipStepWarningDesc": "En ignorant cette étape, Prospecta aura moins d'informations pour personnaliser votre stratégie et vos scripts d'approche. Cela peut réduire l'efficacité de vos campagnes.",
   "continueAnyway": "Continuer quand même",
   "goBackAndFill": "Annuler",
-  "inbox": "Inbox"
+  "inbox": "Inbox",
+  "cookieConsentTitle": "Controllez votre confidentialité",
+  "cookieConsentDescription": "Nous utilisons des cookies pour améliorer votre expérience, analyser le trafic du site et personnaliser les annonces. En cliquant sur 'Accepter', vous consentez à notre utilisation de cookies.",
+  "cookieConsentAccept": "Accepter",
+  "cookieConsentDecline": "Décliner",
+  "cookieConsentReadMore": "Lire la politique",
+  "privacyPolicyContent": "Cette politique de confidentialité explique comment Prospecta collecte, utilise et protège vos données personnelles lorsque vous utilisez nos services de prospection.",
+  "termsOfUseContent": "Nos conditions d'utilisation définissent les règles d'utilisation de notre plateforme de prospection automatisée.",
+  "sortBy": "Trier par",
+  "sortByName": "Nom",
+  "sortBySource": "Source",
+  "sortByDate": "Date d'ajout",
+  "sortByScore": "Score",
+  "orderAsc": "Croissant",
+  "orderDesc": "Décroissant"
 }

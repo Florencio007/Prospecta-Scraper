@@ -67,8 +67,8 @@ const Onboarding = () => {
 
         try {
             // Add timeout logic for the database update
-            const updatePromise = supabase
-                .from("profiles")
+            const updatePromise = (supabase
+                .from("profiles") as any)
                 .update({
                     company_name: formData.company_name,
                     company_type: formData.company_type,

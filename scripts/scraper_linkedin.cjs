@@ -104,9 +104,31 @@ async function promptSearchType() {
 
 // ── Login ─────────────────────────────────────────────────────────────────────
 async function login(page) {
+  emitLog('🔐 Vérification de la session LinkedIn...');
+  
+  // 1. Tente d'accéder directement au feed pour voir si on est déjà loggé
+  try {
+    await page.goto('https://www.linkedin.com/feed/', { waitUntil: 'domcontentloaded', timeout: 20000 });
+    await sleep(2000);
+    
+    if (page.url().includes('/feed') || await page.locator('.global-nav').isVisible({ timeout: 5000 }).catch(() => false)) {
+      emitLog('✅ Session déjà active — Utilisation du compte existant.');
+      return;
+    }
+  } catch (e) {
+    emitLog('   ⚠️ Échec de vérification rapide, passage au login classique.');
+  }
+
   emitLog('🔐 Connexion à LinkedIn...');
   await page.goto('https://www.linkedin.com/login', { waitUntil: 'domcontentloaded', timeout: 30000 });
   await sleep(1000);
+  
+  // Vérifier si on est déjà sur le feed après redirection automatique
+  if (page.url().includes('/feed')) {
+    emitLog('✅ Connecté automatiquement !');
+    return;
+  }
+
   await page.waitForSelector('#username', { timeout: 10000 });
   await page.fill('#username', CONFIG.email);
   await sleep(200);
@@ -117,7 +139,7 @@ async function login(page) {
     const keepLoggedCheckbox = await page.$('#rememberMeOptIn-checkbox');
     if (keepLoggedCheckbox) {
       const isChecked = await keepLoggedCheckbox.isChecked();
-      if (isChecked) {
+      if (!isChecked) { // On veut rester connecté pour la session persistante
         const labelText = await page.$('[for="rememberMeOptIn-checkbox"]');
         if (labelText) await labelText.click();
         await sleep(200);
@@ -130,32 +152,37 @@ async function login(page) {
   for (let i = 0; i < 30; i++) {
     await sleep(1000);
     const url = page.url();
+    
+    // Détection de challenge/checkpoint
+    if (url.includes('checkpoint') || url.includes('challenge') || url.includes('/uas/')) {
+      emitLog('PROGRESS: ⚠️ Vérification de sécurité requise (Captcha/2FA) — RÉSOLVEZ LE BLOCAGE MANUELLEMENT DANS LE NAVIGATEUR...');
+      // On attend que l'URL change vers le feed ou autre
+      let solved = false;
+      for (let j = 0; j < 300; j++) { // 5 minutes max
+        await sleep(1000);
+        const currentUrl = page.url();
+        if (currentUrl.includes('/feed') || currentUrl.includes('/in/') || (!currentUrl.includes('checkpoint') && !currentUrl.includes('challenge') && !currentUrl.includes('/uas/'))) {
+          solved = true;
+          break;
+        }
+      }
+      if (!solved) { emitLog('ERROR: Délai dépassé pour la vérification de sécurité.'); process.exit(1); }
+      break;
+    }
+
     const hasError = await page.evaluate(() => {
       const errEl = document.querySelector('#error-for-password, #error-for-username, .alert-error, [data-test-id="password-login-error"]');
       return errEl ? errEl.innerText.trim() : null;
     });
-    if (hasError) { emitLog(`ERROR: Identifiants LinkedIn invalides : ${hasError}`); process.exit(1); }
-    if (!url.includes('/login') && !url.includes('/uas/')) break;
+    if (hasError) { 
+      emitLog(`ERROR: Identifiants LinkedIn invalides : ${hasError}`); 
+      emitLog('💡 Si vous avez changé de mot de passe, supprimez le dossier .prospecta-sessions/linkedin');
+      process.exit(1); 
+    }
+    
+    if (url.includes('/feed') || url.includes('/search/')) break;
   }
 
-  const afterSubmitUrl = page.url();
-  if (afterSubmitUrl.includes('checkpoint') || afterSubmitUrl.includes('challenge')) {
-    if (CONFIG.headless) {
-      emitLog('ERROR: Vérification de sécurité LinkedIn requise. Connexion automatique impossible.');
-      process.exit(1);
-    } else {
-      emitLog('PROGRESS: ⚠️ Vérification de sécurité requise — Résolvez le Captcha/2FA dans Chromium...');
-      let isChallenged = true;
-      for (let i = 0; i < 300; i++) {
-        await sleep(1000);
-        const currentUrl = page.url();
-        if (!currentUrl.includes('checkpoint') && !currentUrl.includes('challenge') && !currentUrl.includes('/uas/')) {
-          isChallenged = false; break;
-        }
-      }
-      if (isChallenged) { emitLog('ERROR: Délai dépassé pour la vérification de sécurité.'); process.exit(1); }
-    }
-  }
   emitLog('✅ Connecté avec succès !\n');
 }
 
@@ -895,8 +922,13 @@ async function scrapeFullProfile(page, person) {
 async function main() {
   emitLog('🚀 Démarrage du Scraper LinkedIn — Playwright\n');
 
-  const browser = await chromium.launch({
+  const userDataDir = path.join(process.cwd(), '.prospecta-sessions', 'linkedin');
+  
+  const context = await chromium.launchPersistentContext(userDataDir, {
     headless: CONFIG.headless,
+    viewport: { width: 1280, height: 900 },
+    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+    locale: 'fr-FR',
     args: [
       '--lang=fr-FR', 
       '--disable-blink-features=AutomationControlled',
@@ -908,13 +940,7 @@ async function main() {
     ],
   });
 
-  const context = await browser.newContext({
-    viewport: { width: 1280, height: 900 },
-    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    locale: 'fr-FR',
-  });
-
-  const page = await context.newPage();
+  const page = context.pages().length > 0 ? context.pages()[0] : await context.newPage();
 
   try {
     await login(page);
@@ -1040,7 +1066,6 @@ async function main() {
 
   } finally {
     await context.close();
-    await browser.close();
     emitLog('\n🏁 Session terminée.');
   }
 }

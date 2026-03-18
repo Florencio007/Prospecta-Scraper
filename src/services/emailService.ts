@@ -1,3 +1,5 @@
+import { getAgentApiUrl } from "@/utils/agentUtils";
+
 export interface SendEmailResponse {
     messageId?: string;
     error?: string;
@@ -9,7 +11,8 @@ export async function testEmailSend(provider: string, payload: any): Promise<Sen
         if (provider === 'smtp') {
             // For SMTP, we reuse the generic send-smtp endpoint because it's transparent.
             // payload is expected to be SmtpEmailParams-like
-            const response = await fetch('/api/email/send-smtp', {
+            const apiUrl = getAgentApiUrl('/api/email/send-smtp');
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -53,9 +56,10 @@ export interface SmtpEmailParams {
 }
 
 export async function sendSingleEmailSmtp(params: SmtpEmailParams): Promise<SendEmailResponse> {
-    console.log(`[sendSingleEmailSmtp] Calling /api/email/send-smtp...`);
+    const apiUrl = getAgentApiUrl('/api/email/send-smtp');
+    console.log(`[sendSingleEmailSmtp] Calling ${apiUrl}...`);
     try {
-        const response = await fetch('/api/email/send-smtp', {
+        const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(params),
@@ -76,8 +80,9 @@ export async function sendSingleEmailSmtp(params: SmtpEmailParams): Promise<Send
 }
 
 export async function testSmtpConnection(host: string, port: number, user: string, pass: string): Promise<{ ok: boolean; message: string }> {
+    const apiUrl = getAgentApiUrl('/api/email/smtp-test');
     try {
-        const response = await fetch('/api/email/smtp-test', {
+        const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ host, port, user, pass }),

@@ -11,10 +11,15 @@ export interface AgentResult {
 /**
  * Agent Profileur : Analyse les données du prospect pour en faire un résumé percutant.
  */
-export const profileurAgent = async (apiKey: string, prospectData: any): Promise<string> => {
+export const profileurAgent = async (apiKey: string, prospectData: any, userData?: { profile: any }): Promise<string> => {
     const prompt = `
         Tu es l'Agent Profileur de Prospecta. Ton rôle est d'analyser les données d'un prospect B2B et de générer un résumé exécutif court (2-3 phrases).
         
+        ${userData?.profile ? `TON ENTREPRISE :
+        - Secteur : ${userData.profile.industry}
+        - Service : ${userData.profile.user_service_description}
+        - Proposition de valeur : ${userData.profile.value_prop}` : ''}
+
         DONNÉES DU PROSPECT :
         Nom : ${prospectData.name}
         Entreprise : ${prospectData.company}
@@ -25,7 +30,7 @@ export const profileurAgent = async (apiKey: string, prospectData: any): Promise
         
         CONSIGNES :
         - Sois factuel et stratégique.
-        - Identifie le besoin potentiel ou l'opportunité.
+        - Identifie le besoin potentiel ou l'opportunité en lien avec TON ENTREPRISE si possible.
         - Ne fais pas de phrases inutiles.
     `;
 
@@ -38,19 +43,24 @@ export const profileurAgent = async (apiKey: string, prospectData: any): Promise
 /**
  * Agent Stratège : Propose des suggestions d'actions et de points d'accroche.
  */
-export const strategeAgent = async (apiKey: string, prospectData: any): Promise<any> => {
+export const strategeAgent = async (apiKey: string, prospectData: any, userData?: { profile: any }): Promise<any> => {
     const prompt = `
         Tu es l'Agent Stratège de Prospecta. Ton rôle est de proposer 3 suggestions d'actions concrètes pour approcher ce prospect.
         
+        ${userData?.profile ? `TON ENTREPRISE :
+        - Secteur : ${userData.profile.industry}
+        - Service : ${userData.profile.user_service_description}
+        - Proposition de valeur : ${userData.profile.value_prop}` : ''}
+
         PROSPECT : ${prospectData.name} (${prospectData.company})
         CONTEXTE : ${prospectData.summary || "Nouveau prospect"}
         
         Réponds UNIQUEMENT au format JSON avec la structure suivante :
         {
             "suggestions": [
-                {"type": "email", "label": "Angle d'approche", "description": "Explication de pourquoi cet angle"},
-                {"type": "linkedin", "label": "Point d'accroche", "description": "Détail de l'accroche"},
-                {"type": "call", "label": "Sujet de discussion", "description": "Proposition de valeur clé"}
+                {"type": "email", "label": "Angle d'approche", "description": "Explication de pourquoi cet angle en rapport avec ton offre"},
+                {"type": "linkedin", "label": "Point d'accroche", "description": "Détail de l'accroche personnalisée"},
+                {"type": "call", "label": "Sujet de discussion", "description": "Proposition de valeur clé spécifique pour ce prospect"}
             ]
         }
     `;
@@ -72,17 +82,23 @@ export const strategeAgent = async (apiKey: string, prospectData: any): Promise<
 /**
  * Agent Copywriter : Génère des messages ultra-personnalisés.
  */
-export const copywriterAgent = async (apiKey: string, prospectData: any, objective: string): Promise<string> => {
+export const copywriterAgent = async (apiKey: string, prospectData: any, objective: string, userData?: { profile: any }): Promise<string> => {
     const prompt = `
         Tu es l'Agent Copywriter de Prospecta. 
         Génère un message de prospection ultra-personnalisé pour ${prospectData.name} chez ${prospectData.company}.
         
+        ${userData?.profile ? `TON ENTREPRISE (L'EXPÉDITEUR) :
+        - Secteur : ${userData.profile.industry}
+        - Service : ${userData.profile.user_service_description}
+        - Proposition de valeur : ${userData.profile.value_prop}` : ''}
+
         OBJECTIF : ${objective}
         INFO PROSPECT : ${prospectData.summary || prospectData.industry}
         
         CONSIGNES :
-        - Ton : Professionnel, direct, sans "bullshit".
-        - Structure : Accroche personnalisée -> Problématique -> Solution -> CTA clair.
+        - Ton : ${userData?.profile?.communication_tone || 'Professionnel'}, direct, sans "bullshit".
+        - Structure : Accroche personnalisée -> Problématique -> Solution (ton offre) -> CTA clair.
+        - Fais le lien DIRECT entre le prospect et TON service.
         - Max 4-5 phrases.
     `;
 

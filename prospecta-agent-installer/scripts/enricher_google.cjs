@@ -17,10 +17,19 @@ const { chromium } = require("playwright");
 const fs = require("fs");
 const path = require("path");
 
-// Arguments: --prospects='...' --openai-key='...'
+// Arguments: --prospects='...' --openai-key='...' --user-service='...' --user-value-prop='...' --user-industry='...'
 const args = process.argv.slice(2);
 const openaiKeyArg = args.find(a => a.startsWith('--openai-key='));
 const OPENAI_API_KEY = openaiKeyArg ? openaiKeyArg.replace('--openai-key=', '') : null;
+
+const userServiceArg = args.find(a => a.startsWith('--user-service='));
+const userService = userServiceArg ? userServiceArg.replace('--user-service=', '') : "";
+
+const userValuePropArg = args.find(a => a.startsWith('--user-value-prop='));
+const userValueProp = userValuePropArg ? userValuePropArg.replace('--user-value-prop=', '') : "";
+
+const userIndustryArg = args.find(a => a.startsWith('--user-industry='));
+const userIndustry = userIndustryArg ? userIndustryArg.replace('--user-industry=', '') : "";
 
 // ─── Config ──────────────────────────────────────────────────────────────────
 const CANCEL_LOCK = path.join(__dirname, "cancel_scrape.lock");
@@ -385,6 +394,14 @@ async function runAIAnalysis(prospect, text) {
   const systemPrompt = `Tu es un expert en intelligence commerciale.
 Analyse les snippets de recherche Google pour ${prospect.name} chez ${prospect.company || 'Inconnue'}.
 Extraits une intelligence complète : décideurs, services, opportunités.
+
+${userService ? `TON ENTREPRISE (L'utilisateur de Prospecta) :
+- Secteur : ${userIndustry || 'Non spécifié'}
+- Service : ${userService}
+- Proposition de valeur : ${userValueProp || 'Non spécifiée'}
+
+IMPORTANT : Lors de l'analyse, identifie spécifiquement les "prospecting_opportunities" et crée des "sales_scripts" (Icebreaker Email et Elevator Pitch) qui mettent en relation DIRECTE les besoins du prospect avec TON service pour maximiser l'intérêt.` : ''}
+
 Renvoie UNIQUEMENT un JSON : { "phone": "...", "email": "...", "score_global": 0-100, "ai_intelligence": { ... } }`;
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {

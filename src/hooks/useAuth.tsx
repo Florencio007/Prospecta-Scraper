@@ -126,21 +126,40 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setProfile(null);
   };
 
-  const refreshProfile = async () => {
-    if (!session?.user) return;
-    
-    // Add a race to prevent hanging forever
-    try {
-      await Promise.race([
-        fetchProfile(session.user.id),
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error("Refresh profile timeout")), 3000)
-        )
-      ]);
-    } catch (err) {
-      console.error("refreshProfile failed or timed out:", err);
-    }
-  };
+    const refreshProfile = async () => {
+        if (!session?.user) return;
+        
+        // SYNC METADATA: If profile is missing name/photo, but session has them, update profile!
+        const metadata = session.user.user_metadata;
+        const googleName = metadata?.full_name || metadata?.name;
+        const googlePhoto = metadata?.avatar_url || metadata?.picture;
+
+        if ((!profile?.full_name && googleName) || (!profile?.avatar_url && googlePhoto)) {
+            console.log('[Auth] Syncing profile metadata from session...');
+            const { error: syncError } = await supabase
+                .from('profiles')
+                .update({
+                    full_name: profile?.full_name || googleName,
+                    avatar_url: profile?.avatar_url || googlePhoto
+                })
+                .eq('user_id', session.user.id);
+            
+            if (syncError) console.error('[Auth] Sync error:', syncError);
+            else await fetchProfile(session.user.id);
+        }
+
+        // Add a race to prevent hanging forever
+        try {
+            await Promise.race([
+                fetchProfile(session.user.id),
+                new Promise((_, reject) => 
+                    setTimeout(() => reject(new Error("Refresh profile timeout")), 3000)
+                )
+            ]);
+        } catch (err) {
+            console.error("refreshProfile failed or timed out:", err);
+        }
+    };
 
   return (
     <AuthContext.Provider

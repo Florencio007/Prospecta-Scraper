@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useApiKeys } from "@/hooks/useApiKeys";
+import { useAuth } from "@/hooks/useAuth";
 import { profileurAgent, strategeAgent } from "@/lib/ai-agents";
 import { useToast } from "@/hooks/use-toast";
 
@@ -10,6 +11,7 @@ import { useToast } from "@/hooks/use-toast";
  */
 export const useProspectAI = () => {
     const { getKeyByProvider } = useApiKeys();
+    const { profile } = useAuth();
     const { toast } = useToast();
     const [isAnalyzing, setIsAnalyzing] = useState(false);
 
@@ -25,13 +27,13 @@ export const useProspectAI = () => {
             }
 
             // 1. Appel des agents
-            const summary = await profileurAgent(apiKey, prospectData);
-            const suggestionsData = await strategeAgent(apiKey, { ...prospectData, summary });
+            const summary = await profileurAgent(apiKey, prospectData, { profile });
+            const suggestionsData = await strategeAgent(apiKey, { ...prospectData, summary }, { profile });
 
             // 2. Persistance dans Supabase
             // On utilise 'summary' pour le résumé et on stocke les suggestions dans 'web_intelligence'
-            const { error } = await supabase
-                .from('prospect_data')
+            const { error } = await (supabase
+                .from('prospect_data') as any)
                 .update({
                     summary: summary,
                     web_intelligence: {
@@ -39,7 +41,7 @@ export const useProspectAI = () => {
                         ai_suggestions: suggestionsData.suggestions,
                         last_ai_analysis: new Date().toISOString()
                     }
-                } as any)
+                })
                 .eq('prospect_id', prospectId);
 
             if (error) throw error;

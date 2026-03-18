@@ -40,7 +40,7 @@ function getPublicUrl() {
     return url.replace(/\/$/, '');
   }
 
-  return `http://localhost:${process.env.PORT || 3001}`;
+  return `http://localhost:${process.env.PORT || 7842}`;
 }
 // ─────────────────────────────────────────────────────────────────────────────
 const cors = require('cors');
@@ -228,12 +228,55 @@ app.get('/api/scrape/stop', (req, res) => {
 
 // ─── SMTP ─────────────────────────────────────────────────────────────────────
 
+function wrapInBrandedTemplate(content, serverPublicUrl, recipientId) {
+  return `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background-color: #f0f4f8; font-family: 'Outfit', Arial, sans-serif; color: #1a2f4d; }
+    .wrapper { max-width: 600px; margin: 20px auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(26,47,77,0.10); }
+    .header { background-color: #1a2f4d; padding: 24px 30px; text-align: center; }
+    .header img { height: 32px; }
+    .body { padding: 32px; font-size: 15px; line-height: 1.7; color: #4a5f7a; }
+    .footer { background-color: #f8fafc; border-top: 1px solid #e8edf4; padding: 20px; text-align: center; font-size: 11px; color: #8a9ab0; }
+    .footer a { color: #13b981; text-decoration: underline; }
+    .tagline { font-size: 12px; color: #13b981; font-weight: 600; margin-bottom: 4px; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <img src="https://prospecta.soamibango.com/logo_prospecta_claire.png" alt="Prospecta" />
+    </div>
+    <div class="body">
+      ${content}
+    </div>
+    <div class="footer">
+      <p class="tagline">Prospecta — Trouvez vos futurs clients sur tous les réseaux.</p>
+      <p>© 2026 Varatraza Tech · <a href="https://prospecta.soamibango.com">prospecta.soamibango.com</a></p>
+      ${recipientId ? `<div style="margin-top: 12px;"><a href="${serverPublicUrl}/api/email/unsubscribe/${recipientId}">Se désabonner</a></div>` : ''}
+    </div>
+  </div>
+</body>
+</html>`;
+}
+
 function createTransporter(cfg) {
+  // Config par défaut depuis .env si cfg est vide ou incomplet
+  const host = cfg?.host || process.env.SMTP_HOST;
+  const port = parseInt(cfg?.port || process.env.SMTP_PORT, 10) || 587;
+  const user = cfg?.user || process.env.SMTP_USER;
+  const pass = cfg?.pass || process.env.SMTP_PASS;
+
   return nodemailer.createTransport({
-    host: cfg.host,
-    port: parseInt(cfg.port, 10) || 587,
-    secure: parseInt(cfg.port, 10) === 465,
-    auth: { user: cfg.user, pass: cfg.pass },
+    host: host,
+    port: port,
+    secure: port === 465,
+    auth: { user: user, pass: pass },
     tls: { rejectUnauthorized: false },
   });
 }
@@ -255,9 +298,12 @@ app.post('/api/email/smtp-test', async (req, res) => {
 app.post('/api/email/send-smtp', async (req, res) => {
   const { smtpHost, smtpPort, smtpUser, smtpPass, to, from, replyTo, subject, htmlContent, recipientId } = req.body;
 
-  if (!smtpHost || !smtpUser || !smtpPass) {
-    return res.status(400).json({ error: 'Configuration SMTP incomplète (host, user, pass requis).' });
+  if (!smtpHost && !process.env.SMTP_HOST) {
+    return res.status(400).json({ error: 'Configuration SMTP système manquante (.env non configuré).' });
   }
+
+  const senderEmail = from?.email || process.env.DEFAULT_SENDER_EMAIL || process.env.SMTP_USER;
+  const senderName = from?.name || process.env.DEFAULT_SENDER_NAME || 'Prospecta';
 
   console.log(`[SMTP] Sending to ${to.email} via ${smtpHost}...`);
 
@@ -268,7 +314,7 @@ app.post('/api/email/send-smtp', async (req, res) => {
   const trackingPixel = recipientId
     ? `<img src="${serverPublicUrl}/api/email/track/open/${recipientId}" width="1" height="1" style="display:none;" alt="" />`
     : '';
-  const trackedHtml = (htmlContent || '') + trackingPixel + unsubscribeLink;
+  const trackedHtml = wrapInBrandedTemplate((htmlContent || '') + trackingPixel, serverPublicUrl, recipientId);
 
   if (serverPublicUrl.includes('localhost')) {
     console.warn('[SMTP] ⚠️  SERVER_PUBLIC_URL pointe vers localhost — tracking désactivé hors machine locale.');
@@ -280,9 +326,9 @@ app.post('/api/email/send-smtp', async (req, res) => {
   try {
     const transporter = createTransporter({ host: smtpHost, port: smtpPort, user: smtpUser, pass: smtpPass });
     const info = await transporter.sendMail({
-      from: `"${from.name}" <${from.email}>`,
+      from: `"${senderName}" <${senderEmail}>`,
       to: to.email,
-      replyTo: replyTo || from.email,
+      replyTo: replyTo || senderEmail,
       subject,
       html: trackedHtml,
     });
@@ -503,17 +549,28 @@ app.get('/api/scrape/linkedin', (req, res) => {
 
 // Enrichment - Google (sans site web)
 setupScraperEndpoint(app, '/api/scrape/enrich-google', 'enricher_google.cjs', (req) => {
-  const { name, company, l, id, openAiKey } = req.query;
+  const { name, company, l, id, openAiKey, userService, userValueProp, userIndustry } = req.query;
   const prospect = { name, company, city: l, id: id || 'temp' };
   const args = [`--prospects=${JSON.stringify([prospect])}`];
   if (openAiKey) args.push(`--openai-key=${openAiKey}`);
+  if (userService) args.push(`--user-service=${userService}`);
+  if (userValueProp) args.push(`--user-value-prop=${userValueProp}`);
+  if (userIndustry) args.push(`--user-industry=${userIndustry}`);
   return args;
 });
 
 // Enrichment - Website (site web fourni)
 setupScraperEndpoint(app, '/api/scrape/enrich-website', 'scraper_website_enrich.cjs', (req) => {
-  const { website, name, company, openAiKey } = req.query;
-  return [website, name || 'Inconnu', company || 'Inconnue', openAiKey];
+  const { website, name, company, openAiKey, userService, userValueProp, userIndustry } = req.query;
+  return [
+    website, 
+    name || 'Inconnu', 
+    company || 'Inconnue', 
+    openAiKey,
+    userService || '',
+    userValueProp || '',
+    userIndustry || ''
+  ];
 });
 
 // Facebook
@@ -630,11 +687,30 @@ app.post('/api/inbox/ai-draft', async (req, res) => {
       supabase.from('email_threads').select('*, prospects(name, company, position, industry)').eq('id', threadId).single(),
       supabase.from('email_messages').select('direction, body_text, received_at')
         .eq('thread_id', threadId).order('received_at', { ascending: true }).limit(10),
-      supabase.from('api_keys').select('key_value').eq('user_id', userId).eq('provider', 'openai').maybeSingle(),
+      supabase.from('user_api_keys').select('api_key').eq('user_id', userId).eq('provider', 'openai').maybeSingle(),
       supabase.from('user_service_description').select('description').eq('user_id', userId).maybeSingle(),
     ]);
 
-    const openaiKey = apiKeyRow?.key_value || process.env.OPENAI_API_KEY;
+    let openaiKey = apiKeyRow?.api_key || process.env.OPENAI_API_KEY;
+    let baseUrl = 'https://api.openai.com/v1/chat/completions';
+    let model = 'gpt-4o-mini';
+
+    // Parse JSON config if present (multiple providers support)
+    if (openaiKey && openaiKey.startsWith('{')) {
+      try {
+        const config = JSON.parse(openaiKey);
+        if (config.apiKey) openaiKey = config.apiKey;
+        if (config.baseUrl) {
+          baseUrl = config.baseUrl.endsWith('/chat/completions') 
+            ? config.baseUrl 
+            : `${config.baseUrl.replace(/\/$/, '')}/chat/completions`;
+        }
+        if (config.model) model = config.model;
+      } catch (e) {
+        console.error("Failed to parse AI config in server:", e);
+      }
+    }
+
     if (!openaiKey) return res.status(400).json({ error: 'Clé OpenAI non configurée' });
 
     const conversationHistory = (history || [])
@@ -671,14 +747,19 @@ CONSIGNES :
 - N'utilise pas de formule de politesse générique au début
 - Écris uniquement le corps du message, sans objet ni signature`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch(baseUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${openaiKey}`,
+        // OpenRouter specific headers
+        ...(baseUrl.includes('openrouter.ai') ? {
+          'HTTP-Referer': 'https://prospecta.ai',
+          'X-Title': 'Prospecta AI',
+        } : {})
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: model,
         max_tokens: 300,
         temperature: 0.7,
         messages: [

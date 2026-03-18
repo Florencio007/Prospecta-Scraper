@@ -17,6 +17,17 @@ import { ApiKeyGuard } from "@/components/ApiKeyGuard";
 import { useEmailCampaigns } from "@/hooks/useEmailCampaigns";
 import { useApiKeys } from "@/hooks/useApiKeys";
 import { generateEmailTemplate, refineEmailTemplate } from "@/services/openaiService";
+import { 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Legend
+} from "recharts";
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { BarChart3 } from "lucide-react";
 
 /**
  * Page de gestion des campagnes de prospection (Version Premium)
@@ -185,7 +196,61 @@ const Campaigns = () => {
 
           {/* Tab Content */}
           {activeTab === "campaigns" ? (
-            <div className="animate-in fade-in duration-700 slide-in-from-bottom-2">
+            <div className="animate-in fade-in duration-700 slide-in-from-bottom-2 space-y-6">
+              
+              {/* Campaign Performance Chart */}
+              <Card className="border-slate-200 dark:border-slate-800 shadow-sm bg-white/50 dark:bg-slate-900/50 backdrop-blur-sm">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-slate-800 dark:text-slate-100">
+                    <BarChart3 size={20} className="text-emerald-500" />
+                    Analyse de Performance des Campagnes
+                  </CardTitle>
+                  <CardDescription>
+                    Comparaison de l'engagement (Envois, Ouvertures, Clics) de vos campagnes.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {campaigns && campaigns.length > 0 ? (
+                    <div className="h-[300px] w-full">
+                      <ChartContainer
+                        config={{
+                          sent: { label: "Envoyés", color: "hsl(var(--accent))" },
+                          opened: { label: "Ouverts", color: "#3B82F6" },
+                          clicked: { label: "Cliqués", color: "#10B981" },
+                        }}
+                        className="h-full w-full"
+                      >
+                        <BarChart data={(campaigns as any[]).slice(0, 5)} margin={{ top: 20, right: 0, left: -20, bottom: 0 }}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} opacity={0.1} />
+                          <XAxis 
+                            dataKey="name" 
+                            axisLine={false} 
+                            tickLine={false} 
+                            tick={{ fontSize: 12 }}
+                            tickMargin={10}
+                          />
+                          <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
+                          <ChartTooltip content={<ChartTooltipContent />} />
+                          <Legend iconType="circle" />
+                          <Bar dataKey="sent_count" name="Envoyés" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                          <Bar dataKey="opened_count" name="Ouverts" fill="#3B82F6" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                          <Bar dataKey="clicked_count" name="Cliqués" fill="#10B981" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                        </BarChart>
+                      </ChartContainer>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-12 text-center">
+                      <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center mb-4">
+                        <BarChart3 size={24} className="text-emerald-500/40" />
+                      </div>
+                      <p className="text-sm text-slate-500 max-w-xs">
+                        Aucune donnée de campagne disponible pour le moment. Lancez votre première campagne pour voir les statistiques.
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
               <EmailCampaignManager
                 campaigns={campaigns as any[]}
                 isLoading={isLoading}

@@ -14,18 +14,25 @@ const RELEASE_URL = "https://github.com/Florencio007/Prospecta-Scraper/releases/
 const downloads = [
   { 
     os: "Windows", 
-    filename: "Prospectator Setup 1.0.0.exe", 
-    icon: "/windows-logo.jpg",
-    description: "Version 1.0.0 - Windows 10/11",
+    filename: "Prospectator.Setup.1.1.0.exe", 
+    icon: "/windows-logo.png",
+    description: "Version 1.1.0 - Windows 10/11",
     label: "Télécharger pour Windows"
   },
   { 
     os: "macOS", 
-    filename: "Prospectator-1.0.0.dmg", 
+    filename: "Prospectator-1.1.0.dmg", 
     icon: "/apple-logo.png",
     description: "Intel & Apple Silicon (M1/M2/M3)",
     label: "Télécharger pour Mac"
   },
+  {
+    os: "Linux",
+    filename: "Prospectator-1.1.0.AppImage",
+    icon: "/linux-logo.png",
+    description: "Version 1.1.0 - Linux (AppImage)",
+    label: "Télécharger pour Linux"
+  }
 ];
 
 interface Props {
@@ -72,7 +79,7 @@ export const AgentInstallModal = ({ open, onOpenChange, onConfirm }: Props) => (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {/* Windows */}
           <a
-            href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospectator Setup 1.0.0.exe"
+            href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospectator.Setup.1.1.0.exe"
             target="_blank"
             rel="noopener noreferrer"
             className="flex flex-col items-center p-3.5 rounded-2xl border border-border/50 bg-secondary/50 hover:bg-accent/10 hover:border-accent/40 transition-all duration-300 group text-center space-y-2"
@@ -90,29 +97,49 @@ export const AgentInstallModal = ({ open, onOpenChange, onConfirm }: Props) => (
             </div>
           </a>
 
+          {/* Linux */}
+          <a
+            href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospectator-1.1.0.AppImage"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center p-3.5 rounded-2xl border border-border/50 bg-secondary/50 hover:bg-accent/10 hover:border-accent/40 transition-all duration-300 group text-center space-y-2"
+          >
+            <div className="w-9 h-9 bg-background/50 rounded-lg flex items-center justify-center overflow-hidden group-hover:scale-105 transition-transform duration-300 border border-border/50">
+              <img src="/linux-logo.png" alt="Linux" className="w-5 h-5 object-contain" />
+            </div>
+            <div className="space-y-0.5">
+              <p className="text-[13px] font-bold text-foreground">Linux</p>
+              <p className="text-[9px] text-muted-foreground uppercase tracking-wider">AppImage / Ubuntu</p>
+            </div>
+            <div className="flex items-center gap-1.5 text-[10px] font-bold text-accent pt-0.5">
+              <Download size={11} />
+              <span>DÉMARRER</span>
+            </div>
+          </a>
+
           {/* macOS */}
-          <div className="flex flex-col p-3.5 rounded-2xl border border-border/50 bg-secondary/50 space-y-2 text-center shadow-lg">
+          <div className="flex flex-col p-3.5 rounded-2xl border border-border/50 bg-secondary/50 space-y-2 text-center shadow-lg sm:col-span-2">
             <div className="flex flex-col items-center space-y-2">
               <div className="w-9 h-9 bg-background/50 rounded-lg flex items-center justify-center overflow-hidden border border-border/50">
                 <img src="/apple-logo.png" alt="macOS" className="w-5 h-5 object-contain" />
               </div>
               <div className="space-y-0.5">
                 <p className="text-[13px] font-bold text-foreground">macOS</p>
-                <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Silicon & Intel</p>
+                <p className="text-[9px] text-muted-foreground uppercase tracking-wider">Apple Silicon & Intel</p>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-1.5 pt-1">
+            <div className="grid grid-cols-2 gap-3 pt-1">
               <a
-                href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospecta.Agent-1.0.0-arm64.dmg"
-                className="text-[9px] bg-accent text-accent-foreground font-black py-1.5 rounded-lg transition-all hover:opacity-90 flex items-center justify-center gap-1 shadow-lg shadow-accent/20"
+                href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospectator-1.1.0-arm64.dmg"
+                className="text-[10px] bg-accent text-accent-foreground font-black h-10 rounded-lg transition-all hover:opacity-90 flex items-center justify-center gap-2 shadow-lg shadow-accent/20"
               >
-                M1/M2/M3
+                <Apple size={14} /> SILICON (M1/M2/M3)
               </a>
               <a
-                href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospectator-1.0.0.dmg"
-                className="text-[9px] bg-card text-muted-foreground font-black py-1.5 rounded-lg transition-all hover:bg-secondary flex items-center justify-center gap-1 border border-border/50"
+                href="https://github.com/Florencio007/Prospecta-Scraper/releases/download/v1.0.0/Prospectator-1.1.0.dmg"
+                className="text-[10px] bg-card text-muted-foreground font-black h-10 rounded-lg transition-all hover:bg-secondary flex items-center justify-center gap-2 border border-border/50"
               >
-                INTEL
+                <Monitor size={14} /> PUCE INTEL
               </a>
             </div>
           </div>
@@ -136,7 +163,7 @@ export const AgentInstallModal = ({ open, onOpenChange, onConfirm }: Props) => (
             J'AI FINI L'INSTALLATION
           </Button>
           <p className="text-[9px] text-muted-foreground font-mono tracking-tighter uppercase">
-            v1.0.0 Stable · Connexion locale sécurisée · Prospecta Motor
+            v1.1.0 Stable · Connexion locale sécurisée · Prospecta Motor
           </p>
         </div>
       </div>

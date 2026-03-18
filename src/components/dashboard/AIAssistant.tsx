@@ -221,8 +221,8 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
     <div className="fixed inset-y-0 right-0 z-50 w-full sm:w-[450px] bg-card border-l shadow-2xl flex flex-col animate-slide-in-right">
       <div className="flex items-center justify-between p-6 border-b bg-accent/5">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-xl bg-accent flex items-center justify-center text-white shadow-lg shadow-accent/20">
-            <Sparkles size={22} />
+          <div className="h-10 w-10 rounded-xl bg-white border-2 border-accent/20 flex items-center justify-center p-1.5 shadow-lg shadow-accent/10">
+            <img src="/chatgpt-logo.png" className="w-full h-full object-contain" alt="IA" />
           </div>
           <div>
             <h2 className="text-lg font-black text-primary">{t("aiAssistantTitle")}</h2>
@@ -280,8 +280,8 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
               {chatMessages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}>
                   <div className={`max-w-[85%] flex gap-3 ${msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                    <div className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 ${msg.role === 'user' ? 'bg-primary text-white' : 'bg-accent text-white'}`}>
-                      {msg.role === 'user' ? <User size={16} /> : <Sparkles size={16} />}
+                    <div className={`h-8 w-8 rounded-lg flex items-center justify-center shrink-0 ${msg.role === 'user' ? 'bg-primary text-white' : 'bg-white border border-accent/20 p-1 overflow-hidden'}`}>
+                      {msg.role === 'user' ? <User size={16} /> : <img src="/chatgpt-logo.png" className="w-full h-full object-contain" alt="IA" />}
                     </div>
                     <div className={`p-4 rounded-2xl text-sm leading-relaxed shadow-sm ${msg.role === 'user'
                       ? 'bg-primary text-primary-foreground rounded-tr-none'
@@ -305,8 +305,8 @@ const AIAssistant = ({ open, onClose, initialMode = "message" }: Props) => {
               {generating && (
                 <div className="flex justify-start animate-pulse">
                   <div className="max-w-[85%] flex gap-3">
-                    <div className="h-8 w-8 rounded-lg bg-accent flex items-center justify-center text-white shrink-0">
-                      <Sparkles size={16} />
+                    <div className="h-8 w-8 rounded-lg bg-white border border-accent/20 p-1 flex items-center justify-center shrink-0 overflow-hidden">
+                      <img src="/chatgpt-logo.png" className="w-full h-full object-contain" alt="IA" />
                     </div>
                     <div className="p-4 rounded-2xl bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-tl-none">
                       <Loader2 className="h-4 w-4 animate-spin" />

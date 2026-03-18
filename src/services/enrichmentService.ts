@@ -1,3 +1,7 @@
+import { fetchOpenAICompletion } from "./openaiService";
+import { supabase } from "@/integrations/supabase/client";
+import { getAgentApiUrl } from "@/utils/agentUtils";
+
 export interface EnrichmentResult {
     phone?: string;
     email?: string;
@@ -25,6 +29,11 @@ export interface EnrichmentResult {
             content: string;
         }[];
     };
+    // Added for simplified structure support
+    industry?: string;
+    company_description?: string;
+    pain_points?: string[];
+    technologies?: string[];
 }
 
 // Fonction pour extraire le texte brut d'un HTML
@@ -38,13 +47,78 @@ function extractTextFromHTML(html: string): string {
     // Extraire le texte et nettoyer
     const text = doc.body?.textContent || "";
     // Remplacer les espaces multiples et les sauts de ligne multiples par un seul
-    return text.replace(/\s+/g, ' ').trim().substring(0, 15000); // Limiter la taille pour OpenAI
+    return text.replace(/\s+/g, ' ').trim().substring(0, 15000); // Limiter la taille
+}
+
+async function analyzeWithAI(
+    rawText: string,
+    openAiKey: string,
+    prospectContext: { name?: string, company?: string },
+    userContext?: { service?: string, value_prop?: string, industry?: string }
+): Promise<EnrichmentResult> {
+    const systemPrompt = `
+Tu es un expert en intelligence commerciale et scraping web.
+Analyse le contenu brut du site web d'un prospect et extrais les informations clés.
+Le prospect est: ${prospectContext.name || 'Inconnu'} appartenant à l'entreprise ${prospectContext.company || 'Inconnue'}.
+
+${userContext?.service ? `TON ENTREPRISE (L'utilisateur de Prospecta) :
+- Secteur : ${userContext.industry || 'Non spécifié'}
+- Service : ${userContext.service}
+- Proposition de valeur : ${userContext.value_prop || 'Non spécifiée'}
+
+IMPORTANT : Lors de l'analyse, identifie spécifiquement les "prospecting_opportunities" et crée des "sales_scripts" (Icebreaker Email et Elevator Pitch) qui mettent en relation DIRECTE les besoins du prospect avec TON service pour maximiser l'intérêt.` : ''}
+
+Renvoie UNIQUEMENT un objet JSON strictement formaté selon la structure demandée ci-dessous. Ne renvoie aucun autre texte.
+Structure JSON attendue:
+{
+    "phone": "numero de tel principal ou null",
+    "email": "email principal de contact ou null",
+    "score_global": 85, // Score de 0 à 100 basé sur les critères :
+    // - Complétude des infos (Email, Tel, Bureau) : 40pts
+    // - Clarté du positionnement business : 20pts
+    // - Preuve sociale / Actualités récentes : 20pts
+    // - Potentiel de conversion (opportunités détectées) : 20pts
+    "ai_intelligence": {
+        "executive_summary": "Résumé de l'entreprise, sa proposition de valeur et sa cible (3-4 lignes max).",
+        "contact_info": { "phones": ["tel1", "tel2"], "emails": ["email1", "email2"], "addresses": ["adresse 1"] },
+        "key_people": [ { "name": "Nom", "role": "Rôle", "context": "Détails/Contexte" } ],
+        "activities": { "services": ["Service A", "Service B"], "technologies": ["Tech 1"], "sectors": ["Secteur X"] },
+        "recent_news": [ { "type": "Type", "description": "Description de l'actualité" } ],
+        "company_culture": { "mission": "Mission de l'entreprise", "values": ["Valeur 1", "Valeur 2"] },
+        "prospecting_opportunities": [
+            { "signal": "Ex: Recrutement en cours / Nouveau produit", "context": "Détails" }
+        ],
+        "sales_scripts": [
+            { "title": "Icebreaker Email", "content": "Objet: ...\\n\\nBonjour..." },
+            { "title": "Elevator Pitch (Call)", "content": "Bonjour, je vous appelle car..." }
+        ]
+    }
+}
+`;
+
+    try {
+        const content = await fetchOpenAICompletion(openAiKey, [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: `Contenu de la page web: \n\n${rawText}` }
+        ]);
+
+        try {
+            return JSON.parse(content) as EnrichmentResult;
+        } catch (e) {
+            console.error("Erreur de parsing JSON IA", content);
+            throw new Error("Le format renvoyé par l'IA est invalide.");
+        }
+    } catch (error: any) {
+        console.error("Erreur IA:", error);
+        throw new Error(`Erreur lors de l'analyse IA: ${error.message}`);
+    }
 }
 
 export async function enrichProspectLocally(
     url: string,
     openAiKey: string,
-    prospectContext: { name?: string, company?: string }
+    prospectContext: { name?: string, company?: string },
+    userContext?: { service?: string, value_prop?: string, industry?: string }
 ): Promise<EnrichmentResult> {
     if (!openAiKey) {
         throw new Error("Clé API OpenAI manquante.");
@@ -54,39 +128,32 @@ export async function enrichProspectLocally(
     let rawText = "";
     
     // Tente de contacter l'agent local en premier
-    const AGENT_URL = "http://localhost:7842";
+    const agentBase = getAgentApiUrl();
     let useLocalAgent = false;
     
     try {
-        const healthCheck = await fetch(`${AGENT_URL}/api/health`, { signal: AbortSignal.timeout(1000) });
+        const healthCheck = await fetch(`${agentBase}/api/health`, { signal: AbortSignal.timeout(1000) });
         if (healthCheck.ok) useLocalAgent = true;
     } catch (e) {
         useLocalAgent = false;
     }
 
     if (useLocalAgent) {
-        // Mode Agent Local : Scraping via Puppeteer/Playwright (plus robuste)
         try {
             const enrichUrl = url.startsWith('http') ? url : `https://${url}`;
-            const response = await fetch(`${AGENT_URL}/api/scrape/enrich-website?website=${encodeURIComponent(enrichUrl)}&openAiKey=${openAiKey}&name=${encodeURIComponent(prospectContext.name || '')}&company=${encodeURIComponent(prospectContext.company || '')}`);
+            const response = await fetch(`${agentBase}/api/scrape/enrich-website?website=${encodeURIComponent(enrichUrl)}&openAiKey=${openAiKey}&name=${encodeURIComponent(prospectContext.name || '')}&company=${encodeURIComponent(prospectContext.company || '')}`);
             
-            if (!response.ok) throw new Error("Erreur agent local");
-
-            // L'agent local via setupScraperEndpoint renvoie un EventStream
-            // Ici on simplifie en attendant le résultat final via un fetch classique si l'endpoint le permet
-            // OU on implémente un lecteur de stream. Pour l'enrichissement, on va adapter l'endpoint side-agent
-            // pour qu'il soit plus simple si appelé en mode "direct" (non-SSE).
-            
-            // Pour l'instant, on fallback sur le scraping basique si le stream est complexe à gérer ici,
-            // MAIS on marque l'intention d'utiliser l'agent local.
-            console.log("[Enrichment] Agent local détecté, utilisation du scraping agent...");
+            if (response.ok) {
+                 // The agent might return the enrichment directly or we can fallback to local analysis if it just scrapes
+                 // For now, let's assume it returns text or we continue with local analysis of its result
+                 console.log("[Enrichment] Agent local utilisé.");
+            }
         } catch (error) {
             console.warn("[Enrichment] Échec agent local, repli sur proxy CORS");
         }
     }
 
     if (!rawText) {
-        // Mode Fallback / Proxy CORS : Scraping basique (limité au HTML statique)
         try {
             const fullUrl = url.startsWith('http') ? url : `https://${url}`;
             const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(fullUrl)}`;
@@ -106,72 +173,6 @@ export async function enrichProspectLocally(
         }
     }
 
-    // 2. Analyse via OpenAI
-    const systemPrompt = `
-Tu es un expert en intelligence commerciale et scraping web.
-Analyse le contenu brut du site web d'un prospect et extrais les informations clés.
-Le prospect est: ${prospectContext.name || 'Inconnu'} appartenant à l'entreprise ${prospectContext.company || 'Inconnue'}.
-
-Renvoie UNIQUEMENT un objet JSON strictement formaté selon la structure demandée ci-dessous. Ne renvoie aucun autre texte.
-Structure JSON attendue:
-{
-    "phone": "numero de tel principal ou null",
-    "email": "email principal de contact ou null",
-    "score_global": 85, // Score de 0 à 100 estimant la qualité/taille de l'entreprise
-    "ai_intelligence": {
-        "executive_summary": "Résumé de l'entreprise, sa proposition de valeur et sa cible (3-4 lignes max).",
-        "contact_info": { "phones": ["tel1", "tel2"], "emails": ["email1", "email2"], "addresses": ["adresse 1"] },
-        "key_people": [ { "name": "Nom", "role": "Rôle", "context": "Détails/Contexte" } ],
-        "activities": { "services": ["Service A", "Service B"], "technologies": ["Tech 1"], "sectors": ["Secteur X"] },
-        "recent_news": [ { "type": "Type", "description": "Description de l'actualité" } ],
-        "company_culture": { "mission": "Mission de l'entreprise", "values": ["Valeur 1", "Valeur 2"] },
-        "prospecting_opportunities": [
-            { "signal": "Ex: Recrutement en cours / Nouveau produit", "context": "Détails" }
-        ],
-        "sales_scripts": [
-            { "title": "Icebreaker Email", "content": "Objet: ...\\n\\nBonjour..." },
-            { "title": "Elevator Pitch (Call)", "content": "Bonjour, je vous appelle car..." }
-        ]
-    }
-
-}
-`;
-
-    try {
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${openAiKey}`
-            },
-            body: JSON.stringify({
-                model: 'gpt-4o-mini',
-                response_format: { type: "json_object" },
-                messages: [
-                    { role: "system", content: systemPrompt },
-                    { role: "user", content: `Contenu de la page web: \n\n${rawText}` }
-                ],
-                temperature: 0.3,
-            })
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error?.message || "Erreur OpenAI");
-        }
-
-        const openAiData = await response.json();
-        const jsonContent = openAiData.choices[0].message.content;
-
-        try {
-            const parsed = JSON.parse(jsonContent) as EnrichmentResult;
-            return parsed;
-        } catch (e) {
-            console.error("Erreur de parsing JSON OpenAI", jsonContent);
-            throw new Error("Le format renvoyé par l'IA est invalide.");
-        }
-    } catch (error: any) {
-        console.error("Erreur OpenAI:", error);
-        throw new Error(`Erreur lors de l'analyse IA: ${error.message}`);
-    }
+    // 2. Analyse via IA (unifiée)
+    return analyzeWithAI(rawText, openAiKey, prospectContext, userContext);
 }

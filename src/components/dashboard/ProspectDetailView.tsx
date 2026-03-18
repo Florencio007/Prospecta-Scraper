@@ -10,7 +10,9 @@ import { useToast } from "@/hooks/use-toast";
 import { enrichProspectLocally } from "@/services/enrichmentService";
 import { useApiKeys } from "@/hooks/useApiKeys";
 import { supabase } from "@/integrations/supabase/client";
+import { getAgentApiUrl } from "@/utils/agentUtils";
 import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/Logo";
@@ -40,6 +42,7 @@ interface ProspectDetailViewProps {
 const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAgentOffline }: ProspectDetailViewProps) => {
     const { t } = useLanguage();
     const { toast } = useToast();
+    const { user, profile } = useAuth();
     const { getKeyByProvider } = useApiKeys();
     const [isEnriching, setIsEnriching] = useState(false);
     const [localProspect, setLocalProspect] = useState<Prospect | null>(null);
@@ -158,11 +161,14 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                 l: currentProspect.city || '',
                 id: currentProspect.id || '',
                 website: currentProspect.website || '',
-                openAiKey: openAiKey
+                openAiKey: openAiKey,
+                userService: profile?.user_service_description || '',
+                userValueProp: profile?.value_prop || '',
+                userIndustry: profile?.industry || ''
             });
 
             const endpoint = hasWebsite ? '/api/scrape/enrich-website' : '/api/scrape/enrich-google';
-            const serverUrl = import.meta.env.VITE_SERVER_URL || 'http://localhost:7842';
+            const serverUrl = getAgentApiUrl();
             const eventSource = new EventSource(`${serverUrl}${endpoint}?${queryParams.toString()}`);
 
             eventSource.onmessage = async (event) => {
@@ -562,19 +568,31 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                         <Button
                                             onClick={handleEnrich}
                                             disabled={isEnriching}
-                                            className="w-full border-border text-foreground hover:bg-muted rounded-xl transition-all py-6"
+                                            className="w-full border-border text-foreground hover:bg-muted rounded-xl transition-all py-6 h-auto"
                                             variant="outline"
                                         >
-                                            {isEnriching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="mr-2" size={18} />}
+                                            {isEnriching ? (
+                                                <Loader2 className="h-5 w-5 animate-spin" />
+                                            ) : (
+                                                <div className="h-6 w-6 rounded-md bg-white border border-accent/20 flex items-center justify-center p-1 mr-2 shadow-sm">
+                                                    <img src="/chatgpt-logo.png" className="w-full h-full object-contain" alt="IA" />
+                                                </div>
+                                            )}
                                             <span className="font-medium">{isEnriching ? t("verifying") : t("extractIntelligence")}</span>
                                         </Button>
                                         <Button
                                             onClick={handleAIAnalysis}
                                             disabled={isAnalyzing}
-                                            className="w-full border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/5 rounded-xl transition-all py-6"
+                                            className="w-full border-emerald-500/30 text-emerald-500 hover:bg-emerald-500/5 rounded-xl transition-all py-6 h-auto"
                                             variant="outline"
                                         >
-                                            {isAnalyzing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Zap className="mr-2" size={18} />}
+                                            {isAnalyzing ? (
+                                                <Loader2 className="h-5 w-5 animate-spin" />
+                                            ) : (
+                                                <div className="h-6 w-6 rounded-md bg-white border border-emerald-500/20 flex items-center justify-center p-1 mr-2 shadow-sm">
+                                                    <img src="/gemini-logo.png" className="w-full h-full object-contain" alt="IA" />
+                                                </div>
+                                            )}
                                             <span className="font-bold">{isAnalyzing ? t("analyzing") : t("aiStrategy")}</span>
                                         </Button>
                                     </div>

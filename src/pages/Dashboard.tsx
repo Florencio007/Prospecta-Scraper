@@ -46,6 +46,7 @@ const Dashboard = () => {
           .from('activity_log')
           .select('*')
           .eq('user_id', user.id)
+          .neq('action_type', 'prospect_added')
           .order('created_at', { ascending: false })
           .limit(4),
         supabase

@@ -41,9 +41,9 @@ import { logProspectAdded } from "@/lib/activityLogger";
 import { useApiKeys } from "@/hooks/useApiKeys";
 import { LoadingLogo } from "@/components/LoadingLogo";
 import { AgentInstallModal } from "@/components/dashboard/AgentInstallModal";
+import { getAgentApiUrl, discoverAgentPort, DEFAULT_AGENT_PORT } from "@/utils/agentUtils";
 
-const AGENT_PORT = 7842;
-const LOCAL_AGENT_URL = `http://localhost:${AGENT_PORT}`;
+// Port configuration moved to agentUtils.ts
 
 const industryOptions = [
   { key: "software", label: "Logiciels & SaaS" },
@@ -88,27 +88,35 @@ const ProspectFinder = () => {
   const [linkedinOptions, setLinkedinOptions] = useState({ maxPosts: 30, activityType: 'all' });
   const [facebookOptions, setFacebookOptions] = useState({ maxPosts: 10, activityType: 'all' });
   const [facebookCredentials, setFacebookCredentials] = useState({ email: "", password: "" });
-  const [showFacebookPassword, setShowFacebookPassword] = useState(false);
 
-  // ── DÉTECTEUR AGENT LOCAL ────────────────────────────────────────────────
+  // ── DÉTECTEUR AGENT LOCAL (Dynamique) ────────────────────────────────────
+  const [agentPort, setAgentPort] = useState(DEFAULT_AGENT_PORT);
   const [agentOnline, setAgentOnline] = useState<boolean | null>(null);
   const [showInstallModal, setShowInstallModal] = useState(false);
 
   useEffect(() => {
-    // 1. Vérifier d'abord le localStorage (évite le blocage Mixed Content)
-    const alreadyConfirmed = localStorage.getItem('prospecta_agent_confirmed') === 'true';
-    if (alreadyConfirmed) {
-      setAgentOnline(true);
-      return;
-    }
-    // 2. Essayer le fetch direct (fonctionne uniquement en HTTP ou avec extension CORS)
-    const CHECK_URL = `${LOCAL_AGENT_URL}/api/health`;
-    fetch(CHECK_URL, { signal: AbortSignal.timeout(2000) })
-      .then(r => { if (r.ok) { setAgentOnline(true); } else { setAgentOnline(false); setShowInstallModal(true); } })
-      .catch(() => { setAgentOnline(false); setShowInstallModal(true); });
+    const checkAgent = async () => {
+      const port = await discoverAgentPort();
+      if (port) {
+        setAgentPort(port);
+        setAgentOnline(true);
+      } else {
+        const manuallyConfirmed = localStorage.getItem('prospecta_agent_confirmed') === 'true';
+        if (manuallyConfirmed) {
+          setAgentOnline(true);
+        } else {
+          setAgentOnline(false);
+          setShowInstallModal(true);
+        }
+      }
+    };
+
+    checkAgent();
+    // Re-check periodically
+    const interval = setInterval(checkAgent, 30000);
+    return () => clearInterval(interval);
   }, []);
 
-  // Callback appelé quand l'utilisateur confirme manuellement que l'agent est actif
   const handleAgentConfirmed = () => {
     localStorage.setItem('prospecta_agent_confirmed', 'true');
     setAgentOnline(true);
@@ -116,10 +124,7 @@ const ProspectFinder = () => {
   };
 
   const getApiUrl = (endpoint: string) => {
-    // Si l'agent est en ligne, on l'appelle directement sur localhost:3001
-    // Sinon on passe par le proxy /api (utile en dev ou si configuré sur le serveur)
-    const base = agentOnline ? LOCAL_AGENT_URL : "";
-    return `${base}${endpoint}`;
+    return getAgentApiUrl(endpoint);
   };
 
   /**
@@ -161,18 +166,18 @@ const ProspectFinder = () => {
     industry: "",
     customIndustry: "",
     company_size: "",
-    // Canaux actifs par défaut
-    channels: ["google_maps", "linkedin", "pages_jaunes", "pappers", "societe", "infogreffe"] as string[],
-    // Limites par canal pour éviter les blocages/lenteurs
+    // Canaux actifs par défaut (tous décochés)
+    channels: [] as string[],
+    // Limites par canal (toutes à 0 par défaut)
     channelLimits: {
-      google_maps: 50,
-      linkedin: 10,
-      pages_jaunes: 20,
-      pappers: 50,
-      govcon: 10,
-      facebook: 5,
-      societe: 10,
-      infogreffe: 10
+      google_maps: 0,
+      linkedin: 0,
+      pages_jaunes: 0,
+      pappers: 0,
+      govcon: 0,
+      facebook: 0,
+      societe: 0,
+      infogreffe: 0
     } as Record<string, number>
   });
 
@@ -191,6 +196,17 @@ const ProspectFinder = () => {
   ];
 
   const handleChannelToggle = (channel: string) => {
+    // Restriction pour les canaux non fonctionnels
+    const restrictedChannels = ["pages_jaunes", "societe", "infogreffe"];
+    if (restrictedChannels.includes(channel)) {
+      toast({
+        title: "Canal non disponible",
+        description: `Le canal ${channel.replace('_', ' ')} est en cours de maintenance et sera disponible prochainement.`,
+        variant: "destructive",
+      });
+      return;
+    }
+
     setFilters((prev) => ({
       ...prev,
       channels: prev.channels.includes(channel)
@@ -341,16 +357,60 @@ const ProspectFinder = () => {
   /**
    * Calcule un score de qualité initial basé sur la complétude des données
    */
-  const calculateInitialScore = (item: any) => {
-    let score = 20; // Score de base
-    if (item.website || item.url) score += 15;
-    if (item.email || (item.emails && item.emails.length > 0)) score += 20;
-    if (item.phone || item.phoneUnformatted) score += 15;
-    if (item.industry || item.categoryName || item.category) score += 10;
-    if (item.totalScore && item.totalScore >= 4.5) score += 20;
-    else if (item.totalScore) score += 10;
+  const detectProspectType = (item: any, filterType: string) => {
+    const name = (item.name || "").toLowerCase();
+    const position = (item.position || "").toLowerCase();
+    const url = (item.profileUrl || item.website || "").toLowerCase();
+    
+    // Business keywords
+    const companyKeywords = ["sarl", "sas", "inc", "ltd", "group", "groupe", "corp", "co.", "enterprise", "solutions", "services", "agency", "agence", "consulting", "etablissement", "établissement", "association", "ong", "hotel", "restaurant", "garage", "cabinet"];
+    // Job/Person keywords
+    const personKeywords = ["ceo", "p-dg", "fondateur", "founder", "manager", "directeur", "director", "chef", "consultant", "developpeur", "developer", "ingenieur", "engineer", "responsable", "charge", "chargé", "coordonnateur", "co-fondateur"];
 
-    return Math.min(95, score); // Maximum de 95 avant enrichissement IA
+    // 1. URL Analysis
+    if (url.includes("/in/") || url.includes("/user/") || url.includes("/profiles/")) return "person";
+    if (url.includes("/company/") || url.includes("/pages/")) return "company";
+
+    // 2. Name / Keywords Analysis
+    if (companyKeywords.some(kw => name.includes(kw))) return "company";
+    
+    // 3. Position Analysis
+    if (position && personKeywords.some(kw => position.includes(kw))) return "person";
+    
+    // 4. Heuristic: If name is long (~3+ words) and has no person keywords, likely a company
+    if (name.split(' ').length > 3 && !personKeywords.some(kw => name.includes(kw))) return "company";
+
+    // Fallback to filter or person
+    return filterType === 'Entreprise' ? 'company' : 'person';
+  };
+
+  const calculateInitialScore = (item: any) => {
+    let score = 15; // Score de base
+    
+    // Valeur des données de contact
+    if (item.website || item.url) score += 15;
+    if (item.email || (item.emails && item.emails.length > 0)) score += 25;
+    if (item.phone || item.phoneUnformatted) score += 15;
+    
+    // Présence digitale
+    if (item.profileUrl) score += 10;
+    if (item.industry || item.categoryName || item.category) score += 10;
+    
+    // Preuve sociale (Google Maps)
+    if (item.totalScore) {
+      score += Math.round(item.totalScore * 4); // 5 étoiles = +20 pts
+    }
+    if (item.reviewsCount && item.reviewsCount > 10) score += 5;
+
+    // Malus pour manque critique d'infos
+    if (!item.email && !item.phone && !item.website && !item.profileUrl) {
+      score -= 10;
+    }
+
+    // Malus pour nom suspect (trop court)
+    if ((item.name || "").length < 3) score -= 20;
+
+    return Math.max(5, Math.min(95, score)); // Entre 5 et 95
   };
 
   /**
@@ -372,6 +432,17 @@ const ProspectFinder = () => {
       toast({
         title: t("error"),
         description: t("searchChannels") + " (Veuillez sélectionner au moins un canal)",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Vérifier si au moins un canal a une limite > 0
+    const hasActiveLimit = filters.channels.some(c => filters.channelLimits[c] > 0);
+    if (!hasActiveLimit) {
+      toast({
+        title: t("error"),
+        description: "Veuillez définir une limite supérieure à 0 pour au moins un canal sélectionné.",
         variant: "destructive",
       });
       return;
@@ -504,7 +575,8 @@ const ProspectFinder = () => {
           } 
           else if (channel === "google_maps") {
             addLog("🛰️ Scan Google Maps en cours...", "system");
-            const url = getApiUrl(`/api/scrape/gmaps?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || 'Antananarivo')}&limit=${filters.channelLimits.google_maps}&userId=${user?.id || ""}&type=${filters.type}`);
+            const location = [filters.city, filters.country].filter(Boolean).join(', ') || 'France';
+            const url = getApiUrl(`/api/scrape/gmaps?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(location)}&limit=${filters.channelLimits.google_maps}&userId=${user?.id || ""}&type=${filters.type}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -522,7 +594,8 @@ const ProspectFinder = () => {
                   score: calculateInitialScore(d.result), email: d.result.phone ? "Extraction..." : "",
                   phone: d.result.phone || "", website: d.result.website || "",
                   city: filters.city || "", tags: [d.result.category].filter(Boolean),
-                  contractDetails: d.result.contractDetails || d.result
+                  contractDetails: d.result.contractDetails || d.result,
+                  prospect_type: "company"
                 };
                 setPendingProspects(prev => {
                    if (prev.some(p => p.name === mapped.name && p.company === mapped.company)) return prev;
@@ -531,13 +604,15 @@ const ProspectFinder = () => {
                 setSelectedProspectIds(prev => new Set(prev).add(mapped.id));
                 addLog(`📍 Maps: ${mapped.name}`, 'success');
               }
-              if (d.percentage === 100 || d.error) { es.close(); resolveChannel(); }
+              if (d.percentage === 100 || d.error || d.done) { es.close(); resolveChannel(); }
             };
             es.onerror = () => { es.close(); resolveChannel(); };
           }
           else if (channel === "linkedin") {
             addLog("🛡️ Protocoles LinkedIn (Local)...", "system");
-            const url = getApiUrl(`/api/scrape/linkedin?q=${encodeURIComponent(filters.keyword)}&email=${encodeURIComponent(linkedinCredentials.email)}&password=${encodeURIComponent(linkedinCredentials.password)}&maxProfiles=${filters.channelLimits.linkedin}&maxPosts=${linkedinOptions.maxPosts}&type=${filters.type}&activityType=${linkedinOptions.activityType}`);
+            const location = [filters.city, filters.country].filter(Boolean).join(', ');
+            const query = location ? `${filters.keyword} ${location}` : filters.keyword;
+            const url = getApiUrl(`/api/scrape/linkedin?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&email=${encodeURIComponent(linkedinCredentials.email)}&password=${encodeURIComponent(linkedinCredentials.password)}&maxProfiles=${filters.channelLimits.linkedin}&maxPosts=${linkedinOptions.maxPosts}&type=${filters.type}&activityType=${linkedinOptions.activityType}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -550,7 +625,8 @@ const ProspectFinder = () => {
                 const mapped = {
                   ...d.result,
                   id: d.result.id || `li_${Math.random().toString(36).substr(2, 9)}`,
-                  source: "linkedin"
+                  source: "linkedin",
+                  prospect_type: detectProspectType(d.result, filters.type === 'Entreprise' ? 'company' : 'person')
                 };
                 setPendingProspects(prev => {
                    if (prev.some(p => p.profileUrl === mapped.profileUrl)) return prev;
@@ -559,13 +635,15 @@ const ProspectFinder = () => {
                 setSelectedProspectIds(prev => new Set(prev).add(mapped.id));
                 addLog(`👤 LinkedIn: ${mapped.name}`, 'success');
               }
-              if (d.percentage === 100 || d.error) { es.close(); resolveChannel(); }
+              if (d.percentage === 100 || d.error || d.done) { es.close(); resolveChannel(); }
             };
             es.onerror = () => { es.close(); resolveChannel(); };
           }
           else if (channel === "facebook") {
             addLog("👥 Protocoles Facebook (Local)...", "system");
-            const url = getApiUrl(`/api/scrape/facebook?q=${encodeURIComponent(filters.keyword)}&email=${encodeURIComponent(facebookCredentials.email)}&password=${encodeURIComponent(facebookCredentials.password)}&limit=${filters.channelLimits.facebook}&maxPosts=${facebookOptions.maxPosts}&type=${filters.type}&activityType=${facebookOptions.activityType}`);
+            const location = [filters.city, filters.country].filter(Boolean).join(', ');
+            const query = location ? `${filters.keyword} ${location}` : filters.keyword;
+            const url = getApiUrl(`/api/scrape/facebook?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&email=${encodeURIComponent(facebookCredentials.email)}&password=${encodeURIComponent(facebookCredentials.password)}&limit=${filters.channelLimits.facebook}&maxPosts=${facebookOptions.maxPosts}&type=${filters.type}&activityType=${facebookOptions.activityType}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -578,7 +656,8 @@ const ProspectFinder = () => {
                 const mapped = {
                   ...d.result,
                   id: d.result.id || `fb_${Math.random().toString(36).substr(2, 9)}`,
-                  source: "facebook"
+                  source: "facebook",
+                  prospect_type: detectProspectType(d.result, filters.type === 'Entreprise' ? 'company' : 'person')
                 };
                 setPendingProspects(prev => {
                    if (prev.some(p => p.profileUrl === mapped.profileUrl)) return prev;
@@ -587,7 +666,7 @@ const ProspectFinder = () => {
                 setSelectedProspectIds(prev => new Set(prev).add(mapped.id));
                 addLog(`👥 Facebook: ${mapped.name}`, 'success');
               }
-              if (d.percentage === 100 || d.error) { es.close(); resolveChannel(); }
+              if (d.percentage === 100 || d.error || d.done) { es.close(); resolveChannel(); }
             };
             es.onerror = () => { es.close(); resolveChannel(); };
           }
@@ -608,9 +687,10 @@ const ProspectFinder = () => {
                    return [...prev, d.result];
                  });
                  setSelectedProspectIds(prev => new Set(prev).add(d.result.id));
+                 d.result.prospect_type = detectProspectType(d.result, "company");
                  addLog(`📖 PJ: ${d.result.name}`, 'success');
                }
-               if (d.percentage === 100 || d.error) { es.close(); resolveChannel(); }
+               if (d.percentage === 100 || d.error || d.done) { es.close(); resolveChannel(); }
              };
              es.onerror = () => { es.close(); resolveChannel(); };
           }
@@ -631,15 +711,16 @@ const ProspectFinder = () => {
                   return [...prev, d.result];
                 });
                 setSelectedProspectIds(prev => new Set(prev).add(d.result.id));
+                d.result.prospect_type = detectProspectType(d.result, "company");
                 addLog(`🏢 Pappers: ${d.result.name}`, 'success');
               }
-              if (d.percentage === 100 || d.error) { es.close(); resolveChannel(); }
+              if (d.percentage === 100 || d.error || d.done) { es.close(); resolveChannel(); }
             };
             es.onerror = () => { es.close(); resolveChannel(); };
           }
           else if (channel === "societe") {
             addLog("💼 Societe.com...", "system");
-            const url = getApiUrl(`/api/scrape/societe?q=${encodeURIComponent(filters.keyword)}&limit=${filters.channelLimits.societe}&type=${filters.type}`);
+            const url = getApiUrl(`/api/scrape/societe?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || '')}&limit=${filters.channelLimits.societe}&type=${filters.type}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -654,15 +735,16 @@ const ProspectFinder = () => {
                   return [...prev, d.result];
                 });
                 setSelectedProspectIds(prev => new Set(prev).add(d.result.id));
+                d.result.prospect_type = detectProspectType(d.result, "company");
                 addLog(`💼 Societe: ${d.result.name}`, 'success');
               }
-              if (d.percentage === 100 || d.error) { es.close(); resolveChannel(); }
+              if (d.percentage === 100 || d.error || d.done) { es.close(); resolveChannel(); }
             };
             es.onerror = () => { es.close(); resolveChannel(); };
           }
           else if (channel === "infogreffe") {
             addLog("📜 Infogreffe...", "system");
-            const url = getApiUrl(`/api/scrape/infogreffe?q=${encodeURIComponent(filters.keyword)}&limit=${filters.channelLimits.infogreffe}&type=${filters.type}`);
+            const url = getApiUrl(`/api/scrape/infogreffe?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || '')}&limit=${filters.channelLimits.infogreffe}&type=${filters.type}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -677,40 +759,12 @@ const ProspectFinder = () => {
                   return [...prev, d.result];
                 });
                 setSelectedProspectIds(prev => new Set(prev).add(d.result.id));
+                d.result.prospect_type = detectProspectType(d.result, "company");
                 addLog(`📜 Infogreffe: ${d.result.name}`, 'success');
               }
-              if (d.percentage === 100 || d.error) { es.close(); resolveChannel(); }
+              if (d.percentage === 100 || d.error || d.done) { es.close(); resolveChannel(); }
             };
             es.onerror = () => { es.close(); resolveChannel(); };
-          }
-          else if (channel === "facebook") {
-            if (!facebookCredentials.email || !facebookCredentials.password) {
-              addLog("⚠️ Credentials Facebook manquants — canal ignoré.", "warn");
-              resolveChannel();
-            } else {
-              addLog("📘 Scan Facebook en cours...", "system");
-              const url = `/api/scrape/facebook?email=${encodeURIComponent(facebookCredentials.email)}&password=${encodeURIComponent(facebookCredentials.password)}&q=${encodeURIComponent(searchQueryString)}&limit=${filters.channelLimits.facebook}&maxPosts=${facebookOptions.maxPosts}&activityType=${facebookOptions.activityType}&type=${filters.type}`;
-              const es = new EventSource(url);
-              activeEventSources.current.push(es);
-              es.onmessage = (e) => {
-                let d;
-                try { d = JSON.parse(e.data); } catch(err) { addLog(e.data, 'process'); return; }
-                if (d.message && d.percentage === undefined && !d.error && !d.result) { addLog(d.message, 'process'); }
-                if (d.percentage !== undefined) updateChannelPct(d.percentage, d.message || "");
-                if (d.error && typeof d.error === 'string') addLog(`❌ Erreur: ${d.error}`, 'error');
-                if (d.result) {
-                  const r = d.result;
-                  setPendingProspects(prev => {
-                    if (prev.some(p => p.socialLinks?.facebook && p.socialLinks.facebook === r.socialLinks?.facebook)) return prev;
-                    return [...prev, r];
-                  });
-                  setSelectedProspectIds(prev => new Set(prev).add(r.id));
-                  addLog(`📘 Facebook: ${r.name}`, 'success');
-                }
-                if (d.percentage === 100 || d.error) { es.close(); resolveChannel(); }
-              };
-              es.onerror = () => { es.close(); resolveChannel(); };
-            }
           }
         });
       });
@@ -1275,8 +1329,23 @@ const ProspectFinder = () => {
                   <div className="flex items-center justify-between text-xs px-1">
                     <div className="flex items-center gap-1.5">
                       <span className={`w-1.5 h-1.5 rounded-full ${agentOnline === null ? 'bg-yellow-500 animate-pulse' : agentOnline ? 'bg-green-500' : 'bg-red-500 shadow-[0_0_5px_rgba(239,68,68,0.5)]'}`} />
-                      <span className={`font-mono text-[10px] ${agentOnline === false ? 'text-red-400 bg-red-500/10 px-1.5 py-0.5 rounded border border-red-500/20' : 'text-muted-foreground'}`}>
-                        {agentOnline === null ? 'Vérification moteur...' : agentOnline ? 'Prospecta Motor: actif' : 'prospecta motor (prospectator) inactif'}
+                      <span className={`font-mono text-[10px] flex items-center ${agentOnline === false ? 'text-red-400 bg-red-500/10 px-1.5 py-0.5 rounded border border-red-500/20' : 'text-muted-foreground'}`}>
+                        {agentOnline === null ? 'Vérification moteur...' : agentOnline ? (
+                          <>
+                            Prospecta Motor: actif
+                            <button 
+                              onClick={() => {
+                                localStorage.removeItem('prospecta_agent_confirmed');
+                                setAgentOnline(false);
+                                setShowInstallModal(true);
+                              }}
+                              className="ml-2 text-red-500/60 hover:text-red-500 transition-colors underline decoration-red-500/30"
+                              title="Déconnecter l'agent et oublier la confirmation manuelle"
+                            >
+                              DÉCONNECTER
+                            </button>
+                          </>
+                        ) : 'prospecta motor (prospectator) inactif'}
                       </span>
                     </div>
                     {agentOnline === false && (
