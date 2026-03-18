@@ -571,7 +571,7 @@ const AI_MODEL_PROVIDERS = [
 ];
 
 const AiModelCard = ({ existingKey, onUpdate }: { existingKey?: ApiKey, onUpdate: () => void }) => {
-    const { saveKey, deleteKey } = useApiKeys();
+    const { saveKey, testKey, deleteKey } = useApiKeys();
     const { toast } = useToast();
 
     const parseConfig = (raw?: string) => {

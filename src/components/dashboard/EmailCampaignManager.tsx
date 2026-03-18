@@ -20,8 +20,12 @@ import {
     Sparkles,
     X,
     UserPlus,
-    Loader2
+    Loader2,
+    LayoutGrid,
+    List as ListIcon
 } from "lucide-react";
+import CampaignCard from "./CampaignCard";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -199,6 +203,7 @@ export default function EmailCampaignManager({
     const [isEditTemplateOpen, setIsEditTemplateOpen] = useState(false);
     const [isEditCampaignOpen, setIsEditCampaignOpen] = useState(false);
     const [alreadyAddedIds, setAlreadyAddedIds] = useState<string[]>([]);
+    const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
     useEffect(() => {
         if (isProspectSelectorOpen && selected && onGetRecipients) {
@@ -301,6 +306,33 @@ export default function EmailCampaignManager({
                         {label}
                     </Button>
                 ))}
+
+                <div className="ml-auto flex items-center bg-slate-100 dark:bg-slate-900 p-1 rounded-lg border border-border/50">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setViewMode('grid')}
+                        className={cn(
+                            "h-7 px-2 gap-1.5 text-[10px] font-bold uppercase transition-all",
+                            viewMode === 'grid' ? "bg-white dark:bg-slate-800 shadow-sm text-emerald-600" : "text-muted-foreground hover:text-foreground"
+                        )}
+                    >
+                        <LayoutGrid size={12} />
+                        Grid
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setViewMode('list')}
+                        className={cn(
+                            "h-7 px-2 gap-1.5 text-[10px] font-bold uppercase transition-all",
+                            viewMode === 'list' ? "bg-white dark:bg-slate-800 shadow-sm text-emerald-600" : "text-muted-foreground hover:text-foreground"
+                        )}
+                    >
+                        <ListIcon size={12} />
+                        List
+                    </Button>
+                </div>
             </div>
 
             {/* Main Grid: Scrollable list + Detail View */}
@@ -313,16 +345,34 @@ export default function EmailCampaignManager({
                             <p className="text-slate-500 dark:text-slate-600 text-sm mt-1">Créez votre première campagne pour commencer</p>
                         </div>
                     ) : (
-                        filtered.map(c => (
-                            <CampaignRowCard
-                                key={c.id}
-                                campaign={c}
-                                isSelected={selected?.id === c.id}
-                                onSelect={() => setSelected(c)}
-                                onToggle={() => toggleStatus(c.id, c.status)}
-                                onDelete={() => handleDeleteClick(c.id)}
-                            />
-                        ))
+                        viewMode === 'grid' ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+                                {filtered.map((c: any) => (
+                                    <CampaignCard
+                                        key={c.id}
+                                        campaign={c}
+                                        isSelected={selected?.id === c.id}
+                                        onSelect={() => setSelected(c)}
+                                        onToggle={(e: any) => { e.stopPropagation(); toggleStatus(c.id, c.status); }}
+                                        onEdit={(e: any) => { e.stopPropagation(); setSelected(c); setIsEditCampaignOpen(true); }}
+                                        onDelete={(e: any) => { e.stopPropagation(); handleDeleteClick(c.id); }}
+                                    />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="flex flex-col gap-3">
+                                {filtered.map((c: any) => (
+                                    <CampaignRowCard
+                                        key={c.id}
+                                        campaign={c}
+                                        isSelected={selected?.id === c.id}
+                                        onSelect={() => setSelected(c)}
+                                        onToggle={() => toggleStatus(c.id, c.status)}
+                                        onDelete={() => handleDeleteClick(c.id)}
+                                    />
+                                ))}
+                            </div>
+                        )
                     )}
                 </div>
 
@@ -437,77 +487,79 @@ export default function EmailCampaignManager({
 
 function CampaignRowCard({ campaign, onSelect, onToggle, onDelete, isSelected }: any) {
     const openRate = pct(campaign.opened_count, campaign.sent_count);
-    const statusColor = campaign.status === 'active' ? 'bg-emerald-500/10 text-emerald-500 border-emerald-500/20' :
-        campaign.status === 'paused' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' : 'bg-blue-500/10 text-blue-500 border-blue-500/20';
+    const clickRate = pct(campaign.clicked_count, campaign.opened_count);
+    
+    const statusConfig = {
+        active: { label: 'Actif', color: 'bg-emerald-500', bgColor: 'bg-emerald-500/10', textColor: 'text-emerald-500' },
+        paused: { label: 'Pause', color: 'bg-amber-500', bgColor: 'bg-amber-500/10', textColor: 'text-amber-500' },
+        draft: { label: 'Draft', color: 'bg-blue-500', bgColor: 'bg-blue-500/10', textColor: 'text-blue-500' },
+        completed: { label: 'Fini', color: 'bg-slate-500', bgColor: 'bg-slate-500/10', textColor: 'text-slate-500' }
+    }[campaign.status as keyof typeof statusConfig] || { label: campaign.status, color: 'bg-slate-500', bgColor: 'bg-slate-500/10', textColor: 'text-slate-500' };
 
     return (
         <Card
-            className={`bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 cursor-pointer transition-all hover:border-emerald-500/50 ${isSelected ? 'ring-2 ring-emerald-500/50 border-emerald-500/50' : ''}`}
+            className={cn(
+                "bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 cursor-pointer transition-all hover:border-emerald-500/50 hover:shadow-md",
+                isSelected ? 'ring-2 ring-emerald-500/50 border-emerald-500/50 bg-emerald-50/5 dark:bg-emerald-950/10' : ''
+            )}
             onClick={onSelect}
         >
-            <CardContent className="p-5">
-                <div className="flex flex-col sm:flex-row justify-between items-start gap-4 mb-4">
-                    <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">{campaign.name}</h3>
-                            <Badge variant="outline" className={`${statusColor} text-[9px] px-1.5 py-0 uppercase font-black`}>
-                                {campaign.status}
-                            </Badge>
-                        </div>
-                        <div className="flex items-center gap-4 text-[10px] text-slate-600 dark:text-slate-500 font-medium">
-                            <span className="flex items-center gap-1"><Mail size={10} /> {campaign.from_email || 'No email set'}</span>
-                            <span className="flex items-center gap-1"><Clock size={10} /> {new Date(campaign.start_date || Date.now()).toLocaleDateString()}</span>
+            <CardContent className="p-4">
+                <div className="flex items-center gap-4">
+                    {/* Status Dot & Title */}
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
+                        <div className={cn("h-2.5 w-2.5 rounded-full shrink-0", statusConfig.color)}></div>
+                        <div className="flex flex-col min-w-0">
+                            <span className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">{campaign.name}</span>
+                            <span className={cn("text-[10px] font-bold uppercase tracking-wider", statusConfig.textColor)}>{statusConfig.label}</span>
                         </div>
                     </div>
-                    <div className="flex gap-2" onClick={e => e.stopPropagation()}>
-                        <Button variant="outline" size="sm" onClick={onToggle} className={`h-8 gap-1 text-[10px] uppercase font-bold ${campaign.status === 'active' ? 'text-amber-500 border-amber-500/20 hover:bg-amber-500/10' : 'text-emerald-500 border-emerald-500/20 hover:bg-emerald-500/10'}`}>
-                            {campaign.status === 'active' ? <Pause size={12} /> : <Play size={12} />}
-                            <span className="hidden lg:inline">{campaign.status === 'active' ? 'Pause' : 'Reprendre'}</span>
-                        </Button>
-                        <Button variant="outline" size="sm" onClick={() => onDelete(campaign.id)} className="h-8 text-red-500 border-red-500/20 hover:bg-red-500/10">
-                            <Trash2 size={12} />
-                        </Button>
-                    </div>
-                </div>
 
-                {/* Daily Mini Tracker */}
-                <div className="bg-slate-50 dark:bg-slate-950/50 rounded-lg p-2 border border-slate-200 dark:border-slate-800 flex items-center justify-between mb-4">
-                    <div className="flex gap-4">
-                        <div className="flex flex-col">
-                            <span className="text-[9px] text-slate-500 font-bold uppercase">Envois jour</span>
-                            <span className="text-xs font-mono font-bold text-emerald-500">{campaign.sent_today || 0} / {campaign.daily_limit || 200}</span>
+                    {/* Quick Stats */}
+                    <div className="hidden sm:flex items-center gap-6 px-4">
+                        <div className="text-center">
+                            <div className="text-[10px] text-slate-400 font-bold uppercase">Ouverts</div>
+                            <div className="text-sm font-black text-slate-700 dark:text-slate-300">{openRate}%</div>
                         </div>
-                        <div className="flex flex-col">
-                            <span className="text-[9px] text-slate-500 font-bold uppercase">Throttle</span>
-                            <span className="text-xs font-mono font-bold text-slate-700 dark:text-slate-300">{campaign.throttle_min}-{campaign.throttle_max}s</span>
+                        <div className="text-center">
+                            <div className="text-[10px] text-slate-400 font-bold uppercase">Clics</div>
+                            <div className="text-sm font-black text-slate-700 dark:text-slate-300">{clickRate}%</div>
+                        </div>
+                        <div className="text-center">
+                            <div className="text-[10px] text-slate-400 font-bold uppercase">Total</div>
+                            <div className="text-sm font-black text-slate-700 dark:text-slate-300">{campaign.sent_count || 0}</div>
                         </div>
                     </div>
-                    <div className="w-32">
-                        <ProgressBar value={campaign.sent_today || 0} max={campaign.daily_limit || 200} colorClass="bg-emerald-500" />
-                    </div>
-                </div>
 
-                {/* Quick Stats Grid */}
-                <div className="grid grid-cols-5 gap-2">
-                    <div className="bg-slate-50 dark:bg-slate-950/30 p-2 rounded text-center">
-                        <div className="text-[9px] text-slate-500 font-bold uppercase">Envoyés</div>
-                        <div className="text-xs font-mono font-black text-blue-400">{campaign.sent_count || 0}</div>
+                    {/* Progress Mini bar */}
+                    <div className="hidden lg:block w-32 px-4 border-x border-slate-100 dark:border-slate-800">
+                         <div className="text-[9px] text-slate-400 font-bold uppercase mb-1">Aujourd'hui</div>
+                         <div className="h-1.5 w-full bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+                             <div 
+                                className="h-full bg-emerald-500" 
+                                style={{ width: `${Math.min(100, (campaign.sent_today / (campaign.daily_limit || 1)) * 100)}%` }}
+                             />
+                         </div>
                     </div>
-                    <div className="bg-slate-50 dark:bg-slate-950/30 p-2 rounded text-center">
-                        <div className="text-[9px] text-slate-500 font-bold uppercase">Ouverts</div>
-                        <div className="text-xs font-mono font-black text-emerald-500 tracking-tighter">{openRate}%</div>
-                    </div>
-                    <div className="bg-slate-50 dark:bg-slate-950/30 p-2 rounded text-center">
-                        <div className="text-[9px] text-slate-500 font-bold uppercase">Clics</div>
-                        <div className="text-xs font-mono font-black text-purple-400">{campaign.clicked_count || 0}</div>
-                    </div>
-                    <div className="bg-slate-50 dark:bg-slate-950/30 p-2 rounded text-center">
-                        <div className="text-[9px] text-slate-500 font-bold uppercase">Rebonds</div>
-                        <div className="text-xs font-mono font-black text-red-500">{campaign.bounced_count || 0}</div>
-                    </div>
-                    <div className="bg-slate-50 dark:bg-slate-950/30 p-2 rounded text-center">
-                        <div className="text-[9px] text-slate-500 font-bold uppercase border-orange-500/20 text-orange-600">Désabos</div>
-                        <div className="text-xs font-mono font-black text-orange-500">{campaign.unsubscribed_count || 0}</div>
+
+                    {/* Actions */}
+                    <div className="flex items-center gap-1">
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8 text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-950/30"
+                            onClick={(e) => { e.stopPropagation(); onToggle(); }}
+                        >
+                            {campaign.status === 'active' ? <Pause size={16} /> : <Play size={16} />}
+                        </Button>
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30"
+                            onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                        >
+                            <Trash2 size={16} />
+                        </Button>
                     </div>
                 </div>
             </CardContent>
@@ -515,7 +567,7 @@ function CampaignRowCard({ campaign, onSelect, onToggle, onDelete, isSelected }:
     );
 }
 
-function CampaignDetailSidePanel({ campaign, onClose, onLaunchBatch, onAddProspectsClick, onEditTemplateClick, onEditCampaignClick, onManageRecipientsClick, onDeleteClick }: { campaign: Campaign, onClose: () => void, onLaunchBatch?: () => void, onAddProspectsClick?: () => void, onEditTemplateClick?: () => void, onEditCampaignClick?: () => void, onManageRecipientsClick?: () => void, onDeleteClick?: () => void }) {
+function CampaignDetailSidePanel({ campaign, onClose, onLaunchBatch, onAddProspectsClick, onEditTemplateClick, onEditCampaignClick, onManageRecipientsClick, onDeleteClick }: { campaign: any, onClose: () => void, onLaunchBatch?: () => void, onAddProspectsClick?: () => void, onEditTemplateClick?: () => void, onEditCampaignClick?: () => void, onManageRecipientsClick?: () => void, onDeleteClick?: () => void }) {
     const delivRate = pct(campaign.sent_count - (campaign.bounced_count || 0), campaign.sent_count);
     const openRate = pct(campaign.opened_count, campaign.sent_count);
     const clickRate = pct(campaign.clicked_count, campaign.opened_count);
@@ -529,73 +581,82 @@ function CampaignDetailSidePanel({ campaign, onClose, onLaunchBatch, onAddProspe
     };
 
     return (
-        <Card className="bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 shadow-2xl animate-in fade-in slide-in-from-right-4 duration-300">
-            <CardHeader className="p-5 border-b border-slate-200 dark:border-slate-800 flex flex-row items-center justify-between space-y-0">
+        <Card className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-slate-200 dark:border-slate-800 shadow-2xl animate-in fade-in slide-in-from-right-4 duration-300 overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full -mr-16 -mt-16 blur-2xl"></div>
+            
+            <CardHeader className="p-5 border-b border-slate-200 dark:border-slate-800 flex flex-row items-center justify-between space-y-0 relative z-10">
                 <div className="flex flex-col">
-                    <CardTitle className="text-sm font-bold text-slate-900 dark:text-slate-200">{campaign.name}</CardTitle>
-                    <div className="text-[10px] font-bold text-emerald-500 uppercase mt-0.5">{campaign.status}</div>
+                    <CardTitle className="text-base font-bold text-slate-900 dark:text-slate-100">{campaign.name}</CardTitle>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                        <div className={cn("h-1.5 w-1.5 rounded-full", campaign.status === 'active' ? "bg-emerald-500 animate-pulse" : "bg-slate-400")}></div>
+                        <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{campaign.status}</span>
+                    </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    {campaign.status === 'active' && (
-                        <div className="flex flex-col items-end mr-2">
-                            <Badge variant="outline" className="bg-emerald-500/10 text-emerald-600 border-emerald-500/50 text-[10px] mb-1 px-2 py-0.5">
-                                <Zap size={10} className="mr-1 inline animate-pulse" /> Envoi Automatisé (Toutes les 5 min)
-                            </Badge>
+                    <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800">
+                        <X size={18} />
+                    </Button>
+                </div>
+            </CardHeader>
+            <CardContent className="p-5 flex flex-col gap-6 relative z-10">
+                {/* Automation Badge */}
+                {campaign.status === 'active' && (
+                    <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-3 flex items-start gap-3">
+                        <div className="bg-emerald-500/20 p-2 rounded-lg shrink-0">
+                            <Zap size={16} className="text-emerald-500 animate-pulse" />
+                        </div>
+                        <div className="flex-1">
+                            <p className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-tight">Automatisation Active</p>
+                            <p className="text-[10px] text-emerald-600/70 dark:text-emerald-400/60 leading-none mt-1 font-medium">Envoi automatique toutes les 5 minutes</p>
                             {onLaunchBatch && (
-                                <button onClick={handleLaunch} disabled={isLaunching || campaign.sent_today >= campaign.daily_limit} className="text-[10px] text-slate-400 hover:text-slate-600 underline disabled:opacity-50">
+                                <button 
+                                    onClick={handleLaunch} 
+                                    disabled={isLaunching || campaign.sent_today >= campaign.daily_limit} 
+                                    className="text-[9px] text-emerald-600/80 hover:text-emerald-600 font-bold underline mt-2 disabled:opacity-50 block"
+                                >
                                     {isLaunching ? <Loader2 className="mr-1 h-3 w-3 animate-spin inline" /> : null}
-                                    Forcer un envoi manuel
+                                    Déclencher un envoi immédiat
                                 </button>
                             )}
                         </div>
-                    )}
-                    <div className="flex items-center gap-2">
-                        {onDeleteClick && (
-                            <Button variant="ghost" size="icon" onClick={onDeleteClick} className="h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20">
-                                <Trash2 size={18} />
-                            </Button>
-                        )}
-                        <Button variant="ghost" size="icon" onClick={onClose} className="h-8 w-8 text-slate-500 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800">
-                            <X size={18} />
-                        </Button>
                     </div>
-                </div>
-            </CardHeader>
-            <CardContent className="p-5 flex flex-col gap-5">
-                <div className="grid grid-cols-2 gap-2">
+                )}
+
+                {/* Primary Actions Grid */}
+                <div className="grid grid-cols-2 gap-3">
                     <Button
                         onClick={onAddProspectsClick}
-                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-10 shadow-lg shadow-emerald-500/20 gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] text-[11px]"
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold h-11 shadow-lg shadow-emerald-500/20 gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] text-xs rounded-xl"
                     >
-                        <UserPlus size={14} />
+                        <UserPlus size={16} />
                         Ajouter
                     </Button>
                     <Button
                         onClick={onEditTemplateClick}
                         variant="outline"
-                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold h-10 shadow-sm gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] text-[11px]"
+                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold h-11 shadow-sm gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] text-xs rounded-xl"
                     >
-                        <Edit size={14} />
-                        Modifier email
+                        <Edit size={16} />
+                        Email
                     </Button>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-3">
                     <Button
                         onClick={onEditCampaignClick}
                         variant="outline"
-                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold h-10 shadow-sm gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] text-[11px]"
+                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold h-11 shadow-sm gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] text-xs rounded-xl"
                     >
-                        <Settings size={14} />
+                        <Settings size={16} />
                         Paramètres
                     </Button>
                     <Button
                         onClick={onManageRecipientsClick}
                         variant="outline"
-                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold h-10 shadow-sm gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] text-[11px]"
+                        className="bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 font-bold h-11 shadow-sm gap-2 transition-all hover:scale-[1.02] active:scale-[0.98] text-xs rounded-xl"
                     >
-                        <Users size={14} />
-                        Destinataires
+                        <Users size={16} />
+                        Liste
                     </Button>
                 </div>
 

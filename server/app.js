@@ -754,7 +754,7 @@ CONSIGNES :
         'Authorization': `Bearer ${openaiKey}`,
         // OpenRouter specific headers
         ...(baseUrl.includes('openrouter.ai') ? {
-          'HTTP-Referer': 'https://prospecta.ai',
+          'HTTP-Referer': 'https://prospecta.soamibango.com',
           'X-Title': 'Prospecta AI',
         } : {})
       },

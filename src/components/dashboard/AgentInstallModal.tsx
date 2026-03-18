@@ -12,16 +12,16 @@ import { Logo } from "@/components/Logo";
 const RELEASE_URL = "https://github.com/Florencio007/Prospecta-Scraper/releases/tag/v1.0.0";
 
 const downloads = [
-  { 
-    os: "Windows", 
-    filename: "Prospectator.Setup.1.1.0.exe", 
+  {
+    os: "Windows",
+    filename: "Prospectator.Setup.1.1.0.exe",
     icon: "/windows-logo.png",
     description: "Version 1.1.0 - Windows 10/11",
     label: "Télécharger pour Windows"
   },
-  { 
-    os: "macOS", 
-    filename: "Prospectator-1.1.0.dmg", 
+  {
+    os: "macOS",
+    filename: "Prospectator-1.1.0.dmg",
     icon: "/apple-logo.png",
     description: "Intel & Apple Silicon (M1/M2/M3)",
     label: "Télécharger pour Mac"

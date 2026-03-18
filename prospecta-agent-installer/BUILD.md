@@ -154,7 +154,7 @@ Résultats renvoyés en SSE vers Prospecta AI
 
 Mets les fichiers buildés sur ton serveur à :
 ```
-https://prospecta.ai/downloads/
+https://prospecta.soamibango.com/downloads/
 ├── Prospecta-Agent-mac-x64.dmg
 ├── Prospecta-Agent-mac-arm64.dmg
 └── Prospecta-Agent-win-x64.exe

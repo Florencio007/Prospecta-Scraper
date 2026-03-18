@@ -18,9 +18,8 @@
     "https://*.societe.com/*",
     "https://*.infogreffe.fr/*",
     "http://localhost:8080/*",
-    "https://*.vercel.app/*",
     "https://*.supabase.co/*",
-    "https://prospecta-scraper.vercel.app/*"
+    "https://prospecta.soamibango.com/*"
   ],
   "background": {
     "service_worker": "background.js",
@@ -30,7 +29,7 @@
     {
       "matches": [
         "http://localhost:8080/*",
-        "https://*.vercel.app/*"
+        "https://prospecta.soamibango.com/*"
       ],
       "js": [
         "content-bridge.js"
@@ -45,7 +44,7 @@
       ],
       "matches": [
         "http://localhost:8080/*",
-        "https://*.vercel.app/*"
+        "https://prospecta.soamibango.com/*"
       ]
     }
   ]

@@ -140,9 +140,9 @@ VITE_SUPABASE_ANON_KEY=eyJxxx...
 
 ```
 Allowed Origins:
-- https://prospecta.mg
-- https://www.prospecta.mg
-- https://*.vercel.app (développement)
+- https://prospecta.soamibango.com
+- https://www.prospecta.soamibango.com
+- http://localhost:8080 (développement)
 ```
 
 ### Row Level Security (RLS)
