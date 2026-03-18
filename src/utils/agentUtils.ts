@@ -10,6 +10,15 @@ export const DEFAULT_AGENT_PORT = 7842;
  * Checks localStorage for a discovered port, otherwise uses the default.
  */
 export const getAgentApiUrl = (path: string = ''): string => {
+  // If we are on the production domain (not localhost), use relative paths.
+  // This ensures the frontend calls the co-located backend.
+  const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+  
+  if (!isLocal) {
+    const formattedPath = path.startsWith('/') ? path : `/${path}`;
+    return formattedPath;
+  }
+
   const customPort = localStorage.getItem('prospecta-agent-port');
   const port = customPort ? parseInt(customPort, 10) : DEFAULT_AGENT_PORT;
   const baseUrl = `http://localhost:${port}`;

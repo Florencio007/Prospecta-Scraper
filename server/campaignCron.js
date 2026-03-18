@@ -97,17 +97,15 @@ function wrapInBrandedTemplate(content, serverPublicUrl, recipientId) {
 <body>
   <div class="wrapper">
     <div class="header">
-      <img src="https://prospecta.soamibango.com/logo_prospecta_claire.png" alt="Prospecta" />
+      <img src="${serverPublicUrl}/logo_prospecta_claire.png" alt="Prospecta" />
     </div>
     <div class="body">
       ${content}
     </div>
     <div class="footer">
       <p class="tagline">Prospecta — Trouvez vos futurs clients sur tous les réseaux.</p>
-      <p>© 2026 Varatraza Tech · <a href="https://prospecta.soamibango.com">prospecta.soamibango.com</a></p>
-      <div style="margin-top: 12px;">
-        <a href="${serverPublicUrl}/api/email/unsubscribe/${recipientId}">Se désabonner</a>
-      </div>
+      <p>© 2026 Varatraza Tech · <a href="${serverPublicUrl}">prospecta.soamibango.com</a></p>
+      ${recipientId ? `<div style="margin-top: 12px;"><a href="${serverPublicUrl}/api/email/unsubscribe/${recipientId}">Se désabonner</a></div>` : ''}
     </div>
   </div>
 </body>
@@ -198,8 +196,20 @@ async function processCampaigns() {
                 console.warn('[CRON] ⚠️  SERVER_PUBLIC_URL = localhost — tracking hors ligne non fonctionnel.');
                 console.warn('[CRON]    → Lancez `npm run backend:tunnel` pour activer le tracking.');
             }
+            
+            // Click tracking injecté dans le contenu HTML
+            let processedHtml = htmlContentBase || '';
+            if (recipient.id && serverPublicUrl) {
+                const urlRegex = /href=["'](https?:\/\/[^"']+)["']/gi;
+                processedHtml = processedHtml.replace(urlRegex, (match, url) => {
+                    if (url.includes('/api/email/unsubscribe')) return match;
+                    const trackingUrl = `${serverPublicUrl}/api/email/track/click/${recipient.id}?url=${encodeURIComponent(url)}`;
+                    return `href="${trackingUrl}"`;
+                });
+            }
+
             const trackingPixel = `<img src="${serverPublicUrl}/api/email/track/open/${recipient.id}" width="1" height="1" style="display:none;" alt="" />`;
-            const finalHtml = wrapInBrandedTemplate(htmlContentBase + trackingPixel, serverPublicUrl, recipient.id);
+            const finalHtml = wrapInBrandedTemplate(processedHtml + trackingPixel, serverPublicUrl, recipient.id);
 
             let success = false;
             let errorMessage = '';
