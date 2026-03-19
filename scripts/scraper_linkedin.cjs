@@ -396,7 +396,13 @@ async function scrapeMainProfile(page, profileUrl) {
     await sleep(500);
   } catch (_) { }
 
-  const contact = await scrapeContactInfo(page);
+  let contact = { email: '', phone: '', website: '' };
+  const needsContact = requestedFields.length === 0 || requestedFields.includes('email') || requestedFields.includes('phone') || requestedFields.includes('website');
+  if (needsContact) {
+    contact = await scrapeContactInfo(page);
+  } else {
+    emitLog('   ⏩ Infos de contact (ignorées car non demandées)');
+  }
 
   const data = await page.evaluate(() => {
     function getText(el) {
@@ -930,7 +936,14 @@ async function scrapeFullProfile(page, person) {
 
   const main = await scrapeMainProfile(page, person.profileUrl);
   await sleep(CONFIG.delay);
-  const skills = await scrapeSkills(page, person.profileUrl).catch(() => []);
+  
+  const needsSkills = requestedFields.length === 0 || requestedFields.includes('skills') || requestedFields.includes('about') || requestedFields.includes('certifications');
+  let skills = [];
+  if (needsSkills) {
+    skills = await scrapeSkills(page, person.profileUrl).catch(() => []);
+  } else {
+    emitLog('   ⏩ Compétences/Formations secondaires (ignorées)');
+  }
 
   let posts = [];
   let comments = [];

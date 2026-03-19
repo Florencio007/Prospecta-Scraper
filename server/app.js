@@ -585,6 +585,7 @@ setupScraperEndpoint(app, '/api/scrape/gmaps', 'scraper_googlemaps.cjs', (req) =
   req.query.limit || '20',
   req.query.userId || '',
   req.query.type || 'tous',
+  req.query.fields || ''
 ]);
 
 // PagesJaunes
@@ -593,6 +594,7 @@ setupScraperEndpoint(app, '/api/scrape/pj', 'scraper_pj.cjs', (req) => [
   req.query.l || 'Paris',
   req.query.limit || '5',
   req.query.type || 'tous',
+  req.query.fields || ''
 ]);
 
 // Societe.com
@@ -600,6 +602,7 @@ setupScraperEndpoint(app, '/api/scrape/societe', 'scraper_societe.cjs', (req) =>
   req.query.type || 'entreprise',
   req.query.q || '',
   req.query.limit || '5',
+  req.query.fields || ''
 ]);
 
 // Infogreffe
@@ -607,6 +610,7 @@ setupScraperEndpoint(app, '/api/scrape/infogreffe', 'scraper_infogreffe.cjs', (r
   req.query.type || 'entreprise',
   req.query.q || '',
   req.query.limit || '5',
+  req.query.fields || ''
 ]);
 
 // Pappers
@@ -621,6 +625,16 @@ setupScraperEndpoint(app, '/api/scrape/pappers', 'scraper_pappers.cjs', (req) =>
   req.query.limit || '5',
   req.query.apiToken || process.env.PAPPERS_API_TOKEN || '',
   req.query.type || 'entreprise',
+  req.query.fields || ''
+]);
+
+// Google Web Scraper
+setupScraperEndpoint(app, '/api/scrape/google', 'scraper_google.cjs', (req) => [
+  req.query.q || '',
+  req.query.l || '',
+  req.query.limit || '10',
+  req.query.type || 'tous',
+  req.query.fields || ''
 ]);
 
 // LinkedIn
@@ -682,7 +696,7 @@ setupScraperEndpoint(app, '/api/scrape/enrich-website', 'scraper_website_enrich.
 
 // Facebook
 app.get('/api/scrape/facebook', (req, res) => {
-  const { email, password, q, limit, maxPosts, type, activityType } = req.query;
+  const { email, password, q, limit, maxPosts, type, activityType, fields } = req.query;
   if (!email || !password) {
     return res.status(400).json({ error: 'Email et mot de passe Facebook requis.' });
   }
@@ -693,7 +707,7 @@ app.get('/api/scrape/facebook', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
 
   const scriptPath = path.resolve(rootDir, 'scripts', 'scraper_facebook.cjs');
-  const child = spawn('node', [scriptPath, email, password, q || '', limit || '5', maxPosts || '10', type || 'tous', activityType || 'all']);
+  const child = spawn('node', [scriptPath, email, password, q || '', limit || '5', maxPosts || '10', type || 'tous', activityType || 'all', fields || '']);
 
   child.stdout.on('data', (data) => {
     data.toString().split('\n').forEach(line => {

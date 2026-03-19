@@ -12,6 +12,8 @@ const MetricsCards = () => {
     openRate: 0,
     clickRate: 0,
     messagesSent: 0,
+    searchUsage: 0,
+    replyRate: 0,
   });
   const [loading, setLoading] = useState(true);
 
@@ -37,22 +39,38 @@ const MetricsCards = () => {
         let totalClicked = 0;
 
         if (campaigns) {
-            campaigns.forEach(c => {
+            campaigns.forEach((c: any) => {
                 totalSent += (c.sent_count || 0);
                 totalOpened += (c.opened_count || 0);
                 totalClicked += (c.clicked_count || 0);
             });
         }
 
-        // Fallback or addition with email_events for real-time (optional, keeping it simple with aggregates)
+        // Fetch total replies (received messages)
+        const { count: repliesCount } = await supabase
+          .from('email_messages')
+          .select('*', { count: 'exact', head: true })
+          .eq('user_id', user.id)
+          .eq('direction', 'received');
+
+        // Fetch profile for search usage
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('search_usage')
+          .eq('id', user.id)
+          .single();
+
         const openRate = totalSent > 0 ? (totalOpened / totalSent) * 100 : 0;
         const clickRate = totalSent > 0 ? (totalClicked / totalSent) * 100 : 0;
+        const replyRate = totalSent > 0 ? ((repliesCount || 0) / totalSent) * 100 : 0;
 
         setMetrics({
           totalProspects: prospectsCount || 0,
           openRate: openRate,
           clickRate: clickRate,
           messagesSent: totalSent,
+          searchUsage: (profile as any)?.search_usage || 0,
+          replyRate: replyRate,
         });
       } catch (error) {
         console.error('Error fetching metrics:', error);
@@ -66,29 +84,45 @@ const MetricsCards = () => {
 
   const metricsData = [
     {
-      label: t("prospects"),
-      value: loading ? "..." : metrics.totalProspects.toLocaleString(),
+      label: "Recherches",
+      value: loading ? "..." : metrics.searchUsage.toLocaleString(),
       icon: TrendingUp,
+      color: "text-slate-500",
+    },
+    {
+      label: "Messages Envoyés",
+      value: loading ? "..." : metrics.messagesSent.toLocaleString(),
+      icon: ArrowUp,
+      color: "text-blue-600",
     },
     {
       label: "Taux d'ouverture",
       value: loading ? "..." : `${metrics.openRate.toFixed(1)}%`,
       icon: MessageCircle,
+      color: "text-violet-600",
     },
     {
       label: "Taux de clic",
       value: loading ? "..." : `${metrics.clickRate.toFixed(1)}%`,
       icon: Send,
+      color: "text-amber-500",
     },
     {
-      label: t("messagesSent"),
-      value: loading ? "..." : metrics.messagesSent.toLocaleString(),
-      icon: ArrowUp,
+      label: "Taux de réponse",
+      value: loading ? "..." : `${metrics.replyRate.toFixed(1)}%`,
+      icon: MessageCircle,
+      color: "text-emerald-500",
+    },
+    {
+      label: "Total Prospects",
+      value: loading ? "..." : metrics.totalProspects.toLocaleString(),
+      icon: Send,
+      color: "text-rose-500",
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 mb-8">
       {metricsData.map((m) => (
         <div
           key={m.label}
@@ -96,7 +130,7 @@ const MetricsCards = () => {
         >
           <div className="flex items-center justify-between mb-2">
             <h3 className="text-xs font-medium text-muted-foreground tracking-wider uppercase">{m.label}</h3>
-            <m.icon className="text-accent" size={20} />
+            <m.icon className={m.color} size={20} />
           </div>
           <div className="text-3xl font-bold text-primary mb-1">{m.value}</div>
           {/* <div className={`text-sm flex items-center gap-1 ${m.trendUp ? "text-accent" : "text-muted-foreground"}`}>

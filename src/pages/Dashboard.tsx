@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Sparkles, TrendingUp, Users, AlertCircle, Rocket } from "lucide-react";
+import { Sparkles, TrendingUp, Users, AlertCircle, Rocket, ShieldAlert } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Header from "@/components/dashboard/Header";
 import MetricsCards from "@/components/dashboard/MetricsCards";
@@ -21,7 +21,7 @@ import { ProspectGrowthChart } from "@/components/dashboard/ProspectGrowthChart"
  */
 const Dashboard = () => {
   const { t } = useLanguage();
-  const { user, profile } = useAuth();
+  const { user, profile, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   // États de l'interface
@@ -41,14 +41,13 @@ const Dashboard = () => {
       const thirtyDaysAgo = new Date();
       thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
-      const [{ data: activities }, { data: prospects }, { data: events }] = await Promise.all([
+      const [{ data: activities }, { data: prospects }, { data: events }, { data: replies }] = await Promise.all([
         supabase
           .from('activity_log')
           .select('*')
           .eq('user_id', user.id)
-          .neq('action_type', 'prospect_added')
           .order('created_at', { ascending: false })
-          .limit(4),
+          .limit(10),
         supabase
           .from('prospects')
           .select('source, created_at')
@@ -57,6 +56,12 @@ const Dashboard = () => {
           .from('email_events')
           .select('event_type, created_at')
           .eq('user_id', user.id)
+          .gte('created_at', thirtyDaysAgo.toISOString()),
+        supabase
+          .from('email_messages')
+          .select('created_at')
+          .eq('user_id', user.id)
+          .eq('direction', 'received')
           .gte('created_at', thirtyDaysAgo.toISOString())
       ]);
 
@@ -86,25 +91,62 @@ const Dashboard = () => {
                 time: timeAgo,
                 color: 'bg-purple-500'
               };
+            case 'prospect_converted':
+              return {
+                type: 'conversion',
+                text: t("recentActivityConversion", { name: activity.metadata?.name || t("prospect") }),
+                time: timeAgo,
+                color: 'bg-emerald-500'
+              };
+            case 'campaign_created':
+              return {
+                type: 'campaign',
+                text: t("campaignCreated", { name: activity.metadata?.campaign_name || t("campaign") }),
+                time: timeAgo,
+                color: 'bg-amber-500'
+              };
+            case 'email_sent':
+              return {
+                type: 'email',
+                text: t("emailSentTo", { recipient: activity.metadata?.recipient || '...' }),
+                time: timeAgo,
+                color: 'bg-cyan-500'
+              };
+            case 'login':
+              return {
+                type: 'auth',
+                text: t("loginActivity"),
+                time: timeAgo,
+                color: 'bg-slate-400'
+              };
             default:
               return {
                 type: 'other',
-                text: activity.action_type,
+                text: activity.action_type.replace('_', ' '),
                 time: timeAgo,
-                color: 'bg-gray-500'
+                color: 'bg-gray-400'
               };
           }
         });
         setRecentActivity(formattedActivities);
       }
 
-      const eventDaily: Record<string, { sent: number, opened: number }> = {};
+      const eventDaily: Record<string, { sent: number, opened: number, clicked: number, replied: number }> = {};
       if (events) {
         (events as any[]).forEach(e => {
           const dateStr = new Date(e.created_at).toISOString().split('T')[0];
-          if (!eventDaily[dateStr]) eventDaily[dateStr] = { sent: 0, opened: 0 };
+          if (!eventDaily[dateStr]) eventDaily[dateStr] = { sent: 0, opened: 0, clicked: 0, replied: 0 };
           if (e.event_type === 'sent') eventDaily[dateStr].sent++;
           if (e.event_type === 'opened') eventDaily[dateStr].opened++;
+          if (e.event_type === 'clicked') eventDaily[dateStr].clicked++;
+        });
+      }
+
+      if (replies) {
+        (replies as any[]).forEach(r => {
+          const dateStr = new Date(r.created_at).toISOString().split('T')[0];
+          if (!eventDaily[dateStr]) eventDaily[dateStr] = { sent: 0, opened: 0, clicked: 0, replied: 0 };
+          eventDaily[dateStr].replied++;
         });
       }
 
@@ -149,17 +191,21 @@ const Dashboard = () => {
           }
         });
 
-        // Convertir en tableau cumulatif pour les prospects + ajouter l'open rate quotidien
+        // Convertir en tableau cumulatif pour les prospects + ajouter les taux quotidiens
         let cumulative = 0;
         const growthArray = Object.entries(growth).map(([date, count]) => {
           cumulative += count;
-          const dayEvents = eventDaily[date] || { sent: 0, opened: 0 };
+          const dayEvents = eventDaily[date] || { sent: 0, opened: 0, clicked: 0, replied: 0 };
           const openRate = dayEvents.sent > 0 ? Math.round((dayEvents.opened / dayEvents.sent) * 100) : 0;
+          const clickRate = dayEvents.sent > 0 ? Math.round((dayEvents.clicked / dayEvents.sent) * 100) : 0;
+          const replyRate = dayEvents.sent > 0 ? Math.round((dayEvents.replied / dayEvents.sent) * 100) : 0;
           
           return { 
             date, 
             count: cumulative,
-            openRate: openRate
+            openRate,
+            clickRate,
+            replyRate
           };
         });
 
@@ -245,6 +291,40 @@ const Dashboard = () => {
           </div>
         )}
 
+        {/* Admin Dashboard Access */}
+        {isAdmin && (
+          <div className="mb-8 animate-in fade-in slide-in-from-top-4 duration-500">
+            <Card className="bg-emerald-500/5 border border-emerald-500/20 shadow-sm overflow-hidden relative group">
+              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                <Users size={80} className="rotate-12 text-emerald-500" />
+              </div>
+              <CardContent className="p-6">
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center shrink-0">
+                      <ShieldAlert className="text-emerald-500 w-6 h-6" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-bold text-foreground">Accès Administration</h3>
+                      <p className="text-muted-foreground text-sm max-w-md mt-1">
+                        Vous avez des privilèges d'administrateur. Accédez au tableau de bord pour gérer les utilisateurs, voir les statistiques globales et surveiller l'activité.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 shrink-0">
+                    <Button
+                      onClick={() => navigate("/admin")}
+                      className="bg-emerald-500 text-white hover:bg-emerald-600 shadow-md transform hover:scale-105 transition-all"
+                    >
+                      Ouvrir l'Administration
+                    </Button>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
         {/* Header Section */}
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -304,14 +384,16 @@ const Dashboard = () => {
                 </Button>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
+                <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 scrollbar-hide">
                   {recentActivity.length > 0 ? (
                     recentActivity.map((activity, idx) => (
-                      <div key={idx} className="flex items-start gap-3">
-                        <div className={`w-2 h-2 rounded-full ${activity.color} mt-2 shrink-0`} />
+                      <div key={idx} className="flex items-start gap-3 pb-3 border-b border-accent/5 last:border-0 last:pb-0">
+                        <div className={`w-2 h-2 rounded-full ${activity.color} mt-2 shrink-0 shadow-[0_0_8px_rgba(0,0,0,0.1)]`} />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-foreground">{activity.text}</p>
-                          <p className="text-xs text-muted-foreground mt-1">{activity.time}</p>
+                          <p className="text-sm text-foreground font-medium leading-tight">{activity.text}</p>
+                          <p className="text-[10px] text-muted-foreground mt-1 flex items-center gap-1">
+                             <TrendingUp className="h-3 w-3 opacity-50" /> {activity.time}
+                          </p>
                         </div>
                       </div>
                     ))
@@ -331,12 +413,14 @@ const Dashboard = () => {
                   data={topSources.map((s, i) => ({
                     ...s,
                     color: [
-                      "hsl(var(--accent))",
-                      "#3B82F6",
-                      "#8B5CF6",
-                      "#10B981",
-                      "#F59E0B"
-                    ][i % 5]
+                      "#F43F5E", // Rose
+                      "#2563EB", // Blue
+                      "#7C3AED", // Violet
+                      "#F59E0B", // Amber
+                      "#10B981", // Emerald
+                      "#06B6D4", // Cyan
+                      "#84CC16", // Lime
+                    ][i % 8]
                   }))}
                 />
 
@@ -354,18 +438,20 @@ const Dashboard = () => {
                             <div className="text-xs text-muted-foreground">{source.percentage}%</div>
                           </div>
                         </div>
-                        <div className="w-full bg-secondary rounded-full h-1.5">
+                        <div className="w-full bg-secondary rounded-full h-1.5 shadow-inner">
                           <div
-                            className="bg-accent h-1.5 rounded-full transition-all duration-300"
+                            className="h-1.5 rounded-full transition-all duration-700 ease-out"
                             style={{
                               width: `${source.percentage}%`,
                               backgroundColor: [
-                                "hsl(var(--accent))",
-                                "#3B82F6",
-                                "#8B5CF6",
+                                "#F43F5E",
+                                "#2563EB",
+                                "#7C3AED",
+                                "#F59E0B",
                                 "#10B981",
-                                "#F59E0B"
-                              ][idx % 5]
+                                "#06B6D4",
+                                "#84CC16",
+                              ][idx % 8]
                             }}
                           />
                         </div>

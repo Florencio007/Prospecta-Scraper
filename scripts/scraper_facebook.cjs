@@ -39,7 +39,29 @@ function printResult(data) {
 
 function emitResult(data) {
   printResult(data);
-  process.stdout.write(`RESULT:${JSON.stringify(data)}\n`);
+  
+  // Filtrage des champs si argFields est fourni
+  let finalData = { ...data };
+  if (requestedFields.length > 0) {
+    const allowedKeys = new Set(['source', 'source_platform', 'id', 'photo']);
+    if (requestedFields.includes('name')) allowedKeys.add('name');
+    if (requestedFields.includes('email')) { allowedKeys.add('email'); allowedKeys.add('phone'); allowedKeys.add('website'); }
+    if (requestedFields.includes('position')) { allowedKeys.add('position'); }
+    if (requestedFields.includes('company')) { allowedKeys.add('company'); }
+    if (requestedFields.includes('location')) { allowedKeys.add('address'); allowedKeys.add('location'); }
+    if (requestedFields.includes('connections')) { allowedKeys.add('followers'); }
+    if (requestedFields.includes('about')) { allowedKeys.add('about'); allowedKeys.add('headline'); }
+    
+    // activity/posts are kept by default if they were scraped based on activityType
+    allowedKeys.add('activity'); 
+    allowedKeys.add('socialLinks');
+
+    for (const key of Object.keys(finalData)) {
+       if (!allowedKeys.has(key)) delete finalData[key];
+    }
+  }
+
+  process.stdout.write(`RESULT:${JSON.stringify(finalData)}\n`);
 }
 
 function checkCancel() {
@@ -49,7 +71,8 @@ function checkCancel() {
   }
 }
 
-const [, , argEmail, argPass, argQuery, argMax, argMaxPosts, argSearchType, argActivityType] = process.argv;
+const [, , argEmail, argPass, argQuery, argMax, argMaxPosts, argSearchType, argActivityType, argFields] = process.argv;
+const requestedFields = argFields ? argFields.split(',').map(s => s.trim()).filter(Boolean) : [];
 const isPlatform = Boolean(argEmail);
 const searchTypeFromInput = (t) => (t === 'pages' || t === 'company' || (t && t.toLowerCase() === 'entreprise')) ? 'pages' : 'people';
 
@@ -357,7 +380,13 @@ async function scrapeMainProfile(page, profileUrl) {
     await sleep(500);
   } catch (_) { }
 
-  const contact = await scrapeContactInfo(page, profileUrl);
+  let contact = { email: '', phone: '', website: '' };
+  const needsContact = requestedFields.length === 0 || requestedFields.includes('email') || requestedFields.includes('phone') || requestedFields.includes('website');
+  if (needsContact) {
+    contact = await scrapeContactInfo(page, profileUrl);
+  } else {
+    emitLog('   ⏩ Infos de contact (ignorées car non demandées)');
+  }
 
   const data = await page.evaluate(() => {
     function getText(el) {
@@ -677,7 +706,14 @@ async function scrapeComments(page, profileUrl) {
 async function scrapeFullProfile(page, person) {
   emitLog(`\n📋 Scraping : ${person.name} (${person.profileUrl})`);
   const main = await scrapeMainProfile(page, person.profileUrl); await sleep(CONFIG.delay);
-  const skills = await scrapeSkills(page, person.profileUrl); await sleep(CONFIG.delay);
+  
+  const needsSkills = requestedFields.length === 0 || requestedFields.includes('skills') || requestedFields.includes('about');
+  let skills = [];
+  if (needsSkills) {
+    skills = await scrapeSkills(page, person.profileUrl); await sleep(CONFIG.delay);
+  } else {
+    emitLog('   ⏩ Compétences (ignorées)');
+  }
   let activity = [];
   let comments = [];
 

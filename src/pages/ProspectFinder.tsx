@@ -87,6 +87,16 @@ const CHANNEL_DATA_FIELDS: Record<string, { key: string; label: string; icon: st
     { key: "profileUrl", label: "URL Page Facebook", icon: "🔗" },
     { key: "category", label: "Catégorie", icon: "🏷️" },
   ],
+  google: [
+    { key: "name", label: "Nom / Raison sociale", icon: "🏢" },
+    { key: "website", label: "Site web", icon: "🌐" },
+    { key: "description", label: "Bio / Description", icon: "📝" },
+    { key: "email", label: "Email", icon: "📧" },
+    { key: "phone", label: "Téléphone", icon: "📞" },
+    { key: "linkedin", label: "LinkedIn", icon: "🔗" },
+    { key: "facebook", label: "Facebook", icon: "🔗" },
+    { key: "instagram", label: "Instagram", icon: "🔗" },
+  ],
   pappers: [
     { key: "name", label: "Raison sociale", icon: "🏢" },
     { key: "siren", label: "SIREN / SIRET", icon: "🔖" },
@@ -251,6 +261,7 @@ const ProspectFinder = () => {
     // Limites par canal (toutes à 0 par défaut)
     channelLimits: {
       google_maps: 0,
+      google: 0,
       linkedin: 0,
       pages_jaunes: 0,
       pappers: 0,
@@ -288,6 +299,7 @@ const ProspectFinder = () => {
   const channelOptions = [
     { label: t("linkedin"), value: "linkedin" },
     { label: t("googleMaps"), value: "google_maps" },
+    { label: "Google Web Search", value: "google" },
     { label: t("pagesJaunes") || "Pages Jaunes France", value: "pages_jaunes" },
     { label: t("pappers") || "Pappers France", value: "pappers" },
     { label: t("societe") || "Societe.com", value: "societe" },
@@ -414,47 +426,9 @@ const ProspectFinder = () => {
       }
 
       // ── PERSISTANCE DB : Rechercher si une recherche similaire est déjà en base ──
-      if (user && localSession.filters) {
-        try {
-          // Recréer le hash (même logique que le backend : base64 des args)
-          // Note: On simplifie ici pour la recherche initiale
-          const searchParams = {
-            keyword: localSession.filters.keyword,
-            city: localSession.filters.city,
-            country: localSession.filters.country,
-            industry: localSession.filters.industry
-          };
-          
-          // On cherche les résultats récents pour ces filtres
-          const { data: results, error } = await sb
-            .from('cached_results')
-            .select('*')
-            .order('created_at', { ascending: false })
-            .limit(100); // On récupère les 100 derniers pour l'instant
-
-          if (results && results.length > 0) {
-            // Filtrer les résultats qui correspondent aux filtres actuels (si possible via search_id)
-            // Pour l'instant on se contente de fusionner pour montrer que la persistance fonctionne
-            const dbProspects = results.map((r: any) => ({
-              ...r.data,
-              id: r.id,
-              source: r.data.source || 'cached'
-            }));
-
-            setPendingProspects(prev => {
-              const existingIds = new Set(prev.map(p => p.id || p.profileUrl || p.website));
-              const newItems = dbProspects.filter((p: any) => !existingIds.has(p.id || p.profileUrl || p.website));
-              return [...prev, ...newItems];
-            });
-            
-            if (dbProspects.length > 0) {
-              addLog(`📚 ${dbProspects.length} résultats récupérés depuis la session précédente.`, 'system');
-            }
-          }
-        } catch (err) {
-          console.error("Erreur récupération cache DB:", err);
-        }
-      }
+      // FIX: Ne pas charger aveuglément les 100 derniers résultats de la base de données
+      // car cela pollue la liste avec des données sans lien avec les filtres actuels.
+      // Le cache est désormais utilisé uniquement *lors d'une vraie recherche* via le backend.
     };
 
     loadSavedSession();
@@ -815,6 +789,36 @@ const ProspectFinder = () => {
                 });
                 setSelectedProspectIds(prev => new Set(prev).add(mapped.id));
                 addLog(`👥 Facebook: ${mapped.name}`, 'success');
+              }
+              if (d.percentage === 100 || d.error || d.done) { es.close(); resolveChannel(); }
+            };
+            es.onerror = () => { es.close(); resolveChannel(); };
+          }
+          else if (channel === "google") {
+            addLog("🔎 Recherche Google Web en cours...", "system");
+            const location = [filters.city, filters.country].filter(Boolean).join(', ');
+            const url = getApiUrl(`/api/scrape/google?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(location)}&limit=${filters.channelLimits.google}&userId=${user?.id || ""}&type=${filters.type}&fields=${encodeURIComponent(selectedFields.join(','))}`);
+            const es = new EventSource(url);
+            activeEventSources.current.push(es);
+            es.onmessage = (e) => {
+              let d;
+              try { d = JSON.parse(e.data); } catch(err) { addLog(e.data, 'process'); return; }
+              if (d.message && d.percentage === undefined && !d.error && !d.result) { addLog(d.message, 'process'); }
+              if (d.percentage !== undefined) updateChannelPct(d.percentage, d.message || "");
+              if (d.error && typeof d.error === 'string') addLog(`❌ Erreur: ${d.error}`, 'error');
+              if (d.result) {
+                const mapped = {
+                  ...d.result,
+                  id: d.result.id || `goog_${Math.random().toString(36).substr(2, 9)}`,
+                  source: "google",
+                  prospect_type: "company"
+                };
+                setPendingProspects(prev => {
+                   if (prev.some(p => p.website === mapped.website)) return prev;
+                   return [...prev, mapped];
+                });
+                setSelectedProspectIds(prev => new Set(prev).add(mapped.id));
+                addLog(`🌐 Google: ${mapped.name}`, 'success');
               }
               if (d.percentage === 100 || d.error || d.done) { es.close(); resolveChannel(); }
             };

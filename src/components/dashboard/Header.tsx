@@ -20,7 +20,7 @@ import { Button } from "@/components/ui/button";
  * Gère la navigation principale, le changement de langue, le thème sombre et le profil utilisateur.
  */
 const Header = () => {
-  const { profile, signOut } = useAuth();
+  const { profile, signOut, isAdmin } = useAuth();
   const { language, setLanguage, t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
@@ -44,7 +44,7 @@ const Header = () => {
   ];
 
   // Ajouter le lien Admin si l'utilisateur est administrateur
-  if (profile?.role === 'admin') {
+  if (isAdmin) {
     navItems.push({ label: "Admin", path: "/admin" });
   }
 

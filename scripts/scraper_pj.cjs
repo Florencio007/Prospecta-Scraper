@@ -20,7 +20,8 @@ function emitResult(data) {
 const sleep = ms => new Promise(r => setTimeout(r, ms + Math.floor(Math.random() * 400)));
 
 // ─── CONFIGURATION CLI (alignée sur les inputs du finder: q, l, limit, type) ───
-const [, , argQuery, argLocation, argMax, argType] = process.argv;
+const [, , argQuery, argLocation, argMax, argType, argFields] = process.argv;
+const requestedFields = argFields ? argFields.split(',').map(s => s.trim()).filter(Boolean) : [];
 
 // type: "entreprise" | "personne" | "tous" (finder) → mode: "entreprise" | "personne"
 const modeFromType = (t) => (t === 'personne' ? 'personne' : 'entreprise');
@@ -475,7 +476,20 @@ async function main() {
       const pct = 25 + Math.round(((i + 1) / toProcess.length) * 70);
       emitLog(`   📖 [${i + 1}/${toProcess.length}] ${card.name}`, pct);
 
-      const detail = await scrapeDetail(context, card.url);
+      // Mega-optimisation: on évite d'ouvrir la fiche détaillée si les champs requis
+      // sont déjà tous fournis par la carte de recherche globale (nom, téléphone, adresse, catégorie, note).
+      const needsDetail = requestedFields.length === 0 || requestedFields.some(f => 
+        ['email', 'website', 'description', 'about', 'horaires', 'photos', 'certifications', 'socials'].includes(f)
+      );
+
+      let detail = null;
+      if (needsDetail) {
+        detail = await scrapeDetail(context, card.url);
+      } else {
+        emitLog(`      ⏩ Profil détaillé ignoré (champs exhaustifs non cochés). Gain de temps direct.`);
+      }
+
+      let prospect = null;
       if (detail) {
         // Fusion données card + détail (détail prioritaire)
         const merged = {
@@ -486,13 +500,34 @@ async function main() {
           rating: detail.rating ?? card.rating,
           ...detail,
         };
-        const prospect = formatToProspect(merged);
-        emitLog(`      ✅ ${prospect.name} — ${prospect.phone || 'no phone'} — ${prospect.email || 'no email'}`);
-        emitResult(prospect);
+        prospect = formatToProspect(merged);
       } else {
         // Fallback : on envoie les données de la card sans détail
-        emitResult(formatToProspect(card));
+        prospect = formatToProspect(card);
       }
+
+      // Filtrer les data
+      if (requestedFields.length > 0) {
+        const allowedKeys = new Set(['id', 'source', 'source_platform', 'platform', 'mapsUrl', 'pjUrl']);
+        if (requestedFields.includes('name')) allowedKeys.add('name');
+        if (requestedFields.includes('address') || requestedFields.includes('location')) { allowedKeys.add('location'); allowedKeys.add('adresse'); allowedKeys.add('ville'); allowedKeys.add('codePostal'); allowedKeys.add('pays'); }
+        if (requestedFields.includes('phone') || requestedFields.includes('email')) { allowedKeys.add('phone'); allowedKeys.add('email'); }
+        if (requestedFields.includes('website')) allowedKeys.add('website');
+        if (requestedFields.includes('rating') || requestedFields.includes('review_count')) { allowedKeys.add('rating'); allowedKeys.add('reviewCount'); }
+        if (requestedFields.includes('category')) { allowedKeys.add('category'); allowedKeys.add('sousCategories'); }
+        if (requestedFields.includes('description') || requestedFields.includes('about')) { allowedKeys.add('description'); allowedKeys.add('slogan'); }
+        if (requestedFields.includes('horaires')) { allowedKeys.add('horaires'); allowedKeys.add('horairesDetailles'); }
+        
+        allowedKeys.add('contractDetails');
+        allowedKeys.add('aiIntelligence');
+
+        for (const key of Object.keys(prospect)) {
+            if (!allowedKeys.has(key)) delete prospect[key];
+        }
+      }
+
+      emitLog(`      ✅ ${prospect.name} — ${prospect.phone || 'no phone'}`);
+      emitResult(prospect);
 
       await sleep(CONFIG.delay);
     }

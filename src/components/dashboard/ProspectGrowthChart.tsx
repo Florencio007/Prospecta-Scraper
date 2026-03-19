@@ -7,6 +7,8 @@ interface GrowthData {
   date: string;
   count: number;
   openRate: number;
+  clickRate: number;
+  replyRate: number;
 }
 
 interface ProspectGrowthChartProps {
@@ -18,12 +20,20 @@ export function ProspectGrowthChart({ data }: ProspectGrowthChartProps) {
 
   const chartConfig = {
     count: {
-      label: t("prospects"),
-      color: "hsl(var(--accent))",
+      label: "Prospects",
+      color: "#F43F5E", // Rose
     },
     openRate: {
       label: "Taux d'ouverture (%)",
-      color: "#10b981",
+      color: "#7C3AED", // Violet
+    },
+    clickRate: {
+      label: "Taux de clic (%)",
+      color: "#F59E0B", // Amber
+    },
+    replyRate: {
+      label: "Taux de réponse (%)",
+      color: "#10B981", // Emerald
     }
   };
 
@@ -49,26 +59,26 @@ export function ProspectGrowthChart({ data }: ProspectGrowthChartProps) {
               <linearGradient id="fillCount" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="hsl(var(--accent))"
+                  stopColor="#F43F5E"
                   stopOpacity={0.3}
                 />
                 <stop
                   offset="95%"
-                  stopColor="hsl(var(--accent))"
-                  stopOpacity={0}
+                  stopColor="#F43F5E"
+                  stopOpacity={0.1}
                 />
               </linearGradient>
               <linearGradient id="fillOpenRate" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="#10b981"
-                  stopOpacity={0.2}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="#10b981"
-                  stopOpacity={0}
-                />
+                <stop offset="5%" stopColor="#7C3AED" stopOpacity={0.2} />
+                <stop offset="95%" stopColor="#7C3AED" stopOpacity={0} />
+              </linearGradient>
+              <linearGradient id="fillClickRate" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#F59E0B" stopOpacity={0.1} />
+                <stop offset="95%" stopColor="#F59E0B" stopOpacity={0} />
+              </linearGradient>
+              <linearGradient id="fillReplyRate" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#10B981" stopOpacity={0.1} />
+                <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} strokeDasharray="3 3" opacity={0.1} />
@@ -95,11 +105,12 @@ export function ProspectGrowthChart({ data }: ProspectGrowthChartProps) {
             <Area
               yAxisId="left"
               dataKey="count"
-              type="natural"
+              type="monotone"
               fill="url(#fillCount)"
               fillOpacity={0.4}
-              stroke="hsl(var(--accent))"
+              stroke="#F43F5E"
               strokeWidth={2}
+              stackId="a"
             />
             <Area
               yAxisId="right"
@@ -107,9 +118,27 @@ export function ProspectGrowthChart({ data }: ProspectGrowthChartProps) {
               type="monotone"
               fill="url(#fillOpenRate)"
               fillOpacity={0.2}
-              stroke="#10b981"
+              stroke="#7C3AED"
               strokeWidth={1.5}
               strokeDasharray="4 4"
+            />
+            <Area
+              yAxisId="right"
+              dataKey="clickRate"
+              type="monotone"
+              fill="url(#fillClickRate)"
+              fillOpacity={0.1}
+              stroke="#F59E0B"
+              strokeWidth={1.5}
+            />
+            <Area
+              yAxisId="right"
+              dataKey="replyRate"
+              type="monotone"
+              fill="url(#fillReplyRate)"
+              fillOpacity={0.1}
+              stroke="#10B981"
+              strokeWidth={2}
             />
           </AreaChart>
         </ChartContainer>

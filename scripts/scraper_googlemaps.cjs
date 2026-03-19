@@ -17,6 +17,8 @@ const LOCATION = process.argv[3] || 'Antananarivo';
 const MAX_RESULTS = parseInt(process.argv[4] || '20', 10);
 const USER_ID = process.argv[5] || null;
 const TYPE = process.argv[6] || 'tous';
+const FIELDS_ARG = process.argv[7] || '';
+const requestedFields = FIELDS_ARG ? FIELDS_ARG.split(',').map(s => s.trim()).filter(Boolean) : [];
 
 const CONFIG = {
   searchQuery: `${QUERY} ${LOCATION}`.trim(),
@@ -113,7 +115,7 @@ async function scrollList(page) {
 }
 
 // ── Récupérer les liens de toutes les cartes dans la liste ───────────────────
-async function getHotelLinks(page) {
+async function getHotelLinks(page, limit) {
   try {
     const selector = page.locator('[role="feed"] .Nv2PK a').first();
     await selector.waitFor({ state: 'attached', timeout: 15000 });
@@ -121,25 +123,33 @@ async function getHotelLinks(page) {
     emitLog("   ⚠️ Feed non trouvé ou timeout.");
   }
 
-  // Scroll several times to load a maximum of results
-  for (let i = 0; i < 6; i++) {
+  const getLinks = async () => {
+    return await page.evaluate(() => {
+      const cards = document.querySelectorAll('[role="feed"] .Nv2PK a[href*="/maps/place/"]');
+      const seen = new Set();
+      const result = [];
+      cards.forEach(a => {
+        const clean = a.href.split('?')[0];
+        if (!seen.has(clean)) { seen.add(clean); result.push(a.href); }
+      });
+      return result;
+    });
+  };
+
+  // Scroll intelligently to load until limit is reached
+  let currentLinks = await getLinks();
+  let attempts = 0;
+  const maxAttempts = limit > 20 ? Math.ceil(limit / 5) : 3;
+
+  while (currentLinks.length < limit && attempts < maxAttempts) {
     await scrollList(page);
-    await sleep(1200);
+    await sleep(1500);
+    currentLinks = await getLinks();
+    attempts++;
   }
 
-  const links = await page.evaluate(() => {
-    const cards = document.querySelectorAll('[role="feed"] .Nv2PK a[href*="/maps/place/"]');
-    const seen = new Set();
-    const result = [];
-    cards.forEach(a => {
-      const clean = a.href.split('?')[0];
-      if (!seen.has(clean)) { seen.add(clean); result.push(a.href); }
-    });
-    return result;
-  });
-
-  emitLog(`🔗 ${links.length} liens trouvés dans la liste`);
-  return links;
+  emitLog(`🔗 ${currentLinks.length} liens trouvés dans la liste`);
+  return currentLinks.slice(0, limit);
 }
 
 // ── Scraper les détails d'une fiche hôtel ────────────────────────────────────
@@ -178,13 +188,16 @@ async function scrapeHotelDetail(page, url) {
   let aboutData = { amenities: [], description: '', plusCode: '' };
   let reviews = [];
 
+  const needsAbout = requestedFields.length === 0 || requestedFields.includes('description') || requestedFields.includes('about');
+  const needsReviews = requestedFields.length === 0;
+
   const tabs = await page.$$('.buttonText, .m6QErb button, [role="tab"]');
   for (const tab of tabs) {
     try {
       const text = await tab.textContent();
 
       // ── Onglet "À propos" ──────────────────────────────────────────────────
-      if (text && (text.includes('À propos') || text.includes('About'))) {
+      if (needsAbout && text && (text.includes('À propos') || text.includes('About'))) {
         await tab.click();
         await sleep(2000);
 
@@ -242,7 +255,7 @@ async function scrapeHotelDetail(page, url) {
       }
 
       // ── Onglet "Avis" ──────────────────────────────────────────────────────
-      if (text && (text.includes('Avis') || text.includes('Reviews'))) {
+      if (needsReviews && text && (text.includes('Avis') || text.includes('Reviews'))) {
         await tab.click();
         await sleep(2000);
 
@@ -364,11 +377,11 @@ async function main() {
       }
     } catch (_) { }
 
-    // 3. Collecter les liens
+    // 3. Collecter les liens avec limite intelligente
     emitLog(`🛰️ Recherche de "${CONFIG.searchQuery}" sur Maps...`, 10);
-    const links = await getHotelLinks(page);
-    const toScrape = links.slice(0, CONFIG.maxHotels);
-    emitLog(`📋 ${links.length} résultats trouvés, analyse détaillée de ${toScrape.length} fiches...`, 30);
+    const links = await getHotelLinks(page, CONFIG.maxHotels);
+    const toScrape = links;
+    emitLog(`📋 ${links.length} résultats trouvés prèta être analysés...`, 30);
 
     // 4. Visiter chaque fiche
     const hotels = [];
@@ -417,6 +430,24 @@ async function main() {
             },
           },
         };
+
+        if (requestedFields.length > 0) {
+          const allowedKeys = new Set(['source', 'source_platform', 'id', 'platform', 'mapsUrl']);
+          if (requestedFields.includes('name')) allowedKeys.add('name');
+          if (requestedFields.includes('address') || requestedFields.includes('location')) { allowedKeys.add('address'); allowedKeys.add('gps'); }
+          if (requestedFields.includes('phone') || requestedFields.includes('email')) { allowedKeys.add('phone'); }
+          if (requestedFields.includes('website')) allowedKeys.add('website');
+          if (requestedFields.includes('rating')) allowedKeys.add('rating');
+          if (requestedFields.includes('review_count')) allowedKeys.add('totalScore');
+          if (requestedFields.includes('description') || requestedFields.includes('about')) { allowedKeys.add('about'); allowedKeys.add('category'); }
+          
+          allowedKeys.add('contractDetails');
+          allowedKeys.add('aiIntelligence');
+
+          for (const key of Object.keys(payload)) {
+             if (!allowedKeys.has(key)) delete payload[key];
+          }
+        }
 
         hotels.push(payload);
         emitResult(payload);

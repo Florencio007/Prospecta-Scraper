@@ -23,6 +23,7 @@ export interface AuthContextType {
   user: User | null;
   profile: Profile | null;
   loading: boolean;
+  isAdmin: boolean;
   signOut: () => Promise<void>;
   refreshProfile: () => Promise<void>;
 }
@@ -32,6 +33,7 @@ const AuthContext = createContext<AuthContextType>({
   user: null,
   profile: null,
   loading: true,
+  isAdmin: false,
   signOut: async () => { },
   refreshProfile: async () => { },
 });
@@ -188,9 +190,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     user: session?.user ?? null,
     profile,
     loading,
+    isAdmin: profile?.role?.toLowerCase() === 'admin',
     signOut,
     refreshProfile,
   }), [session, profile, loading]);
+
+  useEffect(() => {
+    if (profile) {
+      console.log(`[Auth] User: ${profile.email}, Role: ${profile.role}, isAdmin: ${profile.role?.toLowerCase() === 'admin'}`);
+    }
+  }, [profile]);
 
   return (
     <AuthContext.Provider value={value}>

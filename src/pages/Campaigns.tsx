@@ -214,9 +214,9 @@ const Campaigns = () => {
                     <div className="h-[300px] w-full">
                       <ChartContainer
                         config={{
-                          sent: { label: "Envoyés", color: "hsl(var(--accent))" },
-                          opened: { label: "Ouverts", color: "#3B82F6" },
-                          clicked: { label: "Cliqués", color: "#10B981" },
+                          sent: { label: "Envoyés", color: "#2563EB" },
+                          opened: { label: "Ouverts", color: "#7C3AED" },
+                          clicked: { label: "Cliqués", color: "#F59E0B" },
                         }}
                         className="h-full w-full"
                       >
@@ -232,9 +232,9 @@ const Campaigns = () => {
                           <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 12 }} />
                           <ChartTooltip content={<ChartTooltipContent />} />
                           <Legend iconType="circle" />
-                          <Bar dataKey="sent_count" name="Envoyés" fill="hsl(var(--accent))" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                          <Bar dataKey="opened_count" name="Ouverts" fill="#3B82F6" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                          <Bar dataKey="clicked_count" name="Cliqués" fill="#10B981" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                          <Bar dataKey="sent_count" name="Envoyés" fill="#2563EB" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                          <Bar dataKey="opened_count" name="Ouverts" fill="#7C3AED" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                          <Bar dataKey="clicked_count" name="Cliqués" fill="#F59E0B" radius={[4, 4, 0, 0]} maxBarSize={40} />
                         </BarChart>
                       </ChartContainer>
                     </div>
