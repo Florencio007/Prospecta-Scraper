@@ -51,9 +51,9 @@ const app = express();
 const PORT = process.env.PORT || 7842;
 
 // Configuration CORS pour l'agent local
-// L'agent tourne sur localhost — on autorise toutes les origines (y compris prospecta.soamibango.com)
+// L'agent tourne sur localhost — on autorise toutes les origines (y compris prospecta-scraper.vercel.app)
 const ALLOWED_ORIGINS = [
-  'https://prospecta.soamibango.com',
+  'https://prospecta-scraper.vercel.app',
   'http://localhost:5173',
   'http://localhost:3000',
   'http://localhost:4173',
@@ -297,14 +297,14 @@ function wrapInBrandedTemplate(content, serverPublicUrl, recipientId) {
 <body>
   <div class="wrapper">
     <div class="header">
-      <img src="https://prospecta.soamibango.com/logo_prospecta_claire.png" alt="Prospecta" />
+      <img src="https://prospecta-scraper.vercel.app/logo_prospecta_claire.png" alt="Prospecta" />
     </div>
     <div class="body">
       ${content}
     </div>
     <div class="footer">
       <p class="tagline">Prospecta — Trouvez vos futurs clients sur tous les réseaux.</p>
-      <p>© 2026 Varatraza Tech · <a href="https://prospecta.soamibango.com">prospecta.soamibango.com</a></p>
+      <p>© 2026 Varatraza Tech · <a href="https://prospecta-scraper.vercel.app">prospecta-scraper.vercel.app</a></p>
       ${recipientId ? `<div style="margin-top: 12px;"><a href="${serverPublicUrl}/api/email/unsubscribe/${recipientId}">Se désabonner</a></div>` : ''}
     </div>
   </div>
@@ -861,7 +861,7 @@ CONSIGNES :
         'Authorization': `Bearer ${openaiKey}`,
         // OpenRouter specific headers
         ...(baseUrl.includes('openrouter.ai') ? {
-          'HTTP-Referer': 'https://prospecta.soamibango.com',
+          'HTTP-Referer': 'https://prospecta-scraper.vercel.app',
           'X-Title': 'Prospecta AI',
         } : {})
       },

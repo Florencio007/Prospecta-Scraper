@@ -140,8 +140,8 @@ VITE_SUPABASE_ANON_KEY=eyJxxx...
 
 ```
 Allowed Origins:
-- https://prospecta.soamibango.com
-- https://www.prospecta.soamibango.com
+- https://prospecta-scraper.vercel.app
+- https://www.prospecta-scraper.vercel.app
 - http://localhost:8080 (développement)
 ```
 

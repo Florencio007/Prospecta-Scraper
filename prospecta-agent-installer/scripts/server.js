@@ -35,13 +35,13 @@ const CANCEL_FILE = path.join(path.dirname(__dirname), 'cancel_scrape.lock');
 function setCORSHeaders(req, res) {
   const origin = req.headers.origin;
   const allowedOrigins = [
-    'https://prospecta.soamibango.com',
+    'https://prospecta-scraper.vercel.app',
     'http://localhost:5173',
     'http://localhost:3000',
     'http://127.0.0.1:5173'
   ];
 
-  if (origin && (allowedOrigins.includes(origin) || origin.includes('prospecta.soamibango.com'))) {
+  if (origin && (allowedOrigins.includes(origin) || origin.includes('prospecta-scraper.vercel.app'))) {
     res.setHeader('Access-Control-Allow-Origin', origin);
   } else {
     res.setHeader('Access-Control-Allow-Origin', '*');

@@ -161,7 +161,7 @@ Structure JSON:
         'Authorization': `Bearer ${actualKey}`,
         // OpenRouter specific headers
         ...(baseUrl.includes('openrouter.ai') ? {
-          'HTTP-Referer': 'https://prospecta.soamibango.com',
+          'HTTP-Referer': 'https://prospecta-scraper.vercel.app',
           'X-Title': 'Prospecta AI',
         } : {})
       },

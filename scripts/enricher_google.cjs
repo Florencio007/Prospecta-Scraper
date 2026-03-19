@@ -428,7 +428,7 @@ Renvoie UNIQUEMENT un JSON : { "phone": "...", "email": "...", "score_global": 0
       'Authorization': `Bearer ${actualKey}`,
       // OpenRouter specific headers
       ...(baseUrl.includes('openrouter.ai') ? {
-        'HTTP-Referer': 'https://prospecta.soamibango.com',
+        'HTTP-Referer': 'https://prospecta-scraper.vercel.app',
         'X-Title': 'Prospecta AI',
       } : {})
     },

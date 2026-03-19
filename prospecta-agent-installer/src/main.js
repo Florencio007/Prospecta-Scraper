@@ -582,7 +582,7 @@ ipcMain.handle('open-logs', () => {
   const logToOpen = fs.existsSync(LOG_FILE) ? LOG_FILE : DEBUG_LOG;
   if (fs.existsSync(logToOpen)) shell.openPath(logToOpen);
 });
-ipcMain.handle('open-prospecta', () => shell.openExternal('https://prospecta.soamibango.com/'));
+ipcMain.handle('open-prospecta', () => shell.openExternal('https://prospecta-scraper.vercel.app/'));
 
 // ── Lifecycle ─────────────────────────────────────────────────────────────────
 app.whenReady().then(async () => {
