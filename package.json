@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "start": "node server/app.js",
     "backend": "node server/app.js",
     "tunnel": "node server/tunnel.js",
     "backend:tunnel": "npx concurrently \"npm run backend\" \"npm run tunnel\"",
