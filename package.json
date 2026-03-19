@@ -4,12 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "engines": {
-    "node": ">=18 <=20",
+    "node": ">=18 <=19",
     "npm": ">=9"
   },
   "scripts": {
     "dev": "vite",
-    "start": "node server/app.js",
+    "start": "node server.js",
     "backend": "node server/app.js",
     "tunnel": "node server/tunnel.js",
     "backend:tunnel": "npx concurrently \"npm run backend\" \"npm run tunnel\"",
