@@ -32,7 +32,7 @@ export const useUsage = () => {
                 console.warn("[Usage] Could not fetch profile:", profileError.message);
             }
 
-            const profile = profiles?.[0] || null;
+            const profile = (profiles as any[])?.[0] || null;
 
             // Count actual prospects
             const { count, error: countError } = await supabase

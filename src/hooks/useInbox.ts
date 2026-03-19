@@ -102,8 +102,8 @@ export function useInbox() {
         .map((m: InboxMessage) => m.id);
 
       if (unreadIds.length > 0) {
-        await supabase
-          .from("email_messages")
+        await (supabase
+          .from("email_messages") as any)
           .update({ is_read: true, read_at: new Date().toISOString() })
           .in("id", unreadIds);
 
@@ -133,8 +133,8 @@ export function useInbox() {
       const thread = threads.find(t => t.id === threadId);
       if (!thread) throw new Error("Fil introuvable");
 
-      const { data: message, error } = await supabase
-        .from("email_messages")
+      const { data: message, error } = await (supabase
+        .from("email_messages") as any)
         .insert({
           thread_id:    threadId,
           user_id:      user.id,
@@ -157,7 +157,7 @@ export function useInbox() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          messageId: message.id,
+          messageId: (message as any)?.id,
           threadId,
           body,
           userId: user.id,
@@ -202,8 +202,8 @@ export function useInbox() {
       const { draft } = await response.json();
 
       // Met à jour le statut IA du message
-      await supabase
-        .from("email_messages")
+      await (supabase
+        .from("email_messages") as any)
         .update({ ai_status: "draft_ready", ai_draft_body: draft })
         .eq("id", messageId);
 
@@ -225,8 +225,8 @@ export function useInbox() {
   // ── Rejeter un draft IA ────────────────────────────────────────────────────
 
   const dismissAIDraft = useCallback(async (messageId: string) => {
-    await supabase
-      .from("email_messages")
+    await (supabase
+      .from("email_messages") as any)
       .update({ ai_status: "dismissed" })
       .eq("id", messageId);
 
@@ -238,8 +238,8 @@ export function useInbox() {
   // ── Archiver un fil ────────────────────────────────────────────────────────
 
   const archiveThread = useCallback(async (threadId: string) => {
-    await supabase
-      .from("email_threads")
+    await (supabase
+      .from("email_threads") as any)
       .update({ is_archived: true })
       .eq("id", threadId);
 
@@ -254,8 +254,8 @@ export function useInbox() {
   // ── Mettre en favori ───────────────────────────────────────────────────────
 
   const toggleStar = useCallback(async (threadId: string, current: boolean) => {
-    await supabase
-      .from("email_threads")
+    await (supabase
+      .from("email_threads") as any)
       .update({ is_starred: !current })
       .eq("id", threadId);
 

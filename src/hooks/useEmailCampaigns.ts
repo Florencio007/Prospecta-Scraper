@@ -267,8 +267,9 @@ export function useEmailCampaigns() {
         let errors = 0;
 
         await updateCampaign(campaignId, { status: 'active' });
+        const recipientsList = (recipients as any[]) || [];
 
-        for (const recipient of recipients) {
+        for (const recipient of recipientsList) {
             const htmlContent = personalizeTemplate(campaign.body_html || '', {
                 prenom: recipient.first_name,
                 nom: recipient.last_name,
@@ -314,8 +315,8 @@ export function useEmailCampaigns() {
 
                     if (!thread) {
                         // Create new thread
-                        const { data: newThread, error: tErr } = await supabase
-                            .from('email_threads')
+                        const { data: newThread, error: tErr } = await (supabase
+                            .from('email_threads') as any)
                             .insert({
                                 user_id: user.id,
                                 prospect_id: recipient.prospect_id,
@@ -330,8 +331,8 @@ export function useEmailCampaigns() {
 
                     if (thread) {
                         // 2. Insert the sent message into email_messages
-                        await supabase.from('email_messages').insert({
-                            thread_id: thread.id,
+                        await (supabase.from('email_messages') as any).insert({
+                            thread_id: (thread as any).id,
                             user_id: user.id,
                             direction: 'sent',
                             from_email: campaign.from_email,
@@ -376,10 +377,10 @@ export function useEmailCampaigns() {
                 }
             }
 
-            if (onProgress) onProgress(sentToday, recipients.length);
+            if (onProgress) onProgress(sentToday, recipientsList.length);
 
             // Throttle entre chaque email si ce n'est pas le dernier
-            if (sentToday + errors < recipients.length) {
+            if (sentToday + errors < recipientsList.length) {
                 await randomThrottle(campaign.throttle_min_seconds, campaign.throttle_max_seconds);
             }
         }
@@ -389,7 +390,7 @@ export function useEmailCampaigns() {
             sent_today: campaign.sent_today + sentToday,
             sent_count: campaign.sent_count + sentToday,
             last_sent_at: new Date().toISOString(),
-            status: (sentToday + errors === recipients.length) && (recipients.length < remainingToday) ? 'completed' : 'active'
+            status: (sentToday + errors === recipientsList.length) && (recipientsList.length < remainingToday) ? 'completed' : 'active'
         });
 
         // Simuler le passage au jour suivant (dans une base réelle ce serait un CRON job minuit)
