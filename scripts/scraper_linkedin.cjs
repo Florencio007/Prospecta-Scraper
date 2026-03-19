@@ -35,10 +35,35 @@ function printResult(data) {
 
 function emitResult(data) {
   printResult(data);
-  process.stdout.write(`RESULT:${JSON.stringify(data)}\n`);
+  
+  // Filtrage des champs si argFields est fourni
+  let finalData = { ...data };
+  if (requestedFields.length > 0 && (!data.source || data.source !== 'linkedin_company')) {
+    const allowedKeys = new Set(['source', 'profileUrl', 'id', 'photo']);
+    if (requestedFields.includes('name')) allowedKeys.add('name');
+    if (requestedFields.includes('email')) { allowedKeys.add('email'); allowedKeys.add('phone'); allowedKeys.add('website'); }
+    if (requestedFields.includes('position') || requestedFields.includes('company')) {
+       allowedKeys.add('headline');
+       allowedKeys.add('experiences');
+    }
+    if (requestedFields.includes('location')) allowedKeys.add('location');
+    if (requestedFields.includes('connections')) { allowedKeys.add('connections'); allowedKeys.add('followers'); }
+    if (requestedFields.includes('about')) allowedKeys.add('about');
+    
+    // activity/posts should be kept only if activityType is explicit, but anyway let's allow tests
+    allowedKeys.add('activity'); 
+    allowedKeys.add('socialLinks');
+
+    for (const key of Object.keys(finalData)) {
+       if (!allowedKeys.has(key)) delete finalData[key];
+    }
+  }
+
+  process.stdout.write(`RESULT:${JSON.stringify(finalData)}\n`);
 }
 
-const [, , argEmail, argPass, argQuery, argMax, argMaxPosts, argSearchType, argActivityType] = process.argv;
+const [, , argEmail, argPass, argQuery, argMax, argMaxPosts, argSearchType, argActivityType, argFields] = process.argv;
+const requestedFields = argFields ? argFields.split(',').map(s => s.trim()).filter(Boolean) : [];
 
 // Type finder: "entreprise" | "personne" | "tous" → searchType: "companies" | "people"
 const searchTypeFromInput = (t) => (t === 'companies' || t === 'company' || (t && t.toLowerCase() === 'entreprise')) ? 'companies' : 'people';
@@ -394,13 +419,14 @@ async function scrapeMainProfile(page, profileUrl) {
     let location = '';
     document.querySelectorAll('.pv-text-details__left-panel span, .mt2 span, .ph5 span').forEach(sp => { const t = sp.textContent?.trim() || ''; if (!location && t.length > 5 && !t.match(/^[·•\d]/) && !t.includes('relation') && !t.includes('niveau') && !t.includes('Founder') && !t.includes('CEO')) location = t; });
     let followers = ''; const follMatch = document.body.innerText.match(/([\d\s,]+)\s*abonnés?/i); if (follMatch) followers = follMatch[0].trim();
+    let connections = ''; const connMatch = document.body.innerText.match(/([\d\s,\+]+)\s*(relations?|connections?)/i); if (connMatch) connections = connMatch[0].trim();
     let about = ''; const aboutSection = document.querySelector('#about')?.closest('section'); if (aboutSection) { const clone = aboutSection.cloneNode(true); clone.querySelectorAll('button').forEach(b => b.remove()); about = getText(clone).substring(0, 3000); }
     const experiences = []; const expSection = document.querySelector('#experience')?.closest('section');
     if (expSection) { expSection.querySelectorAll('ul > li.artdeco-list__item').forEach(item => { const boldSpans = Array.from(item.querySelectorAll('.t-bold span[aria-hidden="true"]')).map(s => s.textContent.trim()).filter(Boolean); const normSpans = Array.from(item.querySelectorAll('.t-14.t-normal:not(.t-black--light) span[aria-hidden="true"]')).map(s => s.textContent.trim()).filter(Boolean); const lightSpans = Array.from(item.querySelectorAll('.t-14.t-normal.t-black--light span[aria-hidden="true"]')).map(s => s.textContent.trim()).filter(Boolean); let role = '', company = '', duration = '', loc = ''; if (boldSpans.length >= 2) { company = boldSpans[0]; role = boldSpans[1]; duration = lightSpans[0] || ''; loc = lightSpans[1] || ''; } else { role = boldSpans[0] || ''; company = normSpans[0] || ''; duration = lightSpans[0] || ''; loc = lightSpans[1] || ''; } if (role && role.length < 150 && !role.match(/^\d/) && !role.includes('Découvrir')) experiences.push({ role, company, duration, location: loc, description: '' }); }); }
     const education = []; const eduSection = document.querySelector('#education')?.closest('section'); if (eduSection) { eduSection.querySelectorAll('ul > li.artdeco-list__item').forEach(item => { const school = item.querySelector('.t-bold span[aria-hidden="true"]')?.textContent?.trim() || ''; const degree = item.querySelector('.t-14.t-normal:not(.t-black--light) span[aria-hidden="true"]')?.textContent?.trim() || ''; const years = item.querySelector('.t-14.t-normal.t-black--light span[aria-hidden="true"]')?.textContent?.trim() || ''; if (school) education.push({ school, degree, years }); }); }
     const certifications = []; const certSection = document.querySelector('#licenses_and_certifications, #certifications')?.closest('section'); if (certSection) { certSection.querySelectorAll('ul > li.artdeco-list__item').forEach(item => { const name = item.querySelector('.t-bold span[aria-hidden="true"]')?.textContent?.trim() || ''; const issuer = item.querySelector('.t-14.t-normal:not(.t-black--light) span[aria-hidden="true"]')?.textContent?.trim() || ''; const date = item.querySelector('.t-14.t-normal.t-black--light span[aria-hidden="true"]')?.textContent?.trim() || ''; if (name) certifications.push({ name, issuer, date }); }); }
     const recommendations = []; const recSection = document.querySelector('#recommendations')?.closest('section'); if (recSection) { recSection.querySelectorAll('ul > li').forEach(item => { const from = item.querySelector('.t-bold span[aria-hidden="true"]')?.textContent?.trim() || ''; const role = item.querySelector('.t-14.t-normal span[aria-hidden="true"]')?.textContent?.trim() || ''; if (from && !from.match(/^\d+e/)) recommendations.push({ from, role, text: '' }); }); }
-    return { name, headline, photo, location, followers, about, experiences, education, certifications, recommendations };
+    return { name, headline, photo, location, followers, connections, about, experiences, education, certifications, recommendations };
   });
 
   if (data.photo) emitLog(`   🖼️  Photo: ${data.photo.substring(0, 80)}...`);

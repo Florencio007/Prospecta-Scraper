@@ -625,7 +625,7 @@ setupScraperEndpoint(app, '/api/scrape/pappers', 'scraper_pappers.cjs', (req) =>
 
 // LinkedIn
 app.get('/api/scrape/linkedin', (req, res) => {
-  const { email, password, q, maxProfiles, maxPosts, type, activityType } = req.query;
+  const { email, password, q, maxProfiles, maxPosts, type, activityType, fields } = req.query;
   if (!email || !password) {
     return res.status(400).json({ error: 'Email et mot de passe LinkedIn requis.' });
   }
@@ -636,7 +636,7 @@ app.get('/api/scrape/linkedin', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
 
   const scriptPath = path.resolve(rootDir, 'scripts', 'scraper_linkedin.cjs');
-  const child = spawn('node', [scriptPath, email, password, q || '', maxProfiles || '10', maxPosts || '30', type || 'tous', activityType || 'all']);
+  const child = spawn('node', [scriptPath, email, password, q || '', maxProfiles || '10', maxPosts || '30', type || 'tous', activityType || 'all', fields || '']);
 
   child.stdout.on('data', (data) => {
     data.toString().split('\n').forEach(line => {
