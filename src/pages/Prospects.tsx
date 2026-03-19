@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useLanguage } from "@/hooks/useLanguage";
+import { useApiKeys } from "@/hooks/useApiKeys";
 import { logProspectAdded } from "@/lib/activityLogger";
 import {
   Table,
@@ -60,6 +61,7 @@ const Prospects = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const { t } = useLanguage();
+  const { getKeyByProvider } = useApiKeys();
   const navigate = useNavigate();
   const [prospects, setProspects] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -360,8 +362,19 @@ const Prospects = () => {
     
     let openai_api_key = "";
     try {
-      const { data: profile } = (await supabase.from("profiles").select("openai_api_key").eq("id", user?.id).single()) as any;
-      if (!profile || !profile.openai_api_key) {
+      // Priorité 1 : Nouvelle table user_api_keys (supporte JSON/OpenRouter/OpenAI/etc.)
+      const newKey = await getKeyByProvider('openai');
+      if (newKey) {
+        openai_api_key = newKey;
+      } else {
+        // Priorité 2 : Fallback legacy profiles table
+        const { data: profile } = (await supabase.from("profiles").select("openai_api_key").eq("id", user?.id).single()) as any;
+        if (profile?.openai_api_key) {
+            openai_api_key = profile.openai_api_key;
+        }
+      }
+
+      if (!openai_api_key) {
         toast({
           title: "Clé OpenAI manquante ⚠️",
           description: "Veuillez configurer votre clé API dans les Paramètres pour utiliser l'enrichissement.",
@@ -369,7 +382,6 @@ const Prospects = () => {
         });
         return;
       }
-      openai_api_key = profile.openai_api_key;
     } catch(e) { console.warn("Failed checking OpenAI API key:", e); }
 
     toast({

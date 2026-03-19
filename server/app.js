@@ -101,7 +101,39 @@ function setupScraperEndpoint(app, endpoint, scriptName, getArgs) {
     const args = getArgs(req);
     const scriptPath = path.resolve(rootDir, 'scripts', scriptName);
 
-    console.log(`[Express API] Starting ${scriptName} with args:`, args);
+    // ── GESTION DE LA PERSISTANCE (DB CACHE) ──────────────────────────────────
+    // On génère un hash unique pour cette recherche basée sur ses arguments
+    // pour pouvoir la retrouver plus tard.
+    const queryHash = Buffer.from(JSON.stringify(args)).toString('base64').substring(0, 64);
+    const supabase = getSupabase();
+
+    const startSearchInDb = async () => {
+      if (!supabase) return;
+      try {
+        console.log(`[DB] Upserting search: ${queryHash}`);
+        const { data: search, error } = await supabase.from('cached_searches').upsert([{
+          query_hash: queryHash,
+          keyword: req.query.q || req.query.keyword || '',
+          city: req.query.l || '',
+          country: req.query.country || '',
+          industry: req.query.industry || '',
+          type: req.query.type || 'tous',
+          updated_at: new Date()
+        }], { onConflict: 'query_hash' }).select().single();
+        
+        if (error) console.error('[DB] Erreur upsert search:', error.message);
+        else console.log('[DB] Search Record Ready:', search?.id);
+        
+        return search;
+      } catch (e) {
+        console.error('[DB] Erreur initialisation recherche:', e.message);
+      }
+    };
+
+    let dbSearchRecord = null;
+    startSearchInDb().then(s => dbSearchRecord = s);
+
+    console.log(`[Express API] Starting ${scriptName} [Hash: ${queryHash}] with args:`, args);
 
     res.writeHead(200, {
       'Content-Type': 'text/event-stream',
@@ -119,7 +151,18 @@ function setupScraperEndpoint(app, endpoint, scriptName, getArgs) {
         if (line.startsWith('PROGRESS:')) {
           res.write(`data: ${line.substring(9)}\n\n`);
         } else if (line.startsWith('RESULT:')) {
-          res.write(`data: ${JSON.stringify({ result: JSON.parse(line.substring(7)) })}\n\n`);
+          const resultData = JSON.parse(line.substring(7));
+          res.write(`data: ${JSON.stringify({ result: resultData })}\n\n`);
+
+          // Sauvegarde en base de données pour la persistance
+          if (supabase && queryHash) {
+             supabase.from('cached_results').insert([{
+               search_id: dbSearchRecord?.id, // Optionnel si search_id n'est pas encore prêt, on peut utiliser query_hash si on modifie la table
+               data: resultData
+             }]).then(({ error }) => {
+               if (error) console.error('[DB] Erreur sauvegarde résultat:', error.message);
+             });
+          }
         } else if (line.startsWith('ERROR:')) {
           res.write(`data: ${JSON.stringify({ error: line.substring(6).trim() })}\n\n`);
         }
@@ -132,14 +175,18 @@ function setupScraperEndpoint(app, endpoint, scriptName, getArgs) {
 
     // ── Finalisation à la fermeture du processus enfant ──────────────────────
     child.on('close', (code) => {
-      console.log(`[Express API] ${scriptName} finished with code ${code}`);
+      console.log(`[Express API] ${scriptName} [Hash: ${queryHash}] finished with code ${code}`);
+      
+      // Marquer comme terminé (facultatif car on checke les résultats)
+      if (supabase && dbSearchRecord) {
+        supabase.from('cached_searches').update({ updated_at: new Date() }).eq('id', dbSearchRecord.id).then();
+      }
+
       if (fs.existsSync(lockPath)) {
         try { fs.unlinkSync(lockPath); } catch (e) { }
       }
 
       // ── GMaps : lit last_gmaps_results.json ──────────────────────────────
-      // Renvoie chaque hôtel comme RESULT individuel (filet de sécurité
-      // si certains ont été manqués pendant le streaming temps réel).
       if (scriptName === 'scraper_googlemaps.cjs') {
         exec('pkill -f "Chromium" || true');
         const outputPath = path.resolve(rootDir, 'scripts', 'last_gmaps_results.json');
@@ -165,11 +212,10 @@ function setupScraperEndpoint(app, endpoint, scriptName, getArgs) {
           res.write(`data: ${JSON.stringify({ percentage: 100, message: 'Terminé' })}\n\n`);
         }
         res.end();
-        return; // évite le double res.end()
+        return;
       }
 
       // ── Pappers : lit last_pappers_results.json ──────────────────────────
-      // Renvoie companies + directors comme RESULT individuels.
       if (scriptName === 'scraper_pappers.cjs') {
         const outputPath = path.resolve(rootDir, 'scripts', 'last_pappers_results.json');
         if (fs.existsSync(outputPath)) {
@@ -194,17 +240,18 @@ function setupScraperEndpoint(app, endpoint, scriptName, getArgs) {
           res.write(`data: ${JSON.stringify({ percentage: 100, message: 'Terminé' })}\n\n`);
         }
         res.end();
-        return; // évite le double res.end()
+        return;
       }
 
-      // ── Générique (tous les autres scrapers) ─────────────────────────────
       res.write(`data: ${JSON.stringify({ percentage: 100, message: 'Terminé' })}\n\n`);
       res.end();
     });
 
     req.on('close', () => {
-      console.log(`[Express API] Client disconnected, killing ${scriptName}`);
-      child.kill();
+      // PERSISTANCE : On ne tue plus le process ici !
+      // On log juste la déconnexion.
+      console.log(`[Express API] Client disconnected from ${scriptName} [Hash: ${queryHash}]. Process continues in background.`);
+      // res.end() est implicite ici
     });
   });
 }
@@ -464,6 +511,7 @@ app.get('/api/email/track/click/:recipientId', async (req, res) => {
 // ─── Unsubscribe ──────────────────────────────────────────────────────────────
 
 app.get('/api/email/unsubscribe/:recipientId', async (req, res) => {
+  const { recipientId } = req.params;
   if (!recipientId) return res.status(400).send('ID manquant');
 
   const supabase = getSupabase();
@@ -620,6 +668,7 @@ setupScraperEndpoint(app, '/api/scrape/enrich-google', 'enricher_google.cjs', (r
 // Enrichment - Website (site web fourni)
 setupScraperEndpoint(app, '/api/scrape/enrich-website', 'scraper_website_enrich.cjs', (req) => {
   const { website, name, company, openAiKey, userService, userValueProp, userIndustry } = req.query;
+
   return [
     website, 
     name || 'Inconnu', 
@@ -858,7 +907,7 @@ CONSIGNES :
 app.use(express.static(path.resolve(rootDir, 'dist')));
 
 // Redirection SPA : toutes les autres routes non-API renvoient l'app React
-app.get('*', (req, res) => {
+app.get(/(.*)/, (req, res) => {
   if (req.path.startsWith('/api/')) {
     return res.status(404).json({ error: 'Route API non trouvée' });
   }

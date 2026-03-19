@@ -404,11 +404,36 @@ IMPORTANT : Lors de l'analyse, identifie spécifiquement les "prospecting_opport
 
 Renvoie UNIQUEMENT un JSON : { "phone": "...", "email": "...", "score_global": 0-100, "ai_intelligence": { ... } }`;
 
-  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+  let actualKey = OPENAI_API_KEY;
+  let baseUrl = 'https://api.openai.com/v1/chat/completions';
+  let model = 'gpt-4o-mini';
+
+  if (OPENAI_API_KEY && OPENAI_API_KEY.startsWith('{')) {
+    try {
+      const config = JSON.parse(OPENAI_API_KEY);
+      if (config.apiKey) actualKey = config.apiKey;
+      if (config.baseUrl) {
+        baseUrl = config.baseUrl.endsWith('/chat/completions') 
+          ? config.baseUrl 
+          : `${config.baseUrl.replace(/\/$/, '')}/chat/completions`;
+      }
+      if (config.model) model = config.model;
+    } catch (e) {}
+  }
+
+  const response = await fetch(baseUrl, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${OPENAI_API_KEY}` },
+    headers: { 
+      'Content-Type': 'application/json', 
+      'Authorization': `Bearer ${actualKey}`,
+      // OpenRouter specific headers
+      ...(baseUrl.includes('openrouter.ai') ? {
+        'HTTP-Referer': 'https://prospecta.soamibango.com',
+        'X-Title': 'Prospecta AI',
+      } : {})
+    },
     body: JSON.stringify({
-      model: 'gpt-4o-mini',
+      model: model,
       response_format: { type: "json_object" },
       messages: [ { role: "system", content: systemPrompt }, { role: "user", content: text } ],
       temperature: 0.3

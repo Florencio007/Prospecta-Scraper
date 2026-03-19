@@ -1,543 +1,73 @@
 {
-  "scrapedAt": "2026-03-17T23:41:46.193Z",
-  "query": "hotel Antananarivo",
-  "total": 10,
+  "scrapedAt": "2026-03-18T20:08:31.617Z",
+  "query": "bakery Paris",
+  "total": 2,
   "hotels": [
     {
-      "name": "Radisson Serviced Apartments Antananarivo City Center",
-      "category": "",
-      "address": "Làlana Rahamefy Samuel, Antananarivo 101",
-      "phone": "020 22 694 00",
-      "website": "https://www.radissonhotels.com/en-us/hotels/radisson-serviced-apartments-antananarivo-city-centre?cid=a:se+b:gmb+c:emea+i:local+e:rad+d:mea+h:MGTNRSAP",
+      "name": "Petite Ile boulangerie",
+      "category": "Achats en magasin",
+      "address": "8 Rue des Filles du Calvaire, 75003 Paris, France",
+      "phone": "",
+      "website": "https://instagram.com/petite.ile.paris?igshid=YmMyMTA2M2Y=",
       "rating": "",
       "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Radisson+Serviced+Apartments+Antananarivo+City+Center/@-18.9116656,47.5281355,17z/data=!4m10!3m9!1s0x21f07d5e092716b7:0xa44ffe56a90cf177!5m2!4m1!1i2!8m2!3d-18.9116656!4d47.5281355!10e1!16s%2Fg%2F11gh_6stbv?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
+      "mapsUrl": "https://www.google.com/maps/place/Petite+Ile+boulangerie/@48.8623212,2.3655368,17z/data=!4m7!3m6!1s0x47e66fa63669f3f7:0x4316c722ae3eb10e!8m2!3d48.8623212!4d2.3655368!10e1!16s%2Fg%2F11sphnprss?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
       "gps": {
-        "lat": -18.9116656,
-        "lng": 47.5281355
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine Climatisation Service de blanchisserie Accepte les animaux Service de chambre Adapté aux enfants Restaurant Navette aéroport Centre de fitness Bar Non-fumeurs"
-      },
-      "reviews": [],
-      "contractDetails": {
-        "name": "Radisson Serviced Apartments Antananarivo City Center",
-        "address": "Làlana Rahamefy Samuel, Antananarivo 101",
-        "phone": "020 22 694 00",
-        "website": "https://www.radissonhotels.com/en-us/hotels/radisson-serviced-apartments-antananarivo-city-centre?cid=a:se+b:gmb+c:emea+i:local+e:rad+d:mea+h:MGTNRSAP",
-        "plusCode": "3GQH+87",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -18.9116656,
-          "lng": 47.5281355
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine Climatisation Service de blanchisserie Accepte les animaux Service de chambre Adapté aux enfants Restaurant Navette aéroport Centre de fitness Bar Non-fumeurs"
-        },
-        "reviews": [],
-        "url": "https://www.google.com/maps/place/Radisson+Serviced+Apartments+Antananarivo+City+Center/@-18.9116656,47.5281355,17z/data=!4m10!3m9!1s0x21f07d5e092716b7:0xa44ffe56a90cf177!5m2!4m1!1i2!8m2!3d-18.9116656!4d47.5281355!10e1!16s%2Fg%2F11gh_6stbv?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "020 22 694 00"
-          ],
-          "emails": [],
-          "addresses": [
-            "Làlana Rahamefy Samuel, Antananarivo 101"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine Climatisation Service de blanchisserie Accepte les animaux Service de chambre Adapté aux enfants Restaurant Navette aéroport Centre de fitness Bar Non-fumeurs",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "Central Hôtel Antananarivo",
-      "category": "",
-      "address": "Rue Andriamanamihaja Raoul Tsaralalana Antananarivo, 2 Lalana Ingereza, Antananarivo 101",
-      "phone": "020 22 222 44",
-      "website": "https://www.centralhotel.mg/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Central+H%C3%B4tel+Antananarivo/@-18.9067798,47.5207097,17z/data=!4m10!3m9!1s0x21f07e046fd88957:0xbe4e397e46903ae8!5m2!4m1!1i2!8m2!3d-18.9067798!4d47.5207097!10e1!16s%2Fg%2F11b73sr4cg?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -18.9067798,
-        "lng": 47.5207097
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Petit-déjeuner inclus Parking Piscine Service de blanchisserie Adapté aux enfants Restaurant"
-      },
-      "reviews": [],
-      "contractDetails": {
-        "name": "Central Hôtel Antananarivo",
-        "address": "Rue Andriamanamihaja Raoul Tsaralalana Antananarivo, 2 Lalana Ingereza, Antananarivo 101",
-        "phone": "020 22 222 44",
-        "website": "https://www.centralhotel.mg/",
-        "plusCode": "3GVC+77",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -18.9067798,
-          "lng": 47.5207097
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": "Wi-Fi gratuit Petit-déjeuner inclus Parking Piscine Service de blanchisserie Adapté aux enfants Restaurant"
-        },
-        "reviews": [],
-        "url": "https://www.google.com/maps/place/Central+H%C3%B4tel+Antananarivo/@-18.9067798,47.5207097,17z/data=!4m10!3m9!1s0x21f07e046fd88957:0xbe4e397e46903ae8!5m2!4m1!1i2!8m2!3d-18.9067798!4d47.5207097!10e1!16s%2Fg%2F11b73sr4cg?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "020 22 222 44"
-          ],
-          "emails": [],
-          "addresses": [
-            "Rue Andriamanamihaja Raoul Tsaralalana Antananarivo, 2 Lalana Ingereza, Antananarivo 101"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Petit-déjeuner inclus Parking Piscine Service de blanchisserie Adapté aux enfants Restaurant",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "Downtown Hôtel",
-      "category": "",
-      "address": "28 Lalana Adrianary Ratianarivo, Antananarivo 101",
-      "phone": "032 11 023 47",
-      "website": "",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Downtown+H%C3%B4tel/@-18.9090844,47.5204517,17z/data=!4m10!3m9!1s0x21f07f8a15aeaf29:0xfee9b9710b915b30!5m2!4m1!1i2!8m2!3d-18.9090844!4d47.5204517!10e1!16s%2Fg%2F11n0lhj4kk?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -18.9090844,
-        "lng": 47.5204517
-      },
-      "platform": "Google Maps",
-      "about": {
-        "amenities": [
-          "Hôtel"
-        ],
-        "description": "Wi-Fi gratuit Piscine Climatisation Navette aéroport Centre de fitness"
-      },
-      "reviews": [
-        {
-          "author": "Marc-Andre Petit",
-          "text": "Très mauvais service, même si la chambre est disponible, ils veulent me facturer une nuit supplémentaire pour entrer avant ? Aussi au téléphone le prix est plus élevé que sur booking, et le service en ligne et communication nulle. A éviter. A fuir. Je ne peux recommander basé sur mon expérience personnelle. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Quaterback",
-          "text": "L'hôtel est bien placé, les chambres sont petites mais confortables.\nTout le monde est sympa dans l'hôtel sauf le grand monsieur dégarni à la réception qui se permet des réflexions désagréables et hautaines que même le … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Michael Batté",
-          "text": "Je trouve certaines notes assez sévères concernant l'hôtel Downtown. Certes ça n'est pas un hôtel de luxe mais le rapport qualité-prix est exceptionnel vu l'emplacement. De plus il dispose d'une très grande salle de sport et reste assez calme. Le petit déjeuner est simple mais copieux. Je recommande. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Mavo Gauchat",
-          "text": "L'hôtel est bien placé  car c'est proche du centre ville et avec une bonne qualité  prix. Ce n'est pas trop bruillant si on est du côté cour. La chambre assez grande et  propre. Personnellement, le rideau de douche est le  bienvenu surtout … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "jeanbarnabe",
-          "text": "Un accueil au top, un upgrade sur ma chambre pour une suite, au calme !||Le staff est vraiment gentil, serviable. Mes 3 nuitées ont été super. ||L'Hôtel est neuf, impeccable. Toutes les mesures d'hygiène sont au rendez-vous. La déco est pas … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "patrickramena",
-          "text": "Nous sommes partis du 8 janvier au 15 avec ma sœur, lors du Check in la réceptionniste très agréable souriante et accueillante nous a indiqué que l’on avait été surclasser étant donné que nous étions sur place 8 nuits.||Chaque jour la … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "esiomm",
-          "text": "Je suis resté 3 nuitées chez eux et ça m'a bien plu. Le personnel est serviable, chaleureux. Les chambres sont bien propre et spacieuses. La clim par grosse chaleur est un plus.|bref, j'y retournerai sans hésiter.",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "paulnorman0",
-          "text": "Hôtel situé dans une zone principale qui permet d’être au cœur de l’activité de la capitale malgache.||Service de chambre de qualité. Petit déjeuner qui ne présente pas un grand nombre de choix. Le personnel est présent et toujours … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "njakar2021",
-          "text": "Les chambres sont propres et l'hôtel bien situé, proche des centre d'affaires. çà a facilité mes déplacements. Plusieurs restaurants à proximité. Encore merci pour ce superbe séjour. Je recommande particulièrement pour vos voyages d'affaires à Tana.",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Philippe",
-          "text": "Bon emplacement\nChambres très propres. TV grand écran. Douche nickel. Grandes chambres. WiFi. Salle de sport. Personnel très à l'écoute et sympathique. Paiement CB possible.\nProblème avec l'arrivée d'eau de la douche. J'espère que c'est ponctuel. Plus",
-          "date": "",
-          "rating": ""
-        }
-      ],
-      "contractDetails": {
-        "name": "Downtown Hôtel",
-        "address": "28 Lalana Adrianary Ratianarivo, Antananarivo 101",
-        "phone": "032 11 023 47",
-        "website": "",
-        "plusCode": "3GRC+95",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -18.9090844,
-          "lng": 47.5204517
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [
-            "Hôtel"
-          ],
-          "description": "Wi-Fi gratuit Piscine Climatisation Navette aéroport Centre de fitness"
-        },
-        "reviews": [
-          {
-            "author": "Marc-Andre Petit",
-            "text": "Très mauvais service, même si la chambre est disponible, ils veulent me facturer une nuit supplémentaire pour entrer avant ? Aussi au téléphone le prix est plus élevé que sur booking, et le service en ligne et communication nulle. A éviter. A fuir. Je ne peux recommander basé sur mon expérience personnelle. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Quaterback",
-            "text": "L'hôtel est bien placé, les chambres sont petites mais confortables.\nTout le monde est sympa dans l'hôtel sauf le grand monsieur dégarni à la réception qui se permet des réflexions désagréables et hautaines que même le … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Michael Batté",
-            "text": "Je trouve certaines notes assez sévères concernant l'hôtel Downtown. Certes ça n'est pas un hôtel de luxe mais le rapport qualité-prix est exceptionnel vu l'emplacement. De plus il dispose d'une très grande salle de sport et reste assez calme. Le petit déjeuner est simple mais copieux. Je recommande. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Mavo Gauchat",
-            "text": "L'hôtel est bien placé  car c'est proche du centre ville et avec une bonne qualité  prix. Ce n'est pas trop bruillant si on est du côté cour. La chambre assez grande et  propre. Personnellement, le rideau de douche est le  bienvenu surtout … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "jeanbarnabe",
-            "text": "Un accueil au top, un upgrade sur ma chambre pour une suite, au calme !||Le staff est vraiment gentil, serviable. Mes 3 nuitées ont été super. ||L'Hôtel est neuf, impeccable. Toutes les mesures d'hygiène sont au rendez-vous. La déco est pas … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "patrickramena",
-            "text": "Nous sommes partis du 8 janvier au 15 avec ma sœur, lors du Check in la réceptionniste très agréable souriante et accueillante nous a indiqué que l’on avait été surclasser étant donné que nous étions sur place 8 nuits.||Chaque jour la … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "esiomm",
-            "text": "Je suis resté 3 nuitées chez eux et ça m'a bien plu. Le personnel est serviable, chaleureux. Les chambres sont bien propre et spacieuses. La clim par grosse chaleur est un plus.|bref, j'y retournerai sans hésiter.",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "paulnorman0",
-            "text": "Hôtel situé dans une zone principale qui permet d’être au cœur de l’activité de la capitale malgache.||Service de chambre de qualité. Petit déjeuner qui ne présente pas un grand nombre de choix. Le personnel est présent et toujours … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "njakar2021",
-            "text": "Les chambres sont propres et l'hôtel bien situé, proche des centre d'affaires. çà a facilité mes déplacements. Plusieurs restaurants à proximité. Encore merci pour ce superbe séjour. Je recommande particulièrement pour vos voyages d'affaires à Tana.",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Philippe",
-            "text": "Bon emplacement\nChambres très propres. TV grand écran. Douche nickel. Grandes chambres. WiFi. Salle de sport. Personnel très à l'écoute et sympathique. Paiement CB possible.\nProblème avec l'arrivée d'eau de la douche. J'espère que c'est ponctuel. Plus",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/Downtown+H%C3%B4tel/@-18.9090844,47.5204517,17z/data=!4m10!3m9!1s0x21f07f8a15aeaf29:0xfee9b9710b915b30!5m2!4m1!1i2!8m2!3d-18.9090844!4d47.5204517!10e1!16s%2Fg%2F11n0lhj4kk?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Google Maps"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "032 11 023 47"
-          ],
-          "emails": [],
-          "addresses": [
-            "28 Lalana Adrianary Ratianarivo, Antananarivo 101"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Piscine Climatisation Navette aéroport Centre de fitness",
-        "companyCulture": {
-          "mission": "Équipements et services : Hôtel"
-        }
-      }
-    },
-    {
-      "name": "Hotel Shangai",
-      "category": "",
-      "address": "4 Lalana Rainitovo, Antananarivo",
-      "phone": "034 01 077 71",
-      "website": "http://www.shangai-hotel.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Hotel+Shangai/@-18.9088638,47.5238591,17z/data=!4m10!3m9!1s0x21f07e06c00b0829:0x55eb512a63212c41!5m2!4m1!1i2!8m2!3d-18.9088638!4d47.5238591!10e1!16s%2Fg%2F11bz_ywfb0?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -18.9088638,
-        "lng": 47.5238591
+        "lat": 48.8623212,
+        "lng": 2.3655368
       },
       "platform": "Site propre",
       "about": {
         "amenities": [
-          "Hôtel"
+          "Achats en magasin",
+          "Services sur place",
+          "Vente à emporter",
+          "Livraison",
+          "Cafés",
+          "Petit déjeuner",
+          "Toilettes",
+          "Possibilité de faire des courses rapides",
+          "Cartes de crédit",
+          "Cartes de débit",
+          "Paiements mobiles NFC",
+          "Pluxee"
         ],
-        "description": "Hôtel de style décontracté, restaurant asiatique et chambres à la décoration simple avec Wi-Fi gratuit.\n\nHôtel de style décontracté, restaurant asiatique et chambres à la décoration simple avec Wi-Fi gratuit."
+        "description": "Possibilité de faire des courses rapides"
       },
-      "reviews": [
-        {
-          "author": "Sandrinah Herizo",
-          "text": "Nous y sommes allés avec mon mari et tout s’est très bien passé. Excellent rapport qualité-prix : des assiettes bien remplies, des plats savoureux et copieux pour un prix tout à fait correct. On s’est franchement régalés. L’endroit est sympa, facile à repérer, et l’accueil est au top. Une adresse qu’on retient sans hésiter. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Ofim immobilier",
-          "text": "J ai passé un agréable séjour dans cet hôtel.le personnel est très serviable\nMerci aussi à la direction et en particulier Marius pour son aide précieuse Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Arnauld rogeau",
-          "text": "Un hôtel au très bon rapport qualité prix à privilégier pour toute démarche à réaliser auprès du Consulat général de France, qui est à quelques centaines de mètres... … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "franck andriantsalama",
-          "text": "Lieu tranquille et aéré, idéal pour réfléchir.\nLes plats sont généreux et les prix raisonnables.\nLe Personnel est accueillant. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "b fred 06",
-          "text": "Chambres très propres mais de qualité et de taille inégale. Bon emplacement mais peut être bruyant surtout le we. Le service est impeccable. Bon rapport qualité prix. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "JessAlex",
-          "text": "L’hôtel est bien situé. Le restaurant propose des plats asiatiques succulents et bon marché. Le gérant est sympa et arrangeant. La chambre est correcte mais, comme dans beaucoup d’autres établissements de Tana, elle mériterait un … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Philippe",
-          "text": "Ma chambre était salle. La moquette n'a plus de couleur. Plein de tâches\nLavabos le robinet n'a plus d'embout.\nAutre chambre la chasse d'eau ne fonctionne pas. L'écoulement de l'eau du lavabo … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "kitchencritics",
-          "text": "a  deux pas du Consulat de France et à 3 minutes de l'av. de l'Indépendance (juste un petit escalier à descendre), les chambres de l'hotel Shangai (ps de H) sont  bien entretenues, spacieuses (avec dans mon cas un grand balcon), propres, … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "franck petit",
-          "text": "Accueil chaleureux de l'ensemble du personnel ainsi que de la direction.\nLes repas sont très bons et très copieux. L'emplacement est parfait pour visiter la ville. … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "jpsmada",
-          "text": "Hotel situe en plein centre ville ce qui en soit n est pas mal compte tenu des embouteillages a Tana. Rapport qualité / prix des plus correct. Ce n est pas luxueux mais propre. Le personnel globalement agréable. Le restaurant offre une cuisine asiatique de bonne qualité et copieuse. Je recommande",
-          "date": "",
-          "rating": ""
-        }
-      ],
+      "reviews": [],
       "contractDetails": {
-        "name": "Hotel Shangai",
-        "address": "4 Lalana Rainitovo, Antananarivo",
-        "phone": "034 01 077 71",
-        "website": "http://www.shangai-hotel.com/",
-        "plusCode": "3GRF+FG",
+        "name": "Petite Ile boulangerie",
+        "address": "8 Rue des Filles du Calvaire, 75003 Paris, France",
+        "phone": "",
+        "website": "https://instagram.com/petite.ile.paris?igshid=YmMyMTA2M2Y=",
+        "plusCode": "V968+W6",
         "rating": "",
         "reviewCount": "",
         "gps": {
-          "lat": -18.9088638,
-          "lng": 47.5238591
+          "lat": 48.8623212,
+          "lng": 2.3655368
         },
-        "category": "",
+        "category": "Achats en magasin",
         "starRating": "",
         "about": {
           "amenities": [
-            "Hôtel"
+            "Achats en magasin",
+            "Services sur place",
+            "Vente à emporter",
+            "Livraison",
+            "Cafés",
+            "Petit déjeuner",
+            "Toilettes",
+            "Possibilité de faire des courses rapides",
+            "Cartes de crédit",
+            "Cartes de débit",
+            "Paiements mobiles NFC",
+            "Pluxee"
           ],
-          "description": "Hôtel de style décontracté, restaurant asiatique et chambres à la décoration simple avec Wi-Fi gratuit.\n\nHôtel de style décontracté, restaurant asiatique et chambres à la décoration simple avec Wi-Fi gratuit."
-        },
-        "reviews": [
-          {
-            "author": "Sandrinah Herizo",
-            "text": "Nous y sommes allés avec mon mari et tout s’est très bien passé. Excellent rapport qualité-prix : des assiettes bien remplies, des plats savoureux et copieux pour un prix tout à fait correct. On s’est franchement régalés. L’endroit est sympa, facile à repérer, et l’accueil est au top. Une adresse qu’on retient sans hésiter. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Ofim immobilier",
-            "text": "J ai passé un agréable séjour dans cet hôtel.le personnel est très serviable\nMerci aussi à la direction et en particulier Marius pour son aide précieuse Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Arnauld rogeau",
-            "text": "Un hôtel au très bon rapport qualité prix à privilégier pour toute démarche à réaliser auprès du Consulat général de France, qui est à quelques centaines de mètres... … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "franck andriantsalama",
-            "text": "Lieu tranquille et aéré, idéal pour réfléchir.\nLes plats sont généreux et les prix raisonnables.\nLe Personnel est accueillant. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "b fred 06",
-            "text": "Chambres très propres mais de qualité et de taille inégale. Bon emplacement mais peut être bruyant surtout le we. Le service est impeccable. Bon rapport qualité prix. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "JessAlex",
-            "text": "L’hôtel est bien situé. Le restaurant propose des plats asiatiques succulents et bon marché. Le gérant est sympa et arrangeant. La chambre est correcte mais, comme dans beaucoup d’autres établissements de Tana, elle mériterait un … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Philippe",
-            "text": "Ma chambre était salle. La moquette n'a plus de couleur. Plein de tâches\nLavabos le robinet n'a plus d'embout.\nAutre chambre la chasse d'eau ne fonctionne pas. L'écoulement de l'eau du lavabo … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "kitchencritics",
-            "text": "a  deux pas du Consulat de France et à 3 minutes de l'av. de l'Indépendance (juste un petit escalier à descendre), les chambres de l'hotel Shangai (ps de H) sont  bien entretenues, spacieuses (avec dans mon cas un grand balcon), propres, … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "franck petit",
-            "text": "Accueil chaleureux de l'ensemble du personnel ainsi que de la direction.\nLes repas sont très bons et très copieux. L'emplacement est parfait pour visiter la ville. … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "jpsmada",
-            "text": "Hotel situe en plein centre ville ce qui en soit n est pas mal compte tenu des embouteillages a Tana. Rapport qualité / prix des plus correct. Ce n est pas luxueux mais propre. Le personnel globalement agréable. Le restaurant offre une cuisine asiatique de bonne qualité et copieuse. Je recommande",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/Hotel+Shangai/@-18.9088638,47.5238591,17z/data=!4m10!3m9!1s0x21f07e06c00b0829:0x55eb512a63212c41!5m2!4m1!1i2!8m2!3d-18.9088638!4d47.5238591!10e1!16s%2Fg%2F11bz_ywfb0?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "034 01 077 71"
-          ],
-          "emails": [],
-          "addresses": [
-            "4 Lalana Rainitovo, Antananarivo"
-          ]
-        },
-        "executiveSummary": "Hôtel de style décontracté, restaurant asiatique et chambres à la décoration simple avec Wi-Fi gratuit.\n\nHôtel de style décontracté, restaurant asiatique et chambres à la décoration simple avec Wi-Fi gratuit.",
-        "companyCulture": {
-          "mission": "Équipements et services : Hôtel"
-        }
-      }
-    },
-    {
-      "name": "Central Hôtel Antananarivo",
-      "category": "",
-      "address": "Rue Andriamanamihaja Raoul Tsaralalana Antananarivo, 2 Lalana Ingereza, Antananarivo 101",
-      "phone": "020 22 222 44",
-      "website": "https://www.centralhotel.mg/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Central+H%C3%B4tel+Antananarivo/@-18.9067798,47.5207097,17z/data=!4m10!3m9!1s0x21f07e046fd88957:0xbe4e397e46903ae8!5m2!4m1!1i2!8m2!3d-18.9067798!4d47.5207097!10e1!16s%2Fg%2F11b73sr4cg?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -18.9067798,
-        "lng": 47.5207097
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Petit-déjeuner inclus Parking Piscine Service de blanchisserie Adapté aux enfants Restaurant"
-      },
-      "reviews": [],
-      "contractDetails": {
-        "name": "Central Hôtel Antananarivo",
-        "address": "Rue Andriamanamihaja Raoul Tsaralalana Antananarivo, 2 Lalana Ingereza, Antananarivo 101",
-        "phone": "020 22 222 44",
-        "website": "https://www.centralhotel.mg/",
-        "plusCode": "3GVC+77",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -18.9067798,
-          "lng": 47.5207097
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": "Wi-Fi gratuit Petit-déjeuner inclus Parking Piscine Service de blanchisserie Adapté aux enfants Restaurant"
+          "description": "Possibilité de faire des courses rapides"
         },
         "reviews": [],
-        "url": "https://www.google.com/maps/place/Central+H%C3%B4tel+Antananarivo/@-18.9067798,47.5207097,17z/data=!4m10!3m9!1s0x21f07e046fd88957:0xbe4e397e46903ae8!5m2!4m1!1i2!8m2!3d-18.9067798!4d47.5207097!10e1!16s%2Fg%2F11b73sr4cg?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
+        "url": "https://www.google.com/maps/place/Petite+Ile+boulangerie/@48.8623212,2.3655368,17z/data=!4m7!3m6!1s0x47e66fa63669f3f7:0x4316c722ae3eb10e!8m2!3d48.8623212!4d2.3655368!10e1!16s%2Fg%2F11sphnprss?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
         "platform": "Site propre"
       },
       "aiIntelligence": {
@@ -546,185 +76,85 @@
           "comments": []
         },
         "contactInfo": {
-          "phones": [
-            "020 22 222 44"
-          ],
+          "phones": [],
           "emails": [],
           "addresses": [
-            "Rue Andriamanamihaja Raoul Tsaralalana Antananarivo, 2 Lalana Ingereza, Antananarivo 101"
+            "8 Rue des Filles du Calvaire, 75003 Paris, France"
           ]
         },
-        "executiveSummary": "Wi-Fi gratuit Petit-déjeuner inclus Parking Piscine Service de blanchisserie Adapté aux enfants Restaurant",
+        "executiveSummary": "Possibilité de faire des courses rapides",
         "companyCulture": {
-          "mission": ""
+          "mission": "Équipements et services : Achats en magasin, Services sur place, Vente à emporter, Livraison, Cafés, Petit déjeuner, Toilettes, Possibilité de faire des courses rapides, Cartes de crédit, Cartes de débit, Paiements mobiles NFC, Pluxee"
         }
       }
     },
     {
-      "name": "Sole Hotel",
-      "category": "",
-      "address": "Rue Jean Jaures, Antananarivo",
-      "phone": "038 49 066 06",
-      "website": "http://www.solehotel-mada.com/",
+      "name": "The Smiths Bakery",
+      "category": "Parking accessible en fauteuil roulant",
+      "address": "12 Rue de Buci, 75006 Paris, France",
+      "phone": "+33 1 43 54 96 96",
+      "website": "https://thesmithsbakery.shop/",
       "rating": "",
       "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Sole+Hotel/@-18.9070155,47.5220074,17z/data=!4m10!3m9!1s0x21f07e040827d82d:0x8d09c91070597f1c!5m2!4m1!1i2!8m2!3d-18.9070155!4d47.5220074!10e1!16s%2Fg%2F11b6qbn41m?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
+      "mapsUrl": "https://www.google.com/maps/place/The+Smiths+Bakery/@48.8539362,2.3372788,17z/data=!4m7!3m6!1s0x47e671d8dfc54c93:0x73ffac17431c7f06!8m2!3d48.8539362!4d2.3372788!10e1!16s%2Fg%2F11cfb_tqy?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
       "gps": {
-        "lat": -18.9070155,
-        "lng": 47.5220074
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine Climatisation Service de blanchisserie Accepte les animaux Service de chambre Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport Centre de fitness Bar"
-      },
-      "reviews": [],
-      "contractDetails": {
-        "name": "Sole Hotel",
-        "address": "Rue Jean Jaures, Antananarivo",
-        "phone": "038 49 066 06",
-        "website": "http://www.solehotel-mada.com/",
-        "plusCode": "3GVC+5R",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -18.9070155,
-          "lng": 47.5220074
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine Climatisation Service de blanchisserie Accepte les animaux Service de chambre Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport Centre de fitness Bar"
-        },
-        "reviews": [],
-        "url": "https://www.google.com/maps/place/Sole+Hotel/@-18.9070155,47.5220074,17z/data=!4m10!3m9!1s0x21f07e040827d82d:0x8d09c91070597f1c!5m2!4m1!1i2!8m2!3d-18.9070155!4d47.5220074!10e1!16s%2Fg%2F11b6qbn41m?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "038 49 066 06"
-          ],
-          "emails": [],
-          "addresses": [
-            "Rue Jean Jaures, Antananarivo"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine Climatisation Service de blanchisserie Accepte les animaux Service de chambre Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport Centre de fitness Bar",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "Sakamanga Hôtel",
-      "category": "",
-      "address": "Lot IBK7bis, Lalana Adrianary Ratianarivo Ampasamadinika, Antananarivo 101",
-      "phone": "032 02 668 34",
-      "website": "http://www.sakamanga.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Sakamanga+H%C3%B4tel/@-18.90837,47.521248,17z/data=!4m10!3m9!1s0x21f07e0446cb6a6d:0xc11e13f9a12fc6f!5m2!4m1!1i2!8m2!3d-18.90837!4d47.521248!10e1!16s%2Fg%2F1tftnh7b?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -18.90837,
-        "lng": 47.521248
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine Climatisation Service de blanchisserie Accepte les animaux Service de chambre Adapté aux enfants Restaurant Navette aéroport Centre de fitness Bar"
-      },
-      "reviews": [],
-      "contractDetails": {
-        "name": "Sakamanga Hôtel",
-        "address": "Lot IBK7bis, Lalana Adrianary Ratianarivo Ampasamadinika, Antananarivo 101",
-        "phone": "032 02 668 34",
-        "website": "http://www.sakamanga.com/",
-        "plusCode": "3GRC+MF",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -18.90837,
-          "lng": 47.521248
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine Climatisation Service de blanchisserie Accepte les animaux Service de chambre Adapté aux enfants Restaurant Navette aéroport Centre de fitness Bar"
-        },
-        "reviews": [],
-        "url": "https://www.google.com/maps/place/Sakamanga+H%C3%B4tel/@-18.90837,47.521248,17z/data=!4m10!3m9!1s0x21f07e0446cb6a6d:0xc11e13f9a12fc6f!5m2!4m1!1i2!8m2!3d-18.90837!4d47.521248!10e1!16s%2Fg%2F1tftnh7b?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "032 02 668 34"
-          ],
-          "emails": [],
-          "addresses": [
-            "Lot IBK7bis, Lalana Adrianary Ratianarivo Ampasamadinika, Antananarivo 101"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine Climatisation Service de blanchisserie Accepte les animaux Service de chambre Adapté aux enfants Restaurant Navette aéroport Centre de fitness Bar",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "Hôtel Tana-Jacaranda",
-      "category": "",
-      "address": "24 Arabe Rainitsarovy, Antananarivo 101",
-      "phone": "020 22 562 39",
-      "website": "http://www.tana-jacaranda.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel+Tana-Jacaranda/@-18.911779,47.521577,17z/data=!4m10!3m9!1s0x21f07e05f61b2d59:0xcd6861c325653241!5m2!4m1!1i2!8m2!3d-18.911779!4d47.521577!10e1!16s%2Fg%2F1tmsn7px?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -18.911779,
-        "lng": 47.521577
+        "lat": 48.8539362,
+        "lng": 2.3372788
       },
       "platform": "Site propre",
       "about": {
         "amenities": [
-          "Hôtel"
+          "Parking accessible en fauteuil roulant",
+          "Livraison",
+          "Services sur place",
+          "Vente à emporter",
+          "Repas sur place",
+          "Cafés",
+          "Petit déjeuner",
+          "Toilettes",
+          "Possibilité de faire des courses rapides",
+          "Cartes de crédit",
+          "Cartes de débit",
+          "Paiements mobiles NFC",
+          "Pluxee"
         ],
-        "description": "Wi-Fi gratuit Piscine Service de blanchisserie Adapté aux enfants Restaurant Centre de fitness"
+        "description": "Ce lieu cosy propose glaces, pâtisseries, quiches, burgers ou planches de fromages sur place ou à emporter.\n\nCe lieu cosy propose glaces, pâtisseries, quiches, burgers ou planches de fromages sur place ou à emporter.\n\nParking accessible en fauteuil roulant\n\nPossibilité de faire des courses rapides"
       },
       "reviews": [],
       "contractDetails": {
-        "name": "Hôtel Tana-Jacaranda",
-        "address": "24 Arabe Rainitsarovy, Antananarivo 101",
-        "phone": "020 22 562 39",
-        "website": "http://www.tana-jacaranda.com/",
-        "plusCode": "3GQC+7J",
+        "name": "The Smiths Bakery",
+        "address": "12 Rue de Buci, 75006 Paris, France",
+        "phone": "+33 1 43 54 96 96",
+        "website": "https://thesmithsbakery.shop/",
+        "plusCode": "V83P+HW",
         "rating": "",
         "reviewCount": "",
         "gps": {
-          "lat": -18.911779,
-          "lng": 47.521577
+          "lat": 48.8539362,
+          "lng": 2.3372788
         },
-        "category": "",
+        "category": "Parking accessible en fauteuil roulant",
         "starRating": "",
         "about": {
           "amenities": [
-            "Hôtel"
+            "Parking accessible en fauteuil roulant",
+            "Livraison",
+            "Services sur place",
+            "Vente à emporter",
+            "Repas sur place",
+            "Cafés",
+            "Petit déjeuner",
+            "Toilettes",
+            "Possibilité de faire des courses rapides",
+            "Cartes de crédit",
+            "Cartes de débit",
+            "Paiements mobiles NFC",
+            "Pluxee"
           ],
-          "description": "Wi-Fi gratuit Piscine Service de blanchisserie Adapté aux enfants Restaurant Centre de fitness"
+          "description": "Ce lieu cosy propose glaces, pâtisseries, quiches, burgers ou planches de fromages sur place ou à emporter.\n\nCe lieu cosy propose glaces, pâtisseries, quiches, burgers ou planches de fromages sur place ou à emporter.\n\nParking accessible en fauteuil roulant\n\nPossibilité de faire des courses rapides"
         },
         "reviews": [],
-        "url": "https://www.google.com/maps/place/H%C3%B4tel+Tana-Jacaranda/@-18.911779,47.521577,17z/data=!4m10!3m9!1s0x21f07e05f61b2d59:0xcd6861c325653241!5m2!4m1!1i2!8m2!3d-18.911779!4d47.521577!10e1!16s%2Fg%2F1tmsn7px?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
+        "url": "https://www.google.com/maps/place/The+Smiths+Bakery/@48.8539362,2.3372788,17z/data=!4m7!3m6!1s0x47e671d8dfc54c93:0x73ffac17431c7f06!8m2!3d48.8539362!4d2.3372788!10e1!16s%2Fg%2F11cfb_tqy?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
         "platform": "Site propre"
       },
       "aiIntelligence": {
@@ -734,386 +164,16 @@
         },
         "contactInfo": {
           "phones": [
-            "020 22 562 39"
+            "+33 1 43 54 96 96"
           ],
           "emails": [],
           "addresses": [
-            "24 Arabe Rainitsarovy, Antananarivo 101"
+            "12 Rue de Buci, 75006 Paris, France"
           ]
         },
-        "executiveSummary": "Wi-Fi gratuit Piscine Service de blanchisserie Adapté aux enfants Restaurant Centre de fitness",
+        "executiveSummary": "Ce lieu cosy propose glaces, pâtisseries, quiches, burgers ou planches de fromages sur place ou à emporter.\n\nCe lieu cosy propose glaces, pâtisseries, quiches, burgers ou planches de fromages sur place ou à emporter.\n\nParking accessible en fauteuil roulant\n\nPossibilité de faire des courses rapides",
         "companyCulture": {
-          "mission": "Équipements et services : Hôtel"
-        }
-      }
-    },
-    {
-      "name": "Madagascar Underground",
-      "category": "",
-      "address": "18 Lalana Rainitovo, Antananarivo",
-      "phone": "038 99 503 32",
-      "website": "https://www.madagascar-underground.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Madagascar+Underground/@-18.9099277,47.5234671,17z/data=!4m10!3m9!1s0x21f07e06624ccf07:0x87437e4ffd4fee8e!5m2!4m1!1i2!8m2!3d-18.9099277!4d47.5234671!10e1!16s%2Fg%2F11b6p742nf?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -18.9099277,
-        "lng": 47.5234671
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [
-          "Hostel"
-        ],
-        "description": "Wi-Fi gratuit Parking Piscine Accepte les animaux Adapté aux enfants Restaurant Cuisine dans toutes ch. Navette aéroport Centre de fitness Bar"
-      },
-      "reviews": [
-        {
-          "author": "horns man",
-          "text": "Acceuil parfait, le sourire, la musique réconfortante(soul,nu soul, ,60's français aussi !),ce petit havre de paix propose une terrasse calme en plein coeur de Tana. … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Delphine VIDAL",
-          "text": "Nous avons séjourné dans la chambre la plus chère avec salle de bain privée: chambre donnant sur la rue avec fenêtres qui ferment difficilement, très bruyant, linge de lit et de toilette sale, eau chaude incertaine. … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "DreamAura",
-          "text": "Dortoir pas très chère,lit propre mais locaux un peu vétuste.Bon emplacement.Chambres : 3… Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Bibi Sisé",
-          "text": "Located in the centre of the town 20kms from the Tana-Ivato international airport,the dormitory place may start from ~5k xaf.\nIt has an atmosphere of chilling bar,hostel,... … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Mati",
-          "text": "Superbe hôtel !\nUn vrai espace où backpackers et malgaches se fréquentent.\nLes sanitaires sont toujours propres. … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "indie261",
-          "text": "J'y suis allée pour la première fois en juin 2021 pour une nuit, dans un bungalow perché à côté du toit. La chambre est propre, douillette, simple et assez intimiste. Pour les autres fois où j’étais au dortoir, j’ai eu cette sensation de … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Anna Pierre",
-          "text": "Je recommande le MU! Bon rapport qualité prix pour voyager entre amis. Mes amis et moi avons été dans les dortoirs. Le personnel est au top, chaleureux, flexibles et sympa, les chambres sont propres et la nourriture est bonne (tres bons … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "aurelia356",
-          "text": "On avait réservé un petit bungalow sur les toits. Un peu bruyant mais tout à fait fonctionnel et charmant. Manquant peut être un peu d’intimité pour la salle de bain (ni porte ni rideau entre la chambre et la salle de bain)...|La nourriture … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "erwana269",
-          "text": "Un lieu très sympa favorisant les rencontres. Personnel très accueillant toujours au petit soin. Super bien situé dans la ville, propre avec une bonne cuisine, de quoi passer un séjour très agréable. Ambiance festive où locaux et touristes se mélangent. Prix abordables",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Maeva Randria",
-          "text": "Nous avons mangé avec les cousins sur la terrasse. C'est tout tranquille si tu veux un endroit où se poser et se déconnecter ensemble.\nUn burger à goûter absolument : poulet pané (je ne me rappelle pas du nom exact), c'était une tuerie. Plus",
-          "date": "",
-          "rating": ""
-        }
-      ],
-      "contractDetails": {
-        "name": "Madagascar Underground",
-        "address": "18 Lalana Rainitovo, Antananarivo",
-        "phone": "038 99 503 32",
-        "website": "https://www.madagascar-underground.com/",
-        "plusCode": "3GRF+29",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -18.9099277,
-          "lng": 47.5234671
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [
-            "Hostel"
-          ],
-          "description": "Wi-Fi gratuit Parking Piscine Accepte les animaux Adapté aux enfants Restaurant Cuisine dans toutes ch. Navette aéroport Centre de fitness Bar"
-        },
-        "reviews": [
-          {
-            "author": "horns man",
-            "text": "Acceuil parfait, le sourire, la musique réconfortante(soul,nu soul, ,60's français aussi !),ce petit havre de paix propose une terrasse calme en plein coeur de Tana. … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Delphine VIDAL",
-            "text": "Nous avons séjourné dans la chambre la plus chère avec salle de bain privée: chambre donnant sur la rue avec fenêtres qui ferment difficilement, très bruyant, linge de lit et de toilette sale, eau chaude incertaine. … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "DreamAura",
-            "text": "Dortoir pas très chère,lit propre mais locaux un peu vétuste.Bon emplacement.Chambres : 3… Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Bibi Sisé",
-            "text": "Located in the centre of the town 20kms from the Tana-Ivato international airport,the dormitory place may start from ~5k xaf.\nIt has an atmosphere of chilling bar,hostel,... … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Mati",
-            "text": "Superbe hôtel !\nUn vrai espace où backpackers et malgaches se fréquentent.\nLes sanitaires sont toujours propres. … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "indie261",
-            "text": "J'y suis allée pour la première fois en juin 2021 pour une nuit, dans un bungalow perché à côté du toit. La chambre est propre, douillette, simple et assez intimiste. Pour les autres fois où j’étais au dortoir, j’ai eu cette sensation de … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Anna Pierre",
-            "text": "Je recommande le MU! Bon rapport qualité prix pour voyager entre amis. Mes amis et moi avons été dans les dortoirs. Le personnel est au top, chaleureux, flexibles et sympa, les chambres sont propres et la nourriture est bonne (tres bons … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "aurelia356",
-            "text": "On avait réservé un petit bungalow sur les toits. Un peu bruyant mais tout à fait fonctionnel et charmant. Manquant peut être un peu d’intimité pour la salle de bain (ni porte ni rideau entre la chambre et la salle de bain)...|La nourriture … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "erwana269",
-            "text": "Un lieu très sympa favorisant les rencontres. Personnel très accueillant toujours au petit soin. Super bien situé dans la ville, propre avec une bonne cuisine, de quoi passer un séjour très agréable. Ambiance festive où locaux et touristes se mélangent. Prix abordables",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Maeva Randria",
-            "text": "Nous avons mangé avec les cousins sur la terrasse. C'est tout tranquille si tu veux un endroit où se poser et se déconnecter ensemble.\nUn burger à goûter absolument : poulet pané (je ne me rappelle pas du nom exact), c'était une tuerie. Plus",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/Madagascar+Underground/@-18.9099277,47.5234671,17z/data=!4m10!3m9!1s0x21f07e06624ccf07:0x87437e4ffd4fee8e!5m2!4m1!1i2!8m2!3d-18.9099277!4d47.5234671!10e1!16s%2Fg%2F11b6p742nf?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "038 99 503 32"
-          ],
-          "emails": [],
-          "addresses": [
-            "18 Lalana Rainitovo, Antananarivo"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Parking Piscine Accepte les animaux Adapté aux enfants Restaurant Cuisine dans toutes ch. Navette aéroport Centre de fitness Bar",
-        "companyCulture": {
-          "mission": "Équipements et services : Hostel"
-        }
-      }
-    },
-    {
-      "name": "Radisson Blu Hôtel - Antananarivo Waterfront",
-      "category": "",
-      "address": "Zone Tana Waterfront, Antananarivo 101",
-      "phone": "020 22 692 00",
-      "website": "https://www.radissonhotels.com/en-us/hotels/radisson-blu-antananarivo-waterfront?cid=a:se+b:gmb+c:emea+i:local+e:rdb+d:mea+h:MGTNRWT2",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Radisson+Blu+H%C3%B4tel+-+Antananarivo+Waterfront/@-18.8902563,47.5246662,17z/data=!4m10!3m9!1s0x21f08186a9c88a5b:0xfe9a0f95bf97659a!5m2!4m1!1i2!8m2!3d-18.8902563!4d47.5246662!10e1!16s%2Fg%2F11ry4w38_3?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -18.8902563,
-        "lng": 47.5246662
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine intérieure Climatisation Service de blanchisserie Accepte les animaux Service de chambre Restaurant Navette aéroport Spa Centre de fitness Bar Non-fumeurs"
-      },
-      "reviews": [
-        {
-          "author": "Haja Tiana",
-          "text": "Nous avons passé un merveilleux long week-end à deux au Radisson Blu, un vrai moment de détente comme nous en avions besoin.\nLa chambre était impeccable, toujours parfaitement propre et bien entretenue … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "181lionelr",
-          "text": "Je me rends régulièrement au Radisson Waterfront dans le cadre de mes déplacements professionnels ; c'est une très bonne adresse que je recommande. Les chambres sont confortables et les deux restaurants proposent des plats variés et très … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Neil Vaudin",
-          "text": "Rien à redire sur l’expérience au Radisson Blu Hôtel - Antananarivo Waterfront.\n\nBien que je n’aie jamais séjourné dans l’hôtel, j’y vais régulièrement pour le … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Tiary Rakotobe",
-          "text": "Séjour très agréable au Radisson Blu ! L’hôtel est moderne, propre et offre un vrai confort. Son emplacement est un énorme atout : juste à côté d’un centre commercial, pratique pour se restaurer, faire du shopping ou sortir sans s’éloigner. … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Oomesh Rampersadsingh",
-          "text": "Chef kisto tres professionelle, gentil et il nous a preparer un delicious plat riz blanc, curry de poulet et crevette a chutney de tomate a la mauricienne wow amazing. Il est toujours present en salle avec le sourire. Shania et Kevin a la … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "josuar2026",
-          "text": "J’ai passé un très bon séjour à l’hôtel Radisson Blu. L’accueil dès à l’entrée était très pro. L’hôtel dispose deux restaurants qui sont très délicieux et savoureux. Chambre spacieuse et lit confortable. Service Conciergerie à la disposition. Hôtel vivement recommandé.",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "anthony dao",
-          "text": "Très belle hotel, confortable, bien insonorisé. Dommage pour la taille et profondeur de la piscine, de surcroît glaciale. Bon point à noter, l'accès possible à la piscine du Radisson voisin, en extérieur. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "R Nahaboo",
-          "text": "Très jolie hôtel très propre et très bien. Par contre les prix sont beaucoup plus cher que la moyenne des hôtels de haut niveau à Tananarive. Il y a souvent des salons qui sont organisés là-bas. Il se trouve a tanawaterfront un peu en dehors de la ville Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Mbola Miary ANDRIANANTENAINA",
-          "text": "Une amie m’a invitée à manger au Radisson Blu pour mon anniversaire, et c’était tout simplement magique. L’accueil, le cadre, et surtout… la nourriture !!!\nUn vrai bonheur pour les papilles. Je ne m’y attendais pas du tout, et j’ai … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "njara soafara",
-          "text": "Une équipe exceptionnelle et une belle innovation !\n\nToujours un plaisir de séjourner au Radisson Blu : l’équipe est bienveillante, … Plus",
-          "date": "",
-          "rating": ""
-        }
-      ],
-      "contractDetails": {
-        "name": "Radisson Blu Hôtel - Antananarivo Waterfront",
-        "address": "Zone Tana Waterfront, Antananarivo 101",
-        "phone": "020 22 692 00",
-        "website": "https://www.radissonhotels.com/en-us/hotels/radisson-blu-antananarivo-waterfront?cid=a:se+b:gmb+c:emea+i:local+e:rdb+d:mea+h:MGTNRWT2",
-        "plusCode": "4G5F+VV",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -18.8902563,
-          "lng": 47.5246662
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine intérieure Climatisation Service de blanchisserie Accepte les animaux Service de chambre Restaurant Navette aéroport Spa Centre de fitness Bar Non-fumeurs"
-        },
-        "reviews": [
-          {
-            "author": "Haja Tiana",
-            "text": "Nous avons passé un merveilleux long week-end à deux au Radisson Blu, un vrai moment de détente comme nous en avions besoin.\nLa chambre était impeccable, toujours parfaitement propre et bien entretenue … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "181lionelr",
-            "text": "Je me rends régulièrement au Radisson Waterfront dans le cadre de mes déplacements professionnels ; c'est une très bonne adresse que je recommande. Les chambres sont confortables et les deux restaurants proposent des plats variés et très … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Neil Vaudin",
-            "text": "Rien à redire sur l’expérience au Radisson Blu Hôtel - Antananarivo Waterfront.\n\nBien que je n’aie jamais séjourné dans l’hôtel, j’y vais régulièrement pour le … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Tiary Rakotobe",
-            "text": "Séjour très agréable au Radisson Blu ! L’hôtel est moderne, propre et offre un vrai confort. Son emplacement est un énorme atout : juste à côté d’un centre commercial, pratique pour se restaurer, faire du shopping ou sortir sans s’éloigner. … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Oomesh Rampersadsingh",
-            "text": "Chef kisto tres professionelle, gentil et il nous a preparer un delicious plat riz blanc, curry de poulet et crevette a chutney de tomate a la mauricienne wow amazing. Il est toujours present en salle avec le sourire. Shania et Kevin a la … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "josuar2026",
-            "text": "J’ai passé un très bon séjour à l’hôtel Radisson Blu. L’accueil dès à l’entrée était très pro. L’hôtel dispose deux restaurants qui sont très délicieux et savoureux. Chambre spacieuse et lit confortable. Service Conciergerie à la disposition. Hôtel vivement recommandé.",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "anthony dao",
-            "text": "Très belle hotel, confortable, bien insonorisé. Dommage pour la taille et profondeur de la piscine, de surcroît glaciale. Bon point à noter, l'accès possible à la piscine du Radisson voisin, en extérieur. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "R Nahaboo",
-            "text": "Très jolie hôtel très propre et très bien. Par contre les prix sont beaucoup plus cher que la moyenne des hôtels de haut niveau à Tananarive. Il y a souvent des salons qui sont organisés là-bas. Il se trouve a tanawaterfront un peu en dehors de la ville Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Mbola Miary ANDRIANANTENAINA",
-            "text": "Une amie m’a invitée à manger au Radisson Blu pour mon anniversaire, et c’était tout simplement magique. L’accueil, le cadre, et surtout… la nourriture !!!\nUn vrai bonheur pour les papilles. Je ne m’y attendais pas du tout, et j’ai … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "njara soafara",
-            "text": "Une équipe exceptionnelle et une belle innovation !\n\nToujours un plaisir de séjourner au Radisson Blu : l’équipe est bienveillante, … Plus",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/Radisson+Blu+H%C3%B4tel+-+Antananarivo+Waterfront/@-18.8902563,47.5246662,17z/data=!4m10!3m9!1s0x21f08186a9c88a5b:0xfe9a0f95bf97659a!5m2!4m1!1i2!8m2!3d-18.8902563!4d47.5246662!10e1!16s%2Fg%2F11ry4w38_3?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "020 22 692 00"
-          ],
-          "emails": [],
-          "addresses": [
-            "Zone Tana Waterfront, Antananarivo 101"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine intérieure Climatisation Service de blanchisserie Accepte les animaux Service de chambre Restaurant Navette aéroport Spa Centre de fitness Bar Non-fumeurs",
-        "companyCulture": {
-          "mission": ""
+          "mission": "Équipements et services : Parking accessible en fauteuil roulant, Livraison, Services sur place, Vente à emporter, Repas sur place, Cafés, Petit déjeuner, Toilettes, Possibilité de faire des courses rapides, Cartes de crédit, Cartes de débit, Paiements mobiles NFC, Pluxee"
         }
       }
     }

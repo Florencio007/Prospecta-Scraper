@@ -141,7 +141,17 @@ export async function enrichProspectLocally(
     if (useLocalAgent) {
         try {
             const enrichUrl = url.startsWith('http') ? url : `https://${url}`;
-            const response = await fetch(`${agentBase}/api/scrape/enrich-website?website=${encodeURIComponent(enrichUrl)}&openAiKey=${openAiKey}&name=${encodeURIComponent(prospectContext.name || '')}&company=${encodeURIComponent(prospectContext.company || '')}`);
+            
+            // Si la clé est du JSON (OpenRouter/OpenAI mix), on extrait la clé brute pour l'agent local
+            let actualKey = openAiKey;
+            if (openAiKey && openAiKey.startsWith('{')) {
+                try {
+                    const parsed = JSON.parse(openAiKey);
+                    actualKey = parsed.apiKey || openAiKey;
+                } catch(e) {}
+            }
+
+            const response = await fetch(`${agentBase}/api/scrape/enrich-website?website=${encodeURIComponent(enrichUrl)}&openAiKey=${encodeURIComponent(actualKey)}&name=${encodeURIComponent(prospectContext.name || '')}&company=${encodeURIComponent(prospectContext.company || '')}`);
             
             if (response.ok) {
                  // The agent might return the enrichment directly or we can fallback to local analysis if it just scrapes

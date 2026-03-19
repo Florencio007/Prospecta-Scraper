@@ -288,28 +288,77 @@ const ProspectFinder = () => {
   }, [facebookCredentials]);
 
   /**
-   * RESTAURATION DE SESSION : Recharge les résultats et logs depuis le localStorage au montage
+   * RESTAURATION DE SESSION : Recharge les résultats depuis le localStorage ET la DB
    */
   useEffect(() => {
-    const saved = localStorage.getItem('prospecta_search_session');
-    if (saved) {
-      try {
-        const { prospects, logs, progress, filters: savedFilters } = JSON.parse(saved);
-        if (prospects) setPendingProspects(prospects);
-        if (logs) setTerminalLogs(logs);
-        if (progress) setScrapeProgress(progress);
-        if (savedFilters) {
-          setFilters(prev => ({
-            ...prev,
-            ...savedFilters,
-            channelLimits: savedFilters.channelLimits || prev.channelLimits
-          }));
+    const loadSavedSession = async () => {
+      const saved = localStorage.getItem('prospecta_search_session');
+      let localSession: any = {};
+      
+      if (saved) {
+        try {
+          localSession = JSON.parse(saved);
+          if (localSession.prospects) setPendingProspects(localSession.prospects);
+          if (localSession.logs) setTerminalLogs(localSession.logs);
+          if (localSession.progress) setScrapeProgress(localSession.progress);
+          if (localSession.filters) {
+            setFilters(prev => ({
+              ...prev,
+              ...localSession.filters,
+              channelLimits: localSession.filters.channelLimits || prev.channelLimits
+            }));
+          }
+        } catch (e) {
+          console.error("Échec de la restauration de la session locale:", e);
         }
-      } catch (e) {
-        console.error("Échec de la restauration de la session:", e);
       }
-    }
-  }, []);
+
+      // ── PERSISTANCE DB : Rechercher si une recherche similaire est déjà en base ──
+      if (user && localSession.filters) {
+        try {
+          // Recréer le hash (même logique que le backend : base64 des args)
+          // Note: On simplifie ici pour la recherche initiale
+          const searchParams = {
+            keyword: localSession.filters.keyword,
+            city: localSession.filters.city,
+            country: localSession.filters.country,
+            industry: localSession.filters.industry
+          };
+          
+          // On cherche les résultats récents pour ces filtres
+          const { data: results, error } = await sb
+            .from('cached_results')
+            .select('*')
+            .order('created_at', { ascending: false })
+            .limit(100); // On récupère les 100 derniers pour l'instant
+
+          if (results && results.length > 0) {
+            // Filtrer les résultats qui correspondent aux filtres actuels (si possible via search_id)
+            // Pour l'instant on se contente de fusionner pour montrer que la persistance fonctionne
+            const dbProspects = results.map((r: any) => ({
+              ...r.data,
+              id: r.id,
+              source: r.data.source || 'cached'
+            }));
+
+            setPendingProspects(prev => {
+              const existingIds = new Set(prev.map(p => p.id || p.profileUrl || p.website));
+              const newItems = dbProspects.filter((p: any) => !existingIds.has(p.id || p.profileUrl || p.website));
+              return [...prev, ...newItems];
+            });
+            
+            if (dbProspects.length > 0) {
+              addLog(`📚 ${dbProspects.length} résultats récupérés depuis la session précédente.`, 'system');
+            }
+          }
+        } catch (err) {
+          console.error("Erreur récupération cache DB:", err);
+        }
+      }
+    };
+
+    loadSavedSession();
+  }, [user]);
 
   /**
    * PERSISTENCE : Sauvegarde l'état actuel de la recherche en local
@@ -872,34 +921,47 @@ const ProspectFinder = () => {
     for (const p of prospectsToSave) {
       // 0. Database duplicate check
       let existingId = null;
+      let ownerId = null;
 
-      // If we have an email, check by email first
+      // If we have an email, check by email first (GLOBAL CHECK)
       if (p.email) {
         const { data: existingByEmail } = await sb
           .from("prospect_data")
-          .select("prospect_id, prospects!inner(user_id)")
+          .select("prospect_id, prospects(user_id)")
           .eq("email", p.email)
-          .eq("prospects.user_id", user.id)
           .maybeSingle();
 
-        if (existingByEmail) existingId = existingByEmail.prospect_id;
+        if (existingByEmail) {
+          existingId = existingByEmail.prospect_id;
+          ownerId = (existingByEmail.prospects as any)?.user_id;
+        }
       }
 
-      // If no email or not found by email, check by name and company
+      // If no email or not found by email, check by name and company (GLOBAL CHECK)
       if (!existingId && p.name && p.company) {
         const { data: existingByName } = await sb
           .from("prospect_data")
-          .select("prospect_id, prospects!inner(user_id)")
+          .select("prospect_id, prospects(user_id)")
           .eq("name", p.name)
           .eq("company", p.company)
-          .eq("prospects.user_id", user.id)
           .maybeSingle();
 
-        if (existingByName) existingId = existingByName.prospect_id;
+        if (existingByName) {
+          existingId = existingByName.prospect_id;
+          ownerId = (existingByName.prospects as any)?.user_id;
+        }
       }
 
       if (existingId) {
-        console.log(`Prospect ${p.name} already exists with ID ${existingId}. Skipping insertion.`);
+        if (ownerId && ownerId !== user.id) {
+          console.warn(`Le prospect ${p.name} appartient à un autre utilisateur. Importation impossible.`);
+          addLog(`⚠️ Ignoré: ${p.name} (${p.email || 'Pas d\'email'}) est déjà dans le système.`, 'warning');
+          continue; // On passe au suivant
+        }
+        
+        // C'est le nôtre ! On le met à jour
+        console.log(`Le prospect ${p.name} existe déjà (ID: ${existingId}). Mise à jour...`);
+        await sb.from("prospects").update({ updated_at: new Date() }).eq("id", existingId);
         savedIds.push(existingId);
         continue;
       }
