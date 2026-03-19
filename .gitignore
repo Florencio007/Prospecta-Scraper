@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+# .env <- Unignored as per user request
 
 # Editor directories and files
 .vscode/*
