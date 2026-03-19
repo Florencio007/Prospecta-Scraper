@@ -57,6 +57,85 @@ const industryOptions = [
   { key: "others", label: "Autres" },
 ];
 
+// --- Champs de données disponibles par canal ---
+const CHANNEL_DATA_FIELDS: Record<string, { key: string; label: string; icon: string }[]> = {
+  google_maps: [
+    { key: "name", label: "Nom / Raison sociale", icon: "🏢" },
+    { key: "phone", label: "Téléphone", icon: "📞" },
+    { key: "website", label: "Site web", icon: "🌐" },
+    { key: "address", label: "Adresse", icon: "📍" },
+    { key: "category", label: "Catégorie / Secteur", icon: "🏷️" },
+    { key: "rating", label: "Note / Avis", icon: "⭐" },
+    { key: "openingHours", label: "Horaires d'ouverture", icon: "⏰" },
+  ],
+  linkedin: [
+    { key: "name", label: "Nom complet", icon: "👤" },
+    { key: "email", label: "Email", icon: "📧" },
+    { key: "position", label: "Poste / Titre", icon: "💼" },
+    { key: "company", label: "Entreprise", icon: "🏢" },
+    { key: "location", label: "Localisation", icon: "📍" },
+    { key: "profileUrl", label: "URL Profil LinkedIn", icon: "🔗" },
+    { key: "connections", label: "Nombre de connexions", icon: "👥" },
+    { key: "about", label: "Bio / À propos", icon: "📝" },
+  ],
+  facebook: [
+    { key: "name", label: "Nom / Page", icon: "👤" },
+    { key: "phone", label: "Téléphone", icon: "📞" },
+    { key: "email", label: "Email", icon: "📧" },
+    { key: "website", label: "Site web", icon: "🌐" },
+    { key: "location", label: "Localisation", icon: "📍" },
+    { key: "profileUrl", label: "URL Page Facebook", icon: "🔗" },
+    { key: "category", label: "Catégorie", icon: "🏷️" },
+  ],
+  pappers: [
+    { key: "name", label: "Raison sociale", icon: "🏢" },
+    { key: "siren", label: "SIREN / SIRET", icon: "🔖" },
+    { key: "address", label: "Adresse siège", icon: "📍" },
+    { key: "capital", label: "Capital social", icon: "💰" },
+    { key: "dirigeant", label: "Dirigeant(s)", icon: "👤" },
+    { key: "activite", label: "Activité / NAF", icon: "🏷️" },
+    { key: "phone", label: "Téléphone", icon: "📞" },
+  ],
+  pages_jaunes: [
+    { key: "name", label: "Nom", icon: "🏢" },
+    { key: "phone", label: "Téléphone", icon: "📞" },
+    { key: "address", label: "Adresse", icon: "📍" },
+    { key: "website", label: "Site web", icon: "🌐" },
+    { key: "category", label: "Catégorie", icon: "🏷️" },
+  ],
+  societe: [
+    { key: "name", label: "Raison sociale", icon: "🏢" },
+    { key: "siren", label: "SIREN", icon: "🔖" },
+    { key: "address", label: "Adresse", icon: "📍" },
+    { key: "dirigeant", label: "Dirigeant(s)", icon: "👤" },
+    { key: "activite", label: "Activité", icon: "🏷️" },
+  ],
+  infogreffe: [
+    { key: "name", label: "Raison sociale", icon: "🏢" },
+    { key: "siren", label: "SIREN / SIRET", icon: "🔖" },
+    { key: "address", label: "Adresse", icon: "📍" },
+    { key: "capital", label: "Capital social", icon: "💰" },
+    { key: "dirigeant", label: "Dirigeant(s)", icon: "👤" },
+  ],
+  govcon: [
+    { key: "name", label: "Organisme", icon: "🏢" },
+    { key: "contact_name", label: "Contact", icon: "👤" },
+    { key: "email", label: "Email contact", icon: "📧" },
+    { key: "website", label: "URL annonce", icon: "🔗" },
+  ],
+};
+
+// Union unique des champs pour les canaux sélectionnés
+const getFieldsForChannels = (channels: string[]) => {
+  const seen = new Set<string>();
+  return channels.flatMap(ch => CHANNEL_DATA_FIELDS[ch] || []).filter(f => {
+    if (seen.has(f.key)) return false;
+    seen.add(f.key);
+    return true;
+  });
+};
+
+
 const ProspectFinder = () => {
   const { toast } = useToast();
   const { t } = useLanguage();
@@ -181,9 +260,29 @@ const ProspectFinder = () => {
     } as Record<string, number>
   });
 
+  // --- Champs de données sélectionnés par l'utilisateur ---
+  const [selectedFields, setSelectedFields] = useState<string[]>(["name", "email", "phone", "website"]);
 
+  const availableFields = getFieldsForChannels(filters.channels);
 
+  const handleFieldToggle = (fieldKey: string) => {
+    setSelectedFields(prev =>
+      prev.includes(fieldKey) ? prev.filter(f => f !== fieldKey) : [...prev, fieldKey]
+    );
+  };
 
+  // Quand les canaux changent, conserver les champs encore disponibles + ajouter les nouveaux par défaut
+  const handleChannelToggled = (channel: string) => {
+    handleChannelToggle(channel);
+    // S'il est ajouté, on coche par défaut les champs fondamentaux s'ils existent pour ce canal
+    const channelFields = CHANNEL_DATA_FIELDS[channel] || [];
+    const defaultFields = ["name", "email", "phone", "website"];
+    const toAdd = channelFields.filter(f => defaultFields.includes(f.key)).map(f => f.key);
+    setSelectedFields(prev => {
+      const merged = new Set([...prev, ...toAdd]);
+      return Array.from(merged);
+    });
+  };
 
   const channelOptions = [
     { label: t("linkedin"), value: "linkedin" },
@@ -554,7 +653,8 @@ const ProspectFinder = () => {
         industry: industryTerm,
         locationQuery,
         searchQuery: searchQueryString,
-        userId: user?.id
+        userId: user?.id,
+        selectedFields,
       };
 
       // --- EXÉCUTION PARALLÈLE PAR CANAL (Temps Réel) ---
@@ -625,7 +725,7 @@ const ProspectFinder = () => {
           else if (channel === "google_maps") {
             addLog("🛰️ Scan Google Maps en cours...", "system");
             const location = [filters.city, filters.country].filter(Boolean).join(', ') || 'France';
-            const url = getApiUrl(`/api/scrape/gmaps?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(location)}&limit=${filters.channelLimits.google_maps}&userId=${user?.id || ""}&type=${filters.type}`);
+            const url = getApiUrl(`/api/scrape/gmaps?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(location)}&limit=${filters.channelLimits.google_maps}&userId=${user?.id || ""}&type=${filters.type}&fields=${encodeURIComponent(selectedFields.join(','))}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -661,7 +761,7 @@ const ProspectFinder = () => {
             addLog("🛡️ Protocoles LinkedIn (Local)...", "system");
             const location = [filters.city, filters.country].filter(Boolean).join(', ');
             const query = location ? `${filters.keyword} ${location}` : filters.keyword;
-            const url = getApiUrl(`/api/scrape/linkedin?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&email=${encodeURIComponent(linkedinCredentials.email)}&password=${encodeURIComponent(linkedinCredentials.password)}&maxProfiles=${filters.channelLimits.linkedin}&maxPosts=${linkedinOptions.maxPosts}&type=${filters.type}&activityType=${linkedinOptions.activityType}`);
+            const url = getApiUrl(`/api/scrape/linkedin?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&email=${encodeURIComponent(linkedinCredentials.email)}&password=${encodeURIComponent(linkedinCredentials.password)}&maxProfiles=${filters.channelLimits.linkedin}&maxPosts=${linkedinOptions.maxPosts}&type=${filters.type}&activityType=${linkedinOptions.activityType}&fields=${encodeURIComponent(selectedFields.join(','))}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -692,7 +792,7 @@ const ProspectFinder = () => {
             addLog("👥 Protocoles Facebook (Local)...", "system");
             const location = [filters.city, filters.country].filter(Boolean).join(', ');
             const query = location ? `${filters.keyword} ${location}` : filters.keyword;
-            const url = getApiUrl(`/api/scrape/facebook?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&email=${encodeURIComponent(facebookCredentials.email)}&password=${encodeURIComponent(facebookCredentials.password)}&limit=${filters.channelLimits.facebook}&maxPosts=${facebookOptions.maxPosts}&type=${filters.type}&activityType=${facebookOptions.activityType}`);
+            const url = getApiUrl(`/api/scrape/facebook?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&email=${encodeURIComponent(facebookCredentials.email)}&password=${encodeURIComponent(facebookCredentials.password)}&limit=${filters.channelLimits.facebook}&maxPosts=${facebookOptions.maxPosts}&type=${filters.type}&activityType=${facebookOptions.activityType}&fields=${encodeURIComponent(selectedFields.join(','))}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -721,7 +821,7 @@ const ProspectFinder = () => {
           }
           else if (channel === "pages_jaunes") {
              addLog("📖 Pages Jaunes France...", "system");
-             const url = getApiUrl(`/api/scrape/pj?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || '')}&limit=${filters.channelLimits.pages_jaunes}&userId=${user?.id || ""}&type=${filters.type}`);
+             const url = getApiUrl(`/api/scrape/pj?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || '')}&limit=${filters.channelLimits.pages_jaunes}&userId=${user?.id || ""}&type=${filters.type}&fields=${encodeURIComponent(selectedFields.join(','))}`);
              const es = new EventSource(url);
              activeEventSources.current.push(es);
              es.onmessage = (e) => {
@@ -745,7 +845,7 @@ const ProspectFinder = () => {
           }
           else if (channel === "pappers") {
             addLog("📥 Pappers.fr...", "system");
-            const url = getApiUrl(`/api/scrape/pappers?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || '')}&limit=${filters.channelLimits.pappers}&userId=${user?.id || ""}&type=${filters.type}`);
+            const url = getApiUrl(`/api/scrape/pappers?q=${encodeURIComponent(filters.keyword)}&l=${encodeURIComponent(filters.city || filters.country || '')}&limit=${filters.channelLimits.pappers}&userId=${user?.id || ""}&type=${filters.type}&fields=${encodeURIComponent(selectedFields.join(','))}`);
             const es = new EventSource(url);
             activeEventSources.current.push(es);
             es.onmessage = (e) => {
@@ -1171,6 +1271,70 @@ const ProspectFinder = () => {
                   ))}
                 </div>
               </div>
+
+              {/* ── Sélection des données à extraire ─────────────────── */}
+              {filters.channels.length > 0 && availableFields.length > 0 && (
+                <div className="space-y-3 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Database size={14} className="text-emerald-500" />
+                      <span className="text-xs font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                        Données à extraire
+                      </span>
+                    </div>
+                    <div className="flex gap-2 text-[10px]">
+                      <button
+                        onClick={() => setSelectedFields(availableFields.map(f => f.key))}
+                        className="text-emerald-500 hover:underline font-bold"
+                      >
+                        Tout
+                      </button>
+                      <span className="text-muted-foreground">/</span>
+                      <button
+                        onClick={() => setSelectedFields([])}
+                        className="text-muted-foreground hover:text-destructive hover:underline font-bold"
+                      >
+                        Aucun
+                      </button>
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed">
+                    Choisissez les champs à extraire selon vos canaux actifs.
+                  </p>
+                  <div className="grid grid-cols-1 gap-1.5">
+                    {availableFields.map((field) => (
+                      <div key={field.key} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`field-${field.key}`}
+                          checked={selectedFields.includes(field.key)}
+                          onCheckedChange={() => handleFieldToggle(field.key)}
+                          className="border-emerald-500/40 data-[state=checked]:bg-emerald-500 data-[state=checked]:border-emerald-500"
+                        />
+                        <label
+                          htmlFor={`field-${field.key}`}
+                          className="text-xs cursor-pointer flex items-center gap-1.5 text-slate-700 dark:text-slate-300 select-none"
+                        >
+                          <span>{field.icon}</span>
+                          {field.label}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                  {selectedFields.length > 0 && (
+                    <div className="flex flex-wrap gap-1 pt-2 border-t border-emerald-500/20">
+                      <span className="text-[9px] text-muted-foreground mr-1 self-center">Sélectionnés :</span>
+                      {selectedFields.map(key => {
+                        const f = availableFields.find(af => af.key === key);
+                        return f ? (
+                          <span key={key} className="text-[9px] bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 px-1.5 py-0.5 rounded-full">
+                            {f.icon} {f.label}
+                          </span>
+                        ) : null;
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* LinkedIn Credentials — shown only when LinkedIn is selected */}
               {filters.channels.includes("linkedin") && (
