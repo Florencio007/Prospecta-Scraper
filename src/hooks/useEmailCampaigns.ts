@@ -298,6 +298,54 @@ export function useEmailCampaigns() {
             if (result.messageId) {
                 console.log(`[useEmailCampaigns] Email delivered to ${recipient.email}.`);
                 sentToday++;
+
+                // --- INBOX LINKING ---
+                try {
+                    // 1. Check if a thread already exists for this prospect/user/campaign
+                    let { data: thread } = await supabase
+                        .from('email_threads')
+                        .select('id')
+                        .eq('prospect_id', recipient.prospect_id)
+                        .eq('user_id', user.id)
+                        .maybeSingle();
+
+                    if (!thread) {
+                        // Create new thread
+                        const { data: newThread, error: tErr } = await supabase
+                            .from('email_threads')
+                            .insert({
+                                user_id: user.id,
+                                prospect_id: recipient.prospect_id,
+                                campaign_id: campaignId,
+                                subject: campaign.subject,
+                                prospect_email: recipient.email
+                            })
+                            .select()
+                            .single();
+                        if (!tErr) thread = newThread;
+                    }
+
+                    if (thread) {
+                        // 2. Insert the sent message into email_messages
+                        await supabase.from('email_messages').insert({
+                            thread_id: thread.id,
+                            user_id: user.id,
+                            direction: 'sent',
+                            from_email: campaign.from_email,
+                            from_name: campaign.from_name,
+                            to_email: recipient.email,
+                            subject: campaign.subject,
+                            body_text: htmlContent.replace(/<[^>]*>?/gm, '').slice(0, 1000), // Clean text version
+                            body_html: htmlContent,
+                            is_read: true,
+                            received_at: new Date().toISOString()
+                        });
+                    }
+                } catch (inboxErr) {
+                    console.error('[useEmailCampaigns] Failed to link to inbox:', inboxErr);
+                }
+                // ---------------------
+
                 await (supabase.from('campaign_recipients') as any).update({
                     status: 'sent',
                     sent_at: new Date().toISOString(),

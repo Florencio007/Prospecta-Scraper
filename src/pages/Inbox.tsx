@@ -102,7 +102,7 @@ function ThreadCard({
 
         <div className="flex items-center gap-1.5 mt-1.5">
           {thread.campaign_name && (
-            <span className="text-[10px] bg-accent/5 border border-accent/20 px-1.5 py-0.5 rounded text-accent font-medium uppercase tracking-wider">
+            <span className="text-[10px] bg-accent/10 border border-accent/30 px-2 py-0.5 rounded text-accent font-bold uppercase tracking-wider">
               {thread.campaign_name}
             </span>
           )}
@@ -512,6 +512,11 @@ const Inbox = () => {
                       <Mail size={10} />
                       {selectedThread.prospect_email}
                     </span>
+                    {selectedThread.campaign_name && (
+                      <Badge variant="outline" className="ml-2 bg-accent/10 border-accent/30 text-accent text-[10px] py-0 px-2 h-5 uppercase font-bold tracking-wider">
+                        {selectedThread.campaign_name}
+                      </Badge>
+                    )}
                   </div>
                 </div>
 
