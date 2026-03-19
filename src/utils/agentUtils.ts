@@ -15,9 +15,8 @@ export const getAgentApiUrl = (path: string = ''): string => {
   const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
   
   if (!isLocal) {
-    const baseUrl = import.meta.env.VITE_SERVER_PUBLIC_URL || '';
     const formattedPath = path.startsWith('/') ? path : `/${path}`;
-    return `${baseUrl}${formattedPath}`;
+    return formattedPath;
   }
 
   const customPort = localStorage.getItem('prospecta-agent-port');

@@ -104,7 +104,7 @@ function wrapInBrandedTemplate(content, serverPublicUrl, recipientId) {
     </div>
     <div class="footer">
       <p class="tagline">Prospecta — Trouvez vos futurs clients sur tous les réseaux.</p>
-      <p>© 2026 Varatraza Tech · <a href="${serverPublicUrl}">prospecta-scraper.vercel.app</a></p>
+      <p>© 2026 Varatraza Tech · <a href="${serverPublicUrl}">prospecta.soamibango.com</a></p>
       ${recipientId ? `<div style="margin-top: 12px;"><a href="${serverPublicUrl}/api/email/unsubscribe/${recipientId}">Se désabonner</a></div>` : ''}
     </div>
   </div>

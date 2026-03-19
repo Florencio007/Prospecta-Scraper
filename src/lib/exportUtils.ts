@@ -416,7 +416,7 @@ export const exportToPDF = async (data: ExportData[], filename?: string) => {
             doc.setFontSize(6.5);
             doc.setFont('helvetica', 'normal');
             doc.setTextColor(180, 200, 200);
-            doc.text(' · Intelligence Commerciale Automatisée · prospecta-scraper.vercel.app', margin + 20, pageH - 7);
+            doc.text(' · Intelligence Commerciale Automatisée · prospecta.soamibango.com', margin + 20, pageH - 7);
 
             // Center: confidentiality
             doc.setTextColor(180, 200, 200);

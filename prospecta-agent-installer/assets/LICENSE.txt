@@ -2,7 +2,7 @@ PROSPECTA AI AGENT — LICENCE D'UTILISATION
 
 Copyright © 2025 Prospectator. Tous droits réservés.
 
-Ce logiciel (« Prospectator ») est distribué exclusivement pour une utilisation avec la plateforme Prospectator (https://prospecta-scraper.vercel.app).
+Ce logiciel (« Prospectator ») est distribué exclusivement pour une utilisation avec la plateforme Prospectator (https://prospecta.soamibango.com).
 
 CONDITIONS D'UTILISATION :
 
