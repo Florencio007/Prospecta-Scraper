@@ -13,6 +13,7 @@ import { Sparkles } from "lucide-react";
 import AIAssistant from "@/components/dashboard/AIAssistant";
 import { Button } from "@/components/ui/button";
 import CookieConsent from "@/components/CookieConsent";
+import { ReloadPrompt } from "@/components/ReloadPrompt";
 
 const Landing = lazy(() => import("./pages/Landing"));
 const Login = lazy(() => import("./pages/Login"));
@@ -151,6 +152,7 @@ const App = () => (
                   </Routes>
                   <GlobalAIAssistant />
                   <CookieConsent />
+                  <ReloadPrompt />
                 </ErrorBoundary>
               </Suspense>
             </LanguageProvider>
