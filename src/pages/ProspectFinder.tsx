@@ -164,6 +164,7 @@ const ProspectFinder = () => {
   // ── IDENTIFIANTS DE COMPTES (RÉSEAUX SOCIAUX) ───────────────────────────────
   const [linkedinCredentials, setLinkedinCredentials] = useState({ email: "", password: "" });
   const [showLinkedInPassword, setShowLinkedInPassword] = useState(false);
+  const [showFacebookPassword, setShowFacebookPassword] = useState(false);
   const [linkedinOptions, setLinkedinOptions] = useState({ maxPosts: 30, activityType: 'all' });
   const [facebookOptions, setFacebookOptions] = useState({ maxPosts: 10, activityType: 'all' });
   const [facebookCredentials, setFacebookCredentials] = useState({ email: "", password: "" });
@@ -1055,7 +1056,7 @@ const ProspectFinder = () => {
       if (existingId) {
         if (ownerId && ownerId !== user.id) {
           console.warn(`Le prospect ${p.name} appartient à un autre utilisateur. Importation impossible.`);
-          addLog(`⚠️ Ignoré: ${p.name} (${p.email || 'Pas d\'email'}) est déjà dans le système.`, 'warning');
+          addLog(`⚠️ Ignoré: ${p.name} (${p.email || 'Pas d\'email'}) est déjà dans le système.`, 'warn');
           continue; // On passe au suivant
         }
         
