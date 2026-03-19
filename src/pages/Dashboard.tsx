@@ -203,6 +203,7 @@ const Dashboard = () => {
           return { 
             date, 
             count: cumulative,
+            sentCount: dayEvents.sent,
             openRate,
             clickRate,
             replyRate
