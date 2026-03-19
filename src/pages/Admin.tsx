@@ -23,7 +23,6 @@ interface AdminUserStat {
   total_prospects: number;
   total_campaigns: number;
   total_emails_sent: number;
-  total_ai_messages: number;
 }
 
 /**
@@ -71,7 +70,6 @@ const Admin = () => {
   const totalSearches = stats.reduce((sum, s) => sum + (s.search_usage || 0), 0);
   const totalProspects = stats.reduce((sum, s) => sum + (s.total_prospects || 0), 0);
   const totalEmailsSent = stats.reduce((sum, s) => sum + (s.total_emails_sent || 0), 0);
-  const totalAiMessages = stats.reduce((sum, s) => sum + (s.total_ai_messages || 0), 0);
 
   return (
     <div className="min-h-screen bg-background pb-20">
@@ -93,7 +91,7 @@ const Admin = () => {
         </div>
 
         {/* --- KPIs GLOBAUX --- */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5 mb-8">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 mb-8">
           <Card className="border-accent/10 bg-accent/5 shadow-none rounded-2xl relative overflow-hidden">
             <div className="absolute -right-4 -top-4 opacity-10"><Users size={80} /></div>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -141,18 +139,6 @@ const Admin = () => {
               <p className="text-xs text-muted-foreground mt-1">Dans les campagnes cold email</p>
             </CardContent>
           </Card>
-
-          <Card className="border-orange-500/10 bg-orange-500/5 shadow-none rounded-2xl relative overflow-hidden">
-            <div className="absolute -right-4 -top-4 opacity-10"><MessageSquareText size={80} /></div>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Interactions IA</CardTitle>
-              <MessageSquareText className="h-4 w-4 text-orange-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{totalAiMessages}</div>
-              <p className="text-xs text-muted-foreground mt-1">Messages traités par Prospecta AI</p>
-            </CardContent>
-          </Card>
         </div>
 
         {/* --- TABLEAU DETAILLÉ --- */}
@@ -187,7 +173,6 @@ const Admin = () => {
                       <TableHead>Recherches (Quota)</TableHead>
                       <TableHead className="text-center">Prospects Extraits</TableHead>
                       <TableHead className="text-center">Campagnes / Mails</TableHead>
-                      <TableHead className="text-center">Activité IA</TableHead>
                       <TableHead className="pr-6">Date Inscription</TableHead>
                     </TableRow>
                   </TableHeader>
@@ -253,13 +238,6 @@ const Admin = () => {
                               <span className="text-[10px] text-muted-foreground">
                                 ds {p.total_campaigns} camp.
                               </span>
-                            </div>
-                          </TableCell>
-
-                          <TableCell className="text-center font-mono">
-                            <div className="flex items-center justify-center gap-1.5 text-orange-600 dark:text-orange-400">
-                              <MessageSquareText className="h-3 w-3" />
-                              <span className="text-sm font-semibold">{p.total_ai_messages}</span>
                             </div>
                           </TableCell>
 
