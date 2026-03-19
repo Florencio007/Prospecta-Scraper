@@ -1,6 +1,9 @@
 -- Mise à jour de la vue inbox_threads_view pour l'intégration des campagnes
--- 1. On s'assure que la jointure se fait sur email_campaigns
--- 2. On améliore le preview pour afficher le dernier message (envoyé ou reçu)
+-- 1. On supprime l'ancienne vue pour éviter les erreurs de changement de type de colonne
+-- 2. On s'assure que la jointure se fait sur email_campaigns
+-- 3. On améliore le preview pour afficher le dernier message (envoyé ou reçu)
+
+DROP VIEW IF EXISTS public.inbox_threads_view;
 
 CREATE OR REPLACE VIEW public.inbox_threads_view AS
 SELECT 

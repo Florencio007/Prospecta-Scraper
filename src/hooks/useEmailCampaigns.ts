@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useApiKeys } from '@/hooks/useApiKeys';
@@ -41,9 +41,11 @@ export function useEmailCampaigns() {
     const [campaigns, setCampaigns] = useState<EmailCampaign[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const isFetching = useRef(false);
 
     const fetchCampaigns = useCallback(async () => {
-        if (!user) return;
+        if (!user || isFetching.current) return;
+        isFetching.current = true;
         setLoading(true);
         try {
             const { data, error } = await supabase
@@ -62,6 +64,7 @@ export function useEmailCampaigns() {
             setError((err instanceof Error ? err.message : "Une erreur inconnue s'est produite") || 'Error fetching campaigns');
         } finally {
             setLoading(false);
+            isFetching.current = false;
         }
     }, [user]);
 
