@@ -11,16 +11,17 @@ import { useToast } from '@/hooks/use-toast';
 import { 
     Eye, EyeOff, ExternalLink, CheckCircle2, XCircle, Clock, 
     AlertTriangle, Key, Server, Trash2, Mail, ShieldCheck, 
-    MailCheck, MailWarning, Settings2, RefreshCw, Save 
+    MailCheck, MailWarning, Settings2, RefreshCw, Save,
+    Sparkles, Brain, Cpu, Zap
 } from 'lucide-react';
 import { LoadingLogo } from '@/components/LoadingLogo';
 import { ConfirmDialog } from './ConfirmDialog';
 import { testEmailSend, testSmtpConnection } from '@/services/emailService';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Sparkles, Brain, Cpu, Zap } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { Switch } from '@/components/ui/switch';
 import { testImapConnection } from '@/services/emailService';
+import { getAgentApiUrl } from '@/utils/agentUtils';
 
 const PROVIDERS_CONFIG = [
     /* openai is now handled by AiModelCard */
@@ -144,6 +145,9 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
     const { toast } = useToast();
 
     const [host, setHost] = useState('');
+    const handleHostChange = (val: string) => {
+        setHost(val.replace('smtp.google.com', 'smtp.gmail.com'));
+    };
     const [port, setPort] = useState('587');
     const [user, setUser] = useState('');
     const [pass, setPass] = useState('');
@@ -151,6 +155,9 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
     
     // IMAP Settings
     const [imapHost, setImapHost] = useState('');
+    const handleImapHostChange = (val: string) => {
+        setImapHost(val.replace('imap.google.com', 'imap.gmail.com'));
+    };
     const [imapPort, setImapPort] = useState('993');
     const [imapEnabled, setImapEnabled] = useState(false);
     const [imapSecure, setImapSecure] = useState(true);
@@ -164,6 +171,7 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
     const [isSendingTest, setIsSendingTest] = useState(false);
     const [isTestSuccess, setIsTestSuccess] = useState(false);
     const [isImapTestSuccess, setIsImapTestSuccess] = useState(false);
+    const [isSyncingNow, setIsSyncingNow] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
     const fetchSmtpSettings = async () => {
@@ -171,8 +179,8 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
             const { data: { user: currentUser } } = await supabase.auth.getUser();
             if (!currentUser) return;
 
-            const { data, error } = await supabase
-                .from('smtp_settings')
+            const { data, error } = await (supabase
+                .from('smtp_settings') as any)
                 .select('*')
                 .eq('user_id', currentUser.id)
                 .maybeSingle();
@@ -206,8 +214,8 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
             const { data: { user: currentUser } } = await supabase.auth.getUser();
             if (!currentUser) throw new Error("Utilisateur non connecté");
 
-            const { error } = await supabase
-                .from('smtp_settings')
+            const { error } = await (supabase
+                .from('smtp_settings') as any)
                 .upsert({
                     user_id: currentUser.id,
                     host,
@@ -243,6 +251,42 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
             setIsTestSuccess(true);
         }
         else { toast({ title: 'Échec SMTP', description: result.message, variant: 'destructive' }); }
+    };
+
+    const handleSyncNow = async (days: number = 1) => {
+        setIsSyncingNow(true);
+        try {
+            const { data: { user: currentUser } } = await supabase.auth.getUser();
+            if (!currentUser) throw new Error("Utilisateur non connecté");
+
+            const apiUrl = getAgentApiUrl('/api/email/sync-now');
+            console.log("[DEBUG] Syncing now via URL:", apiUrl);
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: currentUser.id, days }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.text();
+                let errorMessage = "Erreur de synchro";
+                try {
+                    const parsed = JSON.parse(errorData);
+                    errorMessage = parsed.error || errorMessage;
+                } catch (e) {
+                    errorMessage = `Erreur Serveur (${response.status})`;
+                }
+                throw new Error(errorMessage);
+            }
+
+            const data = await response.json();
+            toast({ title: 'Succès', description: 'Synchronisation terminée. Vos messages vont apparaître dans l\'Inbox.' });
+            onUpdate();
+        } catch (err: any) {
+            toast({ title: 'Erreur Sync', description: err.message, variant: 'destructive' });
+        } finally {
+            setIsSyncingNow(false);
+        }
     };
 
     const handleTestImap = async () => {
@@ -341,7 +385,7 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                     <div className="grid grid-cols-4 gap-4">
                         <div className="col-span-3 space-y-1">
                             <Label className="text-xs font-semibold">Serveur SMTP (Host)</Label>
-                            <Input placeholder="smtp.gmail.com" value={host} onChange={e => setHost(e.target.value)} className="bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
+                            <Input placeholder="smtp.gmail.com" value={host} onChange={e => handleHostChange(e.target.value)} className="bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
                         </div>
                         <div className="space-y-1">
                             <Label className="text-xs font-semibold">Port</Label>
@@ -400,7 +444,7 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                             <div className="grid grid-cols-4 gap-4">
                                 <div className="col-span-3 space-y-1">
                                     <Label className="text-xs font-semibold">Serveur IMAP (Host)</Label>
-                                    <Input placeholder="imap.gmail.com" value={imapHost} onChange={e => setImapHost(e.target.value)} className="bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
+                                    <Input placeholder="imap.gmail.com" value={imapHost} onChange={e => handleImapHostChange(e.target.value)} className="bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
                                 </div>
                                 <div className="space-y-1">
                                     <Label className="text-xs font-semibold">Port</Label>

@@ -1,32 +1,199 @@
 {
-  "scrapedAt": "2026-03-20T07:20:49.892Z",
-  "query": "hotel nosy be, Madagascar",
-  "total": 6,
+  "scrapedAt": "2026-03-20T16:47:55.435Z",
+  "query": "hotel Antsiranana, Madagascar",
+  "total": 10,
   "hotels": [
     {
-      "name": "Nosy Be Hotel",
-      "phone": "",
-      "website": "http://www.nosybehotel.com/",
-      "mapsUrl": "https://www.google.com/maps/place/Nosy+Be+Hotel/data=!4m10!3m9!1s0x2213c9cff33b2b4f:0xf6ec66407e25f958!5m2!4m1!1i2!8m2!3d-13.3666238!4d48.1900355!16s%2Fg%2F1wjw921d!19sChIJTys788_JEyIRWPklfkBm7PY?authuser=0&hl=fr&rclk=1",
+      "name": "Le Grand Hôtel",
+      "address": "77 Rue Colbert, Antsiranana 201",
+      "phone": "032 40 881 43",
+      "website": "https://www.facebook.com/grandhoteldiego/",
+      "rating": "3,7",
+      "mapsUrl": "https://www.google.com/maps/place/Le+Grand+H%C3%B4tel/@-12.2765423,49.2921101,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c8788eb49e5:0x8606b0f34263f5e9!5m2!4m1!1i2!8m2!3d-12.2765423!4d49.2921101!16s%2Fg%2F1tdr5ljg?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "gps": {
+        "lat": -12.2765423,
+        "lng": 49.2921101
+      },
       "platform": "Site propre",
       "contractDetails": {
-        "name": "Nosy Be Hotel",
-        "address": "Plage des cocotiers, Ambaro",
-        "phone": "",
-        "website": "http://www.nosybehotel.com/",
-        "plusCode": "J5MR+92",
-        "rating": "4,1",
-        "reviewCount": "215",
+        "name": "Le Grand Hôtel",
+        "address": "77 Rue Colbert, Antsiranana 201",
+        "phone": "032 40 881 43",
+        "website": "https://www.facebook.com/grandhoteldiego/",
+        "plusCode": "P7FR+9R",
+        "rating": "3,7",
+        "reviewCount": "219",
+        "gps": {
+          "lat": -12.2765423,
+          "lng": 49.2921101
+        },
+        "category": "lun. 4 mai",
+        "starRating": "",
+        "about": {
+          "amenities": [],
+          "description": ""
+        },
+        "reviews": [],
+        "url": "https://www.google.com/maps/place/Le+Grand+H%C3%B4tel/@-12.2765423,49.2921101,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c8788eb49e5:0x8606b0f34263f5e9!5m2!4m1!1i2!8m2!3d-12.2765423!4d49.2921101!16s%2Fg%2F1tdr5ljg?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+        "platform": "Site propre"
+      },
+      "aiIntelligence": {
+        "activities": {
+          "posts": [],
+          "comments": []
+        },
+        "contactInfo": {
+          "phones": [
+            "032 40 881 43",
+            "+261 32 40 881 43"
+          ],
+          "emails": [
+            "grandhotel_diego@yahoo.fr"
+          ],
+          "addresses": [
+            "77 Rue Colbert, Antsiranana 201"
+          ]
+        },
+        "executiveSummary": "Le Grand Hôtel est un établissement de type \"lun. 4 mai\".",
+        "companyCulture": {
+          "mission": ""
+        }
+      },
+      "siteEnrichment": {
+        "name": "Le Grand Hôtel  (Diego)",
+        "slogan": "",
+        "pageTitle": "Le Grand Hôtel | Diégo-Suarez | Facebook",
+        "metaDescription": "Le Grand Hôtel, Diégo-Suarez. 12 375 J’aime · 376 en parlent · 44 personnes étaient ici. Là où Diego se vit autrement ❤️🏝️\n🏨 Chambres confortables &...",
+        "ogImage": "https://scontent.ftnr4-2.fna.fbcdn.net/v/t39.30808-1/544802266_1386748213451572_8634560420486160364_n.jpg?stp=dst-jpg_tt6&cstp=mx2048x2048&ctp=s720x720&_nc_cat=105&ccb=1-7&_nc_sid=3ab345&_nc_ohc=qLhBnQZWSNAQ7kNvwFaczas&_nc_oc=Adrsthk4foWy0eupTesDRLmoyOvrD_3UWSIoVP76xN7nu5rT9IWbkf87Q5nmhFGmMxI&_nc_zt=24&_nc_ht=scontent.ftnr4-2.fna&_nc_gid=bDKmYiD6lb-i37PVThmUtw&_nc_ss=7a30f&oh=00_AfzRDfztLO6NQ8tKgKsEcv9ZjtdNolZWJ8qBLMD89t4ilQ&oe=69C35084",
+        "lang": "fr",
+        "canonical": "https://web.facebook.com/grandhoteldiego",
+        "logo": "",
+        "heroImage": "",
+        "url": "https://www.facebook.com/grandhoteldiego/",
+        "domain": "facebook.com",
+        "contacts": {
+          "phones": [
+            "+261 32 40 881 43",
+            "032 40 881 43"
+          ],
+          "emails": [
+            "grandhotel_diego@yahoo.fr"
+          ],
+          "whatsapp": [],
+          "addresses": [
+            "46 Rue Colbert – Diego-Suarez",
+            "46 rue Colbert"
+          ],
+          "postalCode": "",
+          "city": "",
+          "country": ""
+        },
         "gps": null,
-        "category": "lun. 6 avr.",
+        "socials": {
+          "facebook": [
+            "https://facebook.com/grandhoteldiego",
+            "https://facebook.com/recover/initiate",
+            "https://facebook.com/photo",
+            "https://facebook.com/grandhoteldiego/followers",
+            "https://facebook.com/grandhoteldiego/following",
+            "https://facebook.com/grandhoteldiego/about",
+            "https://facebook.com/grandhoteldiego/reels_tab",
+            "https://facebook.com/grandhoteldiego/photos",
+            "https://facebook.com/l.php",
+            "https://facebook.com/grandhoteldiego/posts/pfbid02HC4wGfjKkcPbFgxBex71ujEMfMymPdmh97grSzQyV7JdQG4NNrHFLxH736QumnN5l",
+            "https://facebook.com/paula.hassanaly"
+          ]
+        },
+        "hours": {
+          "raw": [],
+          "structured": {},
+          "notes": []
+        },
+        "team": [],
+        "services": {
+          "list": [],
+          "categories": [],
+          "prices": []
+        },
+        "reputation": {
+          "overallRating": "",
+          "reviewCount": "",
+          "reviews": []
+        },
+        "technologies": {
+          "cms": [
+            "Shopify"
+          ],
+          "analytics": [
+            "Google Analytics"
+          ],
+          "marketing": [],
+          "chat": []
+        },
+        "navLinks": [],
+        "structuredData": [],
+        "scrapedAt": "2026-03-20T16:44:33.768Z",
+        "scrapedVia": "site_scraper_module"
+      },
+      "socials": {
+        "facebook": [
+          "https://facebook.com/grandhoteldiego",
+          "https://facebook.com/recover/initiate",
+          "https://facebook.com/photo",
+          "https://facebook.com/grandhoteldiego/followers",
+          "https://facebook.com/grandhoteldiego/following",
+          "https://facebook.com/grandhoteldiego/about",
+          "https://facebook.com/grandhoteldiego/reels_tab",
+          "https://facebook.com/grandhoteldiego/photos",
+          "https://facebook.com/l.php",
+          "https://facebook.com/grandhoteldiego/posts/pfbid02HC4wGfjKkcPbFgxBex71ujEMfMymPdmh97grSzQyV7JdQG4NNrHFLxH736QumnN5l",
+          "https://facebook.com/paula.hassanaly"
+        ]
+      },
+      "technologies": {
+        "cms": [
+          "Shopify"
+        ],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [],
+        "chat": []
+      }
+    },
+    {
+      "name": "LOTUS HOTEL",
+      "address": "78BIS Rue Colbert, Antsiranana 201",
+      "phone": "034 91 907 05",
+      "website": "",
+      "rating": "4,3",
+      "mapsUrl": "https://www.google.com/maps/place/LOTUS+HOTEL/@-12.277206,49.2917077,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c7d75cbf887:0x554d4dfcf72bb3aa!5m2!4m1!1i2!8m2!3d-12.277206!4d49.2917077!16s%2Fg%2F11td3f4wvc?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "gps": {
+        "lat": -12.277206,
+        "lng": 49.2917077
+      },
+      "platform": "Google Maps",
+      "contractDetails": {
+        "name": "LOTUS HOTEL",
+        "address": "78BIS Rue Colbert, Antsiranana 201",
+        "phone": "034 91 907 05",
+        "website": "",
+        "plusCode": "P7FR+4M",
+        "rating": "4,3",
+        "reviewCount": "7",
+        "gps": {
+          "lat": -12.277206,
+          "lng": 49.2917077
+        },
+        "category": "sam. 21 mars",
         "starRating": "",
         "about": {
           "amenities": [],
           "description": ""
         },
         "reviews": [],
-        "url": "https://www.google.com/maps/place/Nosy+Be+Hotel/data=!4m10!3m9!1s0x2213c9cff33b2b4f:0xf6ec66407e25f958!5m2!4m1!1i2!8m2!3d-13.3666238!4d48.1900355!16s%2Fg%2F1wjw921d!19sChIJTys788_JEyIRWPklfkBm7PY?authuser=0&hl=fr&rclk=1",
-        "platform": "Site propre"
+        "url": "https://www.google.com/maps/place/LOTUS+HOTEL/@-12.277206,49.2917077,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c7d75cbf887:0x554d4dfcf72bb3aa!5m2!4m1!1i2!8m2!3d-12.277206!4d49.2917077!16s%2Fg%2F11td3f4wvc?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+        "platform": "Google Maps"
       },
       "aiIntelligence": {
         "activities": {
@@ -34,44 +201,106 @@
           "comments": []
         },
         "contactInfo": {
-          "phones": [],
+          "phones": [
+            "034 91 907 05"
+          ],
           "emails": [],
           "addresses": [
-            "Plage des cocotiers, Ambaro"
+            "78BIS Rue Colbert, Antsiranana 201"
           ]
         },
-        "executiveSummary": "Nosy Be Hotel est un établissement de type \"lun. 6 avr.\".",
+        "executiveSummary": "LOTUS HOTEL est un établissement de type \"sam. 21 mars\".",
         "companyCulture": {
           "mission": ""
         }
       }
     },
     {
-      "name": "Hôtel-Résidence Au Sable Blanc",
-      "phone": "032 11 105 52",
-      "website": "https://www.au-sable-blanc.com/",
-      "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel-R%C3%A9sidence+Au+Sable+Blanc/@-13.3907345,48.2018605,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c8537f2cc883:0xb432685699baf117!5m2!4m1!1i2!8m2!3d-13.3907345!4d48.2018605!16s%2Fg%2F1hhwv7n9b?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
-      "platform": "Site propre",
+      "name": "Le Valiha",
+      "address": "41 Rue Colbert, Antsiranana 201",
+      "phone": "032 07 789 95",
+      "website": "",
+      "rating": "4,0",
+      "mapsUrl": "https://www.google.com/maps/place/Le+Valiha/@-12.2730039,49.2928128,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c866cc2d411:0xd52c3fdb9d36ee76!5m2!4m1!1i2!8m2!3d-12.2730039!4d49.2928128!16s%2Fg%2F1tfz7lg9?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "gps": {
+        "lat": -12.2730039,
+        "lng": 49.2928128
+      },
+      "platform": "Google Maps",
       "contractDetails": {
-        "name": "Hôtel-Résidence Au Sable Blanc",
-        "address": "Madirokely Nosy be, 207",
-        "phone": "032 11 105 52",
-        "website": "https://www.au-sable-blanc.com/",
-        "plusCode": "J652+PP",
-        "rating": "4,4",
-        "reviewCount": "48",
+        "name": "Le Valiha",
+        "address": "41 Rue Colbert, Antsiranana 201",
+        "phone": "032 07 789 95",
+        "website": "",
+        "plusCode": "P7GV+Q4",
+        "rating": "4,0",
+        "reviewCount": "19",
         "gps": {
-          "lat": -13.3907345,
-          "lng": 48.2018605
+          "lat": -12.2730039,
+          "lng": 49.2928128
         },
-        "category": "lun. 23 mars",
+        "category": "sam. 21 mars",
         "starRating": "",
         "about": {
           "amenities": [],
           "description": ""
         },
         "reviews": [],
-        "url": "https://www.google.com/maps/place/H%C3%B4tel-R%C3%A9sidence+Au+Sable+Blanc/@-13.3907345,48.2018605,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c8537f2cc883:0xb432685699baf117!5m2!4m1!1i2!8m2!3d-13.3907345!4d48.2018605!16s%2Fg%2F1hhwv7n9b?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+        "url": "https://www.google.com/maps/place/Le+Valiha/@-12.2730039,49.2928128,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c866cc2d411:0xd52c3fdb9d36ee76!5m2!4m1!1i2!8m2!3d-12.2730039!4d49.2928128!16s%2Fg%2F1tfz7lg9?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+        "platform": "Google Maps"
+      },
+      "aiIntelligence": {
+        "activities": {
+          "posts": [],
+          "comments": []
+        },
+        "contactInfo": {
+          "phones": [
+            "032 07 789 95"
+          ],
+          "emails": [],
+          "addresses": [
+            "41 Rue Colbert, Antsiranana 201"
+          ]
+        },
+        "executiveSummary": "Le Valiha est un établissement de type \"sam. 21 mars\".",
+        "companyCulture": {
+          "mission": ""
+        }
+      }
+    },
+    {
+      "name": "Hôtel Le Petit Paradis",
+      "address": "Rue de la Prison, Antsiranana 201",
+      "phone": "032 47 891 13",
+      "website": "https://hotelpetitparadis.com/",
+      "rating": "4,5",
+      "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel+Le+Petit+Paradis/@-12.2821293,49.2963033,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c636f625f21:0x8bdef65f2f4c3373!5m2!4m1!1i2!8m2!3d-12.2821293!4d49.2963033!16s%2Fg%2F1tl6n6cm?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "gps": {
+        "lat": -12.2821293,
+        "lng": 49.2963033
+      },
+      "platform": "Site propre",
+      "contractDetails": {
+        "name": "Hôtel Le Petit Paradis",
+        "address": "Rue de la Prison, Antsiranana 201",
+        "phone": "032 47 891 13",
+        "website": "https://hotelpetitparadis.com/",
+        "plusCode": "P79W+4G",
+        "rating": "4,5",
+        "reviewCount": "39",
+        "gps": {
+          "lat": -12.2821293,
+          "lng": 49.2963033
+        },
+        "category": "sam. 21 mars",
+        "starRating": "",
+        "about": {
+          "amenities": [],
+          "description": ""
+        },
+        "reviews": [],
+        "url": "https://www.google.com/maps/place/H%C3%B4tel+Le+Petit+Paradis/@-12.2821293,49.2963033,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c636f625f21:0x8bdef65f2f4c3373!5m2!4m1!1i2!8m2!3d-12.2821293!4d49.2963033!16s%2Fg%2F1tl6n6cm?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
         "platform": "Site propre"
       },
       "aiIntelligence": {
@@ -81,46 +310,384 @@
         },
         "contactInfo": {
           "phones": [
-            "032 11 105 52"
+            "032 47 891 13",
+            "+261324789113",
+            "+261 32 47 891 13"
+          ],
+          "emails": [
+            "petit.paradis.diego@gmail.com"
+          ],
+          "addresses": [
+            "Rue de la Prison, Antsiranana 201"
+          ]
+        },
+        "executiveSummary": "Hôtel Le Petit Paradis est un établissement de type \"sam. 21 mars\".",
+        "companyCulture": {
+          "mission": ""
+        }
+      },
+      "siteEnrichment": {
+        "name": "Hôtel Le Petit Paradis",
+        "slogan": "",
+        "pageTitle": "Accueil - Hôtel Le Petit Paradis",
+        "metaDescription": "",
+        "ogImage": "",
+        "lang": "fr-FR",
+        "canonical": "https://hotelpetitparadis.com/",
+        "logo": "https://hotelpetitparadis.com/wp-content/uploads/2024/09/Logo-petit-paradis.png",
+        "heroImage": "https://hotelpetitparadis.com/wp-content/uploads/2024/07/18.jpg",
+        "url": "https://hotelpetitparadis.com/",
+        "domain": "hotelpetitparadis.com",
+        "contacts": {
+          "phones": [
+            "+261324789113",
+            "+261 32 47 891 13"
+          ],
+          "emails": [
+            "petit.paradis.diego@gmail.com"
+          ],
+          "whatsapp": [],
+          "addresses": [
+            "8 rue de la prison",
+            "rue de la prison"
+          ],
+          "postalCode": "",
+          "city": "",
+          "country": ""
+        },
+        "gps": null,
+        "socials": {},
+        "hours": {
+          "raw": [],
+          "structured": {},
+          "notes": []
+        },
+        "team": [],
+        "services": {
+          "list": [
+            "À propos de nous",
+            "Notre concept",
+            "Galerie photos",
+            "Quartier calme et sécurisé",
+            "Magnifique jardin patio",
+            "Proximité du centre-ville",
+            "Chambres confortables"
+          ],
+          "categories": [],
+          "prices": []
+        },
+        "reputation": {
+          "overallRating": "",
+          "reviewCount": "",
+          "reviews": []
+        },
+        "technologies": {
+          "cms": [
+            "WordPress"
+          ],
+          "analytics": [],
+          "marketing": [
+            "Mailchimp"
+          ],
+          "chat": []
+        },
+        "navLinks": [
+          {
+            "text": "Mon Compte",
+            "href": "https://hotelpetitparadis.com/mon-compte/"
+          },
+          {
+            "text": "Contact",
+            "href": "https://hotelpetitparadis.com/contact/"
+          }
+        ],
+        "structuredData": [
+          {
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "WebPage",
+                "@id": "https://hotelpetitparadis.com/",
+                "url": "https://hotelpetitparadis.com/",
+                "name": "Accueil - Hôtel Le Petit Paradis",
+                "isPartOf": {
+                  "@id": "https://hotelpetitparadis.com/#website"
+                },
+                "datePublished": "2024-05-24T07:01:01+00:00",
+                "dateModified": "2024-09-04T22:19:52+00:00",
+                "breadcrumb": {
+                  "@id": "https://hotelpetitparadis.com/#breadcrumb"
+                },
+                "inLanguage": "fr-FR",
+                "potentialAction": [
+                  {
+                    "@type": "ReadAction",
+                    "target": [
+                      "https://hotelpetitparadis.com/"
+                    ]
+                  }
+                ]
+              },
+              {
+                "@type": "BreadcrumbList",
+                "@id": "https://hotelpetitparadis.com/#breadcrumb",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home"
+                  }
+                ]
+              },
+              {
+                "@type": "WebSite",
+                "@id": "https://hotelpetitparadis.com/#website",
+                "url": "https://hotelpetitparadis.com/",
+                "name": "Hôtel Le Petit Paradis",
+                "description": "Hébergement à petit prix",
+                "potentialAction": [
+                  {
+                    "@type": "SearchAction",
+                    "target": {
+                      "@type": "EntryPoint",
+                      "urlTemplate": "https://hotelpetitparadis.com/?s={search_term_string}"
+                    },
+                    "query-input": {
+                      "@type": "PropertyValueSpecification",
+                      "valueRequired": true,
+                      "valueName": "search_term_string"
+                    }
+                  }
+                ],
+                "inLanguage": "fr-FR"
+              }
+            ]
+          }
+        ],
+        "scrapedAt": "2026-03-20T16:45:54.397Z",
+        "scrapedVia": "site_scraper_module"
+      },
+      "socials": {},
+      "technologies": {
+        "cms": [
+          "WordPress"
+        ],
+        "analytics": [],
+        "marketing": [
+          "Mailchimp"
+        ],
+        "chat": []
+      }
+    },
+    {
+      "name": "Le DIEGO Hôtel",
+      "address": "Antsiranana 201",
+      "phone": "032 46 403 70",
+      "website": "",
+      "rating": "5,0",
+      "mapsUrl": "https://www.google.com/maps/place/Le+DIEGO+H%C3%B4tel/@-12.2805625,49.2919375,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1d6aefbcc627:0x4d998be96766fddb!5m2!4m1!1i2!8m2!3d-12.2805625!4d49.2919375!16s%2Fg%2F11hy_zck53?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "gps": {
+        "lat": -12.2805625,
+        "lng": 49.2919375
+      },
+      "platform": "Google Maps",
+      "contractDetails": {
+        "name": "Le DIEGO Hôtel",
+        "address": "Antsiranana 201",
+        "phone": "032 46 403 70",
+        "website": "",
+        "plusCode": "P79R+QQ",
+        "rating": "5,0",
+        "reviewCount": "13",
+        "gps": {
+          "lat": -12.2805625,
+          "lng": 49.2919375
+        },
+        "category": "ven. 27 mars",
+        "starRating": "",
+        "about": {
+          "amenities": [],
+          "description": ""
+        },
+        "reviews": [],
+        "url": "https://www.google.com/maps/place/Le+DIEGO+H%C3%B4tel/@-12.2805625,49.2919375,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1d6aefbcc627:0x4d998be96766fddb!5m2!4m1!1i2!8m2!3d-12.2805625!4d49.2919375!16s%2Fg%2F11hy_zck53?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+        "platform": "Google Maps"
+      },
+      "aiIntelligence": {
+        "activities": {
+          "posts": [],
+          "comments": []
+        },
+        "contactInfo": {
+          "phones": [
+            "032 46 403 70"
           ],
           "emails": [],
           "addresses": [
-            "Madirokely Nosy be, 207"
+            "Antsiranana 201"
           ]
         },
-        "executiveSummary": "Hôtel-Résidence Au Sable Blanc est un établissement de type \"lun. 23 mars\".",
+        "executiveSummary": "Le DIEGO Hôtel est un établissement de type \"ven. 27 mars\".",
         "companyCulture": {
           "mission": ""
         }
       }
     },
     {
-      "name": "Royal Beach Hotel & Spa",
-      "phone": "032 05 322 44",
-      "website": "http://www.royalbeach.mg/",
-      "mapsUrl": "https://www.google.com/maps/place/Royal+Beach+Hotel+%26+Spa/@-13.392224,48.2044747,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c856a63f44b1:0xb89e3a3ff27a2c50!5m2!4m1!1i2!8m2!3d-13.392224!4d48.2044747!16s%2Fg%2F11b6_v58d5?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "name": "Hôtel de la Poste",
+      "address": "Boulevard Bascilles, Antsiranana 201",
+      "phone": "032 04 785 75",
+      "website": "http://www.diego-hoteldelaposte.com/",
+      "rating": "3,8",
+      "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel+de+la+Poste/@-12.2688338,49.2917689,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c852701d2df:0x94e0cc848182f9be!5m2!4m1!1i2!8m2!3d-12.2688338!4d49.2917689!16s%2Fg%2F1wck04zn?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "gps": {
+        "lat": -12.2688338,
+        "lng": 49.2917689
+      },
       "platform": "Site propre",
       "contractDetails": {
-        "name": "Royal Beach Hotel & Spa",
-        "address": "BP58 Madirokely Nosy Be, 207",
-        "phone": "032 05 322 44",
-        "website": "http://www.royalbeach.mg/",
-        "plusCode": "J653+4Q",
+        "name": "Hôtel de la Poste",
+        "address": "Boulevard Bascilles, Antsiranana 201",
+        "phone": "032 04 785 75",
+        "website": "http://www.diego-hoteldelaposte.com/",
+        "plusCode": "P7JR+FP",
+        "rating": "3,8",
+        "reviewCount": "126",
+        "gps": {
+          "lat": -12.2688338,
+          "lng": 49.2917689
+        },
+        "category": "sam. 21 mars",
+        "starRating": "",
+        "about": {
+          "amenities": [],
+          "description": ""
+        },
+        "reviews": [],
+        "url": "https://www.google.com/maps/place/H%C3%B4tel+de+la+Poste/@-12.2688338,49.2917689,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c852701d2df:0x94e0cc848182f9be!5m2!4m1!1i2!8m2!3d-12.2688338!4d49.2917689!16s%2Fg%2F1wck04zn?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+        "platform": "Site propre"
+      },
+      "aiIntelligence": {
+        "activities": {
+          "posts": [],
+          "comments": []
+        },
+        "contactInfo": {
+          "phones": [
+            "032 04 785 75",
+            "+261 32 04 785 75"
+          ],
+          "emails": [
+            "contact@diego-hoteldelaposte.com"
+          ],
+          "addresses": [
+            "Boulevard Bascilles, Antsiranana 201"
+          ]
+        },
+        "executiveSummary": "Hôtel de la Poste est un établissement de type \"sam. 21 mars\".",
+        "companyCulture": {
+          "mission": ""
+        }
+      },
+      "siteEnrichment": {
+        "name": "HÔTEL DE LA POSTE\n  \n  \n  \n  \n  \n  \n     4,56 dans 277 avis",
+        "slogan": "",
+        "pageTitle": "Hôtel de La Poste - Diego Suarez - Antsiranana - Accueil",
+        "metaDescription": "Hôtel de légende à Diego Suarez, l'Hôtel de La Poste vous propose 80 suites & chambres de standing avec vue sur la Baie, à deux pas du centre ville",
+        "ogImage": "https://www.diego-hoteldelaposte.com/images/slider_2017/chambre.jpg",
+        "lang": "fr-fr",
+        "canonical": "",
+        "logo": "",
+        "heroImage": "",
+        "url": "http://www.diego-hoteldelaposte.com/",
+        "domain": "diego-hoteldelaposte.com",
+        "contacts": {
+          "phones": [
+            "+261 32 04 785 75"
+          ],
+          "emails": [
+            "contact@diego-hoteldelaposte.com"
+          ],
+          "whatsapp": [],
+          "addresses": [],
+          "postalCode": "",
+          "city": "",
+          "country": ""
+        },
+        "gps": null,
+        "socials": {},
+        "hours": {
+          "raw": [],
+          "structured": {},
+          "notes": []
+        },
+        "team": [],
+        "services": {
+          "list": [],
+          "categories": [],
+          "prices": []
+        },
+        "reputation": {
+          "overallRating": "",
+          "reviewCount": "",
+          "reviews": []
+        },
+        "technologies": {
+          "cms": [],
+          "analytics": [
+            "Google Analytics"
+          ],
+          "marketing": [],
+          "chat": []
+        },
+        "navLinks": [],
+        "structuredData": [],
+        "scrapedAt": "2026-03-20T16:46:46.224Z",
+        "scrapedVia": "site_scraper_module"
+      },
+      "socials": {},
+      "technologies": {
+        "cms": [],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [],
+        "chat": []
+      }
+    },
+    {
+      "name": "Sanjeela Plage Coco",
+      "address": "Plage Coco, Antsiranana 201",
+      "phone": "034 47 380 99",
+      "website": "",
+      "rating": "4,7",
+      "mapsUrl": "https://www.google.com/maps/place/Sanjeela+Plage+Coco/@-12.3003726,49.3016923,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1dd300715e69:0x34ad2dca423ff464!5m2!4m1!1i2!8m2!3d-12.3003726!4d49.3016923!16s%2Fg%2F11fd4wh8ms?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "gps": {
+        "lat": -12.3003726,
+        "lng": 49.3016923
+      },
+      "platform": "Google Maps",
+      "contractDetails": {
+        "name": "Sanjeela Plage Coco",
+        "address": "Plage Coco, Antsiranana 201",
+        "phone": "034 47 380 99",
+        "website": "",
+        "plusCode": "M8X2+VM",
         "rating": "4,7",
-        "reviewCount": "797",
+        "reviewCount": "46",
         "gps": {
-          "lat": -13.392224,
-          "lng": 48.2044747
+          "lat": -12.3003726,
+          "lng": 49.3016923
         },
-        "category": "mer. 15 avr.",
+        "category": "mer. 8 avr.",
         "starRating": "",
         "about": {
           "amenities": [],
           "description": ""
         },
         "reviews": [],
-        "url": "https://www.google.com/maps/place/Royal+Beach+Hotel+%26+Spa/@-13.392224,48.2044747,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c856a63f44b1:0xb89e3a3ff27a2c50!5m2!4m1!1i2!8m2!3d-13.392224!4d48.2044747!16s%2Fg%2F11b6_v58d5?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
+        "url": "https://www.google.com/maps/place/Sanjeela+Plage+Coco/@-12.3003726,49.3016923,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1dd300715e69:0x34ad2dca423ff464!5m2!4m1!1i2!8m2!3d-12.3003726!4d49.3016923!16s%2Fg%2F11fd4wh8ms?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+        "platform": "Google Maps"
       },
       "aiIntelligence": {
         "activities": {
@@ -129,45 +696,45 @@
         },
         "contactInfo": {
           "phones": [
-            "032 05 322 44"
+            "034 47 380 99"
           ],
           "emails": [],
           "addresses": [
-            "BP58 Madirokely Nosy Be, 207"
+            "Plage Coco, Antsiranana 201"
           ]
         },
-        "executiveSummary": "Royal Beach Hotel & Spa est un établissement de type \"mer. 15 avr.\".",
+        "executiveSummary": "Sanjeela Plage Coco est un établissement de type \"mer. 8 avr.\".",
         "companyCulture": {
           "mission": ""
         }
       }
     },
     {
-      "name": "Anjiamarango Beach Resort",
-      "phone": "032 02 655 98",
-      "website": "http://www.anjiamarango-beach-resort.com/",
-      "mapsUrl": "https://www.google.com/maps/place/Anjiamarango+Beach+Resort/@-13.240962,48.253424,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c7b0880df185:0xc9b4a983f53b59f0!5m2!4m1!1i2!8m2!3d-13.240962!4d48.253424!16s%2Fg%2F113hj7hbp?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "name": "Motel Au Petit Vatel",
+      "address": "Lot 3, Soafeno, 608 04, Antsiranana 201",
+      "phone": "032 04 101 22",
+      "website": "https://motel-au-petit-vatel.com/",
+      "rating": "5,0",
+      "mapsUrl": "https://www.google.com/maps/place/Motel+Au+Petit+Vatel/data=!4m10!3m9!1s0x226b1c0dab485ba3:0x96eb2b1755283b7!5m2!4m1!1i2!8m2!3d-12.2975899!4d49.2918305!16s%2Fg%2F11fy_dbydq!19sChIJo1tIqw0cayIRt4NSdbGybgk?authuser=0&hl=fr&rclk=1",
+      "gps": null,
       "platform": "Site propre",
       "contractDetails": {
-        "name": "Anjiamarango Beach Resort",
-        "address": "Befotaka",
-        "phone": "032 02 655 98",
-        "website": "http://www.anjiamarango-beach-resort.com/",
-        "plusCode": "Q753+J9",
-        "rating": "4,4",
-        "reviewCount": "202",
-        "gps": {
-          "lat": -13.240962,
-          "lng": 48.253424
-        },
-        "category": "lun. 20 avr.",
+        "name": "Motel Au Petit Vatel",
+        "address": "Lot 3, Soafeno, 608 04, Antsiranana 201",
+        "phone": "032 04 101 22",
+        "website": "https://motel-au-petit-vatel.com/",
+        "plusCode": "P72R+XP",
+        "rating": "5,0",
+        "reviewCount": "3",
+        "gps": null,
+        "category": "sam. 21 mars",
         "starRating": "",
         "about": {
           "amenities": [],
           "description": ""
         },
         "reviews": [],
-        "url": "https://www.google.com/maps/place/Anjiamarango+Beach+Resort/@-13.240962,48.253424,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c7b0880df185:0xc9b4a983f53b59f0!5m2!4m1!1i2!8m2!3d-13.240962!4d48.253424!16s%2Fg%2F113hj7hbp?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+        "url": "https://www.google.com/maps/place/Motel+Au+Petit+Vatel/data=!4m10!3m9!1s0x226b1c0dab485ba3:0x96eb2b1755283b7!5m2!4m1!1i2!8m2!3d-12.2975899!4d49.2918305!16s%2Fg%2F11fy_dbydq!19sChIJo1tIqw0cayIRt4NSdbGybgk?authuser=0&hl=fr&rclk=1",
         "platform": "Site propre"
       },
       "aiIntelligence": {
@@ -177,45 +744,110 @@
         },
         "contactInfo": {
           "phones": [
-            "032 02 655 98"
+            "032 04 101 22"
           ],
           "emails": [],
           "addresses": [
-            "Befotaka"
+            "Lot 3, Soafeno, 608 04, Antsiranana 201"
           ]
         },
-        "executiveSummary": "Anjiamarango Beach Resort est un établissement de type \"lun. 20 avr.\".",
+        "executiveSummary": "Motel Au Petit Vatel est un établissement de type \"sam. 21 mars\".",
+        "companyCulture": {
+          "mission": ""
+        }
+      },
+      "siteEnrichment": {
+        "url": "https://motel-au-petit-vatel.com/",
+        "domain": "motel-au-petit-vatel.com",
+        "loadError": "page.goto: Timeout 25000ms exceeded.\nCall log:\n\u001b[2m  - navigating to \"https://motel-au-petit-vatel.com/\", waiting until \"domcontentloaded\"\u001b[22m\n"
+      }
+    },
+    {
+      "name": "HAVANA RESTAURANT BAR HÔTEL",
+      "address": "1 Rue Francois de Mahy, Antsiranana 201",
+      "phone": "032 05 252 55",
+      "website": "",
+      "rating": "3,9",
+      "mapsUrl": "https://www.google.com/maps/place/HAVANA+RESTAURANT+BAR+H%C3%94TEL/@-12.2778724,49.291971,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1d0069a2f241:0x3e461af0137a82ff!5m2!4m1!1i2!8m2!3d-12.2778724!4d49.291971!16s%2Fg%2F11wpvq9wpr?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "gps": {
+        "lat": -12.2778724,
+        "lng": 49.291971
+      },
+      "platform": "Google Maps",
+      "contractDetails": {
+        "name": "HAVANA RESTAURANT BAR HÔTEL",
+        "address": "1 Rue Francois de Mahy, Antsiranana 201",
+        "phone": "032 05 252 55",
+        "website": "",
+        "plusCode": "P7CR+VQ",
+        "rating": "3,9",
+        "reviewCount": "15",
+        "gps": {
+          "lat": -12.2778724,
+          "lng": 49.291971
+        },
+        "category": "mar. 24 mars",
+        "starRating": "",
+        "about": {
+          "amenities": [],
+          "description": ""
+        },
+        "reviews": [],
+        "url": "https://www.google.com/maps/place/HAVANA+RESTAURANT+BAR+H%C3%94TEL/@-12.2778724,49.291971,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1d0069a2f241:0x3e461af0137a82ff!5m2!4m1!1i2!8m2!3d-12.2778724!4d49.291971!16s%2Fg%2F11wpvq9wpr?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+        "platform": "Google Maps"
+      },
+      "aiIntelligence": {
+        "activities": {
+          "posts": [],
+          "comments": []
+        },
+        "contactInfo": {
+          "phones": [
+            "032 05 252 55"
+          ],
+          "emails": [],
+          "addresses": [
+            "1 Rue Francois de Mahy, Antsiranana 201"
+          ]
+        },
+        "executiveSummary": "HAVANA RESTAURANT BAR HÔTEL est un établissement de type \"mar. 24 mars\".",
         "companyCulture": {
           "mission": ""
         }
       }
     },
     {
-      "name": "L'heure Bleue",
-      "phone": "034 50 484 25",
-      "website": "http://www.heurebleue.com/",
-      "mapsUrl": "https://www.google.com/maps/place/L'heure+Bleue/@-13.3893434,48.1973615,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c9ac63761d0d:0x7c874150c0edc0e4!5m2!4m1!1i2!8m2!3d-13.3893434!4d48.1973615!16s%2Fg%2F1tg_0srs?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "name": "Hôtel Le Village Diego",
+      "address": "P75R+38, lot: 3.232.02 Av. Philibert Tsiranana, Antsiranana 201",
+      "phone": "032 02 306 78",
+      "website": "https://levillage-diego.com/",
+      "rating": "3,6",
+      "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel+Le+Village+Diego/@-12.2925115,49.2905112,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c73a09a85b5:0x985460309f511065!5m2!4m1!1i2!8m2!3d-12.2925115!4d49.2905112!16s%2Fg%2F11b61s14hj?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "gps": {
+        "lat": -12.2925115,
+        "lng": 49.2905112
+      },
       "platform": "Site propre",
       "contractDetails": {
-        "name": "L'heure Bleue",
-        "address": "Madirokely plage Nosy Be, 207",
-        "phone": "034 50 484 25",
-        "website": "http://www.heurebleue.com/",
-        "plusCode": "J56W+7W",
-        "rating": "4,1",
-        "reviewCount": "199",
+        "name": "Hôtel Le Village Diego",
+        "address": "P75R+38, lot: 3.232.02 Av. Philibert Tsiranana, Antsiranana 201",
+        "phone": "032 02 306 78",
+        "website": "https://levillage-diego.com/",
+        "plusCode": "",
+        "rating": "3,6",
+        "reviewCount": "39",
         "gps": {
-          "lat": -13.3893434,
-          "lng": 48.1973615
+          "lat": -12.2925115,
+          "lng": 49.2905112
         },
-        "category": "ven. 20 mars",
+        "category": "sam. 11 avr.",
         "starRating": "",
         "about": {
           "amenities": [],
           "description": ""
         },
         "reviews": [],
-        "url": "https://www.google.com/maps/place/L'heure+Bleue/@-13.3893434,48.1973615,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c9ac63761d0d:0x7c874150c0edc0e4!5m2!4m1!1i2!8m2!3d-13.3893434!4d48.1973615!16s%2Fg%2F1tg_0srs?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+        "url": "https://www.google.com/maps/place/H%C3%B4tel+Le+Village+Diego/@-12.2925115,49.2905112,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c73a09a85b5:0x985460309f511065!5m2!4m1!1i2!8m2!3d-12.2925115!4d49.2905112!16s%2Fg%2F11b61s14hj?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
         "platform": "Site propre"
       },
       "aiIntelligence": {
@@ -225,65 +857,129 @@
         },
         "contactInfo": {
           "phones": [
-            "034 50 484 25"
+            "032 02 306 78",
+            "+261) 32 02 306",
+            "+261) 32 07 910"
           ],
-          "emails": [],
+          "emails": [
+            "levillagediego@yahoo.fr"
+          ],
           "addresses": [
-            "Madirokely plage Nosy Be, 207"
+            "P75R+38, lot: 3.232.02 Av. Philibert Tsiranana, Antsiranana 201"
           ]
         },
-        "executiveSummary": "L'heure Bleue est un établissement de type \"ven. 20 mars\".",
+        "executiveSummary": "Hôtel Le Village Diego est un établissement de type \"sam. 11 avr.\".",
         "companyCulture": {
           "mission": ""
         }
-      }
-    },
-    {
-      "name": "Vanila Hotel & Spa",
-      "phone": "032 03 921 01",
-      "website": "http://vanila-hotel.com/",
-      "mapsUrl": "https://www.google.com/maps/place/Vanila+Hotel+%26+Spa/@-13.3209451,48.1852268,17z/data=!3m1!4b1!4m9!3m8!1s0x2213b658d5d90b9d:0x4c15c112593ecbe0!5m2!4m1!1i2!8m2!3d-13.3209451!4d48.1852268!16s%2Fg%2F1thlqc6g?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
-      "platform": "Site propre",
-      "contractDetails": {
-        "name": "Vanila Hotel & Spa",
-        "address": "Route de l'Ouest Nosy Be, 207",
-        "phone": "032 03 921 01",
-        "website": "http://vanila-hotel.com/",
-        "plusCode": "M5HP+J3",
-        "rating": "4,6",
-        "reviewCount": "385",
-        "gps": {
-          "lat": -13.3209451,
-          "lng": 48.1852268
-        },
-        "category": "lun. 30 mars",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": ""
-        },
-        "reviews": [],
-        "url": "https://www.google.com/maps/place/Vanila+Hotel+%26+Spa/@-13.3209451,48.1852268,17z/data=!3m1!4b1!4m9!3m8!1s0x2213b658d5d90b9d:0x4c15c112593ecbe0!5m2!4m1!1i2!8m2!3d-13.3209451!4d48.1852268!16s%2Fg%2F1thlqc6g?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
       },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
+      "siteEnrichment": {
+        "name": "Hôtel - Restaurant - Piscine",
+        "slogan": "",
+        "pageTitle": "Hôtel Le Village Diego - Antsiranana, Madagascar",
+        "metaDescription": "Découvrez Le Village Diego, un hôtel charmant à Diego Suarez, Madagascar. Profitez de nos bungalows, d'un restaurant et d'une piscine, le tout niché dans un magnifique jardin en plein cœur de la ville.",
+        "ogImage": "",
+        "lang": "fr",
+        "canonical": "",
+        "logo": "https://levillage-diego.com/images/logo_le_village.webp",
+        "heroImage": "https://levillage-diego.com/images/logo_le_village.webp",
+        "url": "https://levillage-diego.com/",
+        "domain": "levillage-diego.com",
+        "contacts": {
           "phones": [
-            "032 03 921 01"
+            "+261) 32 02 306",
+            "+261) 32 07 910"
           ],
-          "emails": [],
+          "emails": [
+            "levillagediego@yahoo.fr"
+          ],
+          "whatsapp": [],
           "addresses": [
-            "Route de l'Ouest Nosy Be, 207"
+            "Madagascar a à offrir.",
+            "lottants sont également mis à disposition pour leur amusement. Un surveillant de baignade est présent j",
+            "Avenue Philibert Tsiranana",
+            "Lot : 3.232.02"
+          ],
+          "postalCode": "",
+          "city": "",
+          "country": ""
+        },
+        "gps": null,
+        "socials": {
+          "facebook": [
+            "https://www.facebook.com/HotelLeVillageDiego"
           ]
         },
-        "executiveSummary": "Vanila Hotel & Spa est un établissement de type \"lun. 30 mars\".",
-        "companyCulture": {
-          "mission": ""
-        }
+        "hours": {
+          "raw": [],
+          "structured": {},
+          "notes": []
+        },
+        "team": [],
+        "services": {
+          "list": [
+            "Bungalow Standard",
+            "Bungalow Familial",
+            "Notre restaurant en bord de piscine",
+            "Notre toute nouvelle Pizzeria",
+            "Une piscine pour toute la famille",
+            "Informations",
+            "Localisation"
+          ],
+          "categories": [],
+          "prices": []
+        },
+        "reputation": {
+          "overallRating": "",
+          "reviewCount": "",
+          "reviews": []
+        },
+        "technologies": {
+          "cms": [],
+          "analytics": [
+            "Google Analytics"
+          ],
+          "marketing": [],
+          "chat": []
+        },
+        "navLinks": [
+          {
+            "text": "Accueil",
+            "href": "https://levillage-diego.com/#accueil"
+          },
+          {
+            "text": "Bungalow",
+            "href": "https://levillage-diego.com/#bungalow"
+          },
+          {
+            "text": "Restaurant, Pizzeria et Piscine",
+            "href": "https://levillage-diego.com/#restaurant-pizza-piscine"
+          },
+          {
+            "text": "Galerie",
+            "href": "https://levillage-diego.com/#galerie"
+          },
+          {
+            "text": "Contact",
+            "href": "https://levillage-diego.com/#contact"
+          }
+        ],
+        "structuredData": [],
+        "scrapedAt": "2026-03-20T16:47:54.426Z",
+        "scrapedVia": "site_scraper_module"
+      },
+      "socials": {
+        "facebook": [
+          "https://www.facebook.com/HotelLeVillageDiego"
+        ]
+      },
+      "technologies": {
+        "cms": [],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [],
+        "chat": []
       }
     }
   ]

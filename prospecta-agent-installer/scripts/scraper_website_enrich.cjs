@@ -99,9 +99,24 @@ async function scrapeWebsite() {
     // Limit text size for OpenAI (approx 15k characters to stay within tokens safely)
     aggregatedText = aggregatedText.replace(/\s+/g, ' ').trim().substring(0, 25000);
 
-    emit("PROGRESS", { percentage: 60, message: `Analyse IA des données collectées...` });
-
     // 2. OpenAI Analysis
+    let actualKey = openAiKey;
+    let baseUrl = 'https://api.openai.com/v1/chat/completions';
+    let model = 'gpt-4o-mini';
+
+    if (openAiKey && openAiKey.startsWith('{')) {
+      try {
+        const config = JSON.parse(openAiKey);
+        if (config.apiKey) actualKey = config.apiKey;
+        if (config.baseUrl) {
+          baseUrl = config.baseUrl.endsWith('/chat/completions') 
+            ? config.baseUrl 
+            : `${config.baseUrl.replace(/\/$/, '')}/chat/completions`;
+        }
+        if (config.model) model = config.model;
+      } catch (e) {}
+    }
+
     const fetchFn = await getFetch();
     const systemPrompt = `
 Tu es un expert en intelligence commerciale hautement qualifié.
@@ -139,14 +154,19 @@ Structure JSON:
 }
 `;
 
-    const openAiResponse = await fetchFn('https://api.openai.com/v1/chat/completions', {
+    const openAiResponse = await fetchFn(baseUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${openAiKey}`
+        'Authorization': `Bearer ${actualKey}`,
+        // OpenRouter specific headers
+        ...(baseUrl.includes('openrouter.ai') ? {
+          'HTTP-Referer': 'https://prospecta.soamibango.com',
+          'X-Title': 'Prospecta AI',
+        } : {})
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: model,
         response_format: { type: "json_object" },
         messages: [
           { role: "system", content: systemPrompt },

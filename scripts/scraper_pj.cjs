@@ -8,6 +8,7 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
 const path = require('path');
+const { scrapeOfficialSite, isOfficialSite } = require('./site_scraper_module.cjs');
 
 // ─── UTILITAIRES ──────────────────────────────────────────────────────────────
 function emitLog(msg, pct = undefined) {
@@ -528,6 +529,47 @@ async function main() {
 
       emitLog(`      ✅ ${prospect.name} — ${prospect.phone || 'no phone'}`);
       emitResult(prospect);
+
+      // ── Enrichissement site officiel ──────────────────────────────────────
+      const websiteUrl = prospect.website || detail?.website;
+      if (websiteUrl && isOfficialSite(websiteUrl)) {
+        try {
+          emitLog(`      🌐 Enrichissement site : ${websiteUrl}`);
+          const enrichPage = await context.newPage();
+          try {
+            const siteData = await scrapeOfficialSite(enrichPage, { url: websiteUrl, name: prospect.name }, { visitContactPage: true, emitLog });
+            
+            if (!siteData.loadError) {
+              prospect.siteEnrichment = siteData;
+              const contacts = siteData.contacts || {};
+              if (contacts.emails?.length) prospect.email = [...new Set([prospect.email, ...contacts.emails])].filter(Boolean).join(', ') || prospect.email;
+              if (contacts.phones?.length) prospect.phone = [...new Set([prospect.phone, ...contacts.phones])].filter(Boolean).join(', ') || prospect.phone;
+              if (contacts.whatsapp?.length) prospect.whatsapp = contacts.whatsapp.join(', ');
+              
+              if (siteData.socials) {
+                prospect.socialLinks = { 
+                  ...prospect.socialLinks, 
+                  ...Object.fromEntries(Object.entries(siteData.socials).map(([k, v]) => [k, Array.isArray(v) ? v[0] : v])) 
+                };
+              }
+              if (siteData.team?.length) prospect.team = siteData.team;
+              if (siteData.technologies) prospect.technologies = siteData.technologies;
+              if (siteData.services) prospect.services_detail = siteData.services;
+              if (siteData.reputation) prospect.website_reputation = siteData.reputation;
+              if (siteData.forms) prospect.contact_forms = siteData.forms;
+              
+              // Re-emit updated result
+              emitResult(prospect);
+            }
+          } finally {
+            await enrichPage.close();
+          }
+        } catch (siteErr) {
+          emitLog(`      ⚠️  Site enrichment failed : ${siteErr.message}`);
+        }
+      } else if (websiteUrl) {
+        emitLog(`      ⏭️  Enrichissement ignoré (blacklist ou non-officiel) : ${websiteUrl}`);
+      }
 
       await sleep(CONFIG.delay);
     }

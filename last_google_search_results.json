@@ -1,0 +1,3988 @@
+{
+  "scrapedAt": "2026-03-20T14:21:41.664Z",
+  "query": "hotel Antsiranana, Madagascar",
+  "location": "Antsiranana, Madagascar",
+  "stats": {
+    "total": 15,
+    "avecTelephone": 11,
+    "avecEmail": 7,
+    "avecWhatsApp": 0,
+    "avecAdresse": 11,
+    "avecGPS": 1,
+    "avecReseaux": 5,
+    "avecHoraires": 1,
+    "avecEquipe": 0,
+    "avecServices": 11,
+    "avecAvis": 2,
+    "avecTarifs": 2,
+    "avecFormulaire": 7,
+    "avecAppStore": 1,
+    "avecDownloads": 0,
+    "avecPlateformes": 4,
+    "avecPartenaires": 11
+  },
+  "enterprises": [
+    {
+      "name": "Grand Hôtel Diego Suarez",
+      "googleName": "Grand Hôtel Diego Suarez",
+      "slogan": "",
+      "pageTitle": "Grand Hôtel Diego Suarez ★★★★ | Antsiranana, Madagascar",
+      "metaDescription": "Grand Hôtel Diego Suarez | Antsiranana, Madagascar, Hôtel 4 étoiles au centre de Diego Suarez : piscine, spa, casino, 2 restaurants. À 8 km de l'aéroport et proche des sites touristiques du Nord Madagascar.",
+      "ogImage": "https://www.grandhoteldiego.com/wp-content/uploads/2025/10/Copie-de-DJI_0754-scaled.webp",
+      "lang": "fr-FR",
+      "canonical": "https://www.grandhoteldiego.com/",
+      "logo": "https://www.grandhoteldiego.com/wp-content/uploads/2025/08/Logo-1-e1757358775605.png",
+      "googleTitle": "Grand Hôtel Diego Suarez ★★★★ | Antsiranana, Madagascar",
+      "googleSnippet": "Grand Hôtel Diego Suarez | Antsiranana, Madagascar, Hôtel 4 étoiles au centre de Diego Suarez : piscine, spa, casino, 2 restaurants. À 8 km de l'aéroport et proche des sites touristiques du Nord Madagascar.",
+      "googlePosition": 1,
+      "url": "https://www.grandhoteldiego.com/",
+      "domain": "grandhoteldiego.com",
+      "contacts": {
+        "phones": [
+          "+261%2032%2040%20881%2043",
+          "+261 32 40 881 43"
+        ],
+        "emails": [
+          "grandhotel_diego@yahoo.fr"
+        ],
+        "whatsapp": [],
+        "addresses": [
+          "46 rue Colbert",
+          "rue Colbert",
+          "Madagascar en toute sérénité.",
+          "Madagascar"
+        ],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "gps": null,
+      "socials": {
+        "facebook": [
+          "https://www.facebook.com/grandhoteldiego"
+        ],
+        "tiktok": [
+          "https://www.tiktok.com/@legrandhoteldiego"
+        ]
+      },
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [
+          {
+            "url": "https://www.tripadvisor.fr/Hotel_Review-g298270-d1751019-Reviews-Le_Grand_Hotel_Diego-Antsiranana_Diego_Suarez_Antsiranana_Province.html?m=19905",
+            "label": "Icomoon_brands-tripadvisor",
+            "platform": "tripadvisor.fr"
+          },
+          {
+            "url": "https://www.booking.com/Share-kEq8w5",
+            "label": "Icomoon_brands-hatenabookmark",
+            "platform": "booking.com"
+          }
+        ],
+        "partners": [
+          {
+            "url": "https://maps.app.goo.gl/bLyrsUmSssm8DHst5",
+            "label": "itinéraires",
+            "domain": "maps.app.goo.gl"
+          }
+        ]
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [],
+        "categories": [],
+        "prices": []
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": []
+      },
+      "technologies": {
+        "cms": [
+          "WordPress"
+        ],
+        "frameworks": [
+          "jQuery"
+        ],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [
+          "Mailchimp"
+        ],
+        "chat": [],
+        "other": []
+      },
+      "forms": [],
+      "navLinks": [
+        {
+          "text": "Accueil",
+          "href": "https://www.grandhoteldiego.com/"
+        },
+        {
+          "text": "À propos",
+          "href": "https://www.grandhoteldiego.com/a-propos/"
+        },
+        {
+          "text": "Nos chambres",
+          "href": "https://www.grandhoteldiego.com/nos-chambres/"
+        },
+        {
+          "text": "Chambre double",
+          "href": "https://www.grandhoteldiego.com/nos-chambres/chambre-double/"
+        },
+        {
+          "text": "Chambre Triple",
+          "href": "https://www.grandhoteldiego.com/nos-chambres/chambre-triple/"
+        },
+        {
+          "text": "Chambres Twin",
+          "href": "https://www.grandhoteldiego.com/nos-chambres/chambres-twin/"
+        },
+        {
+          "text": "Suites Luxe",
+          "href": "https://www.grandhoteldiego.com/nos-chambres/suites-luxe/"
+        },
+        {
+          "text": "Nos services",
+          "href": "https://www.grandhoteldiego.com/#"
+        },
+        {
+          "text": "Restauration",
+          "href": "https://www.grandhoteldiego.com/restauration/"
+        },
+        {
+          "text": "Salle de conférence ou événements",
+          "href": "https://www.grandhoteldiego.com/salle-de-conference-ou-evenements/"
+        },
+        {
+          "text": "Boulangerie – Pâtisserie",
+          "href": "https://www.grandhoteldiego.com/boulangerie-patisserie/"
+        },
+        {
+          "text": "Casino",
+          "href": "https://www.grandhoteldiego.com/casino/"
+        },
+        {
+          "text": "Espace Thalasso & Détente",
+          "href": "https://www.grandhoteldiego.com/espace-thalasso-detente/"
+        },
+        {
+          "text": "Shopping Galerie",
+          "href": "https://www.grandhoteldiego.com/boutique/"
+        },
+        {
+          "text": "Animations",
+          "href": "https://www.grandhoteldiego.com/animations/"
+        },
+        {
+          "text": "Blog",
+          "href": "https://www.grandhoteldiego.com/blog/"
+        },
+        {
+          "text": "Contact",
+          "href": "https://www.grandhoteldiego.com/contact/"
+        },
+        {
+          "text": "Réserver",
+          "href": "https://www.grandhoteldiego.com/contact/"
+        }
+      ],
+      "mainContent": "",
+      "structuredData": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": "https://www.grandhoteldiego.com/",
+              "url": "https://www.grandhoteldiego.com/",
+              "name": "Grand Hôtel Diego Suarez ★★★★ | Antsiranana, Madagascar",
+              "isPartOf": {
+                "@id": "https://www.grandhoteldiego.com/#website"
+              },
+              "about": {
+                "@id": "https://www.grandhoteldiego.com/#organization"
+              },
+              "primaryImageOfPage": {
+                "@id": "https://www.grandhoteldiego.com/#primaryimage"
+              },
+              "image": {
+                "@id": "https://www.grandhoteldiego.com/#primaryimage"
+              },
+              "thumbnailUrl": "https://www.grandhoteldiego.com/wp-content/uploads/2025/10/Copie-de-DJI_0754-scaled.webp",
+              "datePublished": "2025-08-25T19:24:15+00:00",
+              "dateModified": "2025-11-16T23:28:27+00:00",
+              "description": "Grand Hôtel Diego Suarez | Antsiranana, Madagascar, Hôtel 4 étoiles au centre de Diego Suarez : piscine, spa, casino, 2 restaurants. À 8 km de l'aéroport et proche des sites touristiques du Nord Madagascar.",
+              "breadcrumb": {
+                "@id": "https://www.grandhoteldiego.com/#breadcrumb"
+              },
+              "inLanguage": "fr-FR",
+              "potentialAction": [
+                {
+                  "@type": "ReadAction",
+                  "target": [
+                    "https://www.grandhoteldiego.com/"
+                  ]
+                }
+              ]
+            },
+            {
+              "@type": "ImageObject",
+              "inLanguage": "fr-FR",
+              "@id": "https://www.grandhoteldiego.com/#primaryimage",
+              "url": "https://www.grandhoteldiego.com/wp-content/uploads/2025/10/Copie-de-DJI_0754-scaled.webp",
+              "contentUrl": "https://www.grandhoteldiego.com/wp-content/uploads/2025/10/Copie-de-DJI_0754-scaled.webp",
+              "width": 2560,
+              "height": 1437
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://www.grandhoteldiego.com/#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Accueil"
+                }
+              ]
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://www.grandhoteldiego.com/#website",
+              "url": "https://www.grandhoteldiego.com/",
+              "name": "Le Grand Hôtel Diego",
+              "description": "Hôtel 4 étoiles à Antsiranana",
+              "publisher": {
+                "@id": "https://www.grandhoteldiego.com/#organization"
+              },
+              "potentialAction": [
+                {
+                  "@type": "SearchAction",
+                  "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://www.grandhoteldiego.com/?s={search_term_string}"
+                  },
+                  "query-input": {
+                    "@type": "PropertyValueSpecification",
+                    "valueRequired": true,
+                    "valueName": "search_term_string"
+                  }
+                }
+              ],
+              "inLanguage": "fr-FR"
+            },
+            {
+              "@type": "Organization",
+              "@id": "https://www.grandhoteldiego.com/#organization",
+              "name": "Le Grand Hôtel Diego",
+              "url": "https://www.grandhoteldiego.com/",
+              "logo": {
+                "@type": "ImageObject",
+                "inLanguage": "fr-FR",
+                "@id": "https://www.grandhoteldiego.com/#/schema/logo/image/",
+                "url": "https://www.grandhoteldiego.com/wp-content/uploads/2025/08/Logo-1-e1757358775605.png",
+                "contentUrl": "https://www.grandhoteldiego.com/wp-content/uploads/2025/08/Logo-1-e1757358775605.png",
+                "width": 1275,
+                "height": 1102,
+                "caption": "Le Grand Hôtel Diego"
+              },
+              "image": {
+                "@id": "https://www.grandhoteldiego.com/#/schema/logo/image/"
+              },
+              "sameAs": [
+                "https://www.facebook.com/grandhoteldiego/",
+                "https://www.tiktok.com/@legrandhoteldiego"
+              ]
+            }
+          ]
+        }
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:18:45.893Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Les 16 meilleurs hôtels à Antsiranana, Madagascar - tripandways.com",
+      "googleName": "Les 16 meilleurs hôtels à Antsiranana, Madagascar - tripandways.com",
+      "slogan": "",
+      "pageTitle": "Les 16 meilleurs hôtels à Antsiranana, Madagascar – tripandways.com",
+      "metaDescription": "**Pourquoi choisir des hôtels lors de votre voyage à Antsiranana**Antsiranana, auparavant connue sous le nom de Diego Suarez, est une",
+      "ogImage": "",
+      "lang": "fr",
+      "canonical": "https://tripandways.com/fr/hotels-antsiranana/",
+      "logo": "",
+      "googleTitle": "Les 16 meilleurs hôtels à Antsiranana, Madagascar - tripandways.com",
+      "googleSnippet": "En fin de compte, choisir un hôtel pour votre séjour à Antsiranana vous permettra non seulement de bénéficier d'un cadre confortable, mais également d'une immersion véritable dans la culture et la vie locale de cette région unique.",
+      "googlePosition": 2,
+      "url": "https://tripandways.com/fr/hotels-antsiranana/",
+      "domain": "tripandways.com",
+      "contacts": {
+        "phones": [],
+        "emails": [],
+        "whatsapp": [],
+        "addresses": [
+          "2 Route De Ramena",
+          "2 Boulevard Bazeilles",
+          "46 Rue Colbert",
+          "8 rue de la prison",
+          "41 Rue Colbert",
+          "Tananarive"
+        ],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "gps": null,
+      "socials": {},
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [],
+        "partners": []
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [],
+        "categories": [
+          "Destinations populaires",
+          "France",
+          "Espagne",
+          "Italie",
+          "États-Unis"
+        ],
+        "prices": []
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": [
+          "106 Note des clients"
+        ]
+      },
+      "technologies": {
+        "cms": [
+          "WordPress"
+        ],
+        "frameworks": [],
+        "analytics": [],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [],
+      "navLinks": [
+        {
+          "text": "Voyages et trajets",
+          "href": "https://tripandways.com/fr/"
+        },
+        {
+          "text": "Destinations populaires",
+          "href": "https://tripandways.com/fr/popular-destinations/"
+        },
+        {
+          "text": "France",
+          "href": "https://tripandways.com/fr/category/france/"
+        },
+        {
+          "text": "Espagne",
+          "href": "https://tripandways.com/fr/category/spain/"
+        },
+        {
+          "text": "Italie",
+          "href": "https://tripandways.com/fr/category/italy/"
+        },
+        {
+          "text": "États-Unis",
+          "href": "https://tripandways.com/fr/category/us/"
+        }
+      ],
+      "mainContent": "Voici une liste rapide d'hôtels dans Antsiranana, sélectionnés en fonction de leur classement\n\n**Pourquoi choisir des hôtels lors de votre voyage à Antsiranana**\n\nAntsiranana, auparavant connue sous le nom de Diego Suarez, est une destination incontournable pour quiconque désire explorer la beauté de Madagascar. Située au nord du pays, cette ville côtière vous séduira par ses paysages pittoresques, ses plages immaculées et sa riche histoire culturelle. Lorsque vous planifiez un séjour dans cette région fascinante, le choix de votre hébergement peut grandement influencer l'expérience de votre voyage. Parmi les nombreuses options qui s’offrent à vous, opter pour un hôtel peut s'avérer être la solution idéale pour profiter pleinement de votre séjour.\n\nChoisir un hôtel présente plusieurs avantages, notamment en termes de commodité et de confort. Les hôtels d'Antsiranana offrent une large gamme de services allant de la restauration à la sécurité, en passant par des installations modernes qui permettent aux voyageurs de se détendre après une journée d'exploration. De plus, la majorité des établissements sont idéalement situés, ce qui facilite l'accès aux attractions locales telles que le parc national de la Montagne d'Ambre ou les magnifiques baies de la région. Vous pourrez ainsi découvrir tout ce que Antsiranana a à offrir sans avoir à consacrer trop de temps à vos déplacements.\n\nUn autre aspect attrayant des hôtels à Antsiranana est le contact que vous pouvez établir avec les habitants. De nombreux établissements sont gérés par des locaux qui connaissent la région sur le bout des doigts. Ils peuvent vous fournir des conseils avisés sur les meilleures activités, restaurants et sites à visiter, enrichissant encore plus votre expérience. De plus, en choisissant de séjourner dans un hôtel, vous soutenez l'économie locale, contribuant ainsi à un tourisme responsable et durable.\n\nEnfin, la diversité des hôtels disponibles signifie qu'il y en a pour tous les goûts et tous les budgets. Que vous recherchiez un établissement de luxe avec vue sur la mer, ou un hôtel économique pour une expérience authentique, Antsiranana dispose de nombreuses options adaptées à chaque type de voyageur. En fin de compte, choisir un hôtel pour votre séjour à Antsiranana vous permettra non seulement de bénéficier d'un cadre confortable, mais également d'une immersion véritable dans la culture et la vie locale de cette région unique.\n\nL'hôtel se trouve à 10 km de l'aéroport Aérodrome d'Arrachart et à 10 minutes en voiture de l'Evasion Sans Frontiere.\n\nLe centre d'Antsiranana peut être atteint en 10 minutes de marche. En 15 minutes en voiture vous arriverez à Tropical Garden Diego Suarez.\n\nLa Poste est un hôtel de 3 étoiles situé à 5 minutes de marche de Tribunal. L'hôtel offre également un Wi-Fi disponible dans les zones publiques.\n\nCet hôtel est à 2 km du Paradis du Nord. Cet hôtel se trouve à 5 km du centre d'Antsiranana et à 15 minutes en voiture de l'aéroport Aérodrome d'Arrachart. Située à Antsiranana, la propriété est situé à proximité immédiate de Cathedrale Saint Matthieu.\n\nLe Grand Hôtel Diego est un hôtel de 4 étoiles situé à 850 mètres de Lighthouse. Cet hôtel fournit un Wi-Fi dans tout l'établissement.\n\nCet hôtel est à 1 km de Cinéma Ritz. Cet hôtel est juste à la sortie de Tribunal et à 10 km de l'aéroport Aérodrome d'Arrachart.\n\nSitué à 10 km de Kite Alizé - Centre Kitesurf & Windsurf, le lieu se trouve à 20 km de l'aéroport Aérodrome d'Arrachart.\n\nL'hôtel se trouve à 2 km de l'Evasion Sans Frontiere et à 1 km du centre d'Antsiranana.\n\nLes curiosités principales d'Antsiranana, comme la Mer d'Emeraude et The three bays, sont situées à proximité.\n\nLe Petit Paradis est un hôtel de 3 étoiles situé à 13 minutes de marche de Cathedrale Saint Matthieu. Un Wi-Fi est disponible dans tout l'établissement.\n\nLes invités apprécieront la proximité au Diego Raid, qui est à 850 mètres de là. Les hôtes trouveront le centre d'Antsiranana, à 30 minutes de marche de la propriété. L'hôtel se trouve à 15 minutes en voiture de l'aéroport Aérodrome d'Arrachart.\n\nSitué à 3 km de Windsor Castle, cet hôtel est également juste à 10 minutes de route de Kakazo-Be.\n\nLe centre d'Antsiranana peut être atteint en 5 minutes d'allure dès l'hôtel. L'aéroport Aérodrome d'Arrachart reside à 5 km de l'hôtel.\n\nL'hôtel se situe à 400 mètres de Lighthouse et à 250 mètres du Port Antsiranana.\n\nLa propriété est située à 4 km du centre-ville d'Antsiranana et à 10 km de l'aéroport Aérodrome d'Arrachart. L'hôtel est proche de New Sea Roc.\n\nLe lieu se trouve à 5 minutes en voiture de Windsor Castle et à 30 minutes à pied du centre-ville.\n\nVictoria est un hôtel de 3 étoiles situé à 19 minutes de marche de Windsor Castle. Dans tout l'établissement est disponible un Wi-Fi pour vous permettre de rester connecté.\n\nCet hôtel est à 1 km de Tribunal. Cet hôtel se trouve à 4 km du centre d'Antsiranana et à 10 minutes en voiture de l'aéroport Aérodrome d'Arrachart. L'hôtel est situé au bord de Cinéma Ritz, à Antsiranana.\n\nIl est à 2 km de Japanese Monument, alors que la Montagne des Francais est à 1 km.\n\nL'endroit est situé à 4 km du centre de la ville et est adjacent à la Maison Cassam Chenai.\n\nIl faut 25 minutes pour se rendre à Kite Alizé - Centre Kitesurf & Windsurf en voiture.\n\nIl faut 25 minutes en voiture pour atteindre l'aéroport Aérodrome d'Arrachart.\n\nA environ 850 mètres de Cathedrale Saint Matthieu, la propriété est également proche de New Sea Roc.\n\nLa propriété est à 5 minutes à pied du Port Antsiranana. Cet hôtel se trouve à 5 km du centre d'Antsiranana et à 15 minutes en voiture de l'aéroport Aérodrome d'Arrachart.\n\nLa propriété est située à 1 km du centre-ville d'Antsiranana et à 5 km de l'aéroport Aérodrome d'Arrachart.\n\nLa propriété se trouve à environ 4 km de Windsor Castle. La propriété est à moins de 4,1 km de The three bays.\n\nDe superbes emplacements et des offres pour tous les budgets.",
+      "structuredData": [
+        {
+          "@context": "http://schema.org",
+          "@type": [
+            "ItemList",
+            "TouristDestination"
+          ],
+          "itemListElement": [
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "2"
+              },
+              "priceRange": "32",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Pk 2 Route De Ramena"
+              },
+              "name": "Hotel De La Baie"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "3"
+              },
+              "priceRange": "92",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "2 Boulevard Bazeilles"
+              },
+              "name": "Hotel De La Poste"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "4"
+              },
+              "priceRange": "95",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "46 Rue Colbert"
+              },
+              "name": "Le Grand Hôtel Diego"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "3"
+              },
+              "priceRange": "122",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Baie Des Sakalava"
+              },
+              "name": "Hotel Royal Sakalava"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "25",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Andranomitete Morafeno"
+              },
+              "name": "Sanjeela-Plage Coco"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "64",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Ramena Pk17"
+              },
+              "name": "Hotel Lakana Ramena"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "4"
+              },
+              "priceRange": "26",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "8 rue de la prison"
+              },
+              "name": "Hotel Le Petit Paradis"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "3"
+              },
+              "priceRange": "152",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Iharana Bush Camp"
+              },
+              "name": "Hotel Iharana Bush Camp"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "13",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "41 Rue Colbert"
+              },
+              "name": "Hotel Valiha"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "39",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Lazaret Nord, Antsiranana"
+              },
+              "name": "Hôtel RIZIKY"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "4"
+              },
+              "priceRange": "30",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Ankorikahely Ramena"
+              },
+              "name": "Bed and breakfast Le Trou Normand"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "3"
+              },
+              "priceRange": "45",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Angle Rues Rigault Et Gauche"
+              },
+              "name": "Hotel Victoria"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "1"
+              },
+              "priceRange": "25",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "78 Bis Rue Colbert"
+              },
+              "name": "Lotus Hotel"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "91",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "1 Baie De Sakalava, Antsiranana"
+              },
+              "name": "Hotel Madakitecamp"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "46",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Boulevard Bascilles"
+              },
+              "name": "Annexe de l&#039;Hotel de la Poste"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "2"
+              },
+              "priceRange": "38",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "464 Sd Scama Pk07"
+              },
+              "name": "Régina Lodge Diégo Suarez Madagascar"
+            }
+          ]
+        }
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:18:56.267Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Les 15 Meilleurs Hôtels à Antsiranana. Réservez des Hôtels et Appart ...",
+      "googleName": "Les 15 Meilleurs Hôtels à Antsiranana. Réservez des Hôtels et Appart ...",
+      "slogan": "",
+      "pageTitle": "Hôtels à Antsiranana, Diego Suarez, Réservez des hôtels à Antsiranana",
+      "metaDescription": "Meilleurs hôtels à Antsiranana — comparez les prix pour 48+ hôtels, de l'économique au 5 étoiles, et réservez à Antsiranana. Réservez des hôtels aux meilleurs prix en 2026 avec de véritables avis, photos et notes !",
+      "ogImage": "",
+      "lang": "fr",
+      "canonical": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/",
+      "logo": "https://fr.readytotrip.com/images/flags/us.webp",
+      "googleTitle": "Les 15 Meilleurs Hôtels à Antsiranana. Réservez des Hôtels et Appart ...",
+      "googleSnippet": "Réservez en ligne les meilleurs hôtels de Antsiranana, Diego Suarez. Antsiranana, également connue sous le nom de Diego Suarez, est une ville portuaire située dans le nord de Madagascar. Choisissez parmi les 27 hébergements, hôtels et centres de villégiature disponibles en Antsiranana!",
+      "googlePosition": 3,
+      "url": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/",
+      "domain": "fr.readytotrip.com",
+      "contacts": {
+        "phones": [
+          "01\n02\n03\n04"
+        ],
+        "emails": [
+          "info@readytotrip.com"
+        ],
+        "whatsapp": [],
+        "addresses": [
+          "3 VILLAS À 1 STATIONS BALNÉAIRES À 1",
+          "3 Villas à Antsiranana 1 Stations Balnéaires à Antsiranana 1",
+          "7 Rue Richelieu",
+          "1 rue Le Myre De Villers",
+          "13, Rue Freppel",
+          "8 Rue de la Prison",
+          "19 Rue De la Marne 201 Diego Suarez",
+          "41 Rue Colbert",
+          "3 Route Ramena",
+          "97,Rue Richelieu",
+          "BP 97,Rue Richelieu, Antsiranana, 201",
+          "Tanambao 4",
+          "tanamitarana Atsimo (6.7 Km.)"
+        ],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "gps": null,
+      "socials": {},
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [],
+        "partners": [
+          {
+            "url": "https://www.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/",
+            "label": "Antsiranana Hotels",
+            "domain": "readytotrip.com"
+          },
+          {
+            "url": "https://de.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Antsiranana/",
+            "label": "Antsiranana Hotels",
+            "domain": "de.readytotrip.com"
+          },
+          {
+            "url": "https://it.readytotrip.com/hotels/Madagascar/Antsiranana/Antsiranana/",
+            "label": "Hotel Antsiranana",
+            "domain": "it.readytotrip.com"
+          },
+          {
+            "url": "https://www.readytotrip.ru/hotels/madagaskar/diego-suarez/antsiranana/",
+            "label": "Отели Анцеранана",
+            "domain": "readytotrip.ru"
+          },
+          {
+            "url": "https://es.readytotrip.com/hotels/Madagascar/Antsiranana/Antsiranana/",
+            "label": "Hoteles Antsiranana",
+            "domain": "es.readytotrip.com"
+          },
+          {
+            "url": "https://el.readytotrip.com/hotels/%CE%9C%CE%B1%CE%B4%CE%B1%CE%B3%CE%B1%CF%83%CE%BA%CE%AC%CF%81%CE%B7/Diego%20Suarez/Antsiranana/",
+            "label": "Antsiranana Ξενοδοχεία",
+            "domain": "el.readytotrip.com"
+          },
+          {
+            "url": "https://tr.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Antsiranana/",
+            "label": "Antsiranana Otelleri",
+            "domain": "tr.readytotrip.com"
+          },
+          {
+            "url": "https://pl.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Antsiranana/",
+            "label": "Hotele Antsiranana",
+            "domain": "pl.readytotrip.com"
+          },
+          {
+            "url": "https://ro.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/",
+            "label": "Hoteluri Antsiranana",
+            "domain": "ro.readytotrip.com"
+          },
+          {
+            "url": "https://hu.readytotrip.com/hotels/Madagaszk%C3%A1r/Diego%20Suarez/Antsiranana/",
+            "label": "Antsiranana szállodák",
+            "domain": "hu.readytotrip.com"
+          },
+          {
+            "url": "https://cs.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Diego%20Suarez/",
+            "label": "Hotely Diego Suarez",
+            "domain": "cs.readytotrip.com"
+          },
+          {
+            "url": "https://da.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Antsiranana/",
+            "label": "Antsiranana Hoteller",
+            "domain": "da.readytotrip.com"
+          },
+          {
+            "url": "https://kk.readytotrip.com/hotels/Madagascar/diego-suarez/Antsiranana/",
+            "label": "Antsiranana Қонақ үйлері",
+            "domain": "kk.readytotrip.com"
+          },
+          {
+            "url": "https://nl.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Diego%20Suarez/",
+            "label": "Diego Suarez Hotels",
+            "domain": "nl.readytotrip.com"
+          },
+          {
+            "url": "https://pt.readytotrip.com/hotels/Madag%C3%A1scar/Diego%20Suarez/antsiranana/",
+            "label": "Hotéis Antsiranana",
+            "domain": "pt.readytotrip.com"
+          },
+          {
+            "url": "https://fi.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Antsiranana/",
+            "label": "Antsiranana-hotellit",
+            "domain": "fi.readytotrip.com"
+          },
+          {
+            "url": "https://th.readytotrip.com/hotels/%E0%B8%A1%E0%B8%B2%E0%B8%94%E0%B8%B2%E0%B8%81%E0%B8%B1%E0%B8%AA%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B9%8C/Diego%20Suarez/Antsiranana/",
+            "label": "โรงแรมAntsiranana",
+            "domain": "th.readytotrip.com"
+          },
+          {
+            "url": "https://vi.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/",
+            "label": "Khách sạn Antsiranana",
+            "domain": "vi.readytotrip.com"
+          },
+          {
+            "url": "https://cn.readytotrip.com/hotels/%E9%A9%AC%E8%BE%BE%E5%8A%A0%E6%96%AF%E5%8A%A0/%E8%BF%AD%E6%88%88%E8%8B%8F%E7%93%A6%E9%9B%B7%E6%96%AF/%E5%AE%89%E9%BD%90%E6%8B%89%E7%BA%B3%E7%BA%B3/",
+            "label": "安齐拉纳纳酒店",
+            "domain": "cn.readytotrip.com"
+          },
+          {
+            "url": "https://ko.readytotrip.com/hotels/%EB%A7%88%EB%8B%A4%EA%B0%80%EC%8A%A4%EC%B9%B4%EB%A5%B4/Diego%20Suarez/Antsiranana/",
+            "label": "Antsiranana 호텔",
+            "domain": "ko.readytotrip.com"
+          },
+          {
+            "url": "https://ja.readytotrip.com/hotels/%E3%83%9E%E3%83%80%E3%82%AC%E3%82%B9%E3%82%AB%E3%83%AB/Diego%20Suarez/Antsiranana/",
+            "label": "Antsirananaホテル",
+            "domain": "ja.readytotrip.com"
+          }
+        ]
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [
+          "Hôtels à Antsiranana : trouvez les meilleures offres",
+          "Recherche et réservation d'hôtels à Antsiranana",
+          "Comment payer les réservations d'hôtels à Antsiranana ?",
+          "Que faire si vous devez annuler des réservations d'hôtels à Antsiranana ?",
+          "hotel Espace Kaled\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Auberges à Diego Suarez réserver\n             RN6 Rte De L'Ankarana, Antsiranana, 201",
+          "Hotel le Colbert\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Auberges Diego Suarez\n             Rue Colbert, Antsiranana, 678",
+          "Lotus Hotel Diego\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Hôtel Diego Suarez réserver\n             78 bis Rue Colbert, Antsiranana, 201",
+          "Hotel de la Poste\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Logement Diego Suarez\n             7 Rue Richelieu, Antsiranana, 201",
+          "Sanjeela Plage Coco\n            \n            Hôtel\n             Antsiranana, Réserver hôtel Diego Suarez\n             Andranomitete Morafeno 201 Diego Suarez,, Antsiranana, 201",
+          "Hotel Lakana Ramena\n            \n            Hôtel\n             Antsiranana, Réserver hôtel Diego Suarez\n             Route De Ramena PK17 201 Diego Suarez,Route De Ramena, Antsiranana, 201",
+          "Nature Lodge\n            \n            Maison de vacances\n             Antsiranana, Hôtels et auberges Diego Suarez\n             Route de Joffreville, Antsiranana, Antsiranana, 202",
+          "Lasirene hôtel\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Auberges à Diego Suarez réserver\n             1 rue Le Myre De Villers, Antsiranana, 201",
+          "Ocean Lodge Kite  Windsurf\n            \n            Hôtel\n             Antsiranana, Réservation d'hôtels Diego Suarez\n             Sakalava Bay Kylie Beach,, Antsiranana, 201",
+          "Center Point\n            \n            Appartement\n             Hôtels dans le centre de Antsiranana, Réservation d'hôtels Diego Suarez\n             Place de l'independance, 201 Antsiranana, Madagascar, Antsiranana, 201",
+          "Hotel Bungalows Royal Sakalava\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Antsiranana, Hôtel Diego Suarez réserver\n             Baie Des Sakalava 201 Antsiranana Diana, Antsiranana, 201",
+          "Hotel La Belle Aventure\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Auberges à Diego Suarez réserver\n             13, Rue Freppel, Antsiranana, 201",
+          "Hotel Le Petit Paradis\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Réservation d'hôtels Diego Suarez\n             8 Rue de la Prison, Antsiranana, 201",
+          "L Hotel  SPA Le Victoria\n            \n            \n              \n            \n            \n              \n            \n            Complexe hôtelier\n             Hôtels dans le centre de Antsiranana, Logement Diego Suarez\n             Rues Rigault 201 Antsiranana,Rues Rigault, Antsiranana, 201",
+          "Hôtel La Terrasse du Voyageur\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Hébergement Diego Suarez\n             Angle Rue de Mozambique, Antsiranana, 201",
+          "Régina Lodge\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Antsiranana, Auberges Diego Suarez\n             scama, Antsiranana, 201",
+          "Hôtel Golden House\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Hôtels Diego Suarez\n             Rue Pyrotechnie Tanambao 4, Antsiranana, 201",
+          "Motel Au Petit Vatel\n            \n            \n              \n            \n            \n              \n            \n            Motel\n             Antsiranana, Hôtels à Diego Suarez\n             LOT 360804 Soafeno, Antsiranana, 201",
+          "Residence Kathyly\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Chambres d'hôtel Diego Suarez\n             19 Rue De la Marne 201 Diego Suarez,Rue De la Marne, Antsiranana, 201",
+          "Hotel Valiha\n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Logement Diego Suarez\n             41 Rue Colbert, Antsiranana, 201",
+          "Hotel Kartiffa\n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Hôtel Diego Suarez réserver\n             Rue Richelieu 201 Diego Suarez,Rue Richelieu, Antsiranana, 201",
+          "La Note Bleue Park Hotel\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Antsiranana, Hôtel Diego Suarez réserver\n             Pk 3 Route Ramena,, Antsiranana, 201",
+          "Iharana Bush Camp\n            \n            \n              \n            \n            \n              \n            \n            Camping\n             Antsiranana, Réservation d'hôtels Diego Suarez\n             Iharana Bush Camp, Antsiranana, 0206",
+          "Allamanda Hotel\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Hôtels à Diego Suarez\n             Rue Richelieu BP 97,Rue Richelieu, Antsiranana, 201",
+          "Le Grand Hotel Diego\n            \n            \n              \n            \n            \n              \n            \n            Hôtel\n             Hôtels dans le centre de Antsiranana, Hébergement Diego Suarez\n             Antisiranana, Madagascar, Antsiranana",
+          "Entrez les dates pour voir les prix des hôtels",
+          "48 hôtels",
+          "Choisissez vos dates pour voir les tarifs",
+          "Prix (par nuit)",
+          "Étoiles",
+          "Avis voyageurs",
+          "Services et équipements",
+          "Plans de repas",
+          "Type d'établissement",
+          "Monuments de Antsiranana",
+          "Aéroports de Antsiranana"
+        ],
+        "categories": [
+          "Choisissez une devise",
+          "US$ (USD)$",
+          "A$ (AUD)A$",
+          "C$ (CAD)C$",
+          "Pound (GBP)£",
+          "Euro (EUR)€",
+          "S$ (SGD)S$",
+          "Рубль (RUB)₽",
+          "English",
+          "Deutsch",
+          "Italiano",
+          "Français",
+          "Русский",
+          "Español",
+          "Ελληνικά",
+          "Türkçe",
+          "Polski",
+          "Română",
+          "Magyar",
+          "Čeština",
+          "Dansk",
+          "Қазақша",
+          "Nederlands",
+          "Português (PT)",
+          "Suomi",
+          "ภาษาไทย",
+          "Tiếng Việt",
+          "简体中文",
+          "한국어",
+          "日本語",
+          "Recherche",
+          "Recherche"
+        ],
+        "prices": [
+          "€24",
+          "€27",
+          "€19",
+          "€40",
+          "€22",
+          "€58",
+          "€120",
+          "€26",
+          "€65",
+          "€60",
+          "€105",
+          "€20",
+          "€21",
+          "€39",
+          "€18",
+          "€30",
+          "€1",
+          "€17",
+          "€25",
+          "€14",
+          "€81",
+          "€44",
+          "€72",
+          "€102",
+          "€180",
+          "€339"
+        ]
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": [
+          "14 commentaires"
+        ]
+      },
+      "technologies": {
+        "cms": [],
+        "frameworks": [],
+        "analytics": [],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [
+        {
+          "action": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/#result-list",
+          "method": "post",
+          "hasFile": false,
+          "fields": [
+            {
+              "type": "text",
+              "name": "date_from"
+            },
+            {
+              "type": "text",
+              "name": "date_to"
+            },
+            {
+              "type": "select-one",
+              "name": "adults"
+            },
+            {
+              "type": "select-one",
+              "name": "children"
+            },
+            {
+              "type": "checkbox",
+              "name": "type-hotels"
+            },
+            {
+              "type": "checkbox",
+              "name": "type-apartments"
+            },
+            {
+              "type": "checkbox",
+              "name": "type-guesthouses"
+            },
+            {
+              "type": "checkbox",
+              "name": "type-villas"
+            },
+            {
+              "type": "checkbox",
+              "name": "type-resorts"
+            },
+            {
+              "type": "checkbox",
+              "name": "stars-0"
+            },
+            {
+              "type": "checkbox",
+              "name": "stars-2"
+            },
+            {
+              "type": "checkbox",
+              "name": "stars-3"
+            },
+            {
+              "type": "checkbox",
+              "name": "stars-4"
+            },
+            {
+              "type": "checkbox",
+              "name": "zen"
+            }
+          ]
+        },
+        {
+          "action": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/",
+          "method": "get",
+          "hasFile": false,
+          "fields": [
+            {
+              "type": "text",
+              "name": "date_from"
+            },
+            {
+              "type": "text",
+              "name": "date_to"
+            },
+            {
+              "type": "select-one",
+              "name": "adults"
+            },
+            {
+              "type": "select-one",
+              "name": "children"
+            }
+          ]
+        }
+      ],
+      "navLinks": [
+        {
+          "text": "Choisissez une devise",
+          "href": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/?currency=default"
+        },
+        {
+          "text": "US$ (USD)$",
+          "href": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/?currency=USD"
+        },
+        {
+          "text": "A$ (AUD)A$",
+          "href": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/?currency=AUD"
+        },
+        {
+          "text": "C$ (CAD)C$",
+          "href": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/?currency=CAD"
+        },
+        {
+          "text": "Pound (GBP)£",
+          "href": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/?currency=GBP"
+        },
+        {
+          "text": "Euro (EUR)€",
+          "href": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/?currency=EUR"
+        },
+        {
+          "text": "S$ (SGD)S$",
+          "href": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/?currency=SGD"
+        },
+        {
+          "text": "Рубль (RUB)₽",
+          "href": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/?currency=RUB"
+        },
+        {
+          "text": "English",
+          "href": "https://www.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "Deutsch",
+          "href": "https://de.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "Italiano",
+          "href": "https://it.readytotrip.com/hotels/Madagascar/Antsiranana/Antsiranana/"
+        },
+        {
+          "text": "Français",
+          "href": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "Русский",
+          "href": "https://www.readytotrip.ru/hotels/madagaskar/diego-suarez/antsiranana/"
+        },
+        {
+          "text": "Español",
+          "href": "https://es.readytotrip.com/hotels/Madagascar/Antsiranana/Antsiranana/"
+        },
+        {
+          "text": "Ελληνικά",
+          "href": "https://el.readytotrip.com/hotels/%CE%9C%CE%B1%CE%B4%CE%B1%CE%B3%CE%B1%CF%83%CE%BA%CE%AC%CF%81%CE%B7/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "Türkçe",
+          "href": "https://tr.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "Polski",
+          "href": "https://pl.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "Română",
+          "href": "https://ro.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "Magyar",
+          "href": "https://hu.readytotrip.com/hotels/Madagaszk%C3%A1r/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "Čeština",
+          "href": "https://cs.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Diego%20Suarez/"
+        },
+        {
+          "text": "Dansk",
+          "href": "https://da.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "Қазақша",
+          "href": "https://kk.readytotrip.com/hotels/Madagascar/diego-suarez/Antsiranana/"
+        },
+        {
+          "text": "Nederlands",
+          "href": "https://nl.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Diego%20Suarez/"
+        },
+        {
+          "text": "Português (PT)",
+          "href": "https://pt.readytotrip.com/hotels/Madag%C3%A1scar/Diego%20Suarez/antsiranana/"
+        },
+        {
+          "text": "Suomi",
+          "href": "https://fi.readytotrip.com/hotels/Madagaskar/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "ภาษาไทย",
+          "href": "https://th.readytotrip.com/hotels/%E0%B8%A1%E0%B8%B2%E0%B8%94%E0%B8%B2%E0%B8%81%E0%B8%B1%E0%B8%AA%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B9%8C/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "Tiếng Việt",
+          "href": "https://vi.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "简体中文",
+          "href": "https://cn.readytotrip.com/hotels/%E9%A9%AC%E8%BE%BE%E5%8A%A0%E6%96%AF%E5%8A%A0/%E8%BF%AD%E6%88%88%E8%8B%8F%E7%93%A6%E9%9B%B7%E6%96%AF/%E5%AE%89%E9%BD%90%E6%8B%89%E7%BA%B3%E7%BA%B3/"
+        },
+        {
+          "text": "한국어",
+          "href": "https://ko.readytotrip.com/hotels/%EB%A7%88%EB%8B%A4%EA%B0%80%EC%8A%A4%EC%B9%B4%EB%A5%B4/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "日本語",
+          "href": "https://ja.readytotrip.com/hotels/%E3%83%9E%E3%83%80%E3%82%AC%E3%82%B9%E3%82%AB%E3%83%AB/Diego%20Suarez/Antsiranana/"
+        },
+        {
+          "text": "Mobile Menu",
+          "href": "https://fr.readytotrip.com/hotels/Madagascar/Diego%20Suarez/Antsiranana/#mobile-menu-01"
+        },
+        {
+          "text": "Recherche",
+          "href": "https://fr.readytotrip.com/search/"
+        }
+      ],
+      "mainContent": "Vous dormirez à poings fermés ! Hôtel «hotel Espace Kaled» est situé à Antsiranana. Cet hôtel est situé àà quelques pas du centre-ville.\n\nVous dormirez à poings fermés ! Hôtel «Hotel le Colbert» est situé à Antsiranana. Cet hôtel est situé En plein centre-ville.\n\nQuel plaisir de rentrer dans un havre de paix après une journée en ville pleine d’aventure Hôtel «Lotus Hotel Diego» est situé à Antsiranana. Cet hôtel est situé En centre-ville.\n\nEnvie de voyager sans vous ruiner ? Facile ! Hôtel «Hotel de la Poste» est situé à Antsiranana. Cet hôtel est situé à1 km du centre-ville.\n\nExcellente option pour les petits budgets - Hôtel «Sanjeela Plage Coco» est situé à Antsiranana. Cet hôtel est situé à 3 km du centre-ville.\n\nEnvie de voyager sans vous ruiner ? Facile : Hôtel «Hotel Lakana Ramena» est situé à Antsiranana. Cet hôtel est situé à 6 km du centre-ville.\n\nVacances actives ou farniente, à vous de décider. Cottage «Nature Lodge» est situé(e) à Antsiranana.\n\nEnvie de voyager sans vous ruiner ? Facile ! Hôtel «Lasirene hôtel» est situé à Antsiranana. Cet hôtel est situé àà quelques pas du centre-ville.\n\nTrès bel hôtel à prix plus que correct - Hôtel «Ocean Lodge Kite Windsurf» est situé à Antsiranana. Cet hôtel est situé à 3 km du centre-ville.\n\nLe meilleur des vacances, c’est quand vous découvrez un nouvel endroit, mais que vous y sentez comme chez vous : Appartement «Center Point» est situé à Antsiranana. Cet appartement est situé dans le centre-ville.\n\nL’endroit parfait pour se reposer après une folle journée ! Hôtel «Hotel Bungalows Royal Sakalava» est situé à Antsiranana. Cet hôtel est situé à 11 km du centre-ville.\n\nL’endroit parfait pour se reposer après une folle journée ! Hôtel «Hotel La Belle Aventure» est situé à Antsiranana. Cet hôtel est situé dans le centre-ville.\n\nUn super hôtel pour prendre des forces avant d’aller parcourir la ville. Hôtel «Hotel Le Petit Paradis» est situé à Antsiranana.\n\nTout ce dont vous avez besoin pour une escapade ressourçante ! Complexe touristique «L Hotel SPA Le Victoria» est situé à Antsiranana. Ce complexe touristique est situé En plein centre-ville.\n\nL’endroit parfait pour se reposer après une folle journée ! Hôtel «Hôtel La Terrasse du Voyageur» est situé à Antsiranana. Cet hôtel est situé àà quelques pas du centre-ville.\n\nUn lieu qui promet d’être confortable ! Hôtel «Régina Lodge» est situé à Antsiranana. Cet hôtel est situé à 6 km du centre-ville.\n\nUn super hôtel pour prendre des forces avant d’aller parcourir la ville. Hôtel «Hôtel Golden House» est situé à Antsiranana.\n\nRentrer dans un lieu aussi confortable que sa propre maison, ça n’a pas de prix. Mini-hôtel «Motel Au Petit Vatel» est situé à Antsiranana.\n\nL’endroit parfait pour se reposer après une folle journée ! Hôtel «Residence Kathyly» est situé à Antsiranana. Cet hôtel est situé En centre-ville.\n\nTrès bel hôtel à prix plus que correct - Hôtel «Hotel Valiha» est situé à Antsiranana. Cet hôtel est situé à1 km du centre-ville.\n\nEnvie de voyager sans vous ruiner ? Facile : Hôtel «Hotel Kartiffa» est situé à Antsiranana. Cet hôtel est situé à1 km du centre-ville.\n\nUn lieu qui promet d’être confortable ! Hôtel «La Note Bleue Park Hotel» est situé à Antsiranana. Cet hôtel est situé à 4 km du centre-ville.\n\n«Iharana Bush Camp» est situé à Antsiranana. Cet hôtel est situé à 5 km du centre-ville.\n\nL’endroit parfait pour se reposer après une folle journée ! Hôtel «Allamanda Hotel» est situé à Antsiranana. Cet hôtel est situé à 1 km du centre-ville.\n\nQuel plaisir de rentrer dans un havre de paix après une journée en ville pleine d’aventure Hôtel «Le Grand Hotel Diego» est situé à Antsiranana. Cet hôtel est situé En centre-ville.\n\nLe service ReadyToTrip propose des hôtels allant d'économiques à 5★, vous pouvez réserver des appartements, louer un appartement journalier ou trouver une auberge de jeunesse pour un hébergement abordable aujourd'hui, consultez aussi hôtels à Antsiranana sur la carte.\n\nPour réserver des hôtels à Antsiranana, suivez ces étapes simples :\n\nVous pouvez payer votre réservation d'hôtel à Antsiranana de différentes manières :\n\t\t\t\t\t\t\t💳 Par Visa, Mastercard ou American Express.\n\t\t\t\t\t\t\t🔄 Sans prépaiement – certains hôtels permettent le paiement en espèces à l'arrivée.\n\nLa plupart des réservations d'hôtels à Antsiranana peuvent être annulées gratuitement 1–3 jours avant l'arrivée. C'est pratique si :\n\t\t\t\t\t\t\t🔹 Vos plans changent – vous pouvez annuler la réservation sans pénalité.\n\t\t\t\t\t\t\t🔹 Vous trouvez une meilleure option – réservez à nouveau pour une meilleure offre.",
+      "structuredData": [],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:19:09.064Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Les 11 Meilleurs Antsiranana Hôtels de Plage en 2026",
+      "googleName": "Les 11 Meilleurs Antsiranana Hôtels de Plage en 2026",
+      "slogan": "",
+      "pageTitle": "Les 11 Meilleurs Antsiranana Hôtels de Plage en 2026",
+      "metaDescription": "Cher lecteur,Laissez-moi vous emmener dans une escapade inoubliable vers Antsiranana, une perle rare située au nord de Madagascar. Cette",
+      "ogImage": "",
+      "lang": "fr",
+      "canonical": "https://antsiranana.hotelsonthebeach.net/fr/",
+      "logo": "",
+      "googleTitle": "Les 11 Meilleurs Antsiranana Hôtels de Plage en 2026",
+      "googleSnippet": "Le guide officiel de Hôtels de Plage à Antsiranana - Votre source de confiance pour les meilleurs séjours! La Poste est un hôtel de 3 étoiles situé à 25 minutes de marche du Paradis du Nord. Le lieu offre un coffre-fort et un bureau de change ainsi que 34 chambres avec vue sur la mer.",
+      "googlePosition": 4,
+      "url": "https://antsiranana.hotelsonthebeach.net/fr/",
+      "domain": "antsiranana.hotelsonthebeach.net",
+      "contacts": {
+        "phones": [],
+        "emails": [],
+        "whatsapp": [],
+        "addresses": [
+          "2 Boulevard Bazeilles",
+          "9, Rue Louis Brunet"
+        ],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "gps": null,
+      "socials": {},
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [],
+        "partners": [
+          {
+            "url": "https://hotelsonthebeach.net/fr/",
+            "label": "Hotels On The Beach",
+            "domain": "hotelsonthebeach.net"
+          },
+          {
+            "url": "https://hotelsonthebeach.net/fr/popular-destinations/",
+            "label": "Villes populaires",
+            "domain": "hotelsonthebeach.net"
+          },
+          {
+            "url": "https://ciboure.hotelsonthebeach.net/fr/",
+            "label": "Ciboure",
+            "domain": "ciboure.hotelsonthebeach.net"
+          },
+          {
+            "url": "https://brest.hotelsonthebeach.net/fr/",
+            "label": "Brest",
+            "domain": "brest.hotelsonthebeach.net"
+          },
+          {
+            "url": "https://narbonneplage.hotelsonthebeach.net/fr/",
+            "label": "Narbonne-Plage",
+            "domain": "narbonneplage.hotelsonthebeach.net"
+          },
+          {
+            "url": "https://oran.hotelsonthebeach.net/fr/",
+            "label": "Oran",
+            "domain": "oran.hotelsonthebeach.net"
+          },
+          {
+            "url": "https://laturballe.hotelsonthebeach.net/fr/",
+            "label": "La Turballe",
+            "domain": "laturballe.hotelsonthebeach.net"
+          },
+          {
+            "url": "https://bandol.hotelsonthebeach.net/fr/",
+            "label": "Bandol",
+            "domain": "bandol.hotelsonthebeach.net"
+          },
+          {
+            "url": "https://laflotte.hotelsonthebeach.net/fr/",
+            "label": "La Flotte",
+            "domain": "laflotte.hotelsonthebeach.net"
+          },
+          {
+            "url": "https://concarneau.hotelsonthebeach.net/fr/",
+            "label": "Concarneau",
+            "domain": "concarneau.hotelsonthebeach.net"
+          },
+          {
+            "url": "https://aonang.hotelsonthebeach.net/fr/",
+            "label": "Ao Nang",
+            "domain": "aonang.hotelsonthebeach.net"
+          },
+          {
+            "url": "https://hotelsonthebeach.net/fr/top-countries/",
+            "label": "Pays populaires",
+            "domain": "hotelsonthebeach.net"
+          },
+          {
+            "url": "https://hotelsonthebeach.net/fr/top-regions/",
+            "label": "Régions Populaires",
+            "domain": "hotelsonthebeach.net"
+          }
+        ]
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [],
+        "categories": [
+          "Villes populaires"
+        ],
+        "prices": []
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": [
+          "175 Note des clients"
+        ]
+      },
+      "technologies": {
+        "cms": [
+          "WordPress"
+        ],
+        "frameworks": [],
+        "analytics": [],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [
+        {
+          "action": "https://antsiranana.hotelsonthebeach.net/fr/",
+          "method": "post",
+          "hasFile": false,
+          "fields": [
+            {
+              "type": "text",
+              "name": "name"
+            },
+            {
+              "type": "text",
+              "name": "email"
+            },
+            {
+              "type": "select-one",
+              "name": "subject"
+            },
+            {
+              "type": "textarea",
+              "name": "message"
+            },
+            {
+              "type": "text",
+              "name": "message2"
+            }
+          ]
+        }
+      ],
+      "navLinks": [
+        {
+          "text": "Hotels On The Beach",
+          "href": "https://hotelsonthebeach.net/fr/"
+        },
+        {
+          "text": "Villes populaires",
+          "href": "https://hotelsonthebeach.net/fr/popular-destinations/"
+        }
+      ],
+      "mainContent": "Le guide officiel de Hôtels de Plage à Antsiranana – Votre source de confiance pour les meilleurs séjours!\n\nLa Poste est un hôtel de 3 étoiles situé à 25 minutes de marche du Paradis du Nord. Le lieu offre un coffre-fort et un bureau de change ainsi que 34 chambres avec vue sur la mer.\n\nL'Alliance Francaise est proche de la propriété, et l'aéroport Aérodrome d'Arrachart est à environ 15 minutes de route. La propriété est à moins de 8 minutes de marche de la Maison Cassam Chenai.\n\nCoffre personnel et canapé, et oreillers en duvet d'oie, oreillers en duvet et plumes sont pourvus à chaque chambre. Les clients peuvent également utiliser une toilette séparée et une douche.\n\nUne piscine sont également disponibles à un coût additionnel. Offrant une piscine en plein air, ce lieu met à la disposition des hôtes piscine. Les invités peuvent se divertir se livrant à la plongée et la randonnée, offerts sur place.\n\nUn Wi-Fi est disponible dans les zones publiques, ainsi qu'une plage privée et des services de sécurité 24/24 sont disponibles sur place.\n\nSitué à moins de 20 km de la zone de l'aéroport Aérodrome d'Arrachart, cet hôtel se trouve à 25 minutes de route de Kite Alizé - Centre Kitesurf & Windsurf. Il y a un accès facile à la plage privée.\n\nLe lieu propose 15 chambres avec un patio et un balcon. Les salles de bain fournissent une douche ouverte et une toilette séparée.\n\nUne piscine en plein air sont fournis moyennant un supplément. L'hôtel fournit une piscine en plein air ainsi qu'un court de tennis et une piscine en plein air. L'hôtel est un bon endroit pour faire de l'activité de sports nautiques et le windsurf.\n\nDans cet hôtel, vous serez à 1 km de la Mer d'Emeraude et à 5 km de Japanese Monument.\n\nL'hôtel offre un accès facile à la plage privée d'Antsiranana.\n\nChaque chambre est équipée d'un coffre-fort et coffre personnel, ainsi que de salles de bain avec une douche ouverte et une toilette séparée. Ces chambres sont équipées des oreillers anti allergiques et des oreillers souples ou durs anti-allergènes.\n\nL'hôtel dispose également d'une véranda pour se bronzer et une piscine en plein air moyennant un supplément. L'hôtel fournit également une piscine, de même que l'activité de sports nautiques et le windsurf.\n\nL'hôtel se trouve à proximité de plusieurs attractions de renom, à environ 2 km de la Maison Cassam Chenai et à environ 2,1 km de Cathedrale Saint Matthieu.\n\nLa propriété est située à 1 km du centre-ville d'Antsiranana et à 10 km de l'aéroport Aérodrome d'Arrachart.\n\nCertaines chambres fournissent balcon et bureau. Pour votre confort, vous trouverez une toilette séparée et une douche.\n\nSituée à 4 km du centre-ville d'Antsiranana, la propriété est juste à côté de Cathedrale Saint Matthieu et à 19 minutes à pied du Paradis du Nord.\n\nLa propriété est à 10 minutes à pied de Tropical Garden Diego Suarez.\n\nLes chambres sont équipées de coffre-fort et coffre personnel, ainsi que de salles de bain privées avec une toilette séparée. Tout hébergement a un sol carrelé.\n\nIl y a une véranda pour se bronzer et une terrasse ensoleillée disponibles à un coût additionnel. Il y a aussi véranda pour se bronzer sur place.\n\nL'hôtel est situé à environ 11 km de Kite Alizé - Centre Kitesurf & Windsurf.\n\nUne terrasse ensoleillée et un espace de pique-nique sont également disponibles à un coût additionnel. Les hôtes peuvent profiter des cours d'yoga, ou se détendre dans un solarium. Les invités peuvent joindre la plongée et le kayak.\n\nL'endroit est situé à 5 km du centre de la ville et est adjacent au Port Antsiranana.\n\nL'hébergement est à 850 mètres de Cathedrale Saint Matthieu et à 1 km de Japanese Monument.\n\nLes chambres ont des articles de toilette comprenant une toilette séparée et une douche.\n\nUn certain nombre d'activités sont offertes dans la région, comme le windsurf et la plongée.\n\nLes Paillottes de Babaomby Hotel offre un hébergement avec cette véranda pour se bronzer et ce jardin pour la commodité des hôtes à Antsiranana. La Mer d'Emeraude est à moins de 5 minutes de marche des Paillottes de Babaomby Hotel.\n\nLes chambres sont dotées du coffre-fort et le coffre personnel ainsi que d'une toilette séparée et une douche.\n\nLa piscine en plein air est située sur place. L'activité de sports nautiques, le windsurf et la plongée avec tuba sont possibles dans les environs.\n\nL'hôtel se trouve à 20 km de l'aéroport Aérodrome d'Arrachart et à 9 km de Kite Alizé - Centre Kitesurf & Windsurf.\n\nLes chambres sont équipées de coffre personnel et un canapé et de salles de bain avec une douche à l'italienne et une toilette séparée. Ces chambres sont équipées d'oreillers souples ou durs anti-allergènes et oreillers anti allergiques.\n\nL'hôtel offre également coffre-fort et services de sécurité 24/24. Les amateurs de sport apprécieront le windsurf et la plongée avec tuba.\n\nSitué à 11 km de Kite Alizé - Centre Kitesurf & Windsurf, le lieu se trouve à 20 km de l'aéroport Aérodrome d'Arrachart.\n\nLe lieu est fixé dans une zone de plage d'Antsiranana. Cet hôtel dispose d'un accès à la plage partagée et aux équipements de la plage, y compris chaises longues.\n\nLa propriété a des chambres avec coffre-fort et un coffre privé. Ces chambres offrent aussi une douche à l'italienne et une toilette séparée.\n\nL'hôtel fournit une véranda pour se bronzer et une terrasse ensoleillée moyennant un supplément. Véranda pour se bronzer et un salon commun sont fournis pour vous proposer un séjour agréable. Le lieu offre également le windsurf et la plongée avec tuba.\n\nLa propriété se trouve à environ 9 km de Kite Alizé - Centre Kitesurf & Windsurf.\n\nLa propriété fournit coffre-fort et un coffre privé à chaque unité. Elles comportent une douche à l'italienne et une toilette séparée dans les salles de bain.\n\nLes clients peuvent profiter une véranda pour se bronzer et une terrasse ensoleillée moyennant un supplément. Il comprend véranda pour se bronzer et un salon commun, ainsi que des installations de spa comprenant solarium. Cette propriété fournit des activités sportives telles que l'activité de sports nautiques et le windsurf pour tous les invités.\n\nLaissez-moi vous emmener dans une escapade inoubliable vers Antsiranana, une perle rare située au nord de Madagascar. Cette destination envoûtante est célèbre pour ses plages idylliques, ses eaux turquoise et sa nature préservée, mais ce qui la rend véritablement exceptionnelle, ce sont ses hôtels de plage. Avec des plages privées, des piscines éblouissantes et des spas luxueux, ces établissements vous promettent une expérience de détente et d’indulgence sans pareil.\n\nImaginez-vous en train de vous prélasser sur une plage isolée, le doux murmure des vagues en toile de fond. Les hôtels de plage d'Antsiranana sont là pour transformer ce rêve en réalité. Chacun d'eux s'efforce de créer une atmosphère intimiste où le luxe et le confort se rejoignent. Que vous souhaitiez vous lancer dans des activités nautiques ou simplement savourer un cocktail au bord de la piscine, chaque instant passé dans ces lieux est soigneusement pensé pour votre bien-être.\n\nLes spas de ces complexes hôteliers vous invitent à vivre des moments de pur répit. Des soins relaxants inspirés par des traditions anciennes à des massages revitalisants, chaque traitement est conçu pour apaiser votre esprit et revitaliser votre corps. En vous immergeant dans ce monde de sérénité, vous découvrirez une nouvelle dimension de relaxation, bien loin du rythme effréné de la vie quotidienne.\n\nAntsiranana est bien plus qu'une simple destination ; c'est une invitation à la détente et à la découverte. Chaque hôtel, avec son charme distinctif, contribue à sublimer cette expérience unique, vous permettant de profiter pleinement de la beauté naturelle qui vous entoure. Préparez-vous à vous évader et à découvrir ce que ces lieux d'exception ont à offrir, et laissez-vous transporter par le luxe et la tranquillité des plages de Madagascar.\n\nDe superbes emplacements et des offres pour tous les budgets.",
+      "structuredData": [
+        {
+          "@context": "http://schema.org",
+          "@type": [
+            "ItemList",
+            "TouristDestination"
+          ],
+          "itemListElement": [
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "3"
+              },
+              "priceRange": "92",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "2 Boulevard Bazeilles"
+              },
+              "name": "Hotel De La Poste"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "3"
+              },
+              "priceRange": "122",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Baie Des Sakalava"
+              },
+              "name": "Hotel Royal Sakalava"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "64",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Ramena Pk17"
+              },
+              "name": "Hotel Lakana Ramena"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "25",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Andranomitete Morafeno"
+              },
+              "name": "Sanjeela-Plage Coco"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "49",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "9, Rue Louis Brunet"
+              },
+              "name": "Le Jardin Exotique Hotel"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "2"
+              },
+              "priceRange": "21",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "1 Baie De Sakalava"
+              },
+              "name": "Varatraza Wind Riders"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "46",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Boulevard Bascilles"
+              },
+              "name": "Annexe de l&#039;Hotel de la Poste"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "75",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "09 Boulvard De La Liberte"
+              },
+              "name": "Les Paillottes de Babaomby Hotel"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "91",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "1 Baie De Sakalava, Antsiranana"
+              },
+              "name": "Hotel Madakitecamp"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "61",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Baie De Sakalava"
+              },
+              "name": "Ocean Lodge Kite &amp; Windsurf"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "89",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Baie De Sakalava"
+              },
+              "name": "Hotel Kiteparadise-Madagascar"
+            }
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "Antsiranana Hotels On The Beach",
+          "url": "https://antsiranana.hotelsonthebeach.net/fr/"
+        }
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:19:23.601Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Hôtels Antsiranana : 107 offres d'hôtels pas chers Antsiranana",
+      "googleName": "Hôtels Antsiranana : 107 offres d'hôtels pas chers Antsiranana",
+      "slogan": "",
+      "pageTitle": "Hôtels à Antsiranana : 114 offres d'hôtel bon marché à Antsiranana",
+      "metaDescription": "HotelsCombined compare en une seule recherche toutes les offres d’hôtels à Antsiranana proposées par les meilleurs sites d’hébergement. Lisez les avis des client·es sur 114 hôtels à Antsiranana.",
+      "ogImage": "https://content.r9cdn.net/rimg/dimg/ba/0b/f807d966-city-51775-172c0b5357a.jpg?width=1200&height=630&xhint=3134&yhint=3030&crop=true",
+      "lang": "fr-fr",
+      "canonical": "https://www.hotelscombined.fr/Place/Antsiranana.htm",
+      "logo": "https://www.hotelscombined.fr/res/images/flags-svg/fr.svg",
+      "googleTitle": "Hôtels Antsiranana : 107 offres d'hôtels pas chers Antsiranana",
+      "googleSnippet": "HotelsCombined compare en une seule recherche toutes les offres d'hôtels à Antsiranana proposées par les meilleurs sites d'hébergement. Lisez les avis des client·es sur 107 hôtels à Antsiranana.",
+      "googlePosition": 5,
+      "url": "https://www.hotelscombined.fr/Place/Antsiranana.htm",
+      "domain": "hotelscombined.fr",
+      "contacts": {
+        "phones": [],
+        "emails": [],
+        "whatsapp": [],
+        "addresses": [],
+        "postalCode": "201",
+        "city": "Antsiranana",
+        "country": "Madagascar"
+      },
+      "gps": null,
+      "socials": {
+        "facebook": [
+          "https://www.facebook.com/HotelsCombined"
+        ]
+      },
+      "externalLinks": {
+        "appStores": [
+          {
+            "url": "https://play.google.com/store/apps/details?id=com.hotelscombined.mobile",
+            "label": "Disponible sur Google Play"
+          },
+          {
+            "url": "https://apps.apple.com/us/app/hotelscombined-hotel-search/id378011496",
+            "label": "Télécharger dans l’App Store"
+          }
+        ],
+        "downloads": [],
+        "platforms": [],
+        "partners": [
+          {
+            "url": "https://www.hotelscombined.com.au/Place/Antsiranana.htm",
+            "label": "Australia (English)",
+            "domain": "hotelscombined.com.au"
+          },
+          {
+            "url": "https://www.hotelscombined.ca/Place/Antsiranana.htm",
+            "label": "Canada (Français)",
+            "domain": "hotelscombined.ca"
+          },
+          {
+            "url": "https://www.hotelscombined.dk/Place/Antsiranana.htm",
+            "label": "Danmark (Dansk)",
+            "domain": "hotelscombined.dk"
+          },
+          {
+            "url": "https://www.hotelscombined.de/Place/Antsiranana.htm",
+            "label": "Germany (English)",
+            "domain": "hotelscombined.de"
+          },
+          {
+            "url": "https://www.hotelscombined.es/Place/Antsiranana.htm",
+            "label": "Espanya (Català)",
+            "domain": "hotelscombined.es"
+          },
+          {
+            "url": "https://www.hotelscombined.hk/Place/Antsiranana.htm",
+            "label": "香港 (中文)",
+            "domain": "hotelscombined.hk"
+          },
+          {
+            "url": "https://www.hotelscombined.in/Place/Antsiranana.htm",
+            "label": "India (English)",
+            "domain": "hotelscombined.in"
+          },
+          {
+            "url": "https://www.hotelscombined.ie/Place/Antsiranana.htm",
+            "label": "Ireland (English)",
+            "domain": "hotelscombined.ie"
+          },
+          {
+            "url": "https://www.hotelscombined.co.il/Place/Antsiranana.htm",
+            "label": "ישראל (עִבְרִית)",
+            "domain": "hotelscombined.co.il"
+          },
+          {
+            "url": "https://www.hotelscombined.it/Place/Antsiranana.htm",
+            "label": "Italia (Italiano)",
+            "domain": "hotelscombined.it"
+          },
+          {
+            "url": "https://www.hotelscombined.jp/Place/Antsiranana.htm",
+            "label": "日本 (日本語)",
+            "domain": "hotelscombined.jp"
+          },
+          {
+            "url": "https://www.hotelscombined.my/",
+            "label": "Malaysia (Melayu)",
+            "domain": "hotelscombined.my"
+          },
+          {
+            "url": "https://www.hotelscombined.co.nz/Place/Antsiranana.htm",
+            "label": "New Zealand (English)",
+            "domain": "hotelscombined.co.nz"
+          },
+          {
+            "url": "https://www.hotelscombined.no/Place/Antsiranana.htm",
+            "label": "Norge (Norsk)",
+            "domain": "hotelscombined.no"
+          },
+          {
+            "url": "https://www.hotelscombined.com.sg/Place/Antsiranana.htm",
+            "label": "Singapore (English)",
+            "domain": "hotelscombined.com.sg"
+          },
+          {
+            "url": "https://www.hotelscombined.co.kr/Place/Antsiranana.htm",
+            "label": "대한민국 (한국어)",
+            "domain": "hotelscombined.co.kr"
+          },
+          {
+            "url": "https://www.hotelscombined.se/Place/Antsiranana.htm",
+            "label": "Sverige (Svenska)",
+            "domain": "hotelscombined.se"
+          },
+          {
+            "url": "https://www.hotelscombined.com.tw/Place/Antsiranana.htm",
+            "label": "台灣 (中文)",
+            "domain": "hotelscombined.com.tw"
+          },
+          {
+            "url": "https://www.hotelscombined.ae/Place/Antsiranana.htm",
+            "label": "United Arab Emirates (English)",
+            "domain": "hotelscombined.ae"
+          },
+          {
+            "url": "https://www.hotelscombined.co.uk/Place/Antsiranana.htm",
+            "label": "United Kingdom (English)",
+            "domain": "hotelscombined.co.uk"
+          },
+          {
+            "url": "https://www.hotelscombined.com/Place/Antsiranana.htm",
+            "label": "United States (English)",
+            "domain": "hotelscombined.com"
+          },
+          {
+            "url": "https://ar.hotelscombined.com/Place/Antsiranana.htm",
+            "label": "Saudi Arabia (English)",
+            "domain": "ar.hotelscombined.com"
+          },
+          {
+            "url": "https://www.hotelscombined.co.th/Place/Antsiranana.htm",
+            "label": "Thailand (English)",
+            "domain": "hotelscombined.co.th"
+          },
+          {
+            "url": "https://affiliates.kayak.com/?languageCode=FR",
+            "label": "Programme d’affiliation",
+            "domain": "affiliates.kayak.com"
+          }
+        ]
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": [
+          "lundi (7 €)",
+          "jeudi, où le prix moyen d'une nuitée est de 35 €"
+        ]
+      },
+      "team": [],
+      "services": {
+        "list": [
+          "Quel est le mois le moins cher pour réserver un(e) hôtel à Antsiranana ?",
+          "Quel est le jour le moins cher pour séjourner dans un(e) hôtel à Antsiranana ?",
+          "Envisagez ces hôtels 3 étoile(s) populaires à Antsiranana",
+          "Explorez ces villes - Madagascar",
+          "Hôtels tendance à Antsiranana",
+          "Visitez ces destinations populaires",
+          "Villes recherchées par nos utilisateur·ices",
+          "Le mois le moins cher pour réserver un(e) hôtel à Antsiranana est mars (16 €). En revanche, le mois le plus cher pour séjourner à Antsiranana est février (112 €).",
+          "Le mois le moins cher pour séjourner à Antsiranana est le lundi (7 €). En revanche, les voyageur·euses risquent de payer le tarif le plus élevé le jeudi, où le prix moyen d'une nuitée est de 35 €.",
+          "Quels sont les meilleurs hôtels à Antsiranana ?",
+          "Y a-t-il des hôtels à Antsiranana près de Aéroport d'Antsiranana (Arrachart) ?",
+          "Quelles sont les autres villes où séjourner en/au Région Diana ?",
+          "Combien y a-t-il d'hôtels à Antsiranana ?"
+        ],
+        "categories": [
+          "Passer directement au contenu principal",
+          "Vols",
+          "Hôtels",
+          "Voitures",
+          "Vol+Hôtel",
+          "Explore",
+          "Accueil",
+          "Madagascar",
+          "Accueil",
+          "Madagascar",
+          "Qui sommes-nous ?",
+          "Notre fonctionnement",
+          "Mobile",
+          "Aide/FAQ",
+          "Hôteliers",
+          "Programme d’affiliation",
+          "Parcourir les hôtels par pays",
+          "Garantie du meilleur prix"
+        ],
+        "prices": []
+      },
+      "reputation": {
+        "overallRating": "6,8",
+        "reviewCount": "158",
+        "reviews": [],
+        "widgets": []
+      },
+      "technologies": {
+        "cms": [],
+        "frameworks": [
+          "React"
+        ],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [],
+      "navLinks": [
+        {
+          "text": "Passer directement au contenu principal",
+          "href": "https://www.hotelscombined.fr/Place/Antsiranana.htm#main"
+        },
+        {
+          "text": "Vols",
+          "href": "https://www.hotelscombined.fr/flights"
+        },
+        {
+          "text": "Hôtels",
+          "href": "https://www.hotelscombined.fr/hotels"
+        },
+        {
+          "text": "Voitures",
+          "href": "https://www.hotelscombined.fr/cars"
+        },
+        {
+          "text": "Vol+Hôtel",
+          "href": "https://www.hotelscombined.fr/sejours"
+        },
+        {
+          "text": "Explore",
+          "href": "https://www.hotelscombined.fr/explore/"
+        },
+        {
+          "text": "Trips",
+          "href": "https://www.hotelscombined.fr/Place/Antsiranana.htm#"
+        },
+        {
+          "text": "Australia (English)",
+          "href": "https://www.hotelscombined.com.au/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Canada (English)",
+          "href": "https://www.hotelscombined.ca/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Canada (Français)",
+          "href": "https://www.hotelscombined.ca/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Danmark (Dansk)",
+          "href": "https://www.hotelscombined.dk/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Deutschland (Deutsch)",
+          "href": "https://www.hotelscombined.de/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Germany (English)",
+          "href": "https://www.hotelscombined.de/Place/Antsiranana.htm"
+        },
+        {
+          "text": "España (Español)",
+          "href": "https://www.hotelscombined.es/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Espanya (Català)",
+          "href": "https://www.hotelscombined.es/Place/Antsiranana.htm"
+        },
+        {
+          "text": "France (Français)",
+          "href": "https://www.hotelscombined.fr/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Hong Kong (English)",
+          "href": "https://www.hotelscombined.hk/Place/Antsiranana.htm"
+        },
+        {
+          "text": "香港 (中文)",
+          "href": "https://www.hotelscombined.hk/Place/Antsiranana.htm"
+        },
+        {
+          "text": "India (English)",
+          "href": "https://www.hotelscombined.in/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Ireland (English)",
+          "href": "https://www.hotelscombined.ie/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Israel (English)",
+          "href": "https://www.hotelscombined.co.il/Place/Antsiranana.htm"
+        },
+        {
+          "text": "ישראל (עִבְרִית)",
+          "href": "https://www.hotelscombined.co.il/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Italia (Italiano)",
+          "href": "https://www.hotelscombined.it/Place/Antsiranana.htm"
+        },
+        {
+          "text": "日本 (日本語)",
+          "href": "https://www.hotelscombined.jp/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Malaysia (English)",
+          "href": "https://www.hotelscombined.my/"
+        },
+        {
+          "text": "Malaysia (Melayu)",
+          "href": "https://www.hotelscombined.my/"
+        },
+        {
+          "text": "New Zealand (English)",
+          "href": "https://www.hotelscombined.co.nz/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Norge (Norsk)",
+          "href": "https://www.hotelscombined.no/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Singapore (English)",
+          "href": "https://www.hotelscombined.com.sg/Place/Antsiranana.htm"
+        },
+        {
+          "text": "대한민국 (한국어)",
+          "href": "https://www.hotelscombined.co.kr/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Sverige (Svenska)",
+          "href": "https://www.hotelscombined.se/Place/Antsiranana.htm"
+        },
+        {
+          "text": "台灣 (中文)",
+          "href": "https://www.hotelscombined.com.tw/Place/Antsiranana.htm"
+        },
+        {
+          "text": "United Arab Emirates (English)",
+          "href": "https://www.hotelscombined.ae/Place/Antsiranana.htm"
+        },
+        {
+          "text": "United Kingdom (English)",
+          "href": "https://www.hotelscombined.co.uk/Place/Antsiranana.htm"
+        },
+        {
+          "text": "United States (English)",
+          "href": "https://www.hotelscombined.com/Place/Antsiranana.htm"
+        },
+        {
+          "text": "المملكة العربية السعودية (العَرَبِيَّة)",
+          "href": "https://ar.hotelscombined.com/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Saudi Arabia (English)",
+          "href": "https://ar.hotelscombined.com/Place/Antsiranana.htm"
+        },
+        {
+          "text": "ประเทศไทย (ภาษาไทย)",
+          "href": "https://www.hotelscombined.co.th/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Thailand (English)",
+          "href": "https://www.hotelscombined.co.th/Place/Antsiranana.htm"
+        },
+        {
+          "text": "Accueil",
+          "href": "https://www.hotelscombined.fr/"
+        },
+        {
+          "text": "Madagascar",
+          "href": "https://www.hotelscombined.fr/Place/Madagascar.htm"
+        },
+        {
+          "text": "Qui sommes-nous ?",
+          "href": "https://www.hotelscombined.fr/AboutUs"
+        },
+        {
+          "text": "Notre fonctionnement",
+          "href": "https://www.hotelscombined.fr/company"
+        },
+        {
+          "text": "Mobile",
+          "href": "https://www.hotelscombined.fr/mobile"
+        },
+        {
+          "text": "Aide/FAQ",
+          "href": "https://www.hotelscombined.fr/help"
+        },
+        {
+          "text": "Hôteliers",
+          "href": "https://www.hotelscombined.fr/Hotelier/Contact"
+        },
+        {
+          "text": "Programme d’affiliation",
+          "href": "https://affiliates.kayak.com/?languageCode=FR"
+        },
+        {
+          "text": "Parcourir les hôtels par pays",
+          "href": "https://www.hotelscombined.fr/Countries"
+        },
+        {
+          "text": "Garantie du meilleur prix",
+          "href": "https://www.hotelscombined.fr/AboutUs/BestPriceGuarantee"
+        }
+      ],
+      "mainContent": "Utilisez nos conseils basés sur les données de HotelsCombined pour trouver votre prochain hôtel à Antsiranana.\n\nAntsiranana abrite de nombreux hôtels très bien notés, dont Lotus Hotel, qui obtient actuellement une note de 7,3. Pour un autre hébergement, regardez Le Grand Hôtel Diego et La Belle Aventure, qui peuvent aussi être des lieux de séjour agréables à Antsiranana.\n\nL'hôtel le plus proche de Aéroport d'Antsiranana (Arrachart) est Hotel de la Poste qui se trouve à 1,1 km du centre-ville.\n\nEn plus de Antsiranana, les voyageur·euses choisissent de visiter Nosy Be en voyageant en/au Région Diana. Ambatoloaka est également un choix populaire à découvrir.\n\nAu total, il y a 114 hôtels au choix à Antsiranana, pour 613 établissements en Région Diana.",
+      "structuredData": [
+        {
+          "@context": "https://schema.org",
+          "@type": "Website",
+          "name": "HotelsCombined",
+          "url": "https://www.hotelscombined.fr"
+        },
+        {
+          "@context": "http://schema.org",
+          "@type": "Organization",
+          "name": "HotelsCombined",
+          "url": "https://www.hotelscombined.fr/Place/Antsiranana.htm",
+          "sameAs": [
+            "https://www.facebook.com/HotelsCombined/"
+          ]
+        },
+        {
+          "@context": "http://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": "1",
+              "item": {
+                "@id": "/",
+                "name": "Accueil"
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": "2",
+              "item": {
+                "@id": "/Place/Madagascar.htm",
+                "name": "Madagascar"
+              }
+            },
+            {
+              "@type": "ListItem",
+              "position": "3",
+              "item": {
+                "@id": "",
+                "name": "Antsiranana"
+              }
+            }
+          ]
+        },
+        {
+          "@context": "http://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Quels sont les meilleurs hôtels à Antsiranana ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Antsiranana abrite de nombreux hôtels très bien notés, dont Lotus Hotel, qui obtient actuellement une note de 7,3. Pour un autre hébergement, regardez Le Grand Hôtel Diego et La Belle Aventure, qui peuvent aussi être des lieux de séjour agréables à Antsiranana."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Y a-t-il des hôtels à Antsiranana près de Aéroport d'Antsiranana (Arrachart) ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "L'hôtel le plus proche de Aéroport d'Antsiranana (Arrachart) est Hotel de la Poste qui se trouve à 1,1 km du centre-ville."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Quelles sont les autres villes où séjourner en/au Région Diana ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "En plus de Antsiranana, les voyageur·euses choisissent de visiter Nosy Be en voyageant en/au Région Diana. Ambatoloaka est également un choix populaire à découvrir."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Combien y a-t-il d'hôtels à Antsiranana ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Au total, il y a 114 hôtels au choix à Antsiranana, pour 613 établissements en Région Diana."
+              }
+            }
+          ]
+        },
+        {
+          "@context": "http://schema.org",
+          "@type": "Hotel",
+          "name": "Hotel de la Poste",
+          "url": "https://www.hotelscombined.fr/Hotel/Hotel_de_la_Poste_Antsiranana.htm",
+          "description": "Hôtel de Antsiranana, avec 2 piscines extérieures et spa proposant des soins complets Cet hôtel, qui est non-fumeurs, possède 2 piscines extérieures, un spa proposant des soins complets et un restaurant. Le petit déjeuner buffet gratuit, le Wi-Fi gratuit dans les parties communes et le parking sans voiturier gratuit sont également fournis. Parmi les autres prestations, il y a un bar / salon, un café et des soins spa. Hotel de la Poste possède 136 chambres comprenant la climatisation, un coffre-fort et un sèche-cheveux. Chaque chambre bénéficie d'un ameublement personnalisé. Une télévision à écran plat donne accès aux chaînes par satellite. Cet hôtel de Antsiranana offre l'accès gratuit à Internet sans fil (vitesse: 25 Mbit/s ou plus)Des bureaux et un téléphone sont également disponibles. Un service de ménage est proposé tous les jours et des massages en chambre est disponible sur demande. L'hébergement est doté de 2 piscines extérieures.",
+          "starRating": "2",
+          "telephone": "+33 6 29 14 80 80",
+          "alternateName": [
+            "Hotel de la Poste Antsiranana",
+            "Hotel de la Poste Antsiranana, Région Diana"
+          ],
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "7 Rue Richelieu",
+            "addressLocality": "Antsiranana",
+            "postalCode": "201",
+            "addressRegion": "Région Diana",
+            "addressCountry": "Madagascar"
+          },
+          "priceRange": "31 €",
+          "image": "/rimg/himg/e7/75/34/expedia_group-3389230-f9c2dd-827504.jpg?width=128&height=160&crop=true",
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "bestRating": "10",
+            "ratingValue": "6,8",
+            "ratingCount": "158"
+          },
+          "amenityFeature": [
+            "bar",
+            "flat_screen_tv",
+            "hairdryer",
+            "24hfrontdesk",
+            "ac",
+            "fishing",
+            "adapted_bath",
+            "elevator",
+            "garden",
+            "desk"
+          ]
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "TouristDestination",
+          "name": "Antsiranana"
+        }
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:19:37.593Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Les 25 meilleurs hôtels à Antsiranana, Madagascar - waysplanner.guide",
+      "googleName": "Les 25 meilleurs hôtels à Antsiranana, Madagascar - waysplanner.guide",
+      "slogan": "",
+      "pageTitle": "Les 25 meilleurs hôtels à Antsiranana, Madagascar – waysplanner.guide",
+      "metaDescription": "Voyager à Antsiranana, également connue sous le nom de Diego Suarez, est une expérience unique et inoubliable. Cette ville portuaire du nord de",
+      "ogImage": "",
+      "lang": "fr",
+      "canonical": "https://waysplanner.guide/fr/hotels-antsiranana/",
+      "logo": "",
+      "googleTitle": "Les 25 meilleurs hôtels à Antsiranana, Madagascar - waysplanner.guide",
+      "googleSnippet": "En choisissant un hôtel à Antsiranana, vous aurez également accès à une cuisine délicieuse mettant en valeur les saveurs locales de la région. De nombreux hôtels proposent des menus variés mettant en vedette des plats frais et savoureux préparés par des chefs locaux talentueux.",
+      "googlePosition": 6,
+      "url": "https://waysplanner.guide/fr/hotels-antsiranana/",
+      "domain": "waysplanner.guide",
+      "contacts": {
+        "phones": [],
+        "emails": [],
+        "whatsapp": [],
+        "addresses": [
+          "2 Boulevard Bazeilles",
+          "46 Rue Colbert",
+          "2 Route De Ramena",
+          "8 rue de la prison",
+          "13, Rue Freppel",
+          "19 Rue De La Marne",
+          "51 Rue Colbert Madagascar Antsiranana",
+          "Tanaboa 4"
+        ],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "gps": null,
+      "socials": {},
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [],
+        "partners": []
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [],
+        "categories": [
+          "Destinations populaires",
+          "France",
+          "Espagne",
+          "Italie",
+          "États-Unis"
+        ],
+        "prices": []
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": [
+          "175 Note des clients"
+        ]
+      },
+      "technologies": {
+        "cms": [
+          "WordPress"
+        ],
+        "frameworks": [],
+        "analytics": [],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [],
+      "navLinks": [
+        {
+          "text": "Planificateur de voies",
+          "href": "https://waysplanner.guide/fr/"
+        },
+        {
+          "text": "Destinations populaires",
+          "href": "https://waysplanner.guide/fr/popular-destinations/"
+        },
+        {
+          "text": "France",
+          "href": "https://waysplanner.guide/fr/category/france/"
+        },
+        {
+          "text": "Espagne",
+          "href": "https://waysplanner.guide/fr/category/spain/"
+        },
+        {
+          "text": "Italie",
+          "href": "https://waysplanner.guide/fr/category/italy/"
+        },
+        {
+          "text": "États-Unis",
+          "href": "https://waysplanner.guide/fr/category/us/"
+        }
+      ],
+      "mainContent": "Voici une liste rapide d'hôtels dans Antsiranana, sélectionnés en fonction de leur classement\n\nVoyager à Antsiranana, également connue sous le nom de Diego Suarez, est une expérience unique et inoubliable. Cette ville portuaire du nord de Madagascar regorge de beautés naturelles à couper le souffle, allant des plages de sable blanc aux baies turquoise et aux montagnes verdoyantes. Mais lorsque vient le temps de choisir un lieu de séjour, opter pour un hôtel peut s'avérer être la meilleure option pour profiter pleinement de votre voyage.\n\nLes hôtels à Antsiranana offrent non seulement un confort et des commodités modernes, mais ils offrent également un service personnalisé qui rendra votre séjour agréable et sans souci. Que vous voyagiez en famille, en couple ou en solo, il existe une multitude d'options d'hébergement pour répondre à vos besoins et à votre budget. De plus, la plupart des hôtels sont situés à proximité des principales attractions touristiques, ce qui facilite l'exploration de la région.\n\nEn choisissant un hôtel à Antsiranana, vous aurez également accès à une cuisine délicieuse mettant en valeur les saveurs locales de la région. De nombreux hôtels proposent des menus variés mettant en vedette des plats frais et savoureux préparés par des chefs locaux talentueux. Vous pourrez ainsi goûter aux spécialités malgaches tout en profitant du confort et du luxe de votre hébergement.\n\nEn conclusion, choisir un hôtel lorsque vous voyagez à Antsiranana est une décision judicieuse qui vous permettra de profiter pleinement de votre séjour dans cette ville pittoresque. Que ce soit pour sa proximité avec les attractions touristiques, ses services de qualité, ou sa gastronomie raffinée, les hôtels offrent une expérience incomparable qui rendra votre voyage encore plus mémorable. Alors n'hésitez pas à réserver votre séjour dans l'un des nombreux hôtels de la ville pour vivre une expérience authentique et enrichissante à Antsiranana.\n\nLa Poste est un hôtel de 3 étoiles situé à 700 mètres de l'Evasion Sans Frontiere. L'hôtel dispose d'un parking dans la rue sur place.\n\nLa propriété est située à 5 km du centre-ville d'Antsiranana et à 10 km de l'aéroport Aérodrome d'Arrachart. La propriété se trouve à 1 km de Cinéma Ritz. L'hôtel est situé à côté de Tropical Garden Diego Suarez.\n\nLe Grand Hôtel Diego est un hôtel de 4 étoiles situé à 5 minutes de marche du Port Antsiranana. Il fournit une piscine et du Wi-Fi dans toute la propriété.\n\nL'endroit est situé à 4 km du centre de la ville et est adjacent à l'Evasion Sans Frontiere. À moins de 1 km de l'hôtel, les invités trouveront Cinéma Ritz. Des bureaux d'entreprises sont à quelques minutes à pied du site. L'aéroport le plus proche est Aérodrome d'Arrachart, qui se trouve à 10 km de la propriété.\n\nIl y a un restaurant français avec une cuisine belge et une piscine disponible sur place.\n\nLe lieu est à 3 km de Tropical Garden Diego Suarez, alors que la Montagne des Francais est à 1 km. Il est situé à environ 1 km du centre d'Antsiranana. L'aéroport Aérodrome d'Arrachart est situé presque à 10 km de la propriété.\n\nDans cet hôtel, vous serez à 1 km de Ramena Beach et à 1,1 km de la Mer d'Emeraude.\n\nL'hôtel offre un accès facile à la plage privée d'Antsiranana.\n\nLe Petit Paradis est un hôtel de 3 étoiles situé à 17 minutes de marche de l'Alliance Francaise. Dans toute la propriété est disponible du Wi-Fi pour vous permettre de rester connecté.\n\nLa propriété est située à 3 km du centre-ville d'Antsiranana et à 10 km de l'aéroport Aérodrome d'Arrachart. Le Cap Diego est accessible en environ 10 minutes en voiture. De plus, la Place de l'Indépendance se trouve à une distance de marche du site.\n\nLa Belle Aventure est un hôtel de 3 étoiles situé à 8 minutes de marche de Cinéma Ritz. Du Wi-Fi dans toute la propriété, et aussi bureau de change et bureau d'excursions sont fournis à cet hôtel.\n\nLa propriété est située à 4 km du centre-ville d'Antsiranana et à 10 km de l'aéroport Aérodrome d'Arrachart. Il est à 1 km de Japanese Monument.\n\nLes voyageurs d'affaires apprécieront des commodités comme du Wi-Fi dans toute la propriété, et l'accès à bureau.\n\nVous pouvez trouver Cinéma Ritz à 1 km et le Port Antsiranana est à 2 km de la propriété. Cet hôtel est juste à la sortie du Paradis du Nord et à 10 km de l'aéroport Aérodrome d'Arrachart. La Montagne des Francais se trouve près de la propriété.\n\nVictoria est un hôtel de 3 étoiles situé à 750 mètres de la Maison Cassam Chenai. Du Wi-Fi est accessible dans toute la propriété et un parking dans la rue est fourni sur place.\n\nLa propriété est située à 4 km du centre-ville d'Antsiranana et à 10 km de l'aéroport Aérodrome d'Arrachart. L'Evasion Sans Frontiere est à 9 minutes à pied de cet hôtel. Il est à une minute à pied de Cinéma Ritz.\n\nGolden House est un hôtel de 3 étoiles situé à 25 minutes de marche du Port Antsiranana. Fournissant services de sécurité 24/24 et bureau de change, l'hôtel offre hébergement avec un parking dans la rue à proximité.\n\nLe site est situé près de Windsor Castle, juste à 25 minutes du centre-ville. Le Diego Raid est à 1 km de l'hôtel, et l'aéroport Aérodrome d'Arrachart est à 10 km.\n\nIl comprend des barbecues et bassin de plongée, ainsi que des installations de spa comprenant bassin de plongée.\n\nIl se trouve à 4 km de Ramena Beach et à 4,1 km de l'Anosiravo.\n\nVaratraza Wind Riders est un hôtel de 2 étoiles situé à 18 minutes de marche de la Baie des Sakalava. Du Wi-Fi est offert dans les zones publiques.\n\nLes invités peuvent accéder à The three bays en moins de 5 minutes de route de la propriété, alors que l'Alliance Francaise est à 14 minutes de marche.\n\nLa propriété est située à 4 km du centre-ville d'Antsiranana et à 10 km de l'aéroport Aérodrome d'Arrachart.\n\nL'hôtel est à 5 km de Cinéma Ritz et à moins de 10 minutes de route du Paradis du Nord.\n\nLa propriété est située à 1 km du centre-ville d'Antsiranana et à 5 km de l'aéroport Aérodrome d'Arrachart.\n\nLes clients peuvent profiter du Wi-Fi dans les zones publiques, ainsi que d'une plage privée et des services de sécurité 24/24 sur place.\n\nSitué dans une zone de plage d'Antsiranana, le lieu est à quelques pas de la Baie des Sakalava. Cet hôtel est situé à côté des plages privées d'Antsiranana.\n\nIl est posé à 5 km du centre-ville d'Antsiranana et à environ 900 mètres de l'Evasion Sans Frontiere.\n\nLe Port Antsiranana est proche de la propriété, et l'aéroport Aérodrome d'Arrachart est à environ 15 minutes de route. L'endroit est également placé à 20 minutes à pied de Cinéma Ritz.\n\nLe centre d'Antsiranana peut être atteint en 10 minutes d'allure dès l'hôtel. Il se trouve à 10 minutes en voiture de Japanese Monument.\n\nResidence Kathyly est un hôtel de 3 étoiles situé à 250 mètres du Diego Raid. Le lieu offre également du Wi-Fi dans toute la propriété.\n\nLe Paradis du Nord est à moins de 1 kilomètres. Cet hôtel est juste à la sortie de l'Evasion Sans Frontiere et à 10 km de l'aéroport Aérodrome d'Arrachart.\n\nLes curiosités principales d'Antsiranana, comme The three bays et la Montagne des Francais, sont situées à proximité.\n\nLa propriété est située à 4 km du centre-ville d'Antsiranana et à 10 km de l'aéroport Aérodrome d'Arrachart.\n\nVous serez à 1 km de Windsor Castle et à 1,1 km du Port Antsiranana.\n\nLe Diego Raid est proche de la propriété, et l'aéroport Aérodrome d'Arrachart est à environ 15 minutes de route. L'hôtel est situé à 4 km du centre d'Antsiranana.\n\nLes voyageurs d'affaires bénéficieront d'un photocopieur, en plus du Wi-Fi disponible dans les zones publiques.\n\nIl est à 25 minutes de route de l'aéroport Aérodrome d'Arrachart et à 1 km de la Baie des Sakalava. Cet hôtel offre un emplacement près d'une plage privée avec des chaises longues.\n\nMazava Loha Resort est un hôtel de 4 étoiles situé à 5 minutes de marche de la Mer d'Emeraude. Les installations ici comprennent des services de sécurité 24/24 et un stockage des bagages.\n\nLe centre d'Antsiranana peut être atteint en 5 minutes de marche. Il est à 4 km de la Place de l'Indépendance.\n\nLe colbert est un hôtel de 2 étoiles situé à 20 minutes de marche de Cinéma Ritz. L'hôtel offre un parking sur place.\n\nLa propriété est située à 4 km du centre-ville d'Antsiranana et à 10 km de l'aéroport Aérodrome d'Arrachart. Vous pourrez également vous rendre facilement à New Sea Roc ou à l'Alliance Francaise, qui est à 6 minutes de marche. L'une des attractions les plus importantes d'Antsiranana est le Port Antsiranana, situé près de l'hôtel.\n\nL'aéroport Aérodrome d'Arrachart est à 25 minutes en bagnole de l'hôtel.\n\nLa Baie des Sakalava est à 18 minutes de marche de la propriété.\n\nLa propriété se trouve à proximité de la plage privée. L'aéroport le plus proche est Aérodrome d'Arrachart, qui est à peu près 20 km de l'hôtel.\n\nDe superbes emplacements et des offres pour tous les budgets.",
+      "structuredData": [
+        {
+          "@context": "http://schema.org",
+          "@type": [
+            "ItemList",
+            "TouristDestination"
+          ],
+          "itemListElement": [
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "3"
+              },
+              "priceRange": "92",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "2 Boulevard Bazeilles"
+              },
+              "name": "Hotel De La Poste"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "4"
+              },
+              "priceRange": "95",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "46 Rue Colbert"
+              },
+              "name": "Le Grand Hôtel Diego"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "2"
+              },
+              "priceRange": "32",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Pk 2 Route De Ramena"
+              },
+              "name": "Hotel De La Baie"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "64",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Ramena Pk17"
+              },
+              "name": "Hotel Lakana Ramena"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "4"
+              },
+              "priceRange": "26",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "8 rue de la prison"
+              },
+              "name": "Hotel Le Petit Paradis"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "3"
+              },
+              "priceRange": "23",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "13, Rue Freppel"
+              },
+              "name": "Hotel La Belle Aventure"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "53",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Avenue Philibert Tsiranana"
+              },
+              "name": "Le Village Diego"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "3"
+              },
+              "priceRange": "45",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Angle Rues Rigault Et Gauche"
+              },
+              "name": "Hotel Victoria"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "3"
+              },
+              "priceRange": "37",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Bazar Grand Pavois Tanaboa 4"
+              },
+              "name": "Hotel Golden House"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "4"
+              },
+              "priceRange": "30",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Ankorikahely Ramena"
+              },
+              "name": "Bed and breakfast Le Trou Normand"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "2"
+              },
+              "priceRange": "21",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "1 Baie De Sakalava"
+              },
+              "name": "Varatraza Wind Riders"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "16",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "R Notre Dame"
+              },
+              "name": "Bed and breakfast Centre Lucien Botovasoa"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "2"
+              },
+              "priceRange": "38",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "464 Sd Scama Pk07"
+              },
+              "name": "Régina Lodge Diégo Suarez Madagascar"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "3"
+              },
+              "priceRange": "122",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Baie Des Sakalava"
+              },
+              "name": "Hotel Royal Sakalava"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "46",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Boulevard Bascilles"
+              },
+              "name": "Annexe de l&#039;Hotel de la Poste"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "25",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Andranomitete Morafeno"
+              },
+              "name": "Sanjeela-Plage Coco"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "3"
+              },
+              "priceRange": "29",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "19 Rue De La Marne"
+              },
+              "name": "Residence Kathyly"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "4"
+              },
+              "priceRange": "39",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Quartier Universite"
+              },
+              "name": "Villa Bel Azur"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "1"
+              },
+              "priceRange": "25",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "78 Bis Rue Colbert"
+              },
+              "name": "Lotus Hotel"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "61",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Baie De Sakalava"
+              },
+              "name": "Ocean Lodge Kite &amp; Windsurf"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "4"
+              },
+              "priceRange": "116",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Andovokonko Morafeno Andranovondronina. 202 Diego Suarez"
+              },
+              "name": "Mazava Loha Resort"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "3"
+              },
+              "priceRange": "152",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Iharana Bush Camp"
+              },
+              "name": "Hotel Iharana Bush Camp"
+            },
+            {
+              "@type": "Hotel",
+              "starRating": {
+                "@type": "Rating",
+                "ratingValue": "2"
+              },
+              "priceRange": "31",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Hotel Colbert 51 Rue Colbert Madagascar Antsiranana"
+              },
+              "name": "Hotel le colbert"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "89",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Baie De Sakalava"
+              },
+              "name": "Hotel Kiteparadise-Madagascar"
+            },
+            {
+              "@type": "Hotel",
+              "priceRange": "111",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "Baie De Sakalava Commune De Ramena"
+              },
+              "name": "Hotel Filao Eden Sakalava"
+            }
+          ]
+        }
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:19:48.772Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Hôtel de La Poste - Diego Suarez - Antsiranana",
+      "googleName": "Hôtel de La Poste - Diego Suarez - Antsiranana",
+      "slogan": "",
+      "pageTitle": "Hôtel de La Poste - Diego Suarez - Antsiranana - Accueil",
+      "metaDescription": "Hôtel de légende à Diego Suarez, l'Hôtel de La Poste vous propose 80 suites & chambres de standing avec vue sur la Baie, à deux pas du centre ville",
+      "ogImage": "https://www.diego-hoteldelaposte.com/images/slider_2017/chambre.jpg",
+      "lang": "fr-fr",
+      "canonical": "",
+      "logo": "",
+      "googleTitle": "Hôtel de La Poste - Diego Suarez - Antsiranana - Accueil",
+      "googleSnippet": "Hôtel de légende à Diego Suarez, l'Hôtel de La Poste vous propose 80 suites & chambres de standing avec vue sur la Baie, à deux pas du centre ville",
+      "googlePosition": 7,
+      "url": "https://www.diego-hoteldelaposte.com/",
+      "domain": "diego-hoteldelaposte.com",
+      "contacts": {
+        "phones": [
+          "+261 32 04 785 75"
+        ],
+        "emails": [
+          "contact@diego-hoteldelaposte.com"
+        ],
+        "whatsapp": [],
+        "addresses": [],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "gps": null,
+      "socials": {},
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [],
+        "partners": [
+          {
+            "url": "http://thegrue.org/hostgator-coupons/",
+            "label": "hostgator best coupon code",
+            "domain": "thegrue.org"
+          },
+          {
+            "url": "https://www.cyber-diego.com/",
+            "label": "© www.cyber-diego.com",
+            "domain": "cyber-diego.com"
+          }
+        ]
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [],
+        "categories": [],
+        "prices": []
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": []
+      },
+      "technologies": {
+        "cms": [
+          "Joomla"
+        ],
+        "frameworks": [
+          "jQuery",
+          "Bootstrap"
+        ],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [],
+      "navLinks": [],
+      "mainContent": "",
+      "structuredData": [],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:20:03.094Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Hôtel Diego Suarez - Hôtel Lakana Ramena - Hôtel Madagascar",
+      "googleName": "Hôtel Diego Suarez - Hôtel Lakana Ramena - Hôtel Madagascar",
+      "slogan": "",
+      "pageTitle": "Hôtel Diego-Suarez Madagascar avec piscine | Hôtel Lakana Ramena",
+      "metaDescription": "Hôtel Diego-Suarez avec piscine : Découvrez le confort et l'élégance de l'Hôtel Lakana Ramena, une destination parfaite pour une expérience mémorable à Madagascar",
+      "ogImage": "https://static.wixstatic.com/media/2999f9_a40fb352a2714f9cae33ab8ffcf3bb77%7Emv2.jpg/v1/fit/w_2500,h_1330,al_c/2999f9_a40fb352a2714f9cae33ab8ffcf3bb77%7Emv2.jpg",
+      "lang": "fr",
+      "canonical": "https://www.hotel-diego-madagascar.com",
+      "logo": "https://static.wixstatic.com/media/2999f9_a40fb352a2714f9cae33ab8ffcf3bb77~mv2.jpg/v1/fill/w_170,h_69,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/2999f9_a40fb352a2714f9cae33ab8ffcf3bb77~mv2.jpg",
+      "googleTitle": "Hôtel Diego Suarez - Hôtel Lakana Ramena - Hôtel Madagascar",
+      "googleSnippet": "Hôtel avec Piscine Lakana Diego-Suarez Madagascar avec une splendide vue mer depuis les transats confortables sur la plage. Ne cherchez plus, trouver un hôtel confortable et accueillant où vous pourrez faire du farniente ou des activités ou excursions.",
+      "googlePosition": 8,
+      "url": "https://www.hotel-diego-madagascar.com/",
+      "domain": "hotel-diego-madagascar.com",
+      "contacts": {
+        "phones": [
+          "+261 32 56 214 47",
+          "325621447"
+        ],
+        "emails": [
+          "lakana.ramena@gmail.com"
+        ],
+        "whatsapp": [],
+        "addresses": [
+          "Madagascar",
+          "madagascar diego suarez ramena piscine kitesurf windsurf quad excursions séjour",
+          "Madagascar - Mentions légales",
+          "madagascar.com"
+        ],
+        "postalCode": "201",
+        "city": "Diego Suarez",
+        "country": "MG"
+      },
+      "gps": null,
+      "socials": {
+        "facebook": [
+          "https://facebook.com/lakanaramena"
+        ],
+        "instagram": [
+          "https://www.instagram.com/hotel.lakana.madagascar"
+        ],
+        "twitter": [
+          "https://x.com/bolt-performance"
+        ]
+      },
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [],
+        "partners": [
+          {
+            "url": "https://www.site-internet-wix.fr/",
+            "label": "OO WEB",
+            "domain": "site-internet-wix.fr"
+          }
+        ]
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [],
+        "categories": [
+          "Accueil",
+          "Chambres & Restaurant",
+          "Activités",
+          "kitesurf Wingfoil Windsurf",
+          "Contact",
+          "Blog"
+        ],
+        "prices": []
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": []
+      },
+      "technologies": {
+        "cms": [
+          "Wix"
+        ],
+        "frameworks": [
+          "React",
+          "Bootstrap"
+        ],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [],
+      "navLinks": [
+        {
+          "text": "Accueil",
+          "href": "https://www.hotel-diego-madagascar.com/"
+        },
+        {
+          "text": "Chambres & Restaurant",
+          "href": "https://www.hotel-diego-madagascar.com/chambre-hotel-diego-suare-madagascar"
+        },
+        {
+          "text": "Activités",
+          "href": "https://www.hotel-diego-madagascar.com/activites-hotel-diego-suarez-madagascar"
+        },
+        {
+          "text": "kitesurf Wingfoil Windsurf",
+          "href": "https://www.hotel-diego-madagascar.com/ecole-de-kite-surf-diego-suarez-madagascar"
+        },
+        {
+          "text": "Contact",
+          "href": "https://www.hotel-diego-madagascar.com/meilleur-hotel-diego-suarez-madagascar"
+        },
+        {
+          "text": "Blog",
+          "href": "https://www.hotel-diego-madagascar.com/blog-hotel-diego-suarez-madagascar"
+        }
+      ],
+      "mainContent": "Découvrez l'authentique Hôtel Lakana Diego-Suarez à Madagascar, niché en bord de mer, à seulement 150 mètres d'une magnifique plage de sable blanc à l'entrée du village de Ramena. Profitez d'un emplacement idéal qui vous garantit une agréable tranquillité tout en vous rapprochant du centre du village animé de Ramena à Diego-Suarez.\n\nNotre petite unité de 10 magnifiques bungalows vous offre un hébergement unique, chacun équipé de douches et de toilettes privatives, ainsi qu'une terrasse offrant une vue imprenable sur la mer et les couchers de soleil. Nos bungalows sont décorés avec goût et meublés en bois précieux, notamment le palissandre, pour créer une ambiance chaleureuse et authentique qui s'intègre parfaitement au paysage naturel.\n\nAlliant style et équipements modernes pour votre confort, notre complexe hôtelier a été conçu pour vous offrir une expérience exceptionnelle. Profitez d'une douce fraîcheur dans votre bungalow, grâce à une structure étudiée pour ces latitudes, garantissant ainsi un séjour des plus agréables.\n\nQue vous voyagiez en couple, en famille ou en groupe, nous proposons différents types de bungalows, du double au quadruple, pour répondre à vos besoins.\n\nVotre escapade de rêve à Diego-Suarez, Madagascar, commence ici, à l'Hôtel Diego-Suarez.\n\nPour régaler vos papilles, notre chef vous propose une cuisine raffinée avec des plats préparés à partir de produits frais de la région. Nous vous proposons des produits faits maison tels que des poissons fumés et des terrines de foie gras.\n\nNe manquez pas de découvrir les plats traditionnels malgaches tels que le Ravitoto, le Romazave et le crabe farci. Nos spécialités incluent la fondue chinoise et bourguignonne de zébu et de poisson. Nous proposons également des fruits de mer tels que les crevettes, la langouste, les camarons, ainsi que du riz au coco... Et n'oublions pas nos desserts et glaces faits maison, ainsi qu'un délicieux petit-déjeuner continental varié avec des fruits frais et des jus naturels.\n\nDe plus, nous disposons d'un centre de kitesurf et de windsurf pour les amateurs de sports nautiques.\n\nL'Hôtel Lakana Ramena, un lieu unique à Ramena, vous offre un emplacement exceptionnel en bord de mer pour se ressourcer. Notre établissement propose des chambres tout confort, des bungalows et une piscine pour vous assurer un séjour agréable à Diego-Suarez, Madagascar. Profitez de notre site exceptionnel en bord de mer et découvrez nos services de qualité.\n\nIdéalement situé à l'entrée du village de Ramena, à seulement 150 mètres d'une magnifique plage et d'une eau turquoise, notre hôtel est également à proximité de la mer d'émeraude et des 3 baies, à deux pas de Sakalave et à 20 minutes de Diego Suarez. Un parking privé gratuit est à votre disposition sur place, facilitant ainsi vos déplacements.\n\nNous organisons des transferts Aéroport - Hôtel ou vice versa au tarif de 25 euros pour 1 à 4 personnes, assurant ainsi votre confort dès votre arrivée.\n\nL'Hôtel Lakana Ramena vous propose des hébergements de qualité avec une piscine à Diego-Suarez. Une connexion Wifi Starlink gratuite est disponible. Ramena, la station balnéaire de Diego Suarez, est le point de départ des excursions vers les 3 baies : la baie des Dunes, la baie des Pigeons et la baie de Sakalava. Lors de ces excursions, profitez d'un repas organisé au restaurant de L'Océan Lodge par nos chefs. Nous proposons également l'excursion de la mer d'émeraude et ses belles plages, une expérience inoubliable pour se ressourcer. Vous pourrez découvrir des paysages magnifiques et des plages de sable blanc. Une des destinations de rêve pour découvrir des plages paradisiaques immanquables.\n\nPendant votre séjour dans notre hôtel à Madagascar, vous pourrez vous détendre dans une magnifique piscine extérieure avec espace détente et profiter d'un bar où des cocktails raffinés sont servis. Notre établissement peut également vous préparer des menus adaptés à un régime alimentaire particulier, ainsi que des paniers-repas sur demande. Le restaurant vous propose une cuisine européenne, asiatique et la possibilité de goûter les plats incontournables de la gastronomie malgache.\n\nDécouvrez les plaisirs du kitesurf, du windsurf ou du Wing foil dans notre club de l'Ocean Lodge, situé dans une magnifique baie de Sakalava. Cette baie offre des conditions optimales pour l'apprentissage des sports de glisse. Le transfert est gratuit.\n\nDepuis le Lakana, notre hôtel à Diego Suarez Ramena, nous organisons des excursions à la montagne des Français, avec différents parcours adaptés aux petits et grands marcheurs. Profitez de la possibilité de faire du snorkeling lors des excursions en mer, avec la collaboration de prestataires pour organiser toutes les excursions de la région de Diego Suarez (Antsiranana) vers la montagne d'Ambre, les Tsingy rouges, le parc de l'Ankarana et la baie du Courrier. Les nombreuses activités et excursions rendent vos séjours inoubliables. Vous découvrirez les plages paradisiaques de la région. Nous organisons également vos plongées avec notre prestataire pour vous faire découvrir les fonds marins de l'océan Indien.\n\nVous serez logé dans nos spacieux bungalows de charme, avec une literie haut de gamme en provenance d'Italie. Nos chambres tout confort sont spacieuses, l'hôtel dispose de chambre double, triples et familiales pour 4 personnes. Chaque chambre d’hôtel possède une petite terrasse privative.\n\nPour les initiés au kitesurf, nous proposons des départs en bateau pour un downwind et une journée de navigation à Babaomby en mer d'émeraude, avec un repas sur l'îlot Suarez, tout compris.\n\nL’hôtel-restaurant vous propose une formule demi-pension, des repas copieux issus d’une cuisine raffinée et inventive de nos chefs avec un bon rapport qualité-prix et un espace lounge bar convivial. Nous pouvons vous proposer des formules tout-compris.\n\nAfin de vous offrir des produits frais, nous évitons le petit-déjeuner buffet, mais nous avons opté pour un petit déjeuner varié continental ou américain, comprenant des boissons chaudes, du pain, du beurre et des confitures, ainsi que des fruits, des cakes, des crêpes ou des viennoiseries et des jus naturels.\n\nHôtel avec Piscine Lakana Diego-Suarez Madagascar avec une splendide vue mer depuis les transats confortables sur la plage. Ne cherchez plus, trouver un hôtel confortable et accueillant où vous pourrez faire du farniente ou des activités ou excursions. Toute l’équipe se fera un plaisir de vous satisfaire et de vous conseiller pendant vos séjours.\n\nNous acceptons les paiements en euros, ariary et par carte bancaire Visa et MasterCard. Veuillez noter qu'une commission de 3% sera ajoutée à votre facture pour les paiements par carte bancaire. Réservez dès maintenant pour vivre des expériences inoubliables à l'Hôtel Lakana Ramena.\n\nOcean Lodge Baie de Sakalava vous propose un séjour exceptionnel avec une vue panoramique sur la baie de Sakalava. Profitez de nos chambres en bord de mer pour des vacances les pieds dans l'eau, ainsi que de nombreuses activités nautiques passionnantes, telles que le kitesurf, le Wingfoil et la Planche à voile.\n\nEn séjournant à l'hôtel Lakana, vous contribuez directement au financement de l'association Madasource, qui soutient l'éducation des enfants défavorisés.\n\nNotre association Madasource a parrainé 74 enfants pour la rentrée scolaire 2024, en prenant en charge leurs frais de scolarité et en fournissant les matériels nécessaires à leur éducation.",
+      "structuredData": [
+        {
+          "@context": "https://schema.org/",
+          "@type": "LocalBusiness",
+          "name": "Hotel Lakana Ramena",
+          "url": "https://www.hotel-diego-madagascar.com",
+          "image": "https://static.wixstatic.com/media/2999f9_d685bf12e7984f3d9c3beb6e2334f13a~mv2_d_3648_2736_s_4_2.jpg",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "MG",
+            "addressLocality": "Diego Suarez",
+            "postalCode": "201",
+            "streetAddress": "Rte de Ramena PK 17"
+          },
+          "telephone": "+00261 325621447"
+        },
+        {
+          "@context": "https://schema.org/",
+          "@type": "WebSite",
+          "name": "hotel-lakana-ramena",
+          "url": "https://www.hotel-diego-madagascar.com"
+        },
+        {
+          "@context": "http://www.schema.org",
+          "@type": "WebSite",
+          "name": "Hôtel Diego-Suarez Madagascar avec piscine | Hôtel Lakana Ramena",
+          "alternateName": "Hôtel Diego-Suarez avec piscine : Découvrez le confort et l'élégance de l'Hôtel Lakana Ramena, une destination parfaite pour une expérience mémorable à Madagascar",
+          "url": "https://www.hotel-diego-madagascar.com/"
+        }
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:20:16.730Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Le Grand Hôtel Diego Antsiranana, Antsiranana",
+      "googleName": "Le Grand Hôtel Diego Antsiranana, Antsiranana",
+      "slogan": "",
+      "pageTitle": "Le Grand Hôtel Diego Antsiranana, Antsiranana | Explorez les options de chambres, les avis et les prix pour 2025 | boomspeed.com",
+      "metaDescription": "Vivez l'expérience d'un séjour de qualité à Le Grand Hôtel Diego Antsiranana au cœur de Antsiranana, Madagascar ➤ Les tarifs commencent à 95$/nuit, profitez d'un confort luxueux garanti par 241 avis vérifiés et 75 photos magnifiques. ➤ Réservez dès maintenant et profitez de votre séjour sur boomspeed.com!",
+      "ogImage": "/data/Photos/Big/17069/1706940/1706940892/Le-Grand-Hotel-Diego-Antsiranana-Amenities.JPEG",
+      "lang": "fr-FR",
+      "canonical": "https://lediego.boomspeed.com/fr/",
+      "logo": "https://s.boomspeed.com/frontend/img/svg/hgo/hgo_logo_min.78d34da995fee173.svg",
+      "googleTitle": "Le Grand Hôtel Diego Antsiranana, Antsiranana",
+      "googleSnippet": "Situé à 1.5 km de l'Université du Nord de Madagascar et à 35.5 km du Parc National de la Montagne d'Ambre, l'hôtel est à 10 km de l'aéroport d'Arrachart, avec restaurants, cafés et vie nocturne à proximité.",
+      "googlePosition": 9,
+      "url": "https://lediego.boomspeed.com/fr/",
+      "domain": "lediego.boomspeed.com",
+      "contacts": {
+        "phones": [
+          "2022-2026"
+        ],
+        "emails": [],
+        "whatsapp": [],
+        "addresses": [
+          "46 Rue Colbert"
+        ],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "gps": null,
+      "socials": {},
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [],
+        "partners": [
+          {
+            "url": "https://boomspeed.com/fr/",
+            "label": "Hotels",
+            "domain": "boomspeed.com"
+          },
+          {
+            "url": "https://boomspeed.com/madagascar.fr",
+            "label": "Madagascar",
+            "domain": "boomspeed.com"
+          },
+          {
+            "url": "https://domainedebaie.boomspeed.com/fr/",
+            "label": "Domaine de Grand Baie",
+            "domain": "domainedebaie.boomspeed.com"
+          },
+          {
+            "url": "https://mervillebeach.boomspeed.com/fr/",
+            "label": "LUX* Grand Baie Resort&Residences",
+            "domain": "mervillebeach.boomspeed.com"
+          },
+          {
+            "url": "https://luxgrand.boomspeed.com/fr/",
+            "label": "Lux* Grand Gaube Resort & Villas",
+            "domain": "luxgrand.boomspeed.com"
+          },
+          {
+            "url": "https://verandagrand.boomspeed.com/fr/",
+            "label": "Veranda Grand Baie Hotel & Spa",
+            "domain": "verandagrand.boomspeed.com"
+          },
+          {
+            "url": "https://lagunabeachspa.boomspeed.com/fr/",
+            "label": "Laguna Beach Hotel & Spa",
+            "domain": "lagunabeachspa.boomspeed.com"
+          },
+          {
+            "url": "https://lebleutrouauxbiches.boomspeed.com/fr/",
+            "label": "Le Grand Bleu Hotel",
+            "domain": "lebleutrouauxbiches.boomspeed.com"
+          },
+          {
+            "url": "https://grandhotelstockholm.boomspeed.com/fr/",
+            "label": "Grand Hôtel Stockholm",
+            "domain": "grandhotelstockholm.boomspeed.com"
+          },
+          {
+            "url": "https://pietraligure.boomspeed.com/fr/",
+            "label": "Grand Hotel Pietra Ligure",
+            "domain": "pietraligure.boomspeed.com"
+          }
+        ]
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [
+          "Général",
+          "Sports et Fitness",
+          "Parking",
+          "Services",
+          "Restauration",
+          "Business",
+          "Enfants",
+          "Spa et loisirs",
+          "Équipements des chambres",
+          "Salle de bains",
+          "Cuisine",
+          "High-tech"
+        ],
+        "categories": [],
+        "prices": [
+          "8.1 202 USD",
+          "9.0 576 USD",
+          "8.7 202 USD",
+          "246 USD",
+          "7.5 148 USD",
+          "8.0 110 USD",
+          "9.1 495 USD",
+          "8.7 119 USD"
+        ]
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": [
+          "“Un emplacement idéal au cœur de la ville, parfait pour explorer les attractions locales à pied.” afficher l'avis complet"
+        ]
+      },
+      "technologies": {
+        "cms": [],
+        "frameworks": [],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [
+        {
+          "action": "https://boomspeed.com//fr",
+          "method": "post",
+          "hasFile": false,
+          "fields": [
+            {
+              "type": "text",
+              "name": "from"
+            },
+            {
+              "type": "text",
+              "name": "to"
+            }
+          ]
+        },
+        {
+          "action": "https://boomspeed.com//fr",
+          "method": "post",
+          "hasFile": false,
+          "fields": [
+            {
+              "type": "text",
+              "name": "from"
+            },
+            {
+              "type": "text",
+              "name": "to"
+            }
+          ]
+        },
+        {
+          "action": "https://lediego.boomspeed.com/fr/",
+          "method": "get",
+          "hasFile": false,
+          "fields": [
+            {
+              "type": "text",
+              "name": "name"
+            },
+            {
+              "type": "email",
+              "name": "email"
+            }
+          ]
+        }
+      ],
+      "navLinks": [
+        {
+          "text": "Hotels",
+          "href": "https://boomspeed.com/fr/"
+        },
+        {
+          "text": "Madagascar",
+          "href": "https://boomspeed.com/madagascar.fr"
+        }
+      ],
+      "mainContent": "",
+      "structuredData": [],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:20:28.482Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Hôtel Victoria - Antsiranana, Madagascar - Contact Number, Email Address",
+      "googleName": "Hôtel Victoria - Antsiranana, Madagascar - Contact Number, Email Address",
+      "slogan": "",
+      "pageTitle": "Hôtel Victoria - Antsiranana, Madagascar - Contact Number, Email Address",
+      "metaDescription": "Hôtel Victoria based in Antsiranana, Madagascar established in 2012: Contact Details, Phone Number, Email, Address, Website, Location, Opening Hours. Write a Review for Hôtel Victoria. Ask questions the Madagascar YP community.",
+      "ogImage": "https://www.madayp.com/img/site/default-business2.jpg?v=1",
+      "lang": "en",
+      "canonical": "",
+      "logo": "",
+      "googleTitle": "Hôtel Victoria - Antsiranana, Madagascar - Contact Number, Email Address",
+      "googleSnippet": "Hôtel Victoria based in Antsiranana, Madagascar established in 2012: Contact Details, Phone Number, Email, Address, Website, Location, Opening Hours. Write a Review for Hôtel Victoria.",
+      "googlePosition": 10,
+      "url": "https://www.madayp.com/company/12119/H%C3%B4tel_Victoria",
+      "domain": "madayp.com",
+      "contacts": {
+        "phones": [
+          "+261(0)208222544",
+          "+261(0)341122544",
+          "20 82 225 44",
+          "34 11 225 44",
+          "+261 (0) 20 82 225 44",
+          "+261 (0) 34 11 225 44"
+        ],
+        "emails": [],
+        "whatsapp": [],
+        "addresses": [
+          "Madagascar Business Directory - Madagascar YP",
+          "Madagascar Antsiranana Hotels",
+          "Madagascar",
+          "Rues Rigault",
+          "Madagascar YP users. Visitors haven’t asked any questions yet.",
+          "Madagascar YP is Madagascar's online business directory",
+          "Madagascar Network Database",
+          "Madagascar YP (PRO3)"
+        ],
+        "postalCode": "",
+        "city": "Antsiranana",
+        "country": "MG"
+      },
+      "gps": {
+        "lat": -12.2800858049738,
+        "lng": 49.2937660217285
+      },
+      "socials": {},
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [
+          {
+            "url": "https://maps.google.com/maps?daddr=-12.2800858049738,49.2937660217285&saddr=",
+            "label": "Get Directions",
+            "platform": "maps.google.com"
+          }
+        ],
+        "partners": [
+          {
+            "url": "https://wa.me/?text=https%3A%2F%2Fwww.madayp.com%2Fcompany%2F12119%2FH%C3%B4tel_Victoria",
+            "label": "Send to WhatsApp",
+            "domain": "wa.me"
+          },
+          {
+            "url": "https://fr.madayp.com/",
+            "label": "Français",
+            "domain": "fr.madayp.com"
+          }
+        ]
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [
+          "Verified Business",
+          "Related Searches"
+        ],
+        "categories": [
+          "Madagascar Business Directory - Madagascar YP",
+          "+ Get Listed",
+          "Data Hub",
+          "Contacts",
+          "Map",
+          "Reviews",
+          "Q&A"
+        ],
+        "prices": []
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": []
+      },
+      "technologies": {
+        "cms": [],
+        "frameworks": [
+          "jQuery",
+          "Bootstrap"
+        ],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [
+          "Google Ads"
+        ],
+        "chat": [],
+        "other": []
+      },
+      "forms": [],
+      "navLinks": [
+        {
+          "text": "Madagascar Business Directory - Madagascar YP",
+          "href": "https://www.madayp.com/"
+        },
+        {
+          "text": "+ Get Listed",
+          "href": "https://www.madayp.com/create-business-listing"
+        },
+        {
+          "text": "Data Hub",
+          "href": "https://www.madayp.com/saas"
+        },
+        {
+          "text": "Contacts",
+          "href": "https://www.madayp.com/company/12119/H%C3%B4tel_Victoria#contacts"
+        },
+        {
+          "text": "Map",
+          "href": "https://www.madayp.com/company/12119/H%C3%B4tel_Victoria#map"
+        },
+        {
+          "text": "Reviews",
+          "href": "https://www.madayp.com/company/12119/H%C3%B4tel_Victoria#reviews"
+        },
+        {
+          "text": "Q&A",
+          "href": "https://www.madayp.com/company/12119/H%C3%B4tel_Victoria#questions"
+        }
+      ],
+      "mainContent": "",
+      "structuredData": [
+        {
+          "@context": "http://schema.org",
+          "@type": "LocalBusiness",
+          "@id": "https://www.madayp.com/company/12119/Hôtel_Victoria",
+          "name": "Hôtel Victoria",
+          "image": "https://www.madayp.com/img/site/default-photo.png",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Rues Rigault",
+            "addressLocality": "Antsiranana",
+            "addressRegion": "",
+            "addressCountry": "MG"
+          },
+          "telephone": "+261 (0) 20 82 225 44",
+          "url": "http://hotelvictoriadiego.com",
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "-12.2800858049738",
+            "longitude": "49.2937660217285"
+          }
+        }
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:20:40.212Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Grand Hotel - 46 Rue Colbert, Antsiranana 201, Madagascar - Cybo",
+      "googleName": "Grand Hotel - 46 Rue Colbert, Antsiranana 201, Madagascar - Cybo",
+      "slogan": "",
+      "pageTitle": "Grand Hotel - 46 Rue Colbert, Antsiranana 201, Madagascar - Cybo",
+      "metaDescription": "Grand Hotel Antsiranana code postal 201. Voir 3 pages sociales incluant Facebook et Google, Heures, Téléphone, Email, Site internet et plus pour ce commerce. Score Cybo : 3,9. Avis sur Cybo.",
+      "ogImage": "https://d1cs4jq1fdiv1p.cloudfront.net/lyra011//img/v2Icon2.png",
+      "lang": "fr",
+      "canonical": "https://fr.cybo.com/MG-biz/grand-hotel_1w",
+      "logo": "https://d1cs4jq1fdiv1p.cloudfront.net/lyra011/img/logo_reg.png",
+      "googleTitle": "Grand Hotel - 46 Rue Colbert, Antsiranana 201, Madagascar - Cybo",
+      "googleSnippet": "Vous pouvez contacter la société au 032 40 881 43. Vous pouvez trouver plus d'informations sur Grand Hotel à www.grand-hotel-diego.com. Vous pouvez contacter la société par e-mail à contact@grand-hotel-diego.com.",
+      "googlePosition": 11,
+      "url": "https://fr.cybo.com/MG-biz/grand-hotel_1w",
+      "domain": "fr.cybo.com",
+      "contacts": {
+        "phones": [
+          "0324088143",
+          "0208223063",
+          "032 40 881 43",
+          "2005-2026"
+        ],
+        "emails": [
+          "contact@grand-hotel-diego.com"
+        ],
+        "whatsapp": [],
+        "addresses": [
+          "46 Rue Colbert"
+        ],
+        "postalCode": "201",
+        "city": "Antsiranana",
+        "country": "Madagascar"
+      },
+      "gps": null,
+      "socials": {
+        "facebook": [
+          "https://www.facebook.com/316994429356"
+        ]
+      },
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [
+          {
+            "url": "https://maps.google.com/maps?daddr=46+Rue+Colbert%2C+Antsiranana+201%2C+Madagascar%2C+Madagascar",
+            "label": "46 Rue Colbert, Antsiranana 201, Madagascar",
+            "platform": "maps.google.com"
+          },
+          {
+            "url": "https://www.google.com/maps/?cid=9657601009779996137",
+            "label": "www.google.com/maps/?cid=9657601009779996137",
+            "platform": "google.com"
+          }
+        ],
+        "partners": [
+          {
+            "url": "https://xn--codes-tlphone-hhbb.cybo.com/",
+            "label": "Codes téléphoniques",
+            "domain": "xn--codes-tlphone-hhbb.cybo.com"
+          },
+          {
+            "url": "https://codes-postaux.cybo.com/",
+            "label": "Codes Postaux",
+            "domain": "codes-postaux.cybo.com"
+          },
+          {
+            "url": "https://support.cybo.com/hc/en-us?hl=fr",
+            "label": "Centre d'aide",
+            "domain": "support.cybo.com"
+          },
+          {
+            "url": "https://cybo.com/login/google-oauth2/?l=fr&next=%2FMG-biz%2Fgrand-hotel_1w",
+            "label": "Continuer avec Google",
+            "domain": "cybo.com"
+          }
+        ]
+      },
+      "hours": {
+        "raw": [
+          "Mo 0:00-23:59",
+          "Tu 0:00-23:59",
+          "We 0:00-23:59",
+          "Th 0:00-23:59",
+          "Fr 0:00-23:59",
+          "Sa 0:00-23:59",
+          "Su 0:00-23:59"
+        ],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [],
+        "categories": [],
+        "prices": []
+      },
+      "reputation": {
+        "overallRating": "4.0",
+        "reviewCount": "477",
+        "reviews": [],
+        "widgets": [
+          "ÉvaluezCommentaire"
+        ]
+      },
+      "technologies": {
+        "cms": [],
+        "frameworks": [],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [
+        {
+          "action": "https://fr.cybo.com/search/",
+          "method": "get",
+          "hasFile": false,
+          "fields": [
+            {
+              "type": "text",
+              "name": "search"
+            },
+            {
+              "type": "text",
+              "name": "people"
+            },
+            {
+              "type": "text",
+              "name": "address"
+            },
+            {
+              "type": "tel",
+              "name": "phone"
+            },
+            {
+              "type": "text",
+              "name": "web"
+            },
+            {
+              "type": "text",
+              "name": "email"
+            },
+            {
+              "type": "text",
+              "name": "searchcity"
+            },
+            {
+              "type": "text",
+              "name": "searchregion"
+            }
+          ]
+        }
+      ],
+      "navLinks": [],
+      "mainContent": "",
+      "structuredData": [
+        {
+          "@context": "http://schema.org",
+          "@type": "Hotel",
+          "name": "Grand Hotel",
+          "url": "http://www.grand-hotel-diego.com",
+          "naics": "7211",
+          "telephone": "032 40 881 43",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "46 Rue Colbert, Antsiranana 201, Madagascar",
+            "addressLocality": "Antsiranana",
+            "addressRegion": "Région Diana",
+            "addressCountry": "Madagascar",
+            "postalCode": "201"
+          },
+          "sameAs": [
+            "https://www.facebook.com/316994429356/",
+            "https://www.tripadvisor.com/Hotel_Review-g298270-d1751019-Reviews-Grand_Hotel-Antsiranana_Diego_Suarez_Antsiranana_Province.html",
+            "https://www.google.com/maps/?cid=9657601009779996137"
+          ],
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.0",
+            "reviewCount": "477"
+          },
+          "email": "contact@grand-hotel-diego.com",
+          "openingHours": [
+            "Mo 0:00-23:59",
+            "Tu 0:00-23:59",
+            "We 0:00-23:59",
+            "Th 0:00-23:59",
+            "Fr 0:00-23:59",
+            "Sa 0:00-23:59",
+            "Su 0:00-23:59"
+          ],
+          "priceRange": "$"
+        }
+      ],
+      "certifications": [
+        "Wi-Fi",
+        "Accessible aux fauteuils roulants",
+        "Prix"
+      ],
+      "scrapedAt": "2026-03-20T14:20:49.336Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Grand Hotel Antsiranana",
+      "googleName": "Grand Hotel Antsiranana",
+      "slogan": "",
+      "pageTitle": "Grand Hotel Antsiranana | 032 80 907 91 | Antsiranana",
+      "metaDescription": "Vous pouvez contacter Grand Hotel Antsiranana par téléphone au numéro 032 80 907 91.",
+      "ogImage": "https://d1cs4jq1fdiv1p.cloudfront.net/lyra011/satellite/africabizinfo.com/img/logo.png",
+      "lang": "fr",
+      "canonical": "https://www.africabizinfo.com/fr-MG/grand-hotel-antsiranana-032-80-907-91",
+      "logo": "https://d1cs4jq1fdiv1p.cloudfront.net/lyra011/satellite/africabizinfo.com/img/logo70.png",
+      "googleTitle": "Grand Hotel Antsiranana | 032 80 907 91 | Antsiranana - AfricaBizInfo",
+      "googleSnippet": "Vous pouvez contacter Grand Hotel Antsiranana par téléphone au numéro 032 80 907 91.",
+      "googlePosition": 12,
+      "url": "https://www.africabizinfo.com/fr-MG/grand-hotel-antsiranana-032-80-907-91",
+      "domain": "africabizinfo.com",
+      "contacts": {
+        "phones": [
+          "0328090791",
+          "032 80 907 91",
+          "2018-2026"
+        ],
+        "emails": [],
+        "whatsapp": [],
+        "addresses": [],
+        "postalCode": "",
+        "city": "Antsiranana",
+        "country": "Madagascar"
+      },
+      "gps": null,
+      "socials": {},
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [
+          {
+            "url": "https://maps.google.com/maps?daddr=Rue+Colbert%2C+Antisiranana%2C+Madagascar%2C+Madagascar",
+            "label": "Recevoir l'itinéraire",
+            "platform": "maps.google.com"
+          },
+          {
+            "url": "https://www.google.com/maps/?cid=2761925286924863970",
+            "label": "Visiter",
+            "platform": "google.com"
+          }
+        ],
+        "partners": [
+          {
+            "url": "https://user.africabizinfo.com/edit/?i=MG&u=grand-hotel-antsiranana&l=fr",
+            "label": "Modifier ou supprimer",
+            "domain": "user.africabizinfo.com"
+          },
+          {
+            "url": "https://support.allbiz.com/hc/en-us",
+            "label": "Centre d'aide",
+            "domain": "support.allbiz.com"
+          }
+        ]
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [],
+        "categories": [],
+        "prices": []
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": []
+      },
+      "technologies": {
+        "cms": [],
+        "frameworks": [],
+        "analytics": [],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [
+        {
+          "action": "https://www.africabizinfo.com/fr/search",
+          "method": "get",
+          "hasFile": false,
+          "fields": [
+            {
+              "type": "search",
+              "name": "ssm"
+            },
+            {
+              "type": "search",
+              "name": "ss"
+            },
+            {
+              "type": "select-one",
+              "name": "ia"
+            }
+          ]
+        },
+        {
+          "action": "https://www.africabizinfo.com/dyn/actions/review/fr",
+          "method": "post",
+          "hasFile": false,
+          "fields": [
+            {
+              "type": "radio",
+              "name": "rating"
+            },
+            {
+              "type": "radio",
+              "name": "rating"
+            },
+            {
+              "type": "radio",
+              "name": "rating"
+            },
+            {
+              "type": "radio",
+              "name": "rating"
+            },
+            {
+              "type": "radio",
+              "name": "rating"
+            },
+            {
+              "type": "text",
+              "name": "name"
+            },
+            {
+              "type": "textarea",
+              "name": "review"
+            }
+          ]
+        }
+      ],
+      "navLinks": [],
+      "mainContent": "",
+      "structuredData": [
+        {
+          "@context": "http://schema.org",
+          "@type": "Restaurant",
+          "name": "Grand Hotel Antsiranana",
+          "naics": "722",
+          "telephone": "032 80 907 91",
+          "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Rue Colbert, Antisiranana, Madagascar",
+            "addressLocality": "Antsiranana",
+            "addressRegion": "Région Diana",
+            "addressCountry": "Madagascar"
+          },
+          "description": "Grand Hotel Antsiranana se trouve a Antsiranana, Région Diana. Cette entreprise est active dans le secteur industriel suivant : Restaurants."
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Quel est le numéro de téléphone de Grand Hotel Antsiranana?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Le numéro de téléphone de Grand Hotel Antsiranana est 032 80 907 91."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Où est située Grand Hotel Antsiranana ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Grand Hotel Antsiranana est située à Rue Colbert, Antisiranana, Madagascar, Antsiranana, Région Diana."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Existe-t-il un contact principal pour Grand Hotel Antsiranana?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Vous pouvez contacter Grand Hotel Antsiranana par téléphone au numéro 032 80 907 91."
+              }
+            }
+          ]
+        }
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:20:57.436Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Accueil - Hôtel Le Petit Paradis",
+      "googleName": "Accueil - Hôtel Le Petit Paradis",
+      "slogan": "",
+      "pageTitle": "Accueil - Hôtel Le Petit Paradis",
+      "metaDescription": "",
+      "ogImage": "",
+      "lang": "fr-FR",
+      "canonical": "https://hotelpetitparadis.com/",
+      "logo": "https://hotelpetitparadis.com/wp-content/uploads/2024/09/Logo-petit-paradis.png",
+      "googleTitle": "Accueil - Hôtel Le Petit Paradis",
+      "googleSnippet": "Situé au cœur d'Antsiranana, notre établissement combine confort, tranquillité et proximité des attractions locales. Notre équipe chaleureuse et professionnelle est dédiée à rendre votre séjour agréable, en vous fournissant un service personnalisé et attentionné.",
+      "googlePosition": 13,
+      "url": "https://hotelpetitparadis.com/",
+      "domain": "hotelpetitparadis.com",
+      "contacts": {
+        "phones": [
+          "+261324789113",
+          "+261 32 47 891 13"
+        ],
+        "emails": [
+          "petit.paradis.diego@gmail.com"
+        ],
+        "whatsapp": [],
+        "addresses": [
+          "8 rue de la prison",
+          "rue de la prison",
+          "Madagascar"
+        ],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "gps": null,
+      "socials": {},
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [],
+        "partners": []
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [
+          "À propos de nous",
+          "Notre concept",
+          "Galerie photos",
+          "Quartier calme et sécurisé",
+          "Magnifique jardin patio",
+          "Proximité du centre-ville",
+          "Chambres confortables"
+        ],
+        "categories": [
+          "Mon Compte",
+          "Contact"
+        ],
+        "prices": []
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": []
+      },
+      "technologies": {
+        "cms": [
+          "WordPress"
+        ],
+        "frameworks": [
+          "jQuery"
+        ],
+        "analytics": [],
+        "marketing": [
+          "Mailchimp"
+        ],
+        "chat": [],
+        "other": []
+      },
+      "forms": [
+        {
+          "action": "https://hotelpetitparadis.com/#wpcf7-f410-p580-o1",
+          "method": "post",
+          "hasFile": false,
+          "fields": [
+            {
+              "type": "text",
+              "name": "your-name"
+            },
+            {
+              "type": "select-one",
+              "name": "number-of-guests"
+            },
+            {
+              "type": "date",
+              "name": "check-in"
+            },
+            {
+              "type": "date",
+              "name": "check-out"
+            },
+            {
+              "type": "select-one",
+              "name": "room-type"
+            },
+            {
+              "type": "email",
+              "name": "your-email"
+            },
+            {
+              "type": "tel",
+              "name": "your-phone"
+            },
+            {
+              "type": "textarea",
+              "name": "special-requirements"
+            }
+          ]
+        }
+      ],
+      "navLinks": [
+        {
+          "text": "Mon Compte",
+          "href": "https://hotelpetitparadis.com/mon-compte/"
+        },
+        {
+          "text": "Contact",
+          "href": "https://hotelpetitparadis.com/contact/"
+        }
+      ],
+      "mainContent": "En face de la gendarmerie, l'hôtel offre une tranquillité et une sécurité optimale.\n\nUn espace verdoyant parfait pour se détendre après une journée de découverte.\n\nÀ quelques pas des principales attractions, restaurants et commerces.\n\nÉquipées de climatisation et WiFi gratuit pour un séjour agréable.\n\nÀ l’Hôtel le Petit Paradis, nous nous engageons à offrir une expérience inoubliable à nos clients. Situé au cœur d’Antsiranana, notre établissement combine confort, tranquillité et proximité des attractions locales. Notre équipe chaleureuse et professionnelle est dédiée à rendre votre séjour agréable, en vous fournissant un service personnalisé et attentionné.\n\nQue vous soyez seul, en couple, en famille, ou entre amis, l’Hôtel le Petit Paradis est l’endroit idéal pour vous. Profitez d’un séjour inoubliable en découvrant les magnifiques sites touristiques et les baies spectaculaires d’Antsiranana. Faites de votre voyage une expérience unique et laissez vos collègues ou amis envier vos aventures dans ce coin de paradis.\n\nDécouvrez l’Hôtel le Petit Paradis à travers notre galerie photo. Plongez dans l’ambiance paisible de nos chambres, explorez nos espaces communs, et laissez-vous séduire par le charme de notre jardin patio.",
+      "structuredData": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": "https://hotelpetitparadis.com/",
+              "url": "https://hotelpetitparadis.com/",
+              "name": "Accueil - Hôtel Le Petit Paradis",
+              "isPartOf": {
+                "@id": "https://hotelpetitparadis.com/#website"
+              },
+              "datePublished": "2024-05-24T07:01:01+00:00",
+              "dateModified": "2024-09-04T22:19:52+00:00",
+              "breadcrumb": {
+                "@id": "https://hotelpetitparadis.com/#breadcrumb"
+              },
+              "inLanguage": "fr-FR",
+              "potentialAction": [
+                {
+                  "@type": "ReadAction",
+                  "target": [
+                    "https://hotelpetitparadis.com/"
+                  ]
+                }
+              ]
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://hotelpetitparadis.com/#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home"
+                }
+              ]
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://hotelpetitparadis.com/#website",
+              "url": "https://hotelpetitparadis.com/",
+              "name": "Hôtel Le Petit Paradis",
+              "description": "Hébergement à petit prix",
+              "potentialAction": [
+                {
+                  "@type": "SearchAction",
+                  "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://hotelpetitparadis.com/?s={search_term_string}"
+                  },
+                  "query-input": {
+                    "@type": "PropertyValueSpecification",
+                    "valueRequired": true,
+                    "valueName": "search_term_string"
+                  }
+                }
+              ],
+              "inLanguage": "fr-FR"
+            }
+          ]
+        }
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:21:13.936Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "ALLAMANDA HOTEL - Auberges - Go Africa Online",
+      "googleName": "ALLAMANDA HOTEL - Auberges - Go Africa Online",
+      "slogan": "",
+      "pageTitle": "ALLAMANDA HOTEL - Auberges",
+      "metaDescription": "",
+      "ogImage": "https://www.goafricaonline.com/images/logo-gao-fb.png",
+      "lang": "fr-MG",
+      "canonical": "https://www.goafricaonline.com/mg/312717-allamanda-hotel-antsiranana-madagascar",
+      "logo": "https://www.goafricaonline.com/legacy/assets/logo-ckmHoli3.png",
+      "googleTitle": "ALLAMANDA HOTEL - Auberges - Go Africa Online",
+      "googleSnippet": "Coordonnées Rue Richelieu Diego-Suarez B.P. 97 Antsiranana - Madagascar www.hotels-diego.com 208 22 10 33 208 22 31 47",
+      "googlePosition": 14,
+      "url": "https://www.goafricaonline.com/mg/312717-allamanda-hotel-antsiranana-madagascar",
+      "domain": "goafricaonline.com",
+      "contacts": {
+        "phones": [
+          "208221033",
+          "208223147",
+          "320766615",
+          "208 22 10 33",
+          "208 22 31 47",
+          "320 76 66 15",
+          "208 22 21 80"
+        ],
+        "emails": [],
+        "whatsapp": [],
+        "addresses": [],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "gps": null,
+      "socials": {},
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [],
+        "partners": [
+          {
+            "url": "http://www.hotels-diego.com/",
+            "label": "Site web\n            Site",
+            "domain": "hotels-diego.com"
+          }
+        ]
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [],
+        "categories": [
+          "Réseau",
+          "Entreprises",
+          "Talents",
+          "Emploi",
+          "Pack visibilité",
+          "Pack visibilité",
+          "S'inscrire",
+          "Accueil",
+          "Tourisme et loisirs",
+          "Auberges",
+          "ALLAMANDA HOTEL",
+          "Coordonnées",
+          "Avis",
+          "Coordonnées",
+          "Avis",
+          "Coordonnées",
+          "Avis"
+        ],
+        "prices": []
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": []
+      },
+      "technologies": {
+        "cms": [],
+        "frameworks": [
+          "Tailwind CSS"
+        ],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [
+          "Facebook Pixel"
+        ],
+        "chat": [],
+        "other": []
+      },
+      "forms": [
+        {
+          "action": "https://www.goafricaonline.com/mg/312717-allamanda-hotel-antsiranana-madagascar",
+          "method": "post",
+          "hasFile": false,
+          "fields": [
+            {
+              "type": "text",
+              "name": "search-header-form-root.whatWhoQuery"
+            },
+            {
+              "type": "text",
+              "name": "search-header-form-root.whereQuery"
+            }
+          ]
+        },
+        {
+          "action": "https://www.goafricaonline.com/mg/312717-allamanda-hotel-antsiranana-madagascar",
+          "method": "post",
+          "hasFile": false,
+          "fields": [
+            {
+              "type": "text",
+              "name": "multi-quote-form-root.firstname"
+            },
+            {
+              "type": "text",
+              "name": "multi-quote-form-root.lastname"
+            },
+            {
+              "type": "email",
+              "name": "multi-quote-form-root.email"
+            },
+            {
+              "type": "text",
+              "name": "multi-quote-form-root.phone"
+            },
+            {
+              "type": "text",
+              "name": "multi-quote-form-root.country"
+            },
+            {
+              "type": "text",
+              "name": "multi-quote-form-root.city"
+            },
+            {
+              "type": "text",
+              "name": "multi-quote-form-root.hotels.stayType"
+            },
+            {
+              "type": "checkbox",
+              "name": "multi-quote-form-root.hotels.essentialAmenities"
+            },
+            {
+              "type": "checkbox",
+              "name": "multi-quote-form-root.hotels.essentialAmenities"
+            },
+            {
+              "type": "checkbox",
+              "name": "multi-quote-form-root.hotels.essentialAmenities"
+            },
+            {
+              "type": "checkbox",
+              "name": "multi-quote-form-root.hotels.essentialAmenities"
+            },
+            {
+              "type": "checkbox",
+              "name": "multi-quote-form-root.hotels.essentialAmenities"
+            },
+            {
+              "type": "checkbox",
+              "name": "multi-quote-form-root.hotels.essentialAmenities"
+            },
+            {
+              "type": "checkbox",
+              "name": "multi-quote-form-root.hotels.essentialAmenities"
+            },
+            {
+              "type": "checkbox",
+              "name": "multi-quote-form-root.hotels.hotelRating"
+            },
+            {
+              "type": "checkbox",
+              "name": "multi-quote-form-root.hotels.hotelRating"
+            },
+            {
+              "type": "checkbox",
+              "name": "multi-quote-form-root.hotels.hotelRating"
+            },
+            {
+              "type": "checkbox",
+              "name": "multi-quote-form-root.hotels.hotelRating"
+            },
+            {
+              "type": "checkbox",
+              "name": "multi-quote-form-root.hotels.hotelRating"
+            },
+            {
+              "type": "textarea",
+              "name": "multi-quote-form-root.message"
+            }
+          ]
+        }
+      ],
+      "navLinks": [
+        {
+          "text": "Réseau",
+          "href": "https://www.goafricaonline.com/mg/explorer"
+        },
+        {
+          "text": "Entreprises",
+          "href": "https://www.goafricaonline.com/mg/annuaire"
+        },
+        {
+          "text": "Talents",
+          "href": "https://www.goafricaonline.com/mg/pros"
+        },
+        {
+          "text": "Emploi",
+          "href": "https://www.goafricaonline.com/mg/emploi"
+        },
+        {
+          "text": "Pack visibilité",
+          "href": "https://www.goafricaonline.com/mg/packs-en-ligne"
+        },
+        {
+          "text": "S'inscrire",
+          "href": "https://www.goafricaonline.com/inscription"
+        },
+        {
+          "text": "Accueil",
+          "href": "https://www.goafricaonline.com/mg"
+        },
+        {
+          "text": "Tourisme et loisirs",
+          "href": "https://www.goafricaonline.com/mg/annuaire/tourisme-et-loisirs"
+        },
+        {
+          "text": "Auberges",
+          "href": "https://www.goafricaonline.com/mg/annuaire/auberges"
+        },
+        {
+          "text": "ALLAMANDA HOTEL",
+          "href": "https://www.goafricaonline.com/mg/312717-allamanda-hotel-antsiranana-madagascar"
+        },
+        {
+          "text": "Coordonnées",
+          "href": "https://www.goafricaonline.com/mg/312717-allamanda-hotel-antsiranana-madagascar#coordonnees"
+        },
+        {
+          "text": "Avis",
+          "href": "https://www.goafricaonline.com/mg/312717-allamanda-hotel-antsiranana-madagascar#avis-review"
+        }
+      ],
+      "mainContent": "",
+      "structuredData": [],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:21:23.399Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Hôtel Le Village Diego - Antsiranana, Madagascar",
+      "googleName": "Hôtel Le Village Diego - Antsiranana, Madagascar",
+      "slogan": "",
+      "pageTitle": "Hôtel Le Village Diego - Antsiranana, Madagascar",
+      "metaDescription": "Découvrez Le Village Diego, un hôtel charmant à Diego Suarez, Madagascar. Profitez de nos bungalows, d'un restaurant et d'une piscine, le tout niché dans un magnifique jardin en plein cœur de la ville.",
+      "ogImage": "",
+      "lang": "fr",
+      "canonical": "",
+      "logo": "https://levillage-diego.com/images/logo_le_village.webp",
+      "googleTitle": "Hôtel Le Village Diego - Antsiranana, Madagascar",
+      "googleSnippet": "L'Hôtel Le Village Diego est idéalement situé, à 15 minutes à pieds de l'hyper-centre de la ville, offrant un accès privilégié à toutes les facilités.",
+      "googlePosition": 15,
+      "url": "https://levillage-diego.com/",
+      "domain": "levillage-diego.com",
+      "contacts": {
+        "phones": [
+          "+261) 32 02 306",
+          "+261) 32 07 910"
+        ],
+        "emails": [
+          "levillagediego@yahoo.fr"
+        ],
+        "whatsapp": [],
+        "addresses": [
+          "Madagascar a à offrir.",
+          "lottants sont également mis à disposition pour leur amusement. Un surveillant de baignade est présent j",
+          "Avenue Philibert Tsiranana",
+          "Lot : 3.232.02",
+          "Madagascar"
+        ],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "gps": null,
+      "socials": {
+        "facebook": [
+          "https://www.facebook.com/HotelLeVillageDiego"
+        ]
+      },
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [],
+        "partners": []
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "services": {
+        "list": [
+          "Bungalow Standard",
+          "Bungalow Familial",
+          "Notre restaurant en bord de piscine",
+          "Notre toute nouvelle Pizzeria",
+          "Une piscine pour toute la famille",
+          "Informations",
+          "Localisation"
+        ],
+        "categories": [],
+        "prices": []
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": []
+      },
+      "technologies": {
+        "cms": [],
+        "frameworks": [
+          "Tailwind CSS"
+        ],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [],
+      "navLinks": [
+        {
+          "text": "Accueil",
+          "href": "https://levillage-diego.com/#accueil"
+        },
+        {
+          "text": "Bungalow",
+          "href": "https://levillage-diego.com/#bungalow"
+        },
+        {
+          "text": "Restaurant, Pizzeria et Piscine",
+          "href": "https://levillage-diego.com/#restaurant-pizza-piscine"
+        },
+        {
+          "text": "Galerie",
+          "href": "https://levillage-diego.com/#galerie"
+        },
+        {
+          "text": "Contact",
+          "href": "https://levillage-diego.com/#contact"
+        }
+      ],
+      "mainContent": "L'Hôtel Le Village Diego est idéalement situé, à 15 minutes à pieds de l'hyper-centre de la ville, offrant un accès privilégié à toutes les facilités. De plus, notre emplacement stratégique est le point de départ idéal pour explorer Diego-Suarez et ses merveilles environnantes : des plages paradisiaques aux forêts tropicales luxuriantes, en passant par de superbes randonnées et toutes les excursions que la région Nord de Madagascar a à offrir.\n\nNos bungalows, nichés dans un jardin arboré, vous garantissent un séjour serein et reposant. Notre espace restaurant et piscine est un lieu de rencontre convivial, ouvert au public et apprécié des familles, où vous pourrez savourer de délicieux repas.\n\nIdéal pour les voyageurs solos ou les couples, le bungalow standard dispose de :\n\nIdéal pour les familles ou les groupes, le bungalow familial dispose de :\n\nOuvert tous les jours de 7h à 22h, notre restaurant vous accueille dans une grande salle ouverte et aérée, en bord de piscine, propice à la détente à tout moment de la journée.\n\nVous y dégusterez une cuisine simple, sans chichi, qui met à l'honneur les traditions malgaches et les saveurs de l’océan Indien. Du petit-déjeuner au dîner, en passant par un service en continu pour un encas, un snack ou un apéritif au bord de l’eau, chaque moment est une invitation à la gourmandise.\n\nNe manquez pas notre spécialité : l'entrecôte de Zébu, poêlée ou grillée selon votre envie – un incontournable pour les amateurs de viande !\n\nVenez savourer nos délicieuses pizzas cuites au feu de bois, élaborées à partir d'une pâte fine, croustillante et faite maison. Notre carte généreuse saura satisfaire toutes vos envies, avec un large choix de garnitures à base de viande, poulet, poissons ou fruits de mer. Ne manquez pas notre création exclusive, la pizza spéciale Le Village.\n\nQue vous souhaitiez la déguster sur place, en salle ou au bord de la piscine, ou que vous préfériez la prendre à emporter, notre pizzeria est le lieu idéal pour une escapade gourmande en famille ou entre amis, et rajoute une touche de convivialité à l'hôtel.\n\nN'hésitez pas à consulter notre page Facebook pour voir le menu détaillé.\n\nNotre grande piscine extérieure, ouverte toute l’année, est l’endroit idéal pour se rafraîchir et se détendre dans le climat tropical chaud de Diego-Suarez. Accessible pendant toute la durée d’ouverture du restaurant, de 7h à 22h, elle offre un cadre agréable et convivial pour petits et grands.\n\nUne zone peu profonde, spécialement délimitée, permet aux enfants de profiter des plaisirs de l’eau en toute sécurité. Des bouées et jeux flottants sont également mis à disposition pour leur amusement. Un surveillant de baignade est présent jusqu’à 17h, mais la surveillance des enfants reste sous la responsabilité des adultes qui les accompagnent.\n\nLe service bar et restaurant est disponible tout autour de la piscine, pour savourer un encas, un repas ou un rafraîchissement les pieds dans l’eau ou confortablement installé à l’ombre.\n\nQue ce soit pour quelques longueurs, une pause ensoleillée ou un moment ludique en famille, notre piscine vous attend à tout moment de la journée.\n\nAdresse: Avenue Philibert Tsiranana, Lot : 3.232.02, 201 Antsiranana, Madagascar",
+      "structuredData": [],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T14:21:36.081Z",
+      "platform": "Site Officiel (Google Search)"
+    }
+  ]
+}

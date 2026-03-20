@@ -1,5 +1,6 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
+const { scrapeOfficialSite, isOfficialSite } = require('./site_scraper_module.cjs');
 
 /**
  * Google Maps Hotel Scraper - Antananarivo (Playwright version)
@@ -451,6 +452,44 @@ async function main() {
 
         hotels.push(payload);
         emitResult(payload);
+
+        // ── Enrichissement site officiel ───────────────────────────────────
+        if (detail.website && isOfficialSite(detail.website)) {
+          try {
+            emitLog(`   🌐 Enrichissement site officiel : ${detail.website}`);
+            const siteData = await scrapeOfficialSite(page, { url: detail.website, name: detail.name }, { visitContactPage: true, emitLog });
+            
+            // Merge site data into the already-emitted payload
+            if (!siteData.loadError) {
+              Object.assign(payload, { siteEnrichment: siteData });
+              
+              const contacts = siteData.contacts || {};
+              if (contacts.emails?.length) {
+                payload.aiIntelligence.contactInfo.emails = [...new Set([...(payload.aiIntelligence.contactInfo.emails || []), ...contacts.emails])];
+              }
+              if (contacts.phones?.length) {
+                payload.aiIntelligence.contactInfo.phones = [...new Set([...(payload.aiIntelligence.contactInfo.phones || []), ...contacts.phones])];
+              }
+              if (contacts.whatsapp?.length) {
+                payload.aiIntelligence.contactInfo.whatsapp = contacts.whatsapp;
+              }
+              
+              if (siteData.socials) payload.socials = siteData.socials;
+              if (siteData.team?.length) payload.team = siteData.team;
+              if (siteData.technologies) payload.technologies = siteData.technologies;
+              if (siteData.services) payload.services_detail = siteData.services;
+              if (siteData.reputation) payload.website_reputation = siteData.reputation;
+              if (siteData.forms) payload.contact_forms = siteData.forms;
+              
+              // Re-emit updated result
+              emitResult(payload);
+            }
+          } catch (siteErr) {
+            emitLog(`   ⚠️  Site enrichment failed : ${siteErr.message}`);
+          }
+        } else if (detail.website) {
+          emitLog(`   ⏭️  Site ignoré (blacklist ou non-officiel) : ${detail.website}`);
+        }
       } catch (err) {
         emitLog(`❌ Erreur sur la fiche ${i + 1}: ${err.message}`, progress);
         hotels.push({ url, error: err.message });

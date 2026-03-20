@@ -561,6 +561,11 @@ export interface Database {
                     username: string
                     password: string
                     from_email: string
+                    imap_host: string | null
+                    imap_port: number | null
+                    imap_enabled: boolean
+                    imap_secure: boolean
+                    last_imap_sync: string | null
                     created_at: string
                     updated_at: string
                 }
@@ -572,6 +577,11 @@ export interface Database {
                     username: string
                     password: string
                     from_email: string
+                    imap_host?: string | null
+                    imap_port?: number | null
+                    imap_enabled?: boolean
+                    imap_secure?: boolean
+                    last_imap_sync?: string | null
                     created_at?: string
                     updated_at?: string
                 }
@@ -583,6 +593,11 @@ export interface Database {
                     username?: string
                     password?: string
                     from_email?: string
+                    imap_host?: string | null
+                    imap_port?: number | null
+                    imap_enabled?: boolean
+                    imap_secure?: boolean
+                    last_imap_sync?: string | null
                     created_at?: string
                     updated_at?: string
                 }

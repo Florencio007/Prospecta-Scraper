@@ -4,7 +4,11 @@ import { useLanguage } from "@/hooks/useLanguage";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
-const MetricsCards = () => {
+interface MetricsCardsProps {
+  period?: string;
+}
+
+const MetricsCards = ({ period = "all" }: MetricsCardsProps) => {
   const { t } = useLanguage();
   const { user } = useAuth();
   const [metrics, setMetrics] = useState({
@@ -22,36 +26,55 @@ const MetricsCards = () => {
 
     const fetchMetrics = async () => {
       try {
+        let dateFilter = new Date(0); // For "all"
+        const now = new Date();
+        if (period === "today") dateFilter = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        else if (period === "week") {
+          const first = now.getDate() - now.getDay();
+          dateFilter = new Date(now.setDate(first));
+          dateFilter.setHours(0, 0, 0, 0);
+        } else if (period === "month") dateFilter = new Date(now.getFullYear(), now.getMonth(), 1);
+
         // Count total prospects
-        const { count: prospectsCount } = await supabase
+        let prospectsQuery = supabase
           .from('prospects')
           .select('*', { count: 'exact', head: true })
           .eq('user_id', user.id);
+        
+        if (period !== "all") prospectsQuery = prospectsQuery.gte('created_at', dateFilter.toISOString());
+        const { count: prospectsCount } = await prospectsQuery;
 
         // Fetch aggregate campaign stats
-        const { data: campaigns, error: campaignError } = await supabase
-            .from('email_campaigns')
-            .select('sent_count, opened_count, clicked_count')
+        // We need email_events to accurately filter by date since campaigns don't have per-day sent stats
+        let eventsQuery = supabase
+            .from('email_events')
+            .select('event_type')
             .eq('user_id', user.id);
+            
+        if (period !== "all") eventsQuery = eventsQuery.gte('created_at', dateFilter.toISOString());
+        const { data: events, error: eventsError } = await eventsQuery;
 
         let totalSent = 0;
         let totalOpened = 0;
         let totalClicked = 0;
 
-        if (campaigns) {
-            campaigns.forEach((c: any) => {
-                totalSent += (c.sent_count || 0);
-                totalOpened += (c.opened_count || 0);
-                totalClicked += (c.clicked_count || 0);
+        if (events) {
+            events.forEach((e: any) => {
+                if (e.event_type === 'sent') totalSent++;
+                if (e.event_type === 'opened') totalOpened++;
+                if (e.event_type === 'clicked') totalClicked++;
             });
         }
 
         // Fetch total replies (received messages)
-        const { count: repliesCount } = await supabase
+        let repliesQuery = supabase
           .from('email_messages')
           .select('*', { count: 'exact', head: true })
           .eq('user_id', user.id)
           .eq('direction', 'received');
+          
+        if (period !== "all") repliesQuery = repliesQuery.gte('created_at', dateFilter.toISOString());
+        const { count: repliesCount } = await repliesQuery;
 
         // Fetch profile for search usage
         const { data: profile } = await supabase
@@ -80,7 +103,7 @@ const MetricsCards = () => {
     };
 
     fetchMetrics();
-  }, [user?.id]);
+  }, [user?.id, period]);
 
   const metricsData = [
     {

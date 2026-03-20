@@ -1,6 +1,7 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
 const readline = require('readline');
+const { scrapeOfficialSite, isOfficialSite } = require('./site_scraper_module.cjs');
 
 function emitLog(msg, pct = undefined) {
   console.log(msg);
@@ -1064,6 +1065,41 @@ async function main() {
 
         // Envoi du résultat JSON au processus parent (avec affichage direct dans le terminal)
         emitResult(prospectPayload);
+
+        // ── Enrichissement site officiel ──────────────────────────────────────
+        if (prospectPayload.website && isOfficialSite(prospectPayload.website)) {
+          try {
+            emitLog(`      🌐 Enrichissement site : ${prospectPayload.website}`);
+            const ep = await context.newPage();
+            try {
+              const siteData = await scrapeOfficialSite(ep, { url: prospectPayload.website, name: prospectPayload.name }, { visitContactPage: false, emitLog });
+              if (!siteData.loadError) {
+                prospectPayload.siteEnrichment = siteData;
+                const contacts = siteData.contacts || {};
+                if (contacts.emails?.length) prospectPayload.email = [...new Set([prospectPayload.email, ...contacts.emails])].filter(Boolean).join(', ') || prospectPayload.email;
+                if (contacts.phones?.length) prospectPayload.phone = [...new Set([prospectPayload.phone, ...contacts.phones])].filter(Boolean).join(', ') || prospectPayload.phone;
+                if (contacts.whatsapp?.length) prospectPayload.whatsapp = contacts.whatsapp.join(', ');
+                
+                if (siteData.socials) {
+                  prospectPayload.socialLinks = { 
+                    ...prospectPayload.socialLinks, 
+                    ...Object.fromEntries(Object.entries(siteData.socials).map(([k, v]) => [k, Array.isArray(v) ? v[0] : v])) 
+                  };
+                }
+                if (siteData.technologies) prospectPayload.technologies = siteData.technologies;
+                if (siteData.team?.length) prospectPayload.team = siteData.team;
+                if (siteData.services) prospectPayload.services_detail = siteData.services;
+                if (siteData.reputation) prospectPayload.website_reputation = siteData.reputation;
+                if (siteData.forms) prospectPayload.contact_forms = siteData.forms;
+                
+                // Re-emit updated result
+                emitResult(prospectPayload);
+              }
+            } finally { await ep.close(); }
+          } catch (se) { emitLog(`      ⚠️  Site enrichment: ${se.message}`); }
+        } else if (prospectPayload.website) {
+          emitLog(`      ⏭️  Enrichissement ignoré (blacklist) : ${prospectPayload.website}`);
+        }
 
         emitLog(`\n✅ ${full.name} extrait avec succès`);
       } catch (err) {

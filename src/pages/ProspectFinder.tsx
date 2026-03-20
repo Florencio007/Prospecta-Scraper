@@ -189,6 +189,7 @@ const ProspectFinder = () => {
   const [agentOnline, setAgentOnline] = useState<boolean | null>(null);
   const [showInstallModal, setShowInstallModal] = useState(false);
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
+  const [isImporting, setIsImporting] = useState(false);
 
   useEffect(() => {
     const checkAgent = async () => {
@@ -1048,6 +1049,7 @@ const ProspectFinder = () => {
 
     if (toSave.length === 0) return;
 
+    setIsImporting(true);
     try {
       const savedIds = await saveProspectsSequentially(toSave);
       toast({ title: t("success"), description: `${savedIds.length} ${t("prospectsImported")}` });
@@ -1055,66 +1057,77 @@ const ProspectFinder = () => {
       setSelectedProspectIds(new Set());
     } catch (error: any) {
       toast({ title: t("error"), description: error.message, variant: "destructive" });
+    } finally {
+      setIsImporting(false);
     }
   };
 
   const saveProspectsSequentially = async (prospectsToSave: any[]): Promise<string[]> => {
     if (!user) return [];
     const savedIds: string[] = [];
+    
+    // Client-side de-duplication to avoid sending duplicate emails in the same batch
+    const uniqueBatch = prospectsToSave.filter((p, index, self) => 
+      !p.email || self.findIndex(t => t.email && t.email.toLowerCase().trim() === p.email.toLowerCase().trim()) === index
+    );
 
-    for (const p of prospectsToSave) {
-      // 0. Database duplicate check
-      let existingId = null;
-      let ownerId = null;
+    for (const p of uniqueBatch) {
+      try {
+        // 0. Database duplicate check
+        let existingId = null;
+        let ownerId = null;
 
-      // If we have an email, check by email first (GLOBAL CHECK)
-      if (p.email) {
-        const { data: existingByEmail } = await sb
-          .from("prospect_data")
-          .select("prospect_id, prospects(user_id)")
-          .eq("email", p.email)
-          .maybeSingle();
+        // Clean email for check
+        const cleanEmail = p.email?.toLowerCase().trim();
 
-        if (existingByEmail) {
-          existingId = existingByEmail.prospect_id;
-          ownerId = (existingByEmail.prospects as any)?.user_id;
+        // If we have an email, check by email first (GLOBAL CHECK)
+        if (cleanEmail) {
+          const { data: existingByEmail } = await sb
+            .from("prospect_data")
+            .select("prospect_id, prospects(user_id)")
+            .eq("email", cleanEmail)
+            .maybeSingle();
+
+          if (existingByEmail) {
+            existingId = existingByEmail.prospect_id;
+            ownerId = (existingByEmail.prospects as any)?.user_id;
+          }
         }
-      }
 
-      // If no email or not found by email, check by name and company (GLOBAL CHECK)
-      if (!existingId && p.name && p.company) {
-        const { data: existingByName } = await sb
-          .from("prospect_data")
-          .select("prospect_id, prospects(user_id)")
-          .eq("name", p.name)
-          .eq("company", p.company)
-          .maybeSingle();
+        // If no email or not found by email, check by name and company (GLOBAL CHECK)
+        if (!existingId && p.name && p.company) {
+          const { data: existingByName } = await sb
+            .from("prospect_data")
+            .select("prospect_id, prospects(user_id)")
+            .eq("name", p.name)
+            .eq("company", p.company)
+            .maybeSingle();
 
-        if (existingByName) {
-          existingId = existingByName.prospect_id;
-          ownerId = (existingByName.prospects as any)?.user_id;
+          if (existingByName) {
+            existingId = existingByName.prospect_id;
+            ownerId = (existingByName.prospects as any)?.user_id;
+          }
         }
-      }
 
-      if (existingId) {
-        if (ownerId && ownerId !== user.id) {
-          console.warn(`Le prospect ${p.name} appartient à un autre utilisateur. Importation impossible.`);
-          addLog(`⚠️ Ignoré: ${p.name} (${p.email || 'Pas d\'email'}) est déjà dans le système.`, 'warn');
-          continue; // On passe au suivant
+        if (existingId) {
+          if (ownerId && ownerId !== user.id) {
+            console.warn(`Le prospect ${p.name} appartient à un autre utilisateur. Importation impossible.`);
+            addLog(`⚠️ Ignoré: ${p.name} (${p.email || 'Pas d\'email'}) est déjà dans le système.`, 'warn');
+            continue; // On passe au suivant
+          }
+          
+          // C'est le nôtre ! On le met à jour
+          console.log(`Le prospect ${p.name} existe déjà (ID: ${existingId}). Mise à jour...`);
+          await sb.from("prospects").update({ updated_at: new Date() }).eq("id", existingId);
+          savedIds.push(existingId);
+          continue;
         }
-        
-        // C'est le nôtre ! On le met à jour
-        console.log(`Le prospect ${p.name} existe déjà (ID: ${existingId}). Mise à jour...`);
-        await sb.from("prospects").update({ updated_at: new Date() }).eq("id", existingId);
-        savedIds.push(existingId);
-        continue;
-      }
 
-      // Check if already saved (is UUID) - legacy check for front-end IDs
-      if (isUUID(p.id)) {
-        savedIds.push(p.id);
-        continue;
-      }
+        // Check if already saved (is UUID) - legacy check for front-end IDs
+        if (isUUID(p.id)) {
+          savedIds.push(p.id);
+          continue;
+        }
 
       // 1. Insert into prospects
       const { data: newP, error: pErr } = await sb.from("prospects").insert([{
@@ -1157,10 +1170,23 @@ const ProspectFinder = () => {
 
         await logProspectAdded(user.id, newP.id, p.name);
         savedIds.push(newP.id);
+        addLog(`✅ Importé: ${p.name}`, 'success');
+      }
+    } catch (err: any) {
+      console.error(`Erreur d'import pour ${p.name || 'prospect'}:`, err);
+      if (err.code === '23505' || err.message?.includes('unique_email_idx')) {
+        addLog(`⚠️ Ignoré: ${p.email || p.name} existe déjà (doublon).`, 'warn');
+        // Si c'est un doublon mail, on essaie quand même de le marquer comme "sauvé" pour l'UI si possible
+        // mais pour l'instant on se contente de passer au suivant proprement.
+      } else {
+        addLog(`❌ Erreur ${p.name || ''}: ${err.message}`, 'error');
+        // On rebalance l'erreur si c'est plus grave qu'un simple doublon pour arrêter le process global? 
+        // Non, on veut sauver le maximum de prospects possible.
       }
     }
-    return savedIds;
-  };
+  }
+  return savedIds;
+};
 
   const isUUID = (id: string) => {
     const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -1226,25 +1252,6 @@ const ProspectFinder = () => {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label>{t("prospectType") || "Type de prospect"}</Label>
-                <ToggleGroup 
-                  type="single" 
-                  value={filters.type} 
-                  onValueChange={(v) => v && setFilters({ ...filters, type: v })}
-                  className="justify-start gap-2"
-                >
-                  <ToggleGroupItem value="person" className="px-3 border text-xs font-semibold data-[state=on]:bg-accent data-[state=on]:text-accent-foreground">
-                    Personne
-                  </ToggleGroupItem>
-                  <ToggleGroupItem value="company" className="px-3 border text-xs font-semibold data-[state=on]:bg-accent data-[state=on]:text-accent-foreground">
-                    Entreprise
-                  </ToggleGroupItem>
-                  <ToggleGroupItem value="tous" className="px-3 border text-xs font-semibold data-[state=on]:bg-accent data-[state=on]:text-accent-foreground">
-                    Tous
-                  </ToggleGroupItem>
-                </ToggleGroup>
-              </div>
 
               <div className="space-y-2">
                 <Label htmlFor="city">{t("city")}</Label>
@@ -1798,8 +1805,9 @@ const ProspectFinder = () => {
                         {isSavingForCampaign ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2" size={16} />}
                         {t("addToCampaign")} ({selectedProspectIds.size})
                       </Button>
-                      <Button size="sm" onClick={handleSaveSelected} className="bg-accent" disabled={selectedProspectIds.size === 0}>
-                        <Plus className="mr-2" size={16} /> {t("import")} ({selectedProspectIds.size})
+                      <Button size="sm" onClick={handleSaveSelected} className="bg-accent" disabled={selectedProspectIds.size === 0 || isImporting}>
+                        {isImporting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2" size={16} />}
+                        {t("import")} ({selectedProspectIds.size})
                       </Button>
                     </div>
                   </div>
@@ -1891,8 +1899,19 @@ const ProspectFinder = () => {
 
                         <div className="flex flex-col items-center text-center mt-4">
                           <div className="relative mb-4">
-                            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center font-bold text-2xl text-accent group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                              {p.initials}
+                            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center font-bold text-2xl text-accent group-hover:scale-110 transition-transform duration-300 shadow-sm overflow-hidden">
+                              {p.logo || p.ogImage || p.photo || (p.contractDetails as any)?.photo ? (
+                                <img
+                                  src={p.logo || p.ogImage || p.photo || (p.contractDetails as any)?.photo}
+                                  alt={p.name}
+                                  className="h-full w-full object-cover"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(p.name || "P")}&background=random`;
+                                  }}
+                                />
+                              ) : (
+                                p.initials
+                              )}
                             </div>
                             <div className={`absolute -bottom-1 -right-1 p-1 rounded-lg border-2 border-card shadow-sm ${
                               p.source === 'google' ? 'bg-blue-500 text-white' : 

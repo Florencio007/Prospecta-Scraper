@@ -2,6 +2,7 @@ const { chromium } = require('playwright');
 const https = require('https');
 const http = require('http');
 const fs = require('fs');
+const { scrapeOfficialSite } = require('./site_scraper_module.cjs');
 
 /**
  * ╔══════════════════════════════════════════════════════════════╗
@@ -468,6 +469,25 @@ async function apiRun() {
         const payload = formatApiCompany(raw);
         companies.push(payload);
         emitResult(payload);
+
+        // ── Enrichissement site officiel (API mode) ──────────────────
+        if (payload?.website) {
+          try {
+            const { browser: eb, page: ep } = await (async () => {
+              const { chromium: cr } = require('playwright');
+              const eb = await cr.launch({ headless: true });
+              const ep = await eb.newPage();
+              return { browser: eb, page: ep };
+            })();
+            try {
+              const siteData = await scrapeOfficialSite(ep, { url: payload.website, name: payload.name }, { visitContactPage: false, emitLog });
+              payload.siteEnrichment = siteData;
+              if (siteData.contacts?.emails?.length && !payload.email) payload.email = siteData.contacts.emails[0];
+              if (siteData.socials) payload.socialLinks = { ...payload.socialLinks, ...Object.fromEntries(Object.entries(siteData.socials).map(([k, v]) => [k, Array.isArray(v) ? v[0] : v])) };
+              if (siteData.technologies) payload.technologies = siteData.technologies;
+            } finally { await eb.close(); }
+          } catch (se) { emitLog(`   ⚠️  Site enrichment: ${se.message}`); }
+        }
       } catch (e) {
         emitLog(`❌ ${r.siren}: ${e.message}`, pct);
         companies.push({ name: r.nom_entreprise, siren: r.siren, error: e.message });
@@ -565,11 +585,39 @@ async function playwrightRun() {
 
           if (xhrCache[link.siren]) {
             const payload = formatApiCompany(xhrCache[link.siren]);
-            if (payload) { companies.push(payload); emitResult(payload); }
+            if (payload) { companies.push(payload); emitResult(payload);
+              if (payload.website) {
+                try {
+                  emitLog(`   🌐 Enrichissement site : ${payload.website}`);
+                  const ep = await context.newPage();
+                  try {
+                    const siteData = await scrapeOfficialSite(ep, { url: payload.website, name: payload.name }, { visitContactPage: false, emitLog });
+                    payload.siteEnrichment = siteData;
+                    if (siteData.contacts?.emails?.length && !payload.email) payload.email = siteData.contacts.emails[0];
+                    if (siteData.socials) payload.socialLinks = { ...payload.socialLinks, ...Object.fromEntries(Object.entries(siteData.socials).map(([k, v]) => [k, Array.isArray(v) ? v[0] : v])) };
+                    if (siteData.technologies) payload.technologies = siteData.technologies;
+                  } finally { await ep.close(); }
+                } catch (se) { emitLog(`   ⚠️  Site enrichment: ${se.message}`); }
+              }
+            }
           } else {
             const raw = await scrapeCompanyPage(page, link);
             const payload = buildPayload(raw);
-            if (payload) { companies.push(payload); emitResult(payload); }
+            if (payload) { companies.push(payload); emitResult(payload);
+              if (payload.website) {
+                try {
+                  emitLog(`   🌐 Enrichissement site : ${payload.website}`);
+                  const ep = await context.newPage();
+                  try {
+                    const siteData = await scrapeOfficialSite(ep, { url: payload.website, name: payload.name }, { visitContactPage: false, emitLog });
+                    payload.siteEnrichment = siteData;
+                    if (siteData.contacts?.emails?.length && !payload.email) payload.email = siteData.contacts.emails[0];
+                    if (siteData.socials) payload.socialLinks = { ...payload.socialLinks, ...Object.fromEntries(Object.entries(siteData.socials).map(([k, v]) => [k, Array.isArray(v) ? v[0] : v])) };
+                    if (siteData.technologies) payload.technologies = siteData.technologies;
+                  } finally { await ep.close(); }
+                } catch (se) { emitLog(`   ⚠️  Site enrichment: ${se.message}`); }
+              }
+            }
           }
         } catch (e) {
           emitLog(`❌ Fiche ${i + 1} : ${e.message}`, pct);

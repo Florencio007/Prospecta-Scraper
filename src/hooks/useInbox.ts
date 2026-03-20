@@ -24,6 +24,7 @@ export interface InboxThread {
   campaign_name: string | null;
   last_received_preview: string | null;
   has_pending_ai_draft: boolean;
+  category: "primary" | "social" | "promotions" | "notifications";
 }
 
 export interface InboxMessage {
@@ -41,6 +42,7 @@ export interface InboxMessage {
   ai_detected_intent: string | null;
   ai_draft_body: string | null;
   received_at: string;
+  category: "primary" | "social" | "promotions" | "notifications";
 }
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
@@ -259,6 +261,44 @@ export function useInbox() {
     toast({ title: "Conversation archivée" });
   }, [selectedThread]);
 
+  const archiveThreads = useCallback(async (threadIds: string[]) => {
+    try {
+      const { error } = await (supabase
+        .from("email_threads") as any)
+        .update({ is_archived: true })
+        .in("id", threadIds);
+
+      if (error) throw error;
+      setThreads(prev => prev.filter(t => !threadIds.includes(t.id)));
+      if (selectedThread && threadIds.includes(selectedThread.id)) {
+        setSelectedThread(null);
+        setMessages([]);
+      }
+      toast({ title: `${threadIds.length} fil(s) archivé(s)` });
+    } catch (err: any) {
+      toast({ title: "Erreur", description: "Impossible d'archiver.", variant: "destructive" });
+    }
+  }, [selectedThread, toast]);
+
+  const markThreadsAsRead = useCallback(async (threadIds: string[]) => {
+    try {
+      // Pour marquer lu, on cherche les messages non lus de ces fils (ou on met juste à jour un champ sur thread si on l'avait).
+      // Dans Pprospecta, c'est relies on `unread_count` on messages
+      const { error } = await (supabase
+        .from("email_messages") as any)
+        .update({ is_read: true })
+        .in("thread_id", threadIds)
+        .eq("direction", "received")
+        .eq("is_read", false);
+
+      if (error) throw error;
+      setThreads(prev => prev.map(t => threadIds.includes(t.id) ? { ...t, unread_count: 0 } : t));
+      toast({ title: `${threadIds.length} fil(s) marqué(s) comme lu(s)` });
+    } catch (err: any) {
+      toast({ title: "Erreur", description: "Impossible de marquer comme lu.", variant: "destructive" });
+    }
+  }, [toast]);
+
   // ── Mettre en favori ───────────────────────────────────────────────────────
 
   const toggleStar = useCallback(async (threadId: string, current: boolean) => {
@@ -271,6 +311,40 @@ export function useInbox() {
       t.id === threadId ? { ...t, is_starred: !current } : t
     ));
   }, []);
+  
+  // ── Synchronisation manuelle ───────────────────────────────────────────────
+
+  const syncNow = useCallback(async (days: number = 30) => {
+    if (!user) return;
+    setLoading(true);
+    try {
+      const response = await fetch("/api/email/sync-now", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: user.id, days }),
+      });
+
+      if (response.status === 202) {
+        toast({ 
+          title: "Sycnhronisation lancée", 
+          description: "La recherche des nouveaux emails a commencé en arrière-plan. Vos messages apparaîtront dès qu'ils seront trouvés." 
+        });
+      } else {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Erreur lors de la synchronisation");
+      }
+    } catch (err: any) {
+      toast({ 
+        title: "Erreur", 
+        description: err.message, 
+        variant: "destructive" 
+      });
+    } finally {
+      setLoading(false);
+      // On rafraîchit quand même la liste au cas où certains messages seraient déjà là
+      fetchThreads();
+    }
+  }, [user, toast, fetchThreads]);
 
   // ── Supabase Realtime ──────────────────────────────────────────────────────
   // Écoute les nouveaux messages reçus par le poller IMAP
@@ -338,7 +412,10 @@ export function useInbox() {
     generateAIDraft,
     dismissAIDraft,
     archiveThread,
+    archiveThreads,
+    markThreadsAsRead,
     toggleStar,
     fetchThreads,
+    syncNow,
   };
 }

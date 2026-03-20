@@ -163,7 +163,7 @@ export default function AddRecipientDialog({ isOpen, onClose, onSelected, onManu
                         </TabsList>
                     </div>
 
-                    <TabsContent value="prospects" className="flex-1 flex flex-col overflow-hidden m-0">
+                    <TabsContent value="prospects" className="flex-1 flex-col overflow-hidden m-0 data-[state=active]:flex">
                         <div className="p-6 pb-2">
                             <div className="relative">
                                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
@@ -236,7 +236,7 @@ export default function AddRecipientDialog({ isOpen, onClose, onSelected, onManu
                         </div>
                     </TabsContent>
 
-                    <TabsContent value="manual" className="flex-1 flex flex-col m-0 p-6">
+                    <TabsContent value="manual" className="flex-1 flex-col m-0 p-6 data-[state=active]:flex">
                         <form onSubmit={handleManualSubmit} className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div className="space-y-2">

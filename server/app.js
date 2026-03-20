@@ -19,7 +19,7 @@ import fetch from 'node-fetch';
 
 // Initialize background campaign scheduled jobs
 import './campaignCron.js';
-import { runImapSync } from './imapPoller.js';
+import { runImapSync, syncUserInbox } from './imapPoller.js';
 
 const require = createRequire(import.meta.url);
 const imaps = require('imap-simple');
@@ -79,6 +79,9 @@ app.use((req, res, next) => {
   next();
 });
 app.use(express.json());
+
+// HEALH CHECK (Used for port discovery)
+app.get('/api/health', (req, res) => res.json({ status: 'ok', version: '1.0.0' }));
 
 // ─── Supabase Client Helper ──────────────────────────────────────────────────
 function getSupabase() {
@@ -360,14 +363,15 @@ function createTransporter(cfg) {
 
 app.post('/api/email/smtp-test', async (req, res) => {
   const { host, port, user, pass } = req.body;
-  console.log(`[SMTP] Testing connection to ${host}:${port}...`);
+  console.log(`[SMTP TEST] Starting test with host: ${host}, port: ${port}, user: ${user}`);
   try {
     const transporter = createTransporter({ host, port, user, pass });
+    console.log('[SMTP TEST] Verifying transporter...');
     await transporter.verify();
-    console.log('[SMTP] Connection successful.');
+    console.log('[SMTP TEST] Connection successful.');
     res.json({ success: true, message: 'Connexion SMTP réussie !' });
   } catch (err) {
-    console.error('[SMTP] Connection failed:', err.message);
+    console.error('[SMTP TEST ERROR]', err);
     res.status(400).json({ error: `Connexion SMTP échouée : ${err.message}` });
   }
 });
@@ -434,6 +438,7 @@ app.post('/api/email/send-smtp', async (req, res) => {
 // TEST IMAP CONNECTION
 app.post('/api/email/imap-test', async (req, res) => {
   const { host, port, user, pass } = req.body;
+  console.log(`[IMAP TEST] Starting test with host: ${host}, port: ${port}, user: ${user}`);
   if (!host || !user || !pass) {
     return res.status(400).json({ error: 'Host, user and pass are required' });
   }
@@ -445,18 +450,61 @@ app.post('/api/email/imap-test', async (req, res) => {
       host: host,
       port: parseInt(port) || 993,
       tls: true,
-      authTimeout: 10000,
-      tlsOptions: { rejectUnauthorized: false }
+      authTimeout: 30000, // 30 seconds
+      connTimeout: 30000,
+      tlsOptions: { rejectUnauthorized: false },
+      debug: console.log
     }
   };
 
   try {
+    console.log(`[IMAP TEST] Connecting to ${host}:${config.imap.port}...`);
     const connection = await imaps.connect(config);
+    console.log('[IMAP TEST] Connected successfully. Listing boxes...');
+    const boxes = await connection.getBoxes();
+    console.log(`[IMAP TEST] Found ${Object.keys(boxes).length} boxes. Ending...`);
     connection.end();
     res.json({ message: '✅ Connexion IMAP réussie !' });
   } catch (err) {
-    console.error('[IMAP TEST ERROR]', err.message);
-    res.status(500).json({ error: `Échec IMAP : ${err.message}` });
+    console.error('[IMAP TEST ERROR]', err);
+    res.status(500).json({ error: `Échec IMAP (Timeout possible) : ${err.message}` });
+  }
+});
+
+// MANUAL IMAP SYNC
+app.post('/api/email/sync-now', async (req, res) => {
+  const { userId, days } = req.body;
+  if (!userId) return res.status(400).json({ error: 'userId is required' });
+
+  const supabase = getSupabase();
+  if (!supabase) return res.status(500).json({ error: 'Supabase non disponible' });
+
+  try {
+    console.log(`[IMAP SYNC] Manual sync requested for user ${userId} (days: ${days || 30})`);
+    console.log(`[DEBUG] syncUserInbox is defined: ${typeof syncUserInbox !== 'undefined'}`);
+    const { data: settings, error } = await supabase
+      .from('smtp_settings')
+      .select('*')
+      .eq('user_id', userId)
+      .single();
+
+    if (error || !settings) {
+      return res.status(404).json({ error: 'Paramètres IMAP non trouvés pour cet utilisateur.' });
+    }
+
+    if (!settings.imap_enabled) {
+      return res.status(400).json({ error: 'Le service IMAP n\'est pas activé dans vos paramètres.' });
+    }
+
+    // Call the sync function (imported from imapPoller.js) - Non-blocking
+    syncUserInbox(settings, supabase, days || 30).catch(err => {
+      console.error('[IMAP SYNC BACKGROUND ERROR]', err);
+    });
+
+    res.status(202).json({ message: 'Synchronisation démarrée en arrière-plan. Les messages apparaîtront bientôt.' });
+  } catch (err) {
+    console.error('[IMAP SYNC ERROR]', err);
+    res.status(500).json({ error: `Erreur de synchronisation : ${err.message}` });
   }
 });
 
@@ -981,11 +1029,13 @@ CONSIGNES :
 // Cela permet au serveur Node d'être autonome pour le frontend et le backend
 app.use(express.static(path.resolve(rootDir, 'dist')));
 
-// Redirection SPA : toutes les autres routes non-API renvoient l'app React
-app.get(/(.*)/, (req, res) => {
-  if (req.path.startsWith('/api/')) {
-    return res.status(404).json({ error: 'Route API non trouvée' });
-  }
+// API 404 Fallback - using regex for catch-all
+app.all(/^\/api(\/.*)?$/, (req, res) => {
+  res.status(404).json({ error: `Route API non trouvée : ${req.method} ${req.url}` });
+});
+
+// Redirection SPA : toutes les autres routes non-API renvoient l'app React - using regex for catch-all
+app.get(/^(?!\/api).*$/, (req, res) => {
   res.sendFile(path.resolve(rootDir, 'dist', 'index.html'));
 });
 

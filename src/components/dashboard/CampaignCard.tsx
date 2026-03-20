@@ -13,7 +13,8 @@ import {
     Users, 
     Zap,
     Clock,
-    MoreHorizontal
+    MoreHorizontal,
+    Trash2
 } from 'lucide-react';
 import { EmailCampaign } from '@/hooks/useEmailCampaigns';
 import { 
@@ -125,29 +126,38 @@ const CampaignCard = ({
                         </div>
                     </div>
                     
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-emerald-500/10 hover:text-emerald-600">
-                                <MoreHorizontal size={16} />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="w-48 p-1 rounded-xl">
-                            <DropdownMenuItem onClick={onToggle} className="rounded-lg gap-2">
-                                {campaign.status === 'active' ? (
-                                    <><Pause size={14} /> Mettre en pause</>
-                                ) : (
-                                    <><Play size={14} /> Lancer</>
-                                )}
-                            </DropdownMenuItem>
-                            <DropdownMenuItem onClick={onEdit} className="rounded-lg gap-2">
-                                <Settings size={14} /> Paramètres
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem onClick={onDelete} className="rounded-lg gap-2 text-red-500 focus:text-red-500 focus:bg-red-50 dark:focus:bg-red-900/20">
-                                <AlertCircle size={14} /> Supprimer
-                            </DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <div className="flex items-center gap-1">
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8 text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-colors"
+                            onClick={(e) => { e.stopPropagation(); onToggle(e); }}
+                            title={campaign.status === 'active' ? 'Mettre en pause' : 'Lancer'}
+                        >
+                            {campaign.status === 'active' ? <Pause size={16} /> : <Play size={16} />}
+                        </Button>
+                        <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                            onClick={(e) => { e.stopPropagation(); onDelete(e); }}
+                            title="Supprimer"
+                        >
+                            <Trash2 size={16} />
+                        </Button>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-emerald-500/10 hover:text-emerald-600">
+                                    <MoreHorizontal size={16} />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="w-48 p-1 rounded-xl">
+                                <DropdownMenuItem onClick={onEdit} className="rounded-lg gap-2">
+                                    <Settings size={14} /> Paramètres
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                    </div>
                 </div>
 
                 {/* Metrics Grid */}

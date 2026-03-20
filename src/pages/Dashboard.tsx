@@ -38,8 +38,18 @@ const Dashboard = () => {
     if (!user?.id) return;
 
     const fetchDashboardData = async () => {
-      const thirtyDaysAgo = new Date();
-      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+      let days = 30; // default for month
+      if (selectedPeriod === "today") days = 0; // Only today
+      else if (selectedPeriod === "week") days = 7;
+      else if (selectedPeriod === "month") days = 30;
+      else if (selectedPeriod === "all") days = 90; // Limit charts to 90 days for performance
+
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - days);
+      startDate.setHours(0, 0, 0, 0);
+
+      // Pour les prospects/activités, on prend tout pour "all", mais on coupe pour le graphique
+      const filterDateISO = selectedPeriod === "all" ? new Date(0).toISOString() : startDate.toISOString();
 
       const [{ data: activities }, { data: prospects }, { data: events }, { data: replies }] = await Promise.all([
         supabase
@@ -51,18 +61,19 @@ const Dashboard = () => {
         supabase
           .from('prospects')
           .select('source, created_at')
-          .eq('user_id', user.id),
+          .eq('user_id', user.id)
+          .gte('created_at', filterDateISO),
         supabase
           .from('email_events')
           .select('event_type, created_at')
           .eq('user_id', user.id)
-          .gte('created_at', thirtyDaysAgo.toISOString()),
+          .gte('created_at', filterDateISO),
         supabase
           .from('email_messages')
           .select('created_at')
           .eq('user_id', user.id)
           .eq('direction', 'received')
-          .gte('created_at', thirtyDaysAgo.toISOString())
+          .gte('created_at', filterDateISO)
       ]);
 
       if (activities) {
@@ -172,18 +183,18 @@ const Dashboard = () => {
         setTopSources(sources);
 
         // Préparation des données de croissance
-        const days = 30;
         const growth: Record<string, number> = {};
         const now = new Date();
 
-        // Initialiser les derniers 30 jours à 0
-        for (let i = days; i >= 0; i--) {
+        // Initialiser avec zéro pour toute la plage (limité aux jours d'affichage)
+        const displayDays = days === 0 ? 1 : days;
+        for (let i = displayDays; i >= 0; i--) {
           const d = new Date();
           d.setDate(now.getDate() - i);
           growth[d.toISOString().split('T')[0]] = 0;
         }
 
-        // Remplir avec les données réelles
+        // Remplir avec les données réelles formatées
         (prospects as any[]).forEach(p => {
           const dateStr = new Date(p.created_at).toISOString().split('T')[0];
           if (growth[dateStr] !== undefined) {
@@ -191,7 +202,7 @@ const Dashboard = () => {
           }
         });
 
-        // Convertir en tableau cumulatif pour les prospects + ajouter les taux quotidiens
+        // Convertir en tableau cumulatif
         let cumulative = 0;
         const growthArray = Object.entries(growth).map(([date, count]) => {
           cumulative += count;
@@ -215,7 +226,7 @@ const Dashboard = () => {
     };
 
     fetchDashboardData();
-  }, [user?.id]);
+  }, [user?.id, selectedPeriod]);
 
   /**
    * Formate la date en temps écoulé relatif (ex: 5min, 2h, 1j)
@@ -360,7 +371,7 @@ const Dashboard = () => {
         </div>
 
         {/* Metrics Cards */}
-        <MetricsCards />
+        <MetricsCards period={selectedPeriod} />
 
         {/* Main Content Grid */}
         <div className="grid lg:grid-cols-3 gap-6 mt-8">

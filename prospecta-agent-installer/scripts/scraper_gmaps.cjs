@@ -12,11 +12,11 @@ const fs = require('fs');
  * Output : hotels.json
  */
 
-const QUERY         = process.argv[2] || 'hotel';
-const LOCATION      = process.argv[3] || 'Antananarivo';
-const MAX_RESULTS   = parseInt(process.argv[4] || '20', 10);
-const USER_ID       = process.argv[5] || null;
-const TYPE          = process.argv[6] || 'tous';
+const QUERY = process.argv[2] || 'hotel';
+const LOCATION = process.argv[3] || 'Antananarivo';
+const MAX_RESULTS = parseInt(process.argv[4] || '20', 10);
+const USER_ID = process.argv[5] || null;
+const TYPE = process.argv[6] || 'tous';
 
 const CONFIG = {
   searchQuery: `${QUERY} ${LOCATION}`.trim(),
@@ -92,7 +92,7 @@ async function getHotelLinks(page) {
 // ── Scraper les détails d'une fiche hôtel ────────────────────────────────────
 async function scrapeHotelDetail(page, url) {
   await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  try { await page.waitForSelector('h1', { state: 'attached', timeout: 15000 }); } catch(e) { console.log("⚠️ Nom non trouvé, attente prolongée."); }
+  try { await page.waitForSelector('h1', { state: 'attached', timeout: 15000 }); } catch (e) { console.log("⚠️ Nom non trouvé, attente prolongée."); }
   const earlyName = await page.evaluate(() => { const el = document.querySelector('h1'); return el ? el.textContent.trim() : ''; });
   console.log('DEBUG H1s:', earlyName);
   await sleep(2000);
@@ -100,11 +100,11 @@ async function scrapeHotelDetail(page, url) {
   // Ouvrir le panneau "Heures d'ouverture" s'il est réduit
   try {
     const hoursBtn = page.locator('[data-section-id="hours"] [jsaction*="pane.openhours"]').first();
-    if (await hoursBtn.isVisible({ timeout: 1000 }).catch(() => false)) { 
-      await hoursBtn.click(); 
-      await sleep(800); 
+    if (await hoursBtn.isVisible({ timeout: 1000 }).catch(() => false)) {
+      await hoursBtn.click();
+      await sleep(800);
     }
-  } catch (_) {}
+  } catch (_) { }
 
   // ── 1. Extraire les infos de base (sur l'onglet par défaut / Présentation) ──────
   const coreData = await page.evaluate(() => {
@@ -119,7 +119,7 @@ async function scrapeHotelDetail(page, url) {
     // Plus Code
     const plusCodeEl = document.querySelector('[data-item-id="oloc"] .Io6YTe, [data-item-id="oloc"]');
     if (plusCodeEl) data.plusCode = plusCodeEl.textContent.trim().split(' ')[0];
-    
+
     return data;
   });
 
@@ -149,7 +149,7 @@ async function scrapeHotelDetail(page, url) {
             }
           });
           const fullDesc = descParts.join('\n\n');
-          
+
           return { amenities, description: fullDesc };
         });
         aboutData = { ...aboutData, ...aData };
@@ -174,7 +174,7 @@ async function scrapeHotelDetail(page, url) {
           return items.slice(0, 10);
         });
       }
-    } catch (_) {}
+    } catch (_) { }
   }
 
   // ── 3. Finalisation ────────────────────────────────────────────────────────
@@ -182,7 +182,7 @@ async function scrapeHotelDetail(page, url) {
     const { coreData, aboutData, reviews } = context;
     const gpsMatch = window.location.href.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
     const gps = gpsMatch ? { lat: parseFloat(gpsMatch[1]), lng: parseFloat(gpsMatch[2]) } : null;
-    
+
     const clean = (t) => {
       if (!t) return '';
       return t.replace(/^[\uE000-\uF8FF\u2000-\u200B\u2028\u2029\uFEFF\u00A0]|[\uE000-\uF8FF]/g, '').trim();
@@ -233,8 +233,8 @@ async function main() {
   const browser = await chromium.launch({
     headless: CONFIG.headless,
     args: [
-      '--no-sandbox', 
-      '--disable-setuid-sandbox', 
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
       '--lang=fr-FR',
       '--disable-blink-features=AutomationControlled'
     ],
@@ -267,11 +267,11 @@ async function main() {
     // 2. Accepter les cookies si présents
     try {
       const btn = page.locator('form[action*="consent"] button, button[aria-label*="Accepter"], button[aria-label*="Accept"]').first();
-      if (await btn.isVisible({ timeout: 2000 }).catch(() => false)) { 
-        await btn.click(); 
-        await sleep(1500); 
+      if (await btn.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await btn.click();
+        await sleep(1500);
       }
-    } catch (_) {}
+    } catch (_) { }
 
     // 3. Collecter tous les liens de la liste
     emitLog(`🛰️ Recherche de "${CONFIG.searchQuery}" sur Maps...`, 10);
@@ -285,10 +285,10 @@ async function main() {
       const url = toScrape[i];
       const progress = 30 + Math.floor((i / toScrape.length) * 60);
       emitLog(`📍 Analyse de la fiche [${i + 1}/${toScrape.length}]`, progress);
-      
+
       try {
         const detail = await scrapeHotelDetail(page, url);
-        
+
         // Construction du payload aligné sur la logique Prospecta
         const payload = {
           name: detail.name,
@@ -304,7 +304,7 @@ async function main() {
           hours: detail.hours,
           about: detail.about,
           reviews: detail.reviews,
-          
+
           contractDetails: detail,
           aiIntelligence: {
             activities: {
@@ -316,7 +316,7 @@ async function main() {
               emails: [],
               addresses: detail.address ? [detail.address] : []
             },
-            executiveSummary: detail.about?.description || 
+            executiveSummary: detail.about?.description ||
               (detail.category ? `${detail.name} est un établissement de type "${detail.category}".` : `Établissement professionnel listé sur Google Maps.`),
             companyCulture: {
               mission: detail.about?.amenities?.length ? `Équipements et services : ${detail.about.amenities.join(', ')}` : ''

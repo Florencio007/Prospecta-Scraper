@@ -2,7 +2,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Search, Star, Archive, Send, Sparkles, X, ChevronLeft,
   Inbox as InboxIcon, Mail, MailOpen, Building2, Clock,
-  AlertCircle, CheckCheck, Loader2, RefreshCw
+  AlertCircle, CheckCheck, Loader2, RefreshCw,
+  Users, Tag, Bell, Phone, Video, Info, MoreHorizontal, Edit, Image, StickyNote, Smile, ThumbsUp, MoreVertical, Hash, ExternalLink
 } from "lucide-react";
 import Header from "@/components/dashboard/Header";
 import { Button }   from "@/components/ui/button";
@@ -12,6 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { useInbox, InboxThread, InboxMessage } from "@/hooks/useInbox";
 import { useLanguage } from "@/hooks/useLanguage";
 import { cn } from "@/lib/utils";
+import ProspectDetailView from "@/components/dashboard/ProspectDetailView";
+import { PanelLeftClose, PanelRightClose, PanelLeftOpen, PanelRightOpen, ChevronDown, ChevronRight } from "lucide-react";
 
 // ─── Utilitaires ──────────────────────────────────────────────────────────────
 
@@ -42,12 +45,16 @@ const INTENT_LABELS: Record<string, { label: string; color: string }> = {
 function ThreadCard({
   thread,
   isSelected,
+  isSelectionMode,
+  isChecked,
   onClick,
   onStar,
   onArchive,
 }: {
   thread: InboxThread;
   isSelected: boolean;
+  isSelectionMode?: boolean;
+  isChecked?: boolean;
   onClick: () => void;
   onStar: () => void;
   onArchive: () => void;
@@ -60,18 +67,29 @@ function ThreadCard({
       className={cn(
         "group relative flex gap-3 px-4 py-3 cursor-pointer transition-colors border-b border-border/50",
         "hover:bg-accent/5",
-        isSelected && "bg-accent/10 border-l-2 border-l-accent"
+        (isSelected || isChecked) && "bg-accent/10 border-l-2 border-l-accent"
       )}
     >
-      {/* Avatar prospect */}
-      <div className={cn(
-        "flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold",
-        hasUnread
-          ? "bg-accent/20 text-accent"
-          : "bg-muted text-muted-foreground"
-      )}>
-        {getInitials(thread.prospect_name)}
-      </div>
+      {/* Selection Checkbox OR Avatar prospect */}
+      {isSelectionMode ? (
+        <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center">
+          <div className={cn(
+            "w-5 h-5 rounded border flex items-center justify-center transition-colors",
+            isChecked ? "bg-accent border-accent text-white" : "border-muted-foreground/30 bg-background"
+          )}>
+            {isChecked && <CheckCheck size={12} strokeWidth={3} />}
+          </div>
+        </div>
+      ) : (
+        <div className={cn(
+          "flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-xs font-semibold",
+          hasUnread
+            ? "bg-accent/20 text-accent"
+            : "bg-muted text-muted-foreground"
+        )}>
+          {getInitials(thread.prospect_name)}
+        </div>
+      )}
 
       {/* Contenu */}
       <div className="flex-1 min-w-0">
@@ -174,11 +192,13 @@ function MessageBubble({
       <div className={cn("flex flex-col gap-1.5 max-w-[72%]", isSent && "items-end")}>
         {/* Bulle principale */}
         <div className={cn(
-          "px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap",
+          "px-4 py-2.5 rounded-[1.25rem] text-sm leading-relaxed whitespace-pre-wrap break-words" + 
+          (isSent ? " break-all" : " break-words"), // Apply break-all for long links to guarantee no overflow
+          "shadow-sm transition-all max-w-full",
           isSent
-            ? "bg-accent text-white rounded-tr-sm"
-            : "bg-muted text-foreground rounded-tl-sm"
-        )}>
+            ? "bg-gradient-to-br from-accent to-accent/80 text-white rounded-tr-sm hover:translate-y-[-1px] hover:shadow-md"
+            : "bg-muted/80 backdrop-blur-sm text-foreground rounded-tl-sm border border-border/50 hover:bg-muted"
+        )} style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
           {message.body_text}
         </div>
 
@@ -241,20 +261,45 @@ function MessageBubble({
   );
 }
 
-// ─── Composant : zone de réponse ──────────────────────────────────────────────
 
-function ReplyBox({
-  onSend,
-  sending,
-  pendingDraft,
-}: {
-  onSend: (body: string, draftUsed: string | null) => void;
-  sending: boolean;
-  pendingDraft: string | null;
-}) {
+// ─── Page principale : Inbox ──────────────────────────────────────────────────
+
+const Inbox = ({ isStandalone = true }: { isStandalone?: boolean }) => {
+  const {
+    threads, messages, selectedThread, loading, loadingMessages,
+    sending, generatingDraft, totalUnread,
+    openThread, sendReply, generateAIDraft, dismissAIDraft,
+    archiveThread, archiveThreads, markThreadsAsRead, toggleStar, fetchThreads, syncNow
+  } = useInbox();
+
+  const [search, setSearch]           = useState("");
+  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<string>("primary");
+
+  const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(true);
+  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(true);
+  const [expandedCampaigns, setExpandedCampaigns] = useState<Record<string, boolean>>({});
+
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedThreadIds, setSelectedThreadIds] = useState<string[]>([]);
+
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [body, setBody] = useState("");
   const [usedDraft, setUsedDraft] = useState<string | null>(null);
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const [isProspectDetailOpen, setIsProspectDetailOpen] = useState(false);
+
+  // Draft IA en attente dans le fil sélectionné
+  const pendingDraft = messages.find(
+    m => m.direction === "received" &&
+         m.ai_status === "draft_ready" &&
+         m.ai_draft_body
+  )?.ai_draft_body ?? null;
+
+  // Scroll automatique vers le bas à chaque nouveau message
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
 
   // Pré-remplit avec le draft IA si disponible et non encore utilisé
   useEffect(() => {
@@ -265,105 +310,66 @@ function ReplyBox({
     }
   }, [pendingDraft]);
 
-  const handleSend = () => {
-    if (!body.trim() || sending) return;
-    onSend(body.trim(), usedDraft);
-    setBody("");
-    setUsedDraft(null);
-  };
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) handleSend();
-  };
-
-  return (
-    <div className="border-t border-border bg-background p-3">
-      {usedDraft && body === usedDraft && (
-        <div className="flex items-center gap-1.5 text-[11px] text-accent mb-2 px-1">
-          <Sparkles size={11} />
-          Draft IA chargé — modifiez si besoin avant d'envoyer
-          <button
-            className="ml-auto text-muted-foreground hover:text-foreground"
-            onClick={() => { setBody(""); setUsedDraft(null); }}
-          >
-            <X size={11} />
-          </button>
-        </div>
-      )}
-      <div className="flex gap-2 items-end">
-        <Textarea
-          ref={textareaRef}
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          onKeyDown={handleKeyDown}
-          placeholder="Répondre au prospect… (Ctrl+Entrée pour envoyer)"
-          className="min-h-[72px] max-h-[180px] resize-none text-sm bg-muted/30 border-border/50 focus:border-accent/50 rounded-xl"
-          rows={3}
-        />
-        <Button
-          onClick={handleSend}
-          disabled={!body.trim() || sending}
-          className="h-10 px-4 bg-accent hover:bg-accent/90 text-white rounded-xl flex-shrink-0"
-        >
-          {sending
-            ? <Loader2 size={16} className="animate-spin" />
-            : <Send size={16} />
-          }
-        </Button>
-      </div>
-      <p className="text-[10px] text-muted-foreground mt-1.5 px-1">
-        Ctrl+Entrée pour envoyer
-      </p>
-    </div>
-  );
-}
-
-// ─── Page principale : Inbox ──────────────────────────────────────────────────
-
-const Inbox = () => {
-  const {
-    threads, messages, selectedThread, loading, loadingMessages,
-    sending, generatingDraft, totalUnread,
-    openThread, sendReply, generateAIDraft, dismissAIDraft,
-    archiveThread, toggleStar, fetchThreads,
-  } = useInbox();
-
-  const [search, setSearch]           = useState("");
-  const [showStarred, setShowStarred] = useState(false);
-  const [mobilePanelOpen, setMobilePanelOpen] = useState(false);
-
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  // Scroll automatique vers le bas à chaque nouveau message
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
-
-  // Filtre les fils selon la recherche et le filtre favori
+  // Filtre les fils selon la recherche et la catégorie
   const filteredThreads = threads.filter(t => {
     const matchSearch = !search
       || t.prospect_name.toLowerCase().includes(search.toLowerCase())
       || t.prospect_email.toLowerCase().includes(search.toLowerCase())
       || t.subject.toLowerCase().includes(search.toLowerCase());
-    const matchStar = !showStarred || t.is_starred;
-    return matchSearch && matchStar;
+
+    if (!matchSearch) return false;
+
+    if (selectedCategory === "unread") {
+      return t.unread_count > 0;
+    } else if (selectedCategory === "campaigns") {
+      return !!t.campaign_name;
+    } else {
+      return true; // "primary" affiche tout (sauf si on veut masquer les non-lus, mais généralement on affiche tout)
+    }
   });
 
-  // Draft IA en attente dans le fil sélectionné
-  const pendingDraft = messages.find(
-    m => m.direction === "received" &&
-         m.ai_status === "draft_ready" &&
-         m.ai_draft_body
-  )?.ai_draft_body ?? null;
+  const groupedByCampaign = filteredThreads.reduce((acc, t) => {
+    if (t.campaign_name) {
+      if (!acc[t.campaign_name]) acc[t.campaign_name] = [];
+      acc[t.campaign_name].push(t);
+    }
+    return acc;
+  }, {} as Record<string, InboxThread[]>);
+
+  const toggleCampaignExpand = (campaignName: string) => {
+    setExpandedCampaigns(prev => ({ ...prev, [campaignName]: !prev[campaignName] }));
+  };
 
   const handleSelectThread = (thread: InboxThread) => {
+    if (isSelectionMode) {
+      setSelectedThreadIds(prev => 
+        prev.includes(thread.id) ? prev.filter(id => id !== thread.id) : [...prev, thread.id]
+      );
+      return;
+    }
     openThread(thread);
     setMobilePanelOpen(true);
   };
 
-  const handleSend = async (body: string, draftUsed: string | null) => {
-    if (!selectedThread) return;
-    await sendReply(selectedThread.id, body, draftUsed);
+  const handleBulkArchive = async () => {
+    if (selectedThreadIds.length === 0) return;
+    await archiveThreads(selectedThreadIds);
+    setIsSelectionMode(false);
+    setSelectedThreadIds([]);
+  };
+
+  const handleBulkMarkRead = async () => {
+    if (selectedThreadIds.length === 0) return;
+    await markThreadsAsRead(selectedThreadIds);
+    setIsSelectionMode(false);
+    setSelectedThreadIds([]);
+  };
+
+  const handleSend = async (bodyValue: string, draftUsed: string | null) => {
+    if (!selectedThread || !bodyValue.trim() || sending) return;
+    await sendReply(selectedThread.id, bodyValue.trim(), draftUsed);
+    setBody("");
+    setUsedDraft(null);
   };
 
   const handleGenerateDraft = async (messageId: string) => {
@@ -371,68 +377,115 @@ const Inbox = () => {
     await generateAIDraft(messageId, selectedThread.id);
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && (e.ctrlKey || e.metaKey)) {
+      handleSend(body, usedDraft);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <Header />
+    <div className={cn("bg-background flex flex-col", isStandalone ? "min-h-screen" : "h-full w-full overflow-hidden")}>
+      {isStandalone && <Header />}
 
-      <div className="flex-1 flex overflow-hidden" style={{ height: "calc(100vh - 64px)" }}>
+      <div className="flex-1 flex overflow-hidden" 
+           style={isStandalone ? { height: "calc(100vh - 64px)" } : { height: "100%" }}>
 
-        {/* ── Colonne gauche : liste des fils ─────────────────────────────── */}
+        {/* ── Colonne gauche : liste des fils (Discussions) ───────────────────────── */}
         <div className={cn(
-          "w-full md:w-[340px] lg:w-[380px] flex-shrink-0 flex flex-col border-r border-border",
-          "md:flex",
-          mobilePanelOpen ? "hidden" : "flex"
+          "flex-shrink-0 flex flex-col border-r border-border bg-background transition-all duration-300 ease-in-out",
+          mobilePanelOpen ? "hidden md:flex" : "flex",
+          isLeftSidebarOpen ? "w-full md:w-[320px] lg:w-[360px]" : "w-0 overflow-hidden border-none opacity-0"
         )}>
-          {/* En-tête liste */}
-          <div className="px-4 py-3 border-b border-border">
-            <div className="flex items-center justify-between mb-3">
-              <div className="flex items-center gap-2">
-                <InboxIcon size={18} className="text-accent" />
-                <h1 className="font-semibold text-base text-foreground">Inbox</h1>
-                {totalUnread > 0 && (
-                  <Badge className="bg-accent text-white text-[10px] h-4 px-1.5 rounded-full">
-                    {totalUnread}
-                  </Badge>
-                )}
+          <div className="min-w-[320px] lg:min-w-[360px] h-full flex flex-col">
+            {/* En-tête Discussions */}
+          <div className="px-4 py-4 pt-6 space-y-4">
+            {isSelectionMode ? (
+              <div className="flex items-center justify-between bg-accent/5 p-2 rounded-lg border border-accent/20">
+                <div className="flex items-center gap-3">
+                  <button 
+                    onClick={() => { setIsSelectionMode(false); setSelectedThreadIds([]); }}
+                    className="p-1.5 rounded-full hover:bg-accent/10 text-accent transition-colors"
+                  >
+                    <X size={18} />
+                  </button>
+                  <span className="font-semibold text-accent text-sm">
+                    {selectedThreadIds.length} sélectionné(s)
+                  </span>
+                </div>
+                <div className="flex gap-1.5">
+                  <button 
+                    onClick={handleBulkMarkRead}
+                    disabled={selectedThreadIds.length === 0}
+                    className="p-1.5 rounded-md hover:bg-accent/10 text-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Marquer comme lu"
+                  >
+                    <CheckCheck size={18} />
+                  </button>
+                  <button 
+                    onClick={handleBulkArchive}
+                    disabled={selectedThreadIds.length === 0}
+                    className="p-1.5 rounded-md hover:bg-accent/10 text-accent transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    title="Archiver"
+                  >
+                    <Archive size={18} />
+                  </button>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => setShowStarred(!showStarred)}
-                  className={cn(
-                    "p-1.5 rounded-md transition-colors",
-                    showStarred
-                      ? "bg-amber-100 text-amber-500 dark:bg-amber-900/30"
-                      : "text-muted-foreground hover:bg-muted"
-                  )}
-                  title="Favoris uniquement"
-                >
-                  <Star size={15} />
-                </button>
-                <button
-                  onClick={fetchThreads}
-                  className="p-1.5 rounded-md text-muted-foreground hover:bg-muted transition-colors"
-                  title="Actualiser"
-                >
-                  <RefreshCw size={15} className={loading ? "animate-spin" : ""} />
-                </button>
+            ) : (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <h1 className="text-2xl font-bold tracking-tight">Discussions</h1>
+                  {loading && threads.length > 0 && <Loader2 size={16} className="animate-spin text-muted-foreground/50" />}
+                </div>
+                <div className="flex gap-2">
+                  <button 
+                    onClick={() => setIsSelectionMode(true)}
+                    className="p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors"
+                    title="Sélection multiple"
+                  >
+                    <CheckCheck size={20} />
+                  </button>
+                  <button className="p-2 rounded-full bg-muted/50 hover:bg-muted transition-colors">
+                    <Edit size={20} />
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* Barre de recherche */}
-            <div className="relative">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            {/* Barre de recherche style Messenger */}
+            <div className="relative group">
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-accent transition-colors" />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Rechercher une conversation…"
-                className="pl-8 h-8 text-sm bg-muted/40 border-border/50"
+                placeholder="Rechercher dans Messenger"
+                className="pl-10 h-10 rounded-full bg-muted/50 border-transparent focus:bg-background focus:ring-1 focus:ring-accent transition-all text-sm"
               />
+            </div>
+
+            {/* Filtres style Messenger */}
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide">
+              {["primary", "unread", "campaigns"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setSelectedCategory(tab)}
+                  className={cn(
+                    "px-4 py-1.5 rounded-full text-sm font-semibold whitespace-nowrap transition-all",
+                    selectedCategory === tab
+                      ? "bg-accent/10 text-accent"
+                      : "text-muted-foreground hover:bg-muted"
+                  )}
+                >
+                  {tab === "primary" ? "Tout" : tab === "unread" ? "Non lu" : "Campagnes"}
+                </button>
+              ))}
             </div>
           </div>
 
+
           {/* Liste des fils */}
           <div className="flex-1 overflow-y-auto">
-            {loading ? (
+            {loading && threads.length === 0 ? (
               <div className="flex items-center justify-center py-12 text-muted-foreground">
                 <Loader2 size={20} className="animate-spin mr-2" />
                 Chargement…
@@ -449,18 +502,55 @@ const Inbox = () => {
                   </p>
                 )}
               </div>
+            ) : selectedCategory === "campaigns" ? (
+              // Affichage groupé par campagne
+              Object.entries(groupedByCampaign).map(([campaignName, campaignThreads]) => (
+                <div key={campaignName} className="border-b border-border/50">
+                  <button 
+                    onClick={() => toggleCampaignExpand(campaignName)}
+                    className="w-full flex items-center justify-between px-4 py-3 bg-muted/20 hover:bg-muted/40 transition-colors"
+                  >
+                    <div className="flex items-center gap-2">
+                      <Hash size={16} className="text-muted-foreground" />
+                      <span className="font-semibold text-sm text-foreground">{campaignName}</span>
+                      <Badge variant="secondary" className="text-[10px] ml-2">{campaignThreads.length}</Badge>
+                    </div>
+                    {expandedCampaigns[campaignName] !== false ? <ChevronDown size={16} className="text-muted-foreground" /> : <ChevronRight size={16} className="text-muted-foreground" />}
+                  </button>
+                  {expandedCampaigns[campaignName] !== false && (
+                    <div className="pl-2 bg-muted/5 pb-2">
+                      {campaignThreads.map(thread => (
+                        <ThreadCard
+                          key={thread.id}
+                          thread={thread}
+                          isSelected={selectedThread?.id === thread.id}
+                          isSelectionMode={isSelectionMode}
+                          isChecked={selectedThreadIds.includes(thread.id)}
+                          onClick={() => handleSelectThread(thread)}
+                          onStar={() => toggleStar(thread.id, thread.is_starred)}
+                          onArchive={() => archiveThread(thread.id)}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))
             ) : (
+              // Affichage normal (Tout ou Non Lu)
               filteredThreads.map(thread => (
                 <ThreadCard
                   key={thread.id}
                   thread={thread}
                   isSelected={selectedThread?.id === thread.id}
+                  isSelectionMode={isSelectionMode}
+                  isChecked={selectedThreadIds.includes(thread.id)}
                   onClick={() => handleSelectThread(thread)}
                   onStar={() => toggleStar(thread.id, thread.is_starred)}
                   onArchive={() => archiveThread(thread.id)}
                 />
               ))
             )}
+          </div>
           </div>
         </div>
 
@@ -485,23 +575,35 @@ const Inbox = () => {
             <>
               {/* En-tête du fil */}
               <div className="flex items-center gap-3 px-4 py-3 border-b border-border bg-background flex-shrink-0">
+                {/* Toggle Gauche (Desktop) */}
+                <button
+                  className="hidden md:flex p-1.5 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                  onClick={() => setIsLeftSidebarOpen(!isLeftSidebarOpen)}
+                  title={isLeftSidebarOpen ? "Fermer la liste" : "Ouvrir la liste"}
+                >
+                  {isLeftSidebarOpen ? <PanelLeftClose size={18} /> : <PanelLeftOpen size={18} />}
+                </button>
+
                 {/* Bouton retour mobile */}
                 <button
-                  className="md:hidden p-1 rounded text-muted-foreground hover:bg-muted"
+                  className="md:hidden p-1.5 rounded text-muted-foreground hover:bg-muted"
                   onClick={() => setMobilePanelOpen(false)}
                 >
                   <ChevronLeft size={18} />
                 </button>
 
                 {/* Avatar + infos prospect */}
-                <div className="w-9 h-9 rounded-full bg-accent/20 flex items-center justify-center text-xs font-semibold text-accent flex-shrink-0">
+                <div className="w-9 h-9 rounded-full bg-accent/20 flex items-center justify-center text-xs font-semibold text-accent flex-shrink-0 ml-1">
                   {getInitials(selectedThread.prospect_name)}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-sm text-foreground truncate">
-                    {selectedThread.prospect_name}
-                  </p>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2">
+                    <p className="font-semibold text-sm text-foreground truncate">
+                      {selectedThread.prospect_name}
+                    </p>
+                    {loadingMessages && messages.length > 0 && <Loader2 size={12} className="animate-spin text-muted-foreground/50" />}
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
                     {selectedThread.prospect_company && (
                       <span className="flex items-center gap-1">
                         <Building2 size={10} />
@@ -520,34 +622,31 @@ const Inbox = () => {
                   </div>
                 </div>
 
-                {/* Sujet + actions */}
-                <div className="flex items-center gap-1.5 flex-shrink-0">
-                  <span className="text-xs text-muted-foreground hidden lg:block max-w-[200px] truncate">
-                    {selectedThread.subject}
-                  </span>
-                  <button
-                    onClick={() => toggleStar(selectedThread.id, selectedThread.is_starred)}
-                    className="p-1.5 rounded hover:bg-muted transition-colors"
-                  >
-                    <Star size={15} className={
-                      selectedThread.is_starred
-                        ? "fill-amber-400 text-amber-400"
-                        : "text-muted-foreground"
-                    } />
+                {/* Sujet + actions style Messenger */}
+                <div className="flex items-center gap-1 pr-2 flex-shrink-0">
+                  <button className="p-2 text-primary hover:bg-muted rounded-full transition-colors hidden sm:block">
+                    <Phone size={18} className="text-secondary-foreground" />
                   </button>
+                  <button className="p-2 text-primary hover:bg-muted rounded-full transition-colors hidden sm:block">
+                    <Video size={18} className="text-secondary-foreground" />
+                  </button>
+
+                  <div className="w-px h-5 bg-border mx-1 hidden sm:block" />
+
+                  {/* Toggle Droite (Desktop) */}
                   <button
-                    onClick={() => archiveThread(selectedThread.id)}
-                    className="p-1.5 rounded hover:bg-muted transition-colors text-muted-foreground"
-                    title="Archiver"
+                    className="hidden xl:flex p-2 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
+                    onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
+                    title={isRightSidebarOpen ? "Fermer les infos" : "Ouvrir les infos"}
                   >
-                    <Archive size={15} />
+                    {isRightSidebarOpen ? <PanelRightClose size={18} /> : <PanelRightOpen size={18} />}
                   </button>
                 </div>
               </div>
 
               {/* Corps des messages */}
-              <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1">
-                {loadingMessages ? (
+              <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 scrollbar-thin scroll-smooth min-h-0">
+                {loadingMessages && messages.length === 0 ? (
                   <div className="flex items-center justify-center py-12 text-muted-foreground">
                     <Loader2 size={18} className="animate-spin mr-2" />
                     Chargement des messages…
@@ -571,16 +670,121 @@ const Inbox = () => {
                 <div ref={messagesEndRef} />
               </div>
 
-              {/* Zone de réponse */}
-              <ReplyBox
-                onSend={handleSend}
-                sending={sending}
-                pendingDraft={pendingDraft}
-              />
+              {/* Zone de réponse style Messenger */}
+              <div className={cn("px-4 py-3 flex items-center gap-2 border-t border-border bg-background", !isRightSidebarOpen && "pr-16")}>
+                <div className="flex gap-1.5 px-1">
+                  <button className="p-2 text-secondary-foreground hover:bg-muted rounded-full transition-colors lg:block hidden"><MoreHorizontal size={20} /></button>
+                  <button className="p-2 text-secondary-foreground hover:bg-muted rounded-full transition-colors sm:block hidden"><Image size={20} /></button>
+                  <button className="p-2 text-secondary-foreground hover:bg-muted rounded-full transition-colors sm:block hidden"><StickyNote size={20} /></button>
+                </div>
+                
+                <div className="flex-1 relative group">
+                  <Textarea
+                    ref={textareaRef}
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                    onKeyDown={handleKeyDown}
+                    placeholder="Aa"
+                    className="min-h-[40px] max-h-[200px] resize-none text-sm bg-muted/60 border-transparent focus:bg-muted focus:ring-1 focus:ring-accent rounded-full py-2.5 px-4 shadow-none pr-10"
+                    rows={1}
+                  />
+                  <button className="absolute right-3 top-1/2 -translate-y-1/2 text-accent hover:scale-110 transition-transform">
+                    <Smile size={20} />
+                  </button>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  {body.trim() ? (
+                    <Button
+                      onClick={() => handleSend(body, usedDraft)}
+                      disabled={sending}
+                      className="w-10 h-10 p-0 bg-transparent hover:bg-muted text-accent shadow-none rounded-full"
+                    >
+                      {sending ? <Loader2 size={18} className="animate-spin" /> : <Send size={18} />}
+                    </Button>
+                  ) : (
+                    <button className="p-2 text-accent hover:bg-muted rounded-full transition-colors">
+                      <ThumbsUp size={22} className="fill-accent text-accent" />
+                    </button>
+                  )}
+                </div>
+              </div>
             </>
           )}
         </div>
+
+        {/* ── Colonne droite : Détails du prospect [NOUVEAU] ────────────────── */}
+        {selectedThread && (
+          <div className={cn(
+            "hidden xl:flex flex-shrink-0 flex-col border-l border-border bg-background overflow-y-auto scrollbar-hide transition-all duration-300 ease-in-out",
+            isRightSidebarOpen ? "w-[300px]" : "w-0 overflow-hidden border-none opacity-0"
+          )}>
+            <div className="min-w-[300px] flex flex-col items-center pt-8 pb-6 px-4">
+              <div className="relative mb-4">
+                <div className="w-24 h-24 rounded-full bg-accent/10 flex items-center justify-center text-2xl font-bold text-accent border-4 border-background shadow-lg">
+                  {getInitials(selectedThread.prospect_name)}
+                </div>
+                <div className="absolute bottom-1 right-1 w-5 h-5 bg-green-500 border-4 border-background rounded-full" />
+              </div>
+              <h2 className="text-xl font-bold text-center mb-1">{selectedThread.prospect_name}</h2>
+              <p className="text-xs text-muted-foreground flex items-center gap-1 mb-6">
+                <span className="w-2 h-2 rounded-full bg-green-500" /> En ligne
+              </p>
+
+              <div className="flex justify-evenly w-full mb-8">
+                <div className="flex flex-col items-center gap-1">
+                  <button className="w-10 h-10 rounded-full bg-muted/60 flex items-center justify-center hover:bg-muted transition-colors"><Mail size={18} /></button>
+                  <span className="text-[10px] text-muted-foreground">Profil</span>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <button className="w-10 h-10 rounded-full bg-muted/60 flex items-center justify-center hover:bg-muted transition-colors"><Bell size={18} /></button>
+                  <span className="text-[10px] text-muted-foreground">Sourdine</span>
+                </div>
+                <div className="flex flex-col items-center gap-1">
+                  <button className="w-10 h-10 rounded-full bg-muted/60 flex items-center justify-center hover:bg-muted transition-colors"><Search size={18} /></button>
+                  <span className="text-[10px] text-muted-foreground">Rechercher</span>
+                </div>
+              </div>
+
+              <div className="w-full space-y-1">
+                <button 
+                  onClick={() => setIsProspectDetailOpen(true)}
+                  className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors group"
+                >
+                  <span className="text-sm font-semibold text-foreground/90">Informations sur le prospect</span>
+                  <Info size={16} className="text-muted-foreground group-hover:text-foreground transition-colors" />
+                </button>
+
+                {[
+                  { label: "Campagne associée", icon: Hash },
+                  { label: "Personnaliser la discussion", icon: Edit },
+                  { label: "Fichiers et contenus", icon: Image },
+                  { label: "Sécurité et confidentialité", icon: ExternalLink },
+                ].map((item, idx) => (
+                  <button key={idx} className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors group">
+                    <span className="text-sm font-semibold text-foreground/90">{item.label}</span>
+                    <item.icon size={16} className="text-muted-foreground group-hover:text-foreground transition-colors" />
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
+
+      {selectedThread && (
+        <ProspectDetailView
+          prospect={{
+            id: selectedThread.prospect_id || selectedThread.id,
+            name: selectedThread.prospect_name,
+            email: selectedThread.prospect_email,
+            company: selectedThread.prospect_company || 'Entreprise inconnue',
+            status: 'contacted'
+          } as any}
+          isOpen={isProspectDetailOpen}
+          onOpenChange={setIsProspectDetailOpen}
+        />
+      )}
     </div>
   );
 };

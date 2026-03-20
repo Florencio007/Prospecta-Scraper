@@ -13,7 +13,11 @@ import {
     ChevronRight,
     ChevronLeft,
     Clock,
-    Loader2
+    Loader2,
+    Search,
+    Users,
+    Check,
+    UserPlus
 } from "lucide-react";
 import {
     Dialog,
@@ -27,6 +31,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useLanguage } from "@/hooks/useLanguage";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
     Select,
     SelectContent,
@@ -36,6 +41,8 @@ import {
 } from "@/components/ui/select";
 import { checkSpamScore } from "@/services/emailService";
 import { useApiKeys } from "@/hooks/useApiKeys";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 
 
@@ -79,6 +86,7 @@ interface CreateCampaignDialogProps {
 
 export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGeneratingAI, onGenerateAI }: CreateCampaignDialogProps) {
     const { t } = useLanguage();
+    const { user } = useAuth();
     const [step, setStep] = useState(1);
     const [spamScore, setSpamScore] = useState(0);
     const [form, setForm] = useState({
@@ -97,6 +105,56 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
         sequenceType: "Premier contact",
     });
 
+    // Step 4: Prospect selection
+    const [prospects, setProspects] = useState<any[]>([]);
+    const [selectedProspectIds, setSelectedProspectIds] = useState<Set<string>>(new Set());
+    const [prospectSearch, setProspectSearch] = useState("");
+    const [loadingProspects, setLoadingProspects] = useState(false);
+
+    // Step 4: Manual prospect addition
+    const [showManualForm, setShowManualForm] = useState(false);
+    const [manualForm, setManualForm] = useState({ name: "", email: "", company: "" });
+
+    const addManualProspect = () => {
+        if (!manualForm.name.trim() && !manualForm.email.trim()) return;
+        const id = `manual_${Date.now()}`;
+        const newProspect = {
+            id,
+            name: manualForm.name.trim() || manualForm.email,
+            email: manualForm.email.trim(),
+            company: manualForm.company.trim(),
+            initials: (manualForm.name.trim() || manualForm.email).substring(0, 2).toUpperCase(),
+            isManual: true,
+        };
+        setProspects(prev => [newProspect, ...prev]);
+        setSelectedProspectIds(prev => new Set([...prev, id]));
+        setManualForm({ name: "", email: "", company: "" });
+        setShowManualForm(false);
+    };
+
+    const filteredProspects = prospects.filter(p =>
+        !prospectSearch ||
+        (p.name || "").toLowerCase().includes(prospectSearch.toLowerCase()) ||
+        (p.email || "").toLowerCase().includes(prospectSearch.toLowerCase()) ||
+        (p.company || "").toLowerCase().includes(prospectSearch.toLowerCase())
+    );
+
+    const toggleProspect = (id: string) => {
+        setSelectedProspectIds(prev => {
+            const next = new Set(prev);
+            next.has(id) ? next.delete(id) : next.add(id);
+            return next;
+        });
+    };
+
+    const toggleAll = () => {
+        if (selectedProspectIds.size === filteredProspects.length) {
+            setSelectedProspectIds(new Set());
+        } else {
+            setSelectedProspectIds(new Set(filteredProspects.map(p => p.id)));
+        }
+    };
+
     const { getKeys } = useApiKeys();
     const [activeProviders, setActiveProviders] = useState<string[]>([]);
     const [fetchingProviders, setFetchingProviders] = useState(true);
@@ -110,6 +168,45 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
             });
         }
     }, [isOpen, getKeys]);
+
+    // Fetch prospects when step 4 is reached
+    useEffect(() => {
+        if (step === 4 && user && prospects.length === 0) {
+            setLoadingProspects(true);
+            supabase
+                .from("prospects")
+                .select("*, prospect_data(*)")
+                .eq("user_id", user.id)
+                .order("created_at", { ascending: false })
+                .then(({ data }) => {
+                    const flat = (data || []).map((p: any) => {
+                        const pd = Array.isArray(p.prospect_data) ? (p.prospect_data[0] || {}) : (p.prospect_data || {});
+                        const id = pd.prospect_id || p.id;
+                        return {
+                            id,
+                            name: pd.name || p.name || "Inconnu",
+                            email: pd.email || p.email || "",
+                            company: pd.company || p.company || "",
+                            initials: (pd.name || p.name || "N").substring(0, 2).toUpperCase()
+                        };
+                    });
+                    setProspects(flat);
+                    setLoadingProspects(false);
+                });
+        }
+    }, [step, user]);
+
+    // Reset on close
+    useEffect(() => {
+        if (!isOpen) {
+            setStep(1);
+            setSelectedProspectIds(new Set());
+            setProspects([]);
+            setProspectSearch("");
+            setShowManualForm(false);
+            setManualForm({ name: "", email: "", company: "" });
+        }
+    }, [isOpen]);
 
     const isSmtpEnabled = activeProviders.includes('smtp');
 
@@ -154,7 +251,7 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
                                     <Mail className="text-emerald-500" size={20} /> Nouvelle Campagne
                                 </DialogTitle>
                                 <DialogDescription className="text-slate-500 text-xs mt-1 uppercase font-bold tracking-widest flex items-center gap-2">
-                                    Étape {step} sur 3
+                                    Étape {step} sur 4
                                     {!fetchingProviders && (
                                         <span className="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded text-[10px] lowercase font-medium">
                                             via {isSmtpEnabled ? 'SMTP' : 'aucun service'}
@@ -167,7 +264,7 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
 
                     {/* Stepper info */}
                     <div className="flex gap-1 mb-8">
-                        {[1, 2, 3].map(i => (
+                        {[1, 2, 3, 4].map(i => (
                             <div key={i} className={`h-1.5 flex-1 rounded-full transition-all duration-500 ${step >= i ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.3)]' : 'bg-slate-200 dark:bg-slate-800'}`} />
                         ))}
                     </div>
@@ -392,6 +489,146 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
                                 </div>
                             </div>
                         )}
+
+                        {step === 4 && (
+                            <div className="space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-300">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                                            <Users size={16} className="text-emerald-500" />
+                                            Ajouter des prospects
+                                        </h3>
+                                        <p className="text-[10px] text-slate-500 mt-0.5">Sélectionnez les contacts à ajouter à cette campagne.</p>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-xs font-bold text-emerald-600 bg-emerald-500/10 px-2 py-1 rounded-full">
+                                            {selectedProspectIds.size} sélectionné(s)
+                                        </span>
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowManualForm(v => !v)}
+                                            className={`flex items-center gap-1 h-8 px-3 rounded-lg text-xs font-bold border transition-all ${
+                                                showManualForm
+                                                    ? 'bg-emerald-500 text-white border-emerald-500'
+                                                    : 'bg-transparent text-emerald-600 border-emerald-500/30 hover:bg-emerald-500/10'
+                                            }`}
+                                        >
+                                            <UserPlus size={13} />
+                                            {showManualForm ? 'Annuler' : 'Ajouter manuellement'}
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {/* Manual prospect addition form */}
+                                {showManualForm && (
+                                    <div className="border border-emerald-500/20 bg-emerald-500/5 rounded-xl p-4 space-y-3 animate-in fade-in slide-in-from-top-2 duration-200">
+                                        <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wide">Nouveau prospect</p>
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div className="space-y-1">
+                                                <Label className="text-[10px] uppercase font-bold text-slate-500">Nom *</Label>
+                                                <Input
+                                                    placeholder="Jean Dupont"
+                                                    className="h-9 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-sm"
+                                                    value={manualForm.name}
+                                                    onChange={e => setManualForm(f => ({ ...f, name: e.target.value }))}
+                                                    onKeyDown={e => e.key === 'Enter' && addManualProspect()}
+                                                />
+                                            </div>
+                                            <div className="space-y-1">
+                                                <Label className="text-[10px] uppercase font-bold text-slate-500">Email *</Label>
+                                                <Input
+                                                    placeholder="jean@example.com"
+                                                    type="email"
+                                                    className="h-9 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-sm"
+                                                    value={manualForm.email}
+                                                    onChange={e => setManualForm(f => ({ ...f, email: e.target.value }))}
+                                                    onKeyDown={e => e.key === 'Enter' && addManualProspect()}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-1">
+                                            <Label className="text-[10px] uppercase font-bold text-slate-500">Entreprise</Label>
+                                            <Input
+                                                placeholder="Acme SARL"
+                                                className="h-9 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-700 text-sm"
+                                                value={manualForm.company}
+                                                onChange={e => setManualForm(f => ({ ...f, company: e.target.value }))}
+                                                onKeyDown={e => e.key === 'Enter' && addManualProspect()}
+                                            />
+                                        </div>
+                                        <div className="flex justify-end">
+                                            <button
+                                                type="button"
+                                                onClick={addManualProspect}
+                                                disabled={!manualForm.name.trim() && !manualForm.email.trim()}
+                                                className="h-9 px-5 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold rounded-lg flex items-center gap-2 transition-colors"
+                                            >
+                                                <Plus size={13} /> Ajouter
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+
+                                <div className="relative">
+                                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                                    <Input
+                                        placeholder="Rechercher un prospect..."
+                                        className="pl-9 h-10 bg-slate-50 dark:bg-slate-950 border-slate-200 dark:border-slate-800 text-sm"
+                                        value={prospectSearch}
+                                        onChange={e => setProspectSearch(e.target.value)}
+                                    />
+                                </div>
+
+                                <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
+                                    {loadingProspects ? (
+                                        <div className="flex items-center justify-center py-10 text-muted-foreground gap-2">
+                                            <Loader2 size={16} className="animate-spin" /> Chargement…
+                                        </div>
+                                    ) : filteredProspects.length === 0 ? (
+                                        <div className="flex flex-col items-center justify-center py-10 text-center text-slate-500">
+                                            <Users size={28} className="mb-2 text-slate-300" />
+                                            <p className="text-xs font-medium">Aucun prospect trouvé</p>
+                                            <p className="text-[10px] mt-0.5">Ajoutez des prospects via Trouver des Prospects</p>
+                                        </div>
+                                    ) : (
+                                        <div className="max-h-[240px] overflow-y-auto">
+                                            <div
+                                                onClick={toggleAll}
+                                                className="flex items-center gap-3 px-4 py-2.5 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                                            >
+                                                <Checkbox checked={selectedProspectIds.size === filteredProspects.length && filteredProspects.length > 0} />
+                                                <span className="text-[10px] font-bold uppercase text-slate-500 tracking-wide">Tout sélectionner ({filteredProspects.length})</span>
+                                            </div>
+                                            {filteredProspects.map(p => (
+                                                <div
+                                                    key={p.id}
+                                                    onClick={() => toggleProspect(p.id)}
+                                                    className={`flex items-center gap-3 px-4 py-2.5 border-b border-slate-100 dark:border-slate-800 cursor-pointer transition-colors ${
+                                                        selectedProspectIds.has(p.id)
+                                                            ? 'bg-emerald-500/5'
+                                                            : 'hover:bg-slate-50 dark:hover:bg-slate-900'
+                                                    }`}
+                                                >
+                                                    <Checkbox checked={selectedProspectIds.has(p.id)} />
+                                                    <div className="w-8 h-8 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-600 text-xs font-bold shrink-0">
+                                                        {p.initials}
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">{p.name}</div>
+                                                        <div className="text-[10px] text-slate-500 truncate">{p.company} {p.email && `• ${p.email}`}</div>
+                                                    </div>
+                                                    {selectedProspectIds.has(p.id) && <Check size={14} className="text-emerald-500 shrink-0" />}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+
+                                <p className="text-[10px] text-slate-400 text-center">
+                                    Vous pourrez également ajouter des prospects après la création.
+                                </p>
+                            </div>
+                        )}
                     </div>
                 </div>
 
@@ -405,7 +642,7 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
                         {step === 1 ? 'Annuler' : <><ChevronLeft className="mr-2 h-4 w-4" /> Retour</>}
                     </Button>
 
-                    {step < 3 ? (
+                    {step < 4 ? (
                         <Button
                             onClick={() => setStep(s => s + 1)}
                             disabled={step === 1 && !isStep1Valid}
@@ -415,7 +652,10 @@ export default function CreateCampaignDialog({ isOpen, onClose, onSubmit, isGene
                         </Button>
                     ) : (
                         <Button
-                            onClick={() => onSubmit(form)}
+                            onClick={() => {
+                                const fullSelected = prospects.filter(p => selectedProspectIds.has(p.id));
+                                onSubmit({ ...form, prospectIds: Array.from(selectedProspectIds), selectedProspects: fullSelected });
+                            }}
                             className="bg-emerald-600 hover:bg-emerald-700 text-white font-black h-11 px-10 gap-2 shadow-[0_0_20px_rgba(16,185,129,0.2)]"
                         >
                             <Send size={16} /> Lancer la Campagne

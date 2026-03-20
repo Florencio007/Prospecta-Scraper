@@ -22,7 +22,9 @@ import {
     UserPlus,
     Loader2,
     LayoutGrid,
-    List as ListIcon
+    List as ListIcon,
+    Building2,
+    Search
 } from "lucide-react";
 import CampaignCard from "./CampaignCard";
 import { cn } from "@/lib/utils";
@@ -255,7 +257,7 @@ export default function EmailCampaignManager({
     const totalBounced = campaigns.reduce((s, c) => s + (c.bounced_count || 0), 0);
     const activeCampaigns = campaigns.filter(c => c.status === "active").length;
 
-    if (isLoading) {
+    if (isLoading && campaigns.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center py-20 gap-4">
                 <LoadingLogo size="md" message="Chargement des campagnes..." />
@@ -294,7 +296,7 @@ export default function EmailCampaignManager({
             </Card>
 
             {/* Filters */}
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap items-center gap-2">
                 {[["all", "Toutes"], ["active", "Actives"], ["paused", "Pausées"], ["completed", "Terminées"]].map(([val, label]) => (
                     <Button
                         key={val}
@@ -306,6 +308,12 @@ export default function EmailCampaignManager({
                         {label}
                     </Button>
                 ))}
+
+                {isLoading && campaigns.length > 0 && (
+                    <div className="flex items-center text-emerald-500/50 ml-2">
+                        <Loader2 size={16} className="animate-spin" />
+                    </div>
+                )}
 
                 <div className="ml-auto flex items-center bg-slate-100 dark:bg-slate-900 p-1 rounded-lg border border-border/50">
                     <Button
@@ -338,7 +346,15 @@ export default function EmailCampaignManager({
             {/* Main Grid: Scrollable list + Detail View */}
             <div className={`grid gap-6 ${selected ? 'md:grid-cols-[1fr_380px]' : 'grid-cols-1'}`}>
                 <div className="flex flex-col gap-4">
-                    {filtered.length === 0 ? (
+                    {selected ? (
+                        <CampaignProspectsView 
+                            campaign={selected}
+                            getRecipients={onGetRecipients || (async () => [])}
+                            onRemove={onRemoveRecipient || (async () => false)}
+                            onBack={() => setSelected(null)}
+                            onAddClick={() => setIsProspectSelectorOpen(true)}
+                        />
+                    ) : filtered.length === 0 ? (
                         <div className="text-center py-20 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-800 rounded-xl border-dashed">
                             <Mail size={48} className="mx-auto text-slate-400 dark:text-slate-700 mb-4" />
                             <p className="text-slate-600 dark:text-slate-400 font-medium">Aucune campagne à afficher</p>
@@ -734,6 +750,129 @@ function AntiSpamBestPractices() {
                     </div>
                 ))}
             </CardContent>
+        </Card>
+    );
+}
+
+function CampaignProspectsView({ campaign, getRecipients, onRemove, onBack, onAddClick }: any) {
+    const { toast } = useToast();
+    const [loading, setLoading] = useState(true);
+    const [recipients, setRecipients] = useState<any[]>([]);
+    const [search, setSearch] = useState("");
+    const [deletingId, setDeletingId] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (campaign) loadRecipients();
+    }, [campaign]);
+
+    const loadRecipients = async () => {
+        setLoading(true);
+        const data = await getRecipients(campaign.id);
+        setRecipients(data || []);
+        setLoading(false);
+    };
+
+    const handleRemove = async (recipientId: string) => {
+        if (!campaign) return;
+        setDeletingId(recipientId);
+        const success = await onRemove(campaign.id, recipientId);
+        if (success) {
+            setRecipients(prev => prev.filter(r => r.id !== recipientId));
+            toast({ title: "Prospect supprimé" });
+        }
+        setDeletingId(null);
+    };
+
+    const filtered = recipients.filter(r => 
+        (r.first_name + " " + r.last_name).toLowerCase().includes(search.toLowerCase()) ||
+        r.email.toLowerCase().includes(search.toLowerCase()) ||
+        (r.company || "").toLowerCase().includes(search.toLowerCase())
+    );
+
+    return (
+        <Card className="bg-white dark:bg-slate-900/80 border-slate-200 dark:border-slate-800 shadow-sm flex flex-col h-[600px] xl:h-[700px] overflow-hidden animate-in fade-in slide-in-from-left-4 duration-300">
+            <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between bg-slate-50/80 dark:bg-slate-900/80">
+                <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="icon" onClick={onBack} className="h-8 w-8 text-slate-500 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-slate-200 dark:hover:bg-slate-800 mr-2 shrink-0 rounded-full transition-all">
+                        <X size={16} />
+                    </Button>
+                    <div>
+                        <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2">
+                            <Users size={16} className="text-emerald-500" /> Prospects Liés
+                        </h3>
+                        <p className="text-[10px] text-slate-500 font-medium uppercase tracking-widest leading-none mt-1">{recipients.length} prospect(s)</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-2 w-full sm:w-auto">
+                    <div className="relative flex-1 sm:w-64">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
+                        <Input 
+                            placeholder="Rechercher..."
+                            className="pl-9 h-8 text-xs bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-700 focus-visible:ring-emerald-500"
+                            value={search}
+                            onChange={e => setSearch(e.target.value)}
+                        />
+                    </div>
+                    <Button size="sm" onClick={onAddClick} className="h-8 gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-xs px-3 shadow-md shadow-emerald-500/20">
+                        <UserPlus size={14} /> <span className="hidden sm:inline">Ajouter</span>
+                    </Button>
+                </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto px-1 py-1 bg-slate-50/30 dark:bg-slate-950/20">
+                {loading ? (
+                    <div className="flex flex-col items-center justify-center h-full gap-4">
+                        <Loader2 size={24} className="animate-spin text-emerald-500 mb-2" />
+                        <p className="text-xs font-bold text-slate-500 uppercase tracking-tighter">Chargement...</p>
+                    </div>
+                ) : filtered.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center h-full text-slate-400">
+                        <Users size={48} className="opacity-20 mb-4 text-emerald-500" />
+                        <p className="text-sm font-bold uppercase tracking-widest text-slate-500">Aucun prospect trouvé</p>
+                    </div>
+                ) : (
+                    <div className="grid gap-2 p-3">
+                        {filtered.map((r) => (
+                            <div key={r.id} className="p-3 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm flex items-center justify-between hover:border-emerald-500/30 transition-all group">
+                                <div className="flex-1 min-w-0 pr-4">
+                                    <div className="flex items-center gap-2 mb-1.5">
+                                        <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">
+                                            {r.first_name} {r.last_name}
+                                        </h4>
+                                        <Badge variant="outline" className={cn("text-[9px] px-1.5 py-0 font-black uppercase border", 
+                                            r.status === 'sent' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
+                                            r.status === 'pending' ? 'bg-amber-500/10 text-amber-500 border-amber-500/20' :
+                                            'bg-slate-500/10 text-slate-500 border-slate-500/20'
+                                        )}>
+                                            {r.status}
+                                        </Badge>
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-3 text-[10px] text-slate-500 font-medium">
+                                        <span className="flex items-center gap-1"><Mail size={10} /> {r.email}</span>
+                                        {r.company && <span className="flex items-center gap-1"><Building2 size={10} /> {r.company}</span>}
+                                    </div>
+                                    {r.status === 'failed' && r.bounce_reason && (
+                                        <div className="mt-2 p-1.5 bg-red-50 dark:bg-red-500/10 rounded border border-red-100 dark:border-red-500/20 inline-block">
+                                            <p className="text-[9px] text-red-600 dark:text-red-400 font-bold flex items-center gap-1">
+                                                <AlertTriangle size={10} /> {r.bounce_reason}
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    onClick={() => handleRemove(r.id)}
+                                    disabled={deletingId === r.id}
+                                    className="h-8 w-8 text-slate-400 opacity-0 group-hover:opacity-100 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-all"
+                                >
+                                    {deletingId === r.id ? <Loader2 className="h-4 w-4 animate-spin text-red-500" /> : <Trash2 size={14} />}
+                                </Button>
+                            </div>
+                        ))}
+                    </div>
+                )}
+            </div>
         </Card>
     );
 }

@@ -1,48 +1,48 @@
 {
-  "scrapedAt": "2026-03-20T07:26:04.200Z",
-  "query": "hotel nosy be, Madagascar",
-  "location": "nosy be, Madagascar",
+  "scrapedAt": "2026-03-20T12:03:35.536Z",
+  "query": "hotel Antsiranana, Madagascar",
+  "location": "Antsiranana, Madagascar",
   "stats": {
-    "total": 5,
-    "avecTelephone": 5,
-    "avecEmail": 5,
+    "total": 4,
+    "avecTelephone": 3,
+    "avecEmail": 2,
     "avecWhatsApp": 0,
     "avecAdresse": 2,
     "avecGPS": 0,
-    "avecReseaux": 5,
-    "avecHoraires": 1,
+    "avecReseaux": 2,
+    "avecHoraires": 0,
     "avecEquipe": 0,
-    "avecServices": 5,
+    "avecServices": 2,
     "avecAvis": 0,
-    "avecTarifs": 0,
-    "avecFormulaire": 1,
+    "avecTarifs": 1,
+    "avecFormulaire": 0,
     "avecAppStore": 0,
     "avecDownloads": 0,
-    "avecPlateformes": 3,
-    "avecPartenaires": 2
+    "avecPlateformes": 1,
+    "avecPartenaires": 3
   },
   "enterprises": [
     {
-      "name": "Quel est le plus bel endroit à Nosy Be ?",
-      "googleTitle": "Quel est le plus bel endroit à Nosy Be ? - Voyage Madagascar",
-      "googleSnippet": "",
+      "name": "Grand Hôtel Diego Suarez",
+      "googleTitle": "Grand Hôtel Diego Suarez | Antsiranana, Madagascar",
+      "googleSnippet": "Grand Hôtel Diego Suarez | Antsiranana, Madagascar, Hôtel 4 étoiles au centre de Diego Suarez : piscine, spa, casino, 2 restaurants. À 8 km de l'aéroport et ...",
       "googlePosition": 1,
-      "url": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be",
-      "domain": "madagascar-sur-mesure.com",
+      "url": "https://www.grandhoteldiego.com/",
+      "domain": "grandhoteldiego.com",
       "contacts": {
         "phones": [
-          "0189717115",
-          "01 89 71 71"
+          "+261%2032%2040%20881%2043",
+          "+261 32 40 881 43"
         ],
         "emails": [
-          "madagascarsurmesure@gmail.com"
+          "grandhotel_diego@yahoo.fr"
         ],
         "whatsapp": [],
         "addresses": [
-          "22 rue Andrianary Ratianarivo",
-          "Antananarivo & les Hautes terres",
-          "Antananarivo & les Hautes Terres",
-          "Antananarivo"
+          "46 rue Colbert",
+          "rue Colbert",
+          "Madagascar en toute sérénité.",
+          "Madagascar"
         ],
         "postalCode": "",
         "city": "",
@@ -50,345 +50,10 @@
       },
       "socials": {
         "facebook": [
-          "https://www.facebook.com/madagascarsurmesure"
+          "https://www.facebook.com/grandhoteldiego"
         ],
-        "instagram": [
-          "https://www.instagram.com/bynativ"
-        ]
-      },
-      "reputation": {
-        "overallRating": "",
-        "reviewCount": "",
-        "reviews": [],
-        "widgets": []
-      },
-      "services": {
-        "list": [
-          "Le parc national de Lokobe",
-          "Nosy Komba",
-          "Nosy Iranja",
-          "La montagne sacrée de Nosy Be",
-          "Plongée et snorkeling",
-          "Découverte des plantations d’ylang-ylang",
-          "Sortie en mer et observation des baleines",
-          "Le marché d’Ambatoloaka",
-          "Hébergements",
-          "Exploration du Nord en famille",
-          "Périple dans le nord malgache",
-          "Des Hautes Terres au Canal des pangalanes",
-          "Au cœur de Madagascar"
-        ],
-        "categories": [
-          "Nos voyages",
-          "Par régions",
-          "Nosy Be & le Nord",
-          "Antananarivo  & les Hautes terres",
-          "Sainte-Marie & l'Est",
-          "L'Ouest Malgache & Tuléar",
-          "Fort-Dauphin & le Grand Sud",
-          "Par envies",
-          "Incontournables",
-          "Voyage de noces",
-          "En famille",
-          "Nature & Aventure",
-          "Îles & Farniente",
-          "Culture & Traditions",
-          "Trouvailles",
-          "bynativ",
-          "Communauté bynativ",
-          "Vols internationaux",
-          "Conseils santé",
-          "L'agence",
-          "Qui sommes-nous ?",
-          "Notre équipe",
-          "Témoignages",
-          "Conseils voyage",
-          "Que faire à Madagascar ?",
-          "Où aller à Madagascar ?",
-          "Tout savoir sur Madagascar",
-          "Infos pratiques Madagascar",
-          "Culture & Traditions Malgaches"
-        ],
-        "prices": []
-      },
-      "slogan": "",
-      "pageTitle": "Quel est le plus bel endroit à Nosy Be ?",
-      "metaDescription": "Découvrez Nosy Be, l’île aux parfums de Madagascar : plages de rêve, faune exotique, plongée, ylang-ylang et traditions locales. Le guide complet pour préparer votre voyage.",
-      "ogImage": "https://www.madagascar-sur-mesure.com/uploads/sites/67/2023/10/nosy-be-madagascar.jpeg",
-      "lang": "fr",
-      "canonical": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be",
-      "logo": "https://www.madagascar-sur-mesure.com/uploads/sites/67/2025/10/madagascar-2.png",
-      "googleSearchUrl": "https://www.google.com/search?q=hotel%20nosy%20be%2C%20Madagascar",
-      "gps": null,
-      "externalLinks": {
-        "appStores": [],
-        "downloads": [],
-        "platforms": [],
-        "partners": []
-      },
-      "hours": {
-        "raw": [],
-        "structured": {},
-        "notes": [
-          "lundi au vendredi de 7h à 15h30 – appel local gratuit"
-        ]
-      },
-      "team": [],
-      "technologies": {
-        "cms": [
-          "WordPress"
-        ],
-        "frameworks": [],
-        "analytics": [
-          "Google Analytics",
-          "Hotjar"
-        ],
-        "marketing": [],
-        "chat": [],
-        "other": []
-      },
-      "forms": [],
-      "navLinks": [
-        {
-          "text": "DEVIS",
-          "href": "https://www.madagascar-sur-mesure.com/espace-client/travel-request"
-        },
-        {
-          "text": "01 89 71 71 15",
-          "href": "tel:01 89 71 71 15"
-        },
-        {
-          "text": "Espace client",
-          "href": "https://www.madagascar-sur-mesure.com/espace-client"
-        },
-        {
-          "text": "Demander un devis",
-          "href": "https://www.madagascar-sur-mesure.com/espace-client/travel-request"
-        },
-        {
-          "text": "Nos voyages",
-          "href": "https://www.madagascar-sur-mesure.com/voyage/tous-nos-voyages"
-        },
-        {
-          "text": "Par régions",
-          "href": "https://www.madagascar-sur-mesure.com/region"
-        },
-        {
-          "text": "Nosy Be & le Nord",
-          "href": "https://www.madagascar-sur-mesure.com/region/nosy-be-nord"
-        },
-        {
-          "text": "Antananarivo  & les Hautes terres",
-          "href": "https://www.madagascar-sur-mesure.com/region/antananarivo-hautes-terres"
-        },
-        {
-          "text": "Sainte-Marie & l'Est",
-          "href": "https://www.madagascar-sur-mesure.com/region/sainte-marie-est"
-        },
-        {
-          "text": "L'Ouest Malgache & Tuléar",
-          "href": "https://www.madagascar-sur-mesure.com/region/ouest-malgache"
-        },
-        {
-          "text": "Fort-Dauphin & le Grand Sud",
-          "href": "https://www.madagascar-sur-mesure.com/region/fort-dauphin-grand-sud"
-        },
-        {
-          "text": "Par envies",
-          "href": "https://www.madagascar-sur-mesure.com/envie"
-        },
-        {
-          "text": "Incontournables",
-          "href": "https://www.madagascar-sur-mesure.com/envie/incontournables"
-        },
-        {
-          "text": "Voyage de noces",
-          "href": "https://www.madagascar-sur-mesure.com/envie/voyage-noces"
-        },
-        {
-          "text": "En famille",
-          "href": "https://www.madagascar-sur-mesure.com/envie/famille"
-        },
-        {
-          "text": "Nature & Aventure",
-          "href": "https://www.madagascar-sur-mesure.com/envie/nature-aventure"
-        },
-        {
-          "text": "Îles & Farniente",
-          "href": "https://www.madagascar-sur-mesure.com/envie/iles-farniente"
-        },
-        {
-          "text": "Culture & Traditions",
-          "href": "https://www.madagascar-sur-mesure.com/envie/culture-traditions"
-        },
-        {
-          "text": "Trouvailles",
-          "href": "https://www.madagascar-sur-mesure.com/envie/trouvailles"
-        },
-        {
-          "text": "bynativ",
-          "href": "https://www.madagascar-sur-mesure.com/bynativ"
-        },
-        {
-          "text": "Communauté bynativ",
-          "href": "https://www.madagascar-sur-mesure.com/bynativ/communaute-bynativ"
-        },
-        {
-          "text": "Vols internationaux",
-          "href": "https://www.madagascar-sur-mesure.com/bynativ/vols-internationaux"
-        },
-        {
-          "text": "Conseils santé",
-          "href": "https://www.madagascar-sur-mesure.com/bynativ/conseils-sante"
-        },
-        {
-          "text": "L'agence",
-          "href": "https://www.madagascar-sur-mesure.com/agence-locale"
-        },
-        {
-          "text": "Qui sommes-nous ?",
-          "href": "https://www.madagascar-sur-mesure.com/agence-locale/qui-sommes-nous"
-        },
-        {
-          "text": "Notre équipe",
-          "href": "https://www.madagascar-sur-mesure.com/agence-locale/equipe"
-        },
-        {
-          "text": "Témoignages",
-          "href": "https://www.madagascar-sur-mesure.com/agence-locale/temoignage"
-        },
-        {
-          "text": "Conseils voyage",
-          "href": "https://www.madagascar-sur-mesure.com/conseils-voyage"
-        },
-        {
-          "text": "Que faire à Madagascar ?",
-          "href": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire"
-        },
-        {
-          "text": "Où aller à Madagascar ?",
-          "href": "https://www.madagascar-sur-mesure.com/conseils-voyage/ou-aller"
-        },
-        {
-          "text": "Tout savoir sur Madagascar",
-          "href": "https://www.madagascar-sur-mesure.com/conseils-voyage/tout-savoir"
-        },
-        {
-          "text": "Infos pratiques Madagascar",
-          "href": "https://www.madagascar-sur-mesure.com/infos-pratiques"
-        },
-        {
-          "text": "Culture & Traditions Malgaches",
-          "href": "https://www.madagascar-sur-mesure.com/conseils-voyage/culture-traditions"
-        }
-      ],
-      "mainContent": "Nosy Be, surnommée “l’île aux parfums”, est située au nord-ouest de Madagascar. Elle est connue pour ses paysages tropicaux et son ambiance chaleureuse. Cela en fait une destination prisée par les voyageurs en quête de repos, de plongée sous-marine ou de découvertes culturelles. Dans cet article, nous vous expliquons tout ce que vous devez savoir avant votre voyage.\n\nLe parc national de Lokobe se trouve au sud-est de l’île. Il s’agit d’une réserve naturelle abritant une faune et une flore uniques. Vous pourrez y observer des lémuriens, des caméléons colorés et une végétation luxuriante. L’accès se fait généralement en pirogue traditionnelle, ce qui offre une expérience immersive !\n\nLa petite île montagneuse de Nosy Komba est à quelques kilomètres seulement de Nosy Be. Elle a la particularité d’abriter de nombreux lémuriens en liberté qu’il est possible d’approcher. En plus de sa faune riche, l’île est réputée pour ses villages de pêcheurs et son artisanat local.\n\nConnue pour son spectaculaire banc de sable reliant deux îlots à marée basse, Nosy Iranja est un véritable paradis. C’est l’endroit idéal pour une excursion à la journée, avec des eaux turquoise et une plage de sable blanc qui s’étend à perte de vue.\n\nSi vous voulez profiter d’une vue panoramique à couper le souffle, nous vous conseillons de grimper au sommet du Mont Passot. Il s’agit du point culminant de l’île duquel il y a une vue imprenable sur les lacs volcaniques et l’océan Indien.\n\nL’archipel de Nosy Be est l’un des meilleurs spots de plongée de Madagascar. Les endroits plus célèbres sont Nosy Tanikely ou les récifs de l’archipel des Mitsio. Vous aurez l’occasion d’y apercevoir des coraux multicolores, des tortues marines, ou encore des poissons tropicaux.\n\nLes fleurs d’ylang-ylang sont utilisées pour concevoir des parfums. Il existe de nombreuses plantations sur l’île. Une visite guidée vous permettra de découvrir ce savoir-faire traditionnel et de sentir les arômes typiques de Nosy Be.\n\nEntre juillet et octobre, les baleines à bosse migrent vers les eaux chaudes de Madagascar. Elles sont visibles lors d’excursions en bateau. Si vous êtes chanceux, vous pourrez même voir des dauphines et des requins-baleines.\n\nAmbatoloaka est considéré le cœur animé de Nosy Be, notamment en soirée. Entre les marchés, les restaurants en bord de plage et les bars, c’est l’endroit idéal pour s’imprégner de l’ambiance locale et goûter aux spécialités malgaches.\n\nUn large choix d’hébergements est disponible à Nosy Be, allant des hôtels luxueux aux bungalows. Il y en a pour tous les goûts !\n\nSi vous voyagez à Nosy Be, vous ne pouvez pas repartir sans avoir goûté au romazava, un ragoût malgache. Vous devez également tester les brochettes de zébu et les grillades de fruits de mer fraîchement pêchés. Nous vous conseillons les restaurants « Chez Loulou » et « Le Papillon ».\n\nNosy Be est une destination prisée, mais le tourisme a aussi un impact sur son environnement fragile. Voici quelques gestes simples pour voyager de manière plus responsable.\n\nTout d’abord, il est préférable de privilégier les hébergements éco-responsables. Pour les reconnaître, vous pouvez vous appuyer sur différents labels, comme Green Key.\n\nLors de votre séjour, évitez les plastiques à usage unique et utilisez plutôt une gourde réutilisable. Cela réduit le nombre de déchets.\n\nIl est également souhaitable de réserver des excursions encadrées par des guides locaux afin de soutenir l’économie locale. Durant vos randonnées ou vos plongées, vous devez impérativement respecter la faune et la flore.\n\nQuelle est la meilleure période pour visiter Nosy Be ? La saison sèche, de mai à octobre, est idéale pour profiter pleinement de Nosy Be. C’est aussi le moment parfait pour observer les baleines et profiter d’un climat agréable.\n\nComment se déplacer à Nosy Be ? Plusieurs options sont disponibles en fonction de vos besoins :\n\nQuels sont les impacts du tourisme sur l’environnement ? Le développement touristique a contribué à l’économie locale, mais a aussi entraîné des problèmes comme la pollution plastique et la pression sur les ressources naturelles.\n\nSéjour organisé ou voyage en solo : que choisir ? Un séjour organisé garantit un certain confort et une logistique bien rodée. Toutefois, un voyage individuel offre plus de flexibilité et de liberté. Le choix dépend de vos préférences et de votre budget.",
-      "structuredData": [
-        {
-          "@context": "https://schema.org",
-          "@graph": [
-            {
-              "@type": "WebPage",
-              "@id": "/conseils-voyage/que-faire/nosy-be",
-              "url": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be",
-              "name": "Quel est le plus bel endroit à Nosy Be ?",
-              "isPartOf": {
-                "@id": "https://www.madagascar-sur-mesure.com/#website"
-              },
-              "primaryImageOfPage": {
-                "@id": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be#primaryimage"
-              },
-              "image": {
-                "@id": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be#primaryimage"
-              },
-              "thumbnailUrl": "/uploads/sites/67/2023/10/nosy-be-madagascar.jpeg",
-              "datePublished": "2025-04-01T14:47:40+00:00",
-              "dateModified": "2025-04-02T08:37:47+00:00",
-              "description": "Découvrez Nosy Be, l’île aux parfums de Madagascar : plages de rêve, faune exotique, plongée, ylang-ylang et traditions locales. Le guide complet pour préparer votre voyage.",
-              "breadcrumb": {
-                "@id": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be#breadcrumb"
-              },
-              "inLanguage": "fr-FR",
-              "potentialAction": [
-                {
-                  "@type": "ReadAction",
-                  "target": [
-                    "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be"
-                  ]
-                }
-              ]
-            },
-            {
-              "@type": "ImageObject",
-              "inLanguage": "fr-FR",
-              "@id": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be#primaryimage",
-              "url": "/uploads/sites/67/2023/10/nosy-be-madagascar.jpeg",
-              "contentUrl": "/uploads/sites/67/2023/10/nosy-be-madagascar.jpeg",
-              "width": 1920,
-              "height": 1080,
-              "caption": "©mirecca"
-            },
-            {
-              "@type": "WebSite",
-              "@id": "https://www.madagascar-sur-mesure.com/#website",
-              "url": "https://www.madagascar-sur-mesure.com/",
-              "name": "Madagascar sur Mesure",
-              "description": "",
-              "potentialAction": [
-                {
-                  "@type": "SearchAction",
-                  "target": {
-                    "@type": "EntryPoint",
-                    "urlTemplate": "https://www.madagascar-sur-mesure.com/?s={search_term_string}"
-                  },
-                  "query-input": {
-                    "@type": "PropertyValueSpecification",
-                    "valueRequired": true,
-                    "valueName": "search_term_string"
-                  }
-                }
-              ],
-              "inLanguage": "fr-FR"
-            }
-          ]
-        }
-      ],
-      "certifications": [],
-      "scrapedAt": "2026-03-20T07:24:56.226Z",
-      "platform": "Site Officiel (Google Search)"
-    },
-    {
-      "name": "Quel budget prévoir pour son séjour à Nosy Be ?",
-      "googleTitle": "Quel budget prévoir pour son séjour à Nosy Be ? - Corail Noir",
-      "googleSnippet": "",
-      "googlePosition": 2,
-      "url": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/#:~:text=Le%20co%C3%BBt%20moyen%20d'une,et%20150%20%E2%82%AC%20par%20nuit.",
-      "domain": "corailnoirmadagascar.com",
-      "contacts": {
-        "phones": [
-          "+261345357718"
-        ],
-        "emails": [
-          "booking@corailnoirmadagascar.com"
-        ],
-        "whatsapp": [],
-        "addresses": [
-          "BP 501 Ambaro Dzamandzar",
-          "Antananarivo",
-          "Antananarivo. Le coût varie en fonction de la durée de votre séjour.",
-          "Madagascar",
-          "madagascar.com"
-        ],
-        "postalCode": "",
-        "city": "",
-        "country": ""
-      },
-      "socials": {
-        "facebook": [
-          "https://www.facebook.com/corailnoirhotel"
-        ],
-        "instagram": [
-          "https://www.instagram.com/corailnoirhotel"
+        "tiktok": [
+          "https://www.tiktok.com/@legrandhoteldiego"
         ]
       },
       "reputation": {
@@ -399,124 +64,37 @@
       },
       "services": {
         "list": [],
-        "categories": [
-          "L’hôtel",
-          "Hébergements",
-          "Restaurant",
-          "Espace Bien-être",
-          "Expériences",
-          "Excursions",
-          "Plongée",
-          "Notre philosophie",
-          "Nos engagements",
-          "Infos pratiques",
-          "FAQ",
-          "Venir au Corail Noir",
-          "Contact",
-          "Actualités",
-          "Réserver"
-        ],
+        "categories": [],
         "prices": []
       },
       "slogan": "",
-      "pageTitle": "Quel budget prévoir pour son séjour à Nosy Be ?",
-      "metaDescription": "Combien faut-il prévoir pour un séjour à Nosy Be ? Le budget à envisager dépend de nombreux facteurs, tels que la saison, le type d’hébergement ou encore les activités prévues.",
-      "ogImage": "",
+      "pageTitle": "Grand Hôtel Diego Suarez ★★★★ | Antsiranana, Madagascar",
+      "metaDescription": "Grand Hôtel Diego Suarez | Antsiranana, Madagascar, Hôtel 4 étoiles au centre de Diego Suarez : piscine, spa, casino, 2 restaurants. À 8 km de l'aéroport et proche des sites touristiques du Nord Madagascar.",
+      "ogImage": "https://www.grandhoteldiego.com/wp-content/uploads/2025/10/Copie-de-DJI_0754-scaled.webp",
       "lang": "fr-FR",
-      "canonical": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/",
-      "logo": "https://corailnoirmadagascar.com/wp-content/themes/amanta/dist/logo/hotel-nosy-be.png",
-      "googleSearchUrl": "https://www.google.com/search?q=hotel%20nosy%20be%2C%20Madagascar",
+      "canonical": "https://www.grandhoteldiego.com/",
+      "logo": "https://www.grandhoteldiego.com/wp-content/uploads/2025/08/Logo-1-e1757358775605.png",
       "gps": null,
       "externalLinks": {
         "appStores": [],
         "downloads": [],
         "platforms": [
           {
-            "url": "https://www.secure-hotel-booking.com/Corail-Noir/JKG7/fr",
-            "label": "Réserver",
-            "platform": "secure-hotel-booking.com"
-          },
-          {
-            "url": "https://www.tripadvisor.fr/Hotel_Review-g479206-d1167312-Reviews-AHG_Corail_Noir_Hotel-Nosy_Be_Antsiranana_Province.html",
-            "label": "tripadvisor.fr",
+            "url": "https://www.tripadvisor.fr/Hotel_Review-g298270-d1751019-Reviews-Le_Grand_Hotel_Diego-Antsiranana_Diego_Suarez_Antsiranana_Province.html?m=19905",
+            "label": "Icomoon_brands-tripadvisor",
             "platform": "tripadvisor.fr"
           },
           {
-            "url": "https://www.secure-hotel-booking.com/d-edge/Corail-Noir/JKG7/fr-FR/DateSelection?_gl=1*ouswu7*_gcl_au*MTI2MDk5NDkwMC4xNzYzNTU2OTI1*_ga*MTA3ODk0ODIwMC4xNzY0MjMwNjYy*_ga_DJ8WQM28YV*czE3NjU1MzE4MTgkbzgkZzEkdDE3NjU1MzUyMTgkajYwJGwwJGgw",
-            "label": "EUROS (€)",
-            "platform": "secure-hotel-booking.com"
+            "url": "https://www.booking.com/Share-kEq8w5",
+            "label": "Icomoon_brands-hatenabookmark",
+            "platform": "booking.com"
           }
         ],
         "partners": [
           {
-            "url": "https://www.aquamadagascar.com/",
-            "label": "Aqua Diving",
-            "domain": "aquamadagascar.com"
-          },
-          {
-            "url": "https://www.nosykomba.com/",
-            "label": "Nosy Komba",
-            "domain": "nosykomba.com"
-          },
-          {
-            "url": "https://amanta-resorts.com/",
-            "label": "Le groupe AMANTA",
-            "domain": "amanta-resorts.com"
-          },
-          {
-            "url": "https://antsanitia.com/",
-            "label": "Antsanitia Resort - Madagascar",
-            "domain": "antsanitia.com"
-          },
-          {
-            "url": "https://hotel-jardin-maore.com/",
-            "label": "Jardin Maore - Mayotte",
-            "domain": "hotel-jardin-maore.com"
-          },
-          {
-            "url": "https://lagonmaore.com/",
-            "label": "Lagon Maore - Mayotte",
-            "domain": "lagonmaore.com"
-          },
-          {
-            "url": "https://hotel-ledimitile.com/",
-            "label": "Le Dimitile Hôtel & Spa - La Réunion",
-            "domain": "hotel-ledimitile.com"
-          },
-          {
-            "url": "https://cote-ocean.com/",
-            "label": "Côté Océan - Angoulins",
-            "domain": "cote-ocean.com"
-          },
-          {
-            "url": "https://athomeresidence.fr/",
-            "label": "Athome Résidence & Spa - La Rochelle",
-            "domain": "athomeresidence.fr"
-          },
-          {
-            "url": "https://association-amada.org/",
-            "label": "L'association Amada",
-            "domain": "association-amada.org"
-          },
-          {
-            "url": "https://booking.corailnoirmadagascar.com/reservation/search",
-            "label": "ARIARY (MGA)",
-            "domain": "booking.corailnoirmadagascar.com"
-          },
-          {
-            "url": "https://consenthub.utiq.com/pages/privacy-statement#telecom-operators",
-            "label": "connexion internet compatible",
-            "domain": "consenthub.utiq.com"
-          },
-          {
-            "url": "https://consenthub.utiq.com/",
-            "label": "portail d’Utiq (consenthub)",
-            "domain": "consenthub.utiq.com"
-          },
-          {
-            "url": "https://consenthub.utiq.com/pages/privacy-statement",
-            "label": "Politique de protection des données personnelles d’Utiq",
-            "domain": "consenthub.utiq.com"
+            "url": "https://maps.app.goo.gl/bLyrsUmSssm8DHst5",
+            "label": "itinéraires",
+            "domain": "maps.app.goo.gl"
           }
         ]
       },
@@ -537,7 +115,7 @@
           "Google Analytics"
         ],
         "marketing": [
-          "Facebook Pixel"
+          "Mailchimp"
         ],
         "chat": [],
         "other": []
@@ -545,194 +123,224 @@
       "forms": [],
       "navLinks": [
         {
-          "text": "L’hôtel",
-          "href": "https://corailnoirmadagascar.com/corail-noir/corail-noir-hotel-nosy-be/"
+          "text": "Accueil",
+          "href": "https://www.grandhoteldiego.com/"
         },
         {
-          "text": "Hébergements",
-          "href": "https://corailnoirmadagascar.com/hebergements/"
+          "text": "À propos",
+          "href": "https://www.grandhoteldiego.com/a-propos/"
         },
         {
-          "text": "Restaurant",
-          "href": "https://corailnoirmadagascar.com/corail-noir/restaurant-nosy-be/"
+          "text": "Nos chambres",
+          "href": "https://www.grandhoteldiego.com/nos-chambres/"
         },
         {
-          "text": "Espace Bien-être",
-          "href": "https://corailnoirmadagascar.com/corail-noir/hotel-spa-nosy-be/"
+          "text": "Chambre double",
+          "href": "https://www.grandhoteldiego.com/nos-chambres/chambre-double/"
         },
         {
-          "text": "Expériences",
-          "href": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/#"
+          "text": "Chambre Triple",
+          "href": "https://www.grandhoteldiego.com/nos-chambres/chambre-triple/"
         },
         {
-          "text": "Excursions",
-          "href": "https://corailnoirmadagascar.com/excursions-nosy-be-madagascar/"
+          "text": "Chambres Twin",
+          "href": "https://www.grandhoteldiego.com/nos-chambres/chambres-twin/"
         },
         {
-          "text": "Plongée",
-          "href": "https://www.aquamadagascar.com/"
+          "text": "Suites Luxe",
+          "href": "https://www.grandhoteldiego.com/nos-chambres/suites-luxe/"
         },
         {
-          "text": "Nos engagements",
-          "href": "https://corailnoirmadagascar.com/engagements-sociaux-et-environnementaux/"
+          "text": "Nos services",
+          "href": "https://www.grandhoteldiego.com/#"
         },
         {
-          "text": "Infos pratiques",
-          "href": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/#"
+          "text": "Restauration",
+          "href": "https://www.grandhoteldiego.com/restauration/"
         },
         {
-          "text": "FAQ",
-          "href": "https://corailnoirmadagascar.com/faq/"
+          "text": "Salle de conférence ou événements",
+          "href": "https://www.grandhoteldiego.com/salle-de-conference-ou-evenements/"
         },
         {
-          "text": "Venir au Corail Noir",
-          "href": "https://corailnoirmadagascar.com/corail-noir/venir-au-corail-noir/"
+          "text": "Boulangerie – Pâtisserie",
+          "href": "https://www.grandhoteldiego.com/boulangerie-patisserie/"
+        },
+        {
+          "text": "Casino",
+          "href": "https://www.grandhoteldiego.com/casino/"
+        },
+        {
+          "text": "Espace Thalasso & Détente",
+          "href": "https://www.grandhoteldiego.com/espace-thalasso-detente/"
+        },
+        {
+          "text": "Shopping Galerie",
+          "href": "https://www.grandhoteldiego.com/boutique/"
+        },
+        {
+          "text": "Animations",
+          "href": "https://www.grandhoteldiego.com/animations/"
+        },
+        {
+          "text": "Blog",
+          "href": "https://www.grandhoteldiego.com/blog/"
         },
         {
           "text": "Contact",
-          "href": "https://corailnoirmadagascar.com/contact/"
-        },
-        {
-          "text": "Actualités",
-          "href": "https://corailnoirmadagascar.com/actualites-nosy-be/"
+          "href": "https://www.grandhoteldiego.com/contact/"
         },
         {
           "text": "Réserver",
-          "href": "https://www.secure-hotel-booking.com/Corail-Noir/JKG7/fr"
-        },
-        {
-          "text": "FR",
-          "href": "javascript:void(0);"
-        },
-        {
-          "text": "EN",
-          "href": "https://corailnoirmadagascar.com/en/"
-        },
-        {
-          "text": "IT",
-          "href": "https://corailnoirmadagascar.com/it/guida/soggiorno-a-nosy-be/soggiornare-a-nosy-be-quanto-costa/"
+          "href": "https://www.grandhoteldiego.com/contact/"
         }
       ],
-      "mainContent": "Nichée dans les eaux saphir de l’océan Indien, Nosy Be, la plus grande île de Madagascar, est un véritable joyau de la nature. Saisissez l’occasion de vous immerger dans la beauté spectaculaire de ses plages de sable blanc, de ses eaux cristallines et de sa luxuriante forêt tropicale. Son allure paradisiaque attire des voyageurs du monde entier, cherchant à s’évader dans ce sanctuaire préservé où le temps semble s’arrêter.\n\nMais, combien faut-il prévoir pour un séjour à Nosy Be ? Le budget à envisager dépend de nombreux facteurs, tels que la saison, le type d’hébergement ou encore les activités prévues. Cette analyse détaillée vous fournira un aperçu précis du coût de vos prochaines vacances à Nosy Be.\n\nNosy Be, destination phare de Madagascar, offre à ses visiteurs un environnement idyllique. Les voyageurs sont conquis par la diversité de ses paysages, entre mer et forêt tropicale, et la richesse de sa faune et de sa flore.\n\nSituée au nord-ouest de Madagascar, Nosy Be est une île paradisiaque qui se distingue par ses plages de sable fin et son eau d’un bleu incroyable.\n\nLa ville principale, Hell-Ville, est un véritable mélange de cultures, où les traditions malgaches rencontrent l’héritage colonial français. Avec un climat tropical, Nosy Be offre une température moyenne agréable tout au long de l’année, rendant chaque saison propice au voyage.\n\nNosy Be offre une multitude d’activités pour tous les goûts. Les amoureux de la nature seront comblés par la découverte du parc de Lokobe, réserve naturelle abritant une faune et une flore endémiques.\n\nLes adeptes de la plage et des sports nautiques ne seront pas en reste, avec de nombreuses plages et des spots de plongée réputés.\n\nAux alentours de Nosy Be, plusieurs autres îles méritent le détour. De Nosy Komba avec son marché artisanal, à Nosy Iranja et ses plages de rêve, chaque île offre une expérience unique.\n\nLa préparation d’un voyage à Nosy Be implique de prévoir les coûts associés au transport, aux formalités administratives et à la santé.\n\nEn moyenne, il faut compter entre 600 et 1 000 € pour un aller-retour Paris-Antananarivo, la capitale de Madagascar. De là, il vous faudra prendre un vol interne ou un bateau pour rejoindre Nosy Be, ce qui représente un coût supplémentaire.\n\nPour un séjour à Nosy Be, il vous faut un visa que vous pouvez obtenir à votre arrivée à Antananarivo. Le coût varie en fonction de la durée de votre séjour.\n\nIl est également recommandé de prévoir un budget pour les vaccinations et autres frais de santé.\n\nLe choix de l’hébergement à Nosy Be est vaste, et le coût varie en fonction du niveau de confort souhaité.\n\nNosy Be propose une grande variété d’hébergements pour tous les budgets. Des hôtels de luxe avec vue sur la mer aux locations de vacances plus abordables en ville, il y en a pour tous les goûts.\n\nLe prix d’une nuit d’hôtel à Nosy Be varie considérablement en fonction de l’établissement choisi et de la saison. En moyenne, il faut compter entre 30 et 150 € par nuit.\n\nDe nombreux hôtels à Nosy Be proposent des offres spéciales pour les familles, par exemple des chambres communicantes ou des tarifs préférentiels pour les enfants.\n\nCertains établissements offrent également des packages pour les couples en lune de miel ou pour les groupes.\n\nNosy Be offre une variété de choix en matière de restauration, allant des restaurants gastronomiques aux petites échoppes de rue.\n\nEn moyenne, un repas dans un restaurant local coûte entre 3 et 10 €, tandis qu’un repas dans un restaurant haut de gamme peut coûter entre 15 et 30 €.\n\nNosy Be propose une cuisine malgache riche et variée, avec une influence française notable. Vous trouverez aussi bien des restaurants servant des spécialités locales, que des établissements proposant des plats internationaux.\n\nParmi les plats à ne pas manquer à Nosy Be, on compte le Romazava, un ragoût de viande et de brèdes, et le Ravitoto, du porc cuit avec des feuilles de manioc. La variété de fruits de mer disponibles est également un régal pour les amateurs.\n\nNosy Be offre une panoplie d’activités pour tous les budgets.\n\nLe coût des activités à Nosy Be varie en fonction de la nature de l’activité. Une excursion d’une journée en bateau peut coûter entre 20 et 50 €, tandis qu’une plongée sous-marine coûtera environ 30 €.\n\nPour se déplacer à Nosy Be, il est possible de louer un véhicule ou d’utiliser les services de taxis locaux. Le coût d’une location de voiture est d’environ 25 € par jour, tandis qu’un trajet en taxi coûtera environ 2 €.\n\nIl existe de nombreuses activités gratuites ou à faible coût à Nosy Be, telles que :\n\nIl est toujours prudent de prévoir un budget supplémentaire pour les dépenses imprévues.\n\nLe coût des souvenirs à Nosy Be varie en fonction de l’article et du lieu d’achat. Il est recommandé de prévoir un budget pour cela, surtout si vous envisagez d’acheter des articles artisanaux locaux.\n\nIl est courant de laisser un pourboire dans les restaurants et les hôtels à Nosy Be. De plus, certaines activités peuvent inclure des frais d’entrée ou des taxes qui ne sont pas incluses dans le prix initial.\n\nIl est toujours recommandé de prévoir un budget pour les frais imprévus, tels que les frais médicaux, les pertes de bagages ou autres dépenses inattendues.\n\nPrévoir un budget pour un voyage à Nosy Be n’est pas une tâche facile, mais avec les bonnes informations, vous pouvez organiser un voyage mémorable qui respecte votre budget. Que vous prévoyiez un voyage en famille, une escapade romantique ou une aventure en solo, Nosy Be a quelque chose à offrir à tout le monde. Alors, pourquoi ne pas commencer à planifier votre voyage dès aujourd’hui ? Nosy Be vous attend !",
+      "mainContent": "",
       "structuredData": [
         {
           "@context": "https://schema.org",
           "@graph": [
             {
-              "@type": "WebSite",
-              "@id": "https://corailnoirmadagascar.com/#/schema/WebSite",
-              "url": "https://corailnoirmadagascar.com/",
-              "name": "Hôtel Corail Noir",
-              "inLanguage": "fr-FR",
-              "potentialAction": {
-                "@type": "SearchAction",
-                "target": {
-                  "@type": "EntryPoint",
-                  "urlTemplate": "https://corailnoirmadagascar.com/search/{search_term_string}/"
-                },
-                "query-input": "required name=search_term_string"
+              "@type": "WebPage",
+              "@id": "https://www.grandhoteldiego.com/",
+              "url": "https://www.grandhoteldiego.com/",
+              "name": "Grand Hôtel Diego Suarez ★★★★ | Antsiranana, Madagascar",
+              "isPartOf": {
+                "@id": "https://www.grandhoteldiego.com/#website"
               },
-              "publisher": {
-                "@type": "Organization",
-                "@id": "https://corailnoirmadagascar.com/#/schema/Organization",
-                "name": "Hôtel Corail Noir",
-                "url": "https://corailnoirmadagascar.com/"
-              }
+              "about": {
+                "@id": "https://www.grandhoteldiego.com/#organization"
+              },
+              "primaryImageOfPage": {
+                "@id": "https://www.grandhoteldiego.com/#primaryimage"
+              },
+              "image": {
+                "@id": "https://www.grandhoteldiego.com/#primaryimage"
+              },
+              "thumbnailUrl": "https://www.grandhoteldiego.com/wp-content/uploads/2025/10/Copie-de-DJI_0754-scaled.webp",
+              "datePublished": "2025-08-25T19:24:15+00:00",
+              "dateModified": "2025-11-16T23:28:27+00:00",
+              "description": "Grand Hôtel Diego Suarez | Antsiranana, Madagascar, Hôtel 4 étoiles au centre de Diego Suarez : piscine, spa, casino, 2 restaurants. À 8 km de l'aéroport et proche des sites touristiques du Nord Madagascar.",
+              "breadcrumb": {
+                "@id": "https://www.grandhoteldiego.com/#breadcrumb"
+              },
+              "inLanguage": "fr-FR",
+              "potentialAction": [
+                {
+                  "@type": "ReadAction",
+                  "target": [
+                    "https://www.grandhoteldiego.com/"
+                  ]
+                }
+              ]
             },
             {
-              "@type": "WebPage",
-              "@id": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/",
-              "url": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/",
-              "name": "Quel budget prévoir pour son séjour à Nosy Be ?",
-              "description": "Combien faut-il prévoir pour un séjour à Nosy Be ? Le budget à envisager dépend de nombreux facteurs, tels que la saison, le type d’hébergement ou encore les activités prévues.",
+              "@type": "ImageObject",
               "inLanguage": "fr-FR",
-              "isPartOf": {
-                "@id": "https://corailnoirmadagascar.com/#/schema/WebSite"
+              "@id": "https://www.grandhoteldiego.com/#primaryimage",
+              "url": "https://www.grandhoteldiego.com/wp-content/uploads/2025/10/Copie-de-DJI_0754-scaled.webp",
+              "contentUrl": "https://www.grandhoteldiego.com/wp-content/uploads/2025/10/Copie-de-DJI_0754-scaled.webp",
+              "width": 2560,
+              "height": 1437
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://www.grandhoteldiego.com/#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Accueil"
+                }
+              ]
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://www.grandhoteldiego.com/#website",
+              "url": "https://www.grandhoteldiego.com/",
+              "name": "Le Grand Hôtel Diego",
+              "description": "Hôtel 4 étoiles à Antsiranana",
+              "publisher": {
+                "@id": "https://www.grandhoteldiego.com/#organization"
               },
-              "breadcrumb": {
-                "@type": "BreadcrumbList",
-                "@id": "https://corailnoirmadagascar.com/#/schema/BreadcrumbList",
-                "itemListElement": [
-                  {
-                    "@type": "ListItem",
-                    "position": 1,
-                    "item": "https://corailnoirmadagascar.com/",
-                    "name": "Hôtel Corail Noir"
+              "potentialAction": [
+                {
+                  "@type": "SearchAction",
+                  "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://www.grandhoteldiego.com/?s={search_term_string}"
                   },
-                  {
-                    "@type": "ListItem",
-                    "position": 2,
-                    "item": "https://corailnoirmadagascar.com/guide/",
-                    "name": "Guide"
-                  },
-                  {
-                    "@type": "ListItem",
-                    "position": 3,
-                    "item": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/",
-                    "name": "Séjour Nosy Be"
-                  },
-                  {
-                    "@type": "ListItem",
-                    "position": 4,
-                    "name": "Quel budget prévoir pour son séjour à Nosy Be ?"
+                  "query-input": {
+                    "@type": "PropertyValueSpecification",
+                    "valueRequired": true,
+                    "valueName": "search_term_string"
                   }
-                ]
+                }
+              ],
+              "inLanguage": "fr-FR"
+            },
+            {
+              "@type": "Organization",
+              "@id": "https://www.grandhoteldiego.com/#organization",
+              "name": "Le Grand Hôtel Diego",
+              "url": "https://www.grandhoteldiego.com/",
+              "logo": {
+                "@type": "ImageObject",
+                "inLanguage": "fr-FR",
+                "@id": "https://www.grandhoteldiego.com/#/schema/logo/image/",
+                "url": "https://www.grandhoteldiego.com/wp-content/uploads/2025/08/Logo-1-e1757358775605.png",
+                "contentUrl": "https://www.grandhoteldiego.com/wp-content/uploads/2025/08/Logo-1-e1757358775605.png",
+                "width": 1275,
+                "height": 1102,
+                "caption": "Le Grand Hôtel Diego"
               },
-              "potentialAction": {
-                "@type": "ReadAction",
-                "target": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/"
-              }
+              "image": {
+                "@id": "https://www.grandhoteldiego.com/#/schema/logo/image/"
+              },
+              "sameAs": [
+                "https://www.facebook.com/grandhoteldiego/",
+                "https://www.tiktok.com/@legrandhoteldiego"
+              ]
             }
           ]
-        },
-        [
-          {
-            "@context": "https://schema.org",
-            "@type": "LocalBusiness",
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": "Nosy Be",
-              "postalCode": "207",
-              "streetAddress": "BP 501 Ambaro Dzamandzar",
-              "addressCountry": "Madagascar"
-            },
-            "image": "https://corailnoirmadagascar.com/wp-content/themes/amanta/dist/logo/hotel-nosy-be.png",
-            "name": "Hôtel Corail Noir",
-            "telephone": "+261345357718",
-            "url": "https://corailnoirmadagascar.com/"
-          }
-        ]
+        }
       ],
       "certifications": [],
-      "scrapedAt": "2026-03-20T07:25:15.200Z",
+      "scrapedAt": "2026-03-20T12:03:00.012Z",
       "platform": "Site Officiel (Google Search)"
     },
     {
-      "name": "Hotel Nosy Be",
-      "googleTitle": "Hotel Nosy Be | Nosy Be Hôtel Resort & Spa **** |",
-      "googleSnippet": "Nosy Be Hôtel Resort & Spa est un hôtel quatre étoiles avec un accès calme et paisible à la plage, situé dans l'archipel de Nosy Be.",
-      "googlePosition": 3,
-      "url": "https://www.nosybehotel.com/",
-      "domain": "nosybehotel.com",
+      "name": "Hôtel Lakana Ramena: Hôtel Diego-Suarez Madagascar ...",
+      "googleTitle": "Hôtel Lakana Ramena: Hôtel Diego-Suarez Madagascar ...",
+      "googleSnippet": "Découvrez l'authentique Hôtel Lakana Diego-Suarez à Madagascar, niché en bord de mer, à seulement 150 mètres d'une magnifique plage de sable blanc à ...",
+      "googlePosition": 2,
+      "url": "https://www.hotel-diego-madagascar.com/",
+      "domain": "hotel-diego-madagascar.com",
       "contacts": {
         "phones": [
-          "32 11 952 00"
+          "+261 32 56 214 47",
+          "325621447"
         ],
         "emails": [
-          "e.ross@nosybehotel.com"
+          "lakana.ramena@gmail.com"
         ],
         "whatsapp": [],
-        "addresses": [],
-        "postalCode": "",
-        "city": "",
-        "country": ""
+        "addresses": [
+          "Madagascar",
+          "madagascar diego suarez ramena piscine kitesurf windsurf quad excursions séjour",
+          "Madagascar - Mentions légales",
+          "madagascar.com"
+        ],
+        "postalCode": "201",
+        "city": "Diego Suarez",
+        "country": "MG"
       },
       "socials": {
         "facebook": [
-          "https://www.facebook.com/nosybehotel"
+          "https://facebook.com/lakanaramena"
         ],
         "instagram": [
-          "https://www.instagram.com/nosybehotel"
+          "https://www.instagram.com/hotel.lakana.madagascar"
         ],
         "twitter": [
           "https://x.com/bolt-performance"
@@ -748,30 +356,33 @@
         "list": [],
         "categories": [
           "Accueil",
-          "Chambres & Suites",
-          "Restaurant & Bar",
-          "Excursions",
-          "Spa",
-          "Mariage",
-          "L'histoire",
-          "Galerie"
+          "Chambres & Restaurant",
+          "Activités",
+          "kitesurf Wingfoil Windsurf",
+          "Contact",
+          "Blog"
         ],
         "prices": []
       },
       "slogan": "",
-      "pageTitle": "Hotel Nosy Be | Nosy Be Hôtel Resort & Spa **** |",
-      "metaDescription": "Nosy Be Hôtel Resort & Spa est un hôtel quatre étoiles avec un accès calme et paisible à la plage, situé dans l’archipel de Nosy Be.\nIl est à l’écoute de l’environnement grâce à une conception réfléchie qui respecte le patrimoine Malgache.",
-      "ogImage": "https://static.wixstatic.com/media/d279b5_e51a773450704b39ad622a3cd2121422~mv2_d_4032_3024_s_4_2.jpg/v1/fill/w_2500,h_1875,al_c/d279b5_e51a773450704b39ad622a3cd2121422~mv2_d_4032_3024_s_4_2.jpg",
+      "pageTitle": "Hôtel Diego-Suarez Madagascar avec piscine | Hôtel Lakana Ramena",
+      "metaDescription": "Hôtel Diego-Suarez avec piscine : Découvrez le confort et l'élégance de l'Hôtel Lakana Ramena, une destination parfaite pour une expérience mémorable à Madagascar",
+      "ogImage": "https://static.wixstatic.com/media/2999f9_a40fb352a2714f9cae33ab8ffcf3bb77%7Emv2.jpg/v1/fit/w_2500,h_1330,al_c/2999f9_a40fb352a2714f9cae33ab8ffcf3bb77%7Emv2.jpg",
       "lang": "fr",
-      "canonical": "https://www.nosybehotel.com",
-      "logo": "https://static.wixstatic.com/media/d3e4bc_f694a2c3636a42a980e7e4eda1dbbb9c~mv2.jpg/v1/fill/w_123,h_100,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Logo%20NBH%20NOIR_edited.jpg",
-      "googleSearchUrl": "https://www.google.com/search?q=hotel%20nosy%20be%2C%20Madagascar",
+      "canonical": "https://www.hotel-diego-madagascar.com",
+      "logo": "https://static.wixstatic.com/media/2999f9_a40fb352a2714f9cae33ab8ffcf3bb77~mv2.jpg/v1/fill/w_170,h_69,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/2999f9_a40fb352a2714f9cae33ab8ffcf3bb77~mv2.jpg",
       "gps": null,
       "externalLinks": {
         "appStores": [],
         "downloads": [],
         "platforms": [],
-        "partners": []
+        "partners": [
+          {
+            "url": "https://www.site-internet-wix.fr/",
+            "label": "OO WEB",
+            "domain": "site-internet-wix.fr"
+          }
+        ]
       },
       "hours": {
         "raw": [],
@@ -798,131 +409,104 @@
       "navLinks": [
         {
           "text": "Accueil",
-          "href": "https://www.nosybehotel.com/"
+          "href": "https://www.hotel-diego-madagascar.com/"
         },
         {
-          "text": "Chambres & Suites",
-          "href": "https://www.nosybehotel.com/chambres-et-suites"
+          "text": "Chambres & Restaurant",
+          "href": "https://www.hotel-diego-madagascar.com/chambre-hotel-diego-suare-madagascar"
         },
         {
-          "text": "Restaurant & Bar",
-          "href": "https://www.nosybehotel.com/altamarea-restaurant"
+          "text": "Activités",
+          "href": "https://www.hotel-diego-madagascar.com/activites-hotel-diego-suarez-madagascar"
         },
         {
-          "text": "Excursions",
-          "href": "https://www.nosybehotel.com/excursions"
+          "text": "kitesurf Wingfoil Windsurf",
+          "href": "https://www.hotel-diego-madagascar.com/ecole-de-kite-surf-diego-suarez-madagascar"
         },
         {
-          "text": "Spa",
-          "href": "https://www.nosybehotel.com/spa"
+          "text": "Contact",
+          "href": "https://www.hotel-diego-madagascar.com/meilleur-hotel-diego-suarez-madagascar"
         },
         {
-          "text": "Mariage",
-          "href": "https://www.nosybehotel.com/wedding"
-        },
-        {
-          "text": "L'histoire",
-          "href": "https://www.nosybehotel.com/histoire"
-        },
-        {
-          "text": "Galerie",
-          "href": "https://www.nosybehotel.com/gallerie"
+          "text": "Blog",
+          "href": "https://www.hotel-diego-madagascar.com/blog-hotel-diego-suarez-madagascar"
         }
       ],
-      "mainContent": "Découvrez un coin de paradis niché au cœur de l'archipel de Nosy Be, où le rêve devient réalité. Nosy Be Hôtel & Spa, un boutique hôtel depuis sa fondation en 1993, vous invite à vivre des moments uniques au sein d'un jardin luxuriant de plus de 35 000 mètres carrés, bordant une plage immaculée. Ici, chaque moment devient une aventure, chaque détail est soigné avec passion, et chaque sourire est sincère.\n\nL'emplacement privilégié de l'hôtel, situé plein ouest, offre l'opportunité d'admirer les couchers de soleil les plus spectaculaires tout au long de l'année. Avec l'îlot de Nosy Tanga en toile de fond, le paysage devient une véritable œuvre d'art naturelle, ajoutant une touche de beauté inégalée à votre séjour.\n\nPlongez dans un monde d'élégance et de raffinement avec nos 7 catégories de chambres. Chacune d'entre elles raconte une histoire unique, une ode à Madagascar, utilisant des matériaux précieux pour créer un havre de confort où vous vous sentirez chez vous.\n\nLe restaurant Alta Marea est bien plus qu'un simple lieu de restauration. C'est une expérience gastronomique qui vous transporte dans un coin de paradis, là où l'Italie et la Méditerranée se rencontrent au cœur de la splendeur tropicale de Madagascar.\n\n« Séjour merveilleux dans cet hôtel où tout était parfait. Les chambres très propres, bien insonorisées. Le personnel aux petits soins toujours disponible. Le cadre magnifique, jardin luxuriant, plage déserte, piscine très agréable. Le restaurant propose également de très bons plats et buffets. Tout était génial! »",
+      "mainContent": "Découvrez l'authentique Hôtel Lakana Diego-Suarez à Madagascar, niché en bord de mer, à seulement 150 mètres d'une magnifique plage de sable blanc à l'entrée du village de Ramena. Profitez d'un emplacement idéal qui vous garantit une agréable tranquillité tout en vous rapprochant du centre du village animé de Ramena à Diego-Suarez.\n\nNotre petite unité de 10 magnifiques bungalows vous offre un hébergement unique, chacun équipé de douches et de toilettes privatives, ainsi qu'une terrasse offrant une vue imprenable sur la mer et les couchers de soleil. Nos bungalows sont décorés avec goût et meublés en bois précieux, notamment le palissandre, pour créer une ambiance chaleureuse et authentique qui s'intègre parfaitement au paysage naturel.\n\nAlliant style et équipements modernes pour votre confort, notre complexe hôtelier a été conçu pour vous offrir une expérience exceptionnelle. Profitez d'une douce fraîcheur dans votre bungalow, grâce à une structure étudiée pour ces latitudes, garantissant ainsi un séjour des plus agréables.\n\nQue vous voyagiez en couple, en famille ou en groupe, nous proposons différents types de bungalows, du double au quadruple, pour répondre à vos besoins.\n\nVotre escapade de rêve à Diego-Suarez, Madagascar, commence ici, à l'Hôtel Diego-Suarez.\n\nPour régaler vos papilles, notre chef vous propose une cuisine raffinée avec des plats préparés à partir de produits frais de la région. Nous vous proposons des produits faits maison tels que des poissons fumés et des terrines de foie gras.\n\nNe manquez pas de découvrir les plats traditionnels malgaches tels que le Ravitoto, le Romazave et le crabe farci. Nos spécialités incluent la fondue chinoise et bourguignonne de zébu et de poisson. Nous proposons également des fruits de mer tels que les crevettes, la langouste, les camarons, ainsi que du riz au coco... Et n'oublions pas nos desserts et glaces faits maison, ainsi qu'un délicieux petit-déjeuner continental varié avec des fruits frais et des jus naturels.\n\nDe plus, nous disposons d'un centre de kitesurf et de windsurf pour les amateurs de sports nautiques.\n\nL'Hôtel Lakana Ramena, un lieu unique à Ramena, vous offre un emplacement exceptionnel en bord de mer pour se ressourcer. Notre établissement propose des chambres tout confort, des bungalows et une piscine pour vous assurer un séjour agréable à Diego-Suarez, Madagascar. Profitez de notre site exceptionnel en bord de mer et découvrez nos services de qualité.\n\nIdéalement situé à l'entrée du village de Ramena, à seulement 150 mètres d'une magnifique plage et d'une eau turquoise, notre hôtel est également à proximité de la mer d'émeraude et des 3 baies, à deux pas de Sakalave et à 20 minutes de Diego Suarez. Un parking privé gratuit est à votre disposition sur place, facilitant ainsi vos déplacements.\n\nNous organisons des transferts Aéroport - Hôtel ou vice versa au tarif de 25 euros pour 1 à 4 personnes, assurant ainsi votre confort dès votre arrivée.\n\nL'Hôtel Lakana Ramena vous propose des hébergements de qualité avec une piscine à Diego-Suarez. Une connexion Wifi Starlink gratuite est disponible. Ramena, la station balnéaire de Diego Suarez, est le point de départ des excursions vers les 3 baies : la baie des Dunes, la baie des Pigeons et la baie de Sakalava. Lors de ces excursions, profitez d'un repas organisé au restaurant de L'Océan Lodge par nos chefs. Nous proposons également l'excursion de la mer d'émeraude et ses belles plages, une expérience inoubliable pour se ressourcer. Vous pourrez découvrir des paysages magnifiques et des plages de sable blanc. Une des destinations de rêve pour découvrir des plages paradisiaques immanquables.\n\nPendant votre séjour dans notre hôtel à Madagascar, vous pourrez vous détendre dans une magnifique piscine extérieure avec espace détente et profiter d'un bar où des cocktails raffinés sont servis. Notre établissement peut également vous préparer des menus adaptés à un régime alimentaire particulier, ainsi que des paniers-repas sur demande. Le restaurant vous propose une cuisine européenne, asiatique et la possibilité de goûter les plats incontournables de la gastronomie malgache.\n\nDécouvrez les plaisirs du kitesurf, du windsurf ou du Wing foil dans notre club de l'Ocean Lodge, situé dans une magnifique baie de Sakalava. Cette baie offre des conditions optimales pour l'apprentissage des sports de glisse. Le transfert est gratuit.\n\nDepuis le Lakana, notre hôtel à Diego Suarez Ramena, nous organisons des excursions à la montagne des Français, avec différents parcours adaptés aux petits et grands marcheurs. Profitez de la possibilité de faire du snorkeling lors des excursions en mer, avec la collaboration de prestataires pour organiser toutes les excursions de la région de Diego Suarez (Antsiranana) vers la montagne d'Ambre, les Tsingy rouges, le parc de l'Ankarana et la baie du Courrier. Les nombreuses activités et excursions rendent vos séjours inoubliables. Vous découvrirez les plages paradisiaques de la région. Nous organisons également vos plongées avec notre prestataire pour vous faire découvrir les fonds marins de l'océan Indien.\n\nVous serez logé dans nos spacieux bungalows de charme, avec une literie haut de gamme en provenance d'Italie. Nos chambres tout confort sont spacieuses, l'hôtel dispose de chambre double, triples et familiales pour 4 personnes. Chaque chambre d’hôtel possède une petite terrasse privative.\n\nPour les initiés au kitesurf, nous proposons des départs en bateau pour un downwind et une journée de navigation à Babaomby en mer d'émeraude, avec un repas sur l'îlot Suarez, tout compris.\n\nL’hôtel-restaurant vous propose une formule demi-pension, des repas copieux issus d’une cuisine raffinée et inventive de nos chefs avec un bon rapport qualité-prix et un espace lounge bar convivial. Nous pouvons vous proposer des formules tout-compris.\n\nAfin de vous offrir des produits frais, nous évitons le petit-déjeuner buffet, mais nous avons opté pour un petit déjeuner varié continental ou américain, comprenant des boissons chaudes, du pain, du beurre et des confitures, ainsi que des fruits, des cakes, des crêpes ou des viennoiseries et des jus naturels.\n\nHôtel avec Piscine Lakana Diego-Suarez Madagascar avec une splendide vue mer depuis les transats confortables sur la plage. Ne cherchez plus, trouver un hôtel confortable et accueillant où vous pourrez faire du farniente ou des activités ou excursions. Toute l’équipe se fera un plaisir de vous satisfaire et de vous conseiller pendant vos séjours.\n\nNous acceptons les paiements en euros, ariary et par carte bancaire Visa et MasterCard. Veuillez noter qu'une commission de 3% sera ajoutée à votre facture pour les paiements par carte bancaire. Réservez dès maintenant pour vivre des expériences inoubliables à l'Hôtel Lakana Ramena.\n\nOcean Lodge Baie de Sakalava vous propose un séjour exceptionnel avec une vue panoramique sur la baie de Sakalava. Profitez de nos chambres en bord de mer pour des vacances les pieds dans l'eau, ainsi que de nombreuses activités nautiques passionnantes, telles que le kitesurf, le Wingfoil et la Planche à voile.\n\nEn séjournant à l'hôtel Lakana, vous contribuez directement au financement de l'association Madasource, qui soutient l'éducation des enfants défavorisés.\n\nNotre association Madasource a parrainé 74 enfants pour la rentrée scolaire 2024, en prenant en charge leurs frais de scolarité et en fournissant les matériels nécessaires à leur éducation.",
       "structuredData": [
         {
           "@context": "https://schema.org/",
+          "@type": "LocalBusiness",
+          "name": "Hotel Lakana Ramena",
+          "url": "https://www.hotel-diego-madagascar.com",
+          "image": "https://static.wixstatic.com/media/2999f9_d685bf12e7984f3d9c3beb6e2334f13a~mv2_d_3648_2736_s_4_2.jpg",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "MG",
+            "addressLocality": "Diego Suarez",
+            "postalCode": "201",
+            "streetAddress": "Rte de Ramena PK 17"
+          },
+          "telephone": "+00261 325621447"
+        },
+        {
+          "@context": "https://schema.org/",
           "@type": "WebSite",
-          "name": "Nosybehotel",
-          "url": "https://www.nosybehotel.com"
+          "name": "hotel-lakana-ramena",
+          "url": "https://www.hotel-diego-madagascar.com"
+        },
+        {
+          "@context": "http://www.schema.org",
+          "@type": "WebSite",
+          "name": "Hôtel Diego-Suarez Madagascar avec piscine | Hôtel Lakana Ramena",
+          "alternateName": "Hôtel Diego-Suarez avec piscine : Découvrez le confort et l'élégance de l'Hôtel Lakana Ramena, une destination parfaite pour une expérience mémorable à Madagascar",
+          "url": "https://www.hotel-diego-madagascar.com/"
         }
       ],
       "certifications": [],
-      "scrapedAt": "2026-03-20T07:25:22.003Z",
+      "scrapedAt": "2026-03-20T12:03:11.554Z",
       "platform": "Site Officiel (Google Search)"
     },
     {
-      "name": "Hôtel Résidence Au Sable Blanc à Nosy-Be",
-      "googleTitle": "Hôtel Résidence Au Sable Blanc à Nosy-Be - Madagascar",
-      "googleSnippet": "Notre hôtel Résidence propose en location des appartements & studios tout confort les pieds dans l'eau à Nosy-Be à 40€ avec pdj - Madagascar.",
-      "googlePosition": 4,
-      "url": "https://www.au-sable-blanc.com/",
-      "domain": "au-sable-blanc.com",
+      "name": "Hôtels Antsiranana pas chers",
+      "googleTitle": "Hôtels Antsiranana pas chers - 50 hôtels disponibles",
+      "googleSnippet": "Notre sélection d'hôtels à Antsiranana · Le Grand Hotel Diego · Hotel de la Poste · Régina Lodge · Mantasaly Resort · LOTUS HOTEL DIEGO · Royal Sakalava · Villa Louis ...",
+      "googlePosition": 3,
+      "url": "https://www.ebookers.fr/Hotel-Antsiranana.d1008.Voyage-Guide-Hotels",
+      "domain": "ebookers.fr",
       "contacts": {
-        "phones": [
-          "+261 34 40 886 32",
-          "+261 32 11 105 52"
-        ],
-        "emails": [
-          "info@au-sable-blanc.com",
-          "direction@au-sable-blanc.com"
-        ],
+        "phones": [],
+        "emails": [],
         "whatsapp": [],
         "addresses": [],
         "postalCode": "",
         "city": "",
         "country": ""
       },
-      "socials": {
-        "facebook": [
-          "https://www.facebook.com/au.sable.blanc",
-          "http://www.facebook.com/https://www.facebook.com/au.sable.blanc"
-        ],
-        "twitter": [
-          "https://x.com/ausableblanc"
-        ]
-      },
+      "socials": {},
       "reputation": {
         "overallRating": "",
         "reviewCount": "",
         "reviews": [],
-        "widgets": [
-          "Gayraud - Janvier 2020 Nous avions réservé les 2 appartements du premier étage, côté plage, le séjour a été parfait. Couchers de soleil incroyables, personnel au petit soin. Propreté des appartements. Il est possible de réserver en plus la demi pension (ce que nous avions fait), à un prix très raisonnable avec un bon choix de produits frais. Nous reviendrons"
-        ]
+        "widgets": []
       },
       "services": {
-        "list": [
-          "Plongée sous marine",
-          "Pêche à Nosy-Be",
-          "Cafétéria",
-          "Parking Service",
-          "Cuisine équipée",
-          "Nosy-be de Madagascar ne faillit pas à sa réputation quand il s’agit de parler de plongée sous-marine",
-          "Les eaux de Nosy be à Madagascar sont un lieu de pêche privilégié pour les accros de la pêche sportive comme pour ceux qui souhaitent s’initier.",
-          "Uniquement avec les produits locaux.",
-          "Parking sécurisé 24H/24",
-          "Le principe de la Résidence Au sable blanc est l’autonomie"
-        ],
-        "categories": [
-          "Rappels & règles de la Résidence"
-        ],
+        "list": [],
+        "categories": [],
         "prices": []
       },
       "slogan": "",
-      "pageTitle": "Hôtel Résidence Au Sable Blanc à Nosy-Be - Madagascar",
-      "metaDescription": "Notre hôtel Résidence propose en location des appartements & studios tout confort les pieds dans l'eau à Nosy-Be à 40€ avec pdj - Madagascar",
+      "pageTitle": "Robot ou pas robot ?",
+      "metaDescription": "",
       "ogImage": "",
-      "lang": "fr-FR",
-      "canonical": "https://www.au-sable-blanc.com/",
-      "logo": "https://www.au-sable-blanc.com/wp-content/uploads/2024/09/logo-ausableblanc-2024-2.png",
-      "googleSearchUrl": "https://www.google.com/search?q=hotel%20nosy%20be%2C%20Madagascar",
+      "lang": "",
+      "canonical": "",
+      "logo": "https://www.ebookers.fr/_dms/header/logo.svg?locale=fr_FR&siteid=70420",
       "gps": null,
       "externalLinks": {
         "appStores": [],
         "downloads": [],
-        "platforms": [
-          {
-            "url": "http://tripadvisor.com/https://www.tripadvisor.fr/Hotel_Review-g9859511-d3333399-Reviews-Hotel_Residence_Au_Sable_Blanc-Madirokely_Nosy_Be_Antsiranana_Province.html",
-            "label": "",
-            "platform": "tripadvisor.com"
-          },
-          {
-            "url": "https://www.tripadvisor.fr/Hotel_Review-g9859511-d3333399-Reviews-Hotel_Residence_Au_Sable_Blanc-Madirokely_Nosy_Be_Antsiranana_Province.html",
-            "label": "tripadvisor.fr",
-            "platform": "tripadvisor.fr"
-          }
-        ],
+        "platforms": [],
         "partners": []
       },
       "hours": {
@@ -932,11 +516,9 @@
       },
       "team": [],
       "technologies": {
-        "cms": [
-          "WordPress"
-        ],
+        "cms": [],
         "frameworks": [
-          "jQuery"
+          "React"
         ],
         "analytics": [
           "Google Analytics"
@@ -945,255 +527,125 @@
         "chat": [],
         "other": []
       },
-      "forms": [
-        {
-          "action": "https://booking.roomcloud.net/be/se2/hotel.jsp",
-          "method": "post",
-          "hasFile": false,
-          "fields": [
-            {
-              "type": "text",
-              "name": "checkin"
-            },
-            {
-              "type": "text",
-              "name": "checkout"
-            },
-            {
-              "type": "number",
-              "name": "adults"
-            },
-            {
-              "type": "number",
-              "name": "children"
-            }
-          ]
-        }
-      ],
-      "navLinks": [
-        {
-          "text": "Rappels & règles de la Résidence",
-          "href": "https://www.au-sable-blanc.com/regles-hotel/"
-        }
-      ],
-      "mainContent": "",
-      "structuredData": [
-        {
-          "@context": "https://schema.org",
-          "@graph": [
-            {
-              "@type": "WebPage",
-              "@id": "https://www.au-sable-blanc.com/",
-              "url": "https://www.au-sable-blanc.com/",
-              "name": "Hôtel Résidence Au Sable Blanc à Nosy-Be - Madagascar",
-              "isPartOf": {
-                "@id": "https://www.au-sable-blanc.com/#website"
-              },
-              "about": {
-                "@id": "https://www.au-sable-blanc.com/#organization"
-              },
-              "datePublished": "2018-09-03T17:11:29+00:00",
-              "dateModified": "2026-02-19T10:23:02+00:00",
-              "description": "Notre hôtel Résidence propose en location des appartements & studios tout confort les pieds dans l'eau à Nosy-Be à 40€ avec pdj - Madagascar",
-              "breadcrumb": {
-                "@id": "https://www.au-sable-blanc.com/#breadcrumb"
-              },
-              "inLanguage": "fr-FR",
-              "potentialAction": [
-                {
-                  "@type": "ReadAction",
-                  "target": [
-                    "https://www.au-sable-blanc.com/"
-                  ]
-                }
-              ]
-            },
-            {
-              "@type": "BreadcrumbList",
-              "@id": "https://www.au-sable-blanc.com/#breadcrumb",
-              "itemListElement": [
-                {
-                  "@type": "ListItem",
-                  "position": 1,
-                  "name": "Accueil"
-                }
-              ]
-            },
-            {
-              "@type": "WebSite",
-              "@id": "https://www.au-sable-blanc.com/#website",
-              "url": "https://www.au-sable-blanc.com/",
-              "name": "Au Sable Blanc",
-              "description": "Hôtel Résidence Au Sable Blanc",
-              "publisher": {
-                "@id": "https://www.au-sable-blanc.com/#organization"
-              },
-              "potentialAction": [
-                {
-                  "@type": "SearchAction",
-                  "target": {
-                    "@type": "EntryPoint",
-                    "urlTemplate": "https://www.au-sable-blanc.com/?s={search_term_string}"
-                  },
-                  "query-input": {
-                    "@type": "PropertyValueSpecification",
-                    "valueRequired": true,
-                    "valueName": "search_term_string"
-                  }
-                }
-              ],
-              "inLanguage": "fr-FR"
-            },
-            {
-              "@type": "Organization",
-              "@id": "https://www.au-sable-blanc.com/#organization",
-              "name": "Hôtel Nosy-Be Au Sable Blanc",
-              "url": "https://www.au-sable-blanc.com/",
-              "logo": {
-                "@type": "ImageObject",
-                "inLanguage": "fr-FR",
-                "@id": "https://www.au-sable-blanc.com/#/schema/logo/image/",
-                "url": "https://www.au-sable-blanc.com/wp-content/uploads/2020/05/logo-ausableblanc-couleur.png",
-                "contentUrl": "https://www.au-sable-blanc.com/wp-content/uploads/2020/05/logo-ausableblanc-couleur.png",
-                "width": 230,
-                "height": 77,
-                "caption": "Hôtel Nosy-Be Au Sable Blanc"
-              },
-              "image": {
-                "@id": "https://www.au-sable-blanc.com/#/schema/logo/image/"
-              },
-              "sameAs": [
-                "https://www.facebook.com/au.sable.blanc",
-                "https://x.com/ausableblanc"
-              ]
-            }
-          ]
-        }
-      ],
+      "forms": [],
+      "navLinks": [],
+      "mainContent": "Nous ne sommes pas sûrs que vous soyez un humain ou un robot.",
+      "structuredData": [],
       "certifications": [],
-      "scrapedAt": "2026-03-20T07:25:47.776Z",
+      "scrapedAt": "2026-03-20T12:03:21.083Z",
       "platform": "Site Officiel (Google Search)"
     },
     {
-      "name": "Anjiamarango Beach Resort: Hôtel à Nosy Be",
-      "googleTitle": "Anjiamarango Beach Resort: Hôtel à Nosy Be",
-      "googleSnippet": "L'hôtel présente 35 bungalows individuels tous orientés mer et bénéficiant d'une vue imprenable sur la baie, de conception par Claude Roure architecte inspirée ...",
-      "googlePosition": 5,
-      "url": "https://www.anjiamarango-beach-resort.com/",
-      "domain": "anjiamarango-beach-resort.com",
+      "name": "Hôtels 4 étoiles à Province de Diego-Suarez, Madagascar",
+      "googleTitle": "Hôtels 4 étoiles à Province de Diego-Suarez, Madagascar",
+      "googleSnippet": "En choisissant Le Grand Hotel Diego, vous profiterez d'un séjour en plein centre de Antsiranana, à seulement 4 min à pied de Cathédrale Antsiranana et à 9 ...",
+      "googlePosition": 4,
+      "url": "https://fr.trip.com/fourstars/province/mg-antsiranana.html",
+      "domain": "fr.trip.com",
       "contacts": {
         "phones": [
-          "+261320265598",
-          "+261344284606",
-          "+261 32 02 655 98",
-          "+261 34 42 84 606"
+          "2025.05.02",
+          "2024.06.23",
+          "2025.10.29",
+          "2025.09.28",
+          "2025.05.06"
         ],
-        "emails": [
-          "contact@anjiamarango-beach-resort.com"
-        ],
+        "emails": [],
         "whatsapp": [],
         "addresses": [],
         "postalCode": "",
         "city": "",
         "country": ""
       },
-      "socials": {
-        "facebook": [
-          "https://www.facebook.com/anjiamarango-beach-resort-449245910150"
-        ]
-      },
+      "socials": {},
       "reputation": {
         "overallRating": "",
         "reviewCount": "",
         "reviews": [],
-        "widgets": [
-          "helenePerpignan Nous venons de passer une semaine absolument magnifique nous étions 3 générations réunis de 30 à 80 ans et nous sommes revenus émerveillés. Philippe et son équipe ont tout mis en œuvre pour que ce séjour soit parfait et c’est réussi. Christine Wälti Séjour paradisiaque. Le bungalow et la mer à 20m. La nourriture extra et l'accueil très sympathique. Que demander de plus ? Linda C Pour ceux souhaitant un hôtel typiquement malgache ne cherchez plus. Les bungalows respectueux de l’environnement ont été fait pour entrer dans le décor. Tout en bois, très spacieux , ils disposent tous d’une plage privée avec transat cocotier et palmier. Jeannel Y Tot Nai Très bel endroit et savoureux mélange d'exotisme...Dépaysement assuré Philippe fait preuve de professionnalisme ainsi que toute son équipe. Côté cuisine Roger est à votre écoute pour vos désirs...A voir absolument. Jean Guillon Superbe séjour, un \"sans faute\" gastronomique: nourriture parfaitement préparée avec une présentation impeccable. Le bar est très agréable juste avant le repas. helenePerpignan Nous venons de passer une semaine absolument magnifique nous étions 3 générations réunis de 30 à 80 ans et nous sommes revenus émerveillés. Philippe et son équipe ont tout mis en œuvre pour que ce séjour soit parfait et c’est réussi. Christine Wälti Séjour paradisiaque. Le bungalow et la mer à 20m. La nourriture extra et l'accueil très sympathique. Que demander de plus ? Linda C Pour ceux souhaitant un hôtel typiquement malgache ne cherchez plus. Les bungalows respectueux de l’environnement ont été fait pour entrer dans le décor. Tout en bois, très spacieux , ils disposent tous d’une plage privée avec transat cocotier et palmier. Jeannel Y Tot Nai Très bel endroit et savoureux mélange d'exotisme...Dépaysement assuré Philippe fait preuve de professionnalisme ainsi que toute son équipe. Côté cuisine Roger est à votre écoute pour vos désirs...A voir absolument. Jean Guillon Superbe séjour, un \"sans faute\" gastronomique: nourriture parfaitement préparée avec une présentation impeccable. Le bar est très agréable juste avant le repas. helenePerpignan Nous venons de passer une semaine absolument magnifique nous étions 3 générations réunis de 30 à 80 ans et nous sommes revenus émerveillés. Philippe et son équipe ont tout mis en œuvre pour que ce séjour soit parfait et c’est réussi. Christine Wälti Séjour paradisiaque. Le bungalow et la mer à 20m. La nourriture extra et l'accueil très sympathique. Que demander de plus ? Linda C Pour ceux souhaitant un hôtel typiquement malgache ne cherchez plus. Les bungalows respectueux de l’environnement ont été fait pour entrer dans le décor. Tout en bois, très spacieux , ils disposent tous d’une plage privée avec transat cocotier et palmier.",
-          "helenePerpignan Nous venons de passer une semaine absolument magnifique nous étions 3 générations réunis de 30 à 80 ans et nous sommes revenus émerveillés. Philippe et son équipe ont tout mis en œuvre pour que ce séjour soit parfait et c’est réussi."
-        ]
+        "widgets": []
       },
       "services": {
         "list": [
-          "Voyage en famille",
-          "Voyage de noce",
-          "Week-end",
-          "Vous souhaitez en savoir plus sur notre histoire ?"
+          "Hôtel Villa les Orchidées",
+          "Ravintsara Wellness Hotel",
+          "Le Grand Hotel",
+          "Nosy Be Hotel & Spa",
+          "Manga Soa Lodge",
+          "Royal Beach Hôtel",
+          "Palm Beach Resort & Spa",
+          "Royal Andilana Resort & Spa",
+          "VOI Andilana Beach Resort",
+          "Oceanfront Luxury Villa with Private Pool",
+          "Andriana Resort & Spa",
+          "Comment réserver un hôtel sur Trip.com ?",
+          "Comment trouver des offres d'hôtels sur Trip.com ?",
+          "Où puis-je trouver des offres d'hôtels sur Trip.com ?",
+          "Comment obtenir des prix plus bas sur les hôtels ?",
+          "Combien d'hôtels sont répertoriés sur Trip.com ?",
+          "Puis-je annuler ou modifier mes réservations d'hôtel sur Trip.com ?",
+          "Comment puis-je contacter le service clients de Trip.com ?",
+          "Recommandations d'hôtels étoilés",
+          "Recommandations"
         ],
         "categories": [
-          "Accueil",
-          "A propos",
-          "Bungalows",
-          "Restaurant",
-          "Activités",
-          "Visite des îles",
-          "Intérieur des terres",
-          "Observation des baleines et requins baleines",
-          "Plongée",
-          "Pêche",
-          "Activités à l’hôtel",
-          "Utiles",
-          "Comment venir à Nosy Be ?",
-          "Dictionnaire Malgache",
-          "Décalage horaire",
-          "la monnaie locale",
-          "Hôtellerie & restauration",
-          "Recommandations d’usage et à vivre à Nosy Be",
-          "Sanitaire",
-          "Télécommunications",
-          "tarifs",
-          "Offres spéciales",
-          "Contact",
-          "Mention légale",
-          "Politique de confidentialité",
-          "Accueil",
-          "A propos",
-          "Bungalows",
-          "Restaurant",
-          "Activités",
-          "Visite des îles",
-          "Intérieur des terres",
-          "Observation des baleines et requins baleines",
-          "Plongée",
-          "Pêche",
-          "Activités à l’hôtel",
-          "Utiles",
-          "Comment venir à Nosy Be ?",
-          "Dictionnaire Malgache",
-          "Décalage horaire",
-          "la monnaie locale",
-          "Hôtellerie & restauration",
-          "Recommandations d’usage et à vivre à Nosy Be",
-          "Sanitaire",
-          "Télécommunications",
-          "tarifs",
-          "Offres spéciales",
-          "Contact"
+          "Trip.com",
+          "Hôtels",
+          "4 étoiles",
+          "Hôtels 4 étoiles en Madagascar"
         ],
-        "prices": []
+        "prices": [
+          "50 EUR",
+          "€ 9",
+          "€ 8"
+        ]
       },
       "slogan": "",
-      "pageTitle": "Hôtel à Nosy Be- Anjiamarango Beach Resort",
-      "metaDescription": "Le domaine hôtelier d’Anjiamarango est situé à proximité du village de Befotaka à la pointe Nord-Ouest de l’île aux parfums et à 15 minutes de l’aéroport",
-      "ogImage": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/Anjiamarango-Nosy-Be-piscine.jpg",
+      "pageTitle": "Meilleures offres sur les chambres d'hôtels 4 étoiles à Province de Diego-Suarez, Madagascar | Trip.com",
+      "metaDescription": "Trouvez les meilleurs hôtels 4 étoiles à Province de Diego-Suarez, Madagascar. Consultez les images des hôtels 4 étoiles, les informations sur les équipements et les évaluations de vrais voyageurs. Un service clients 24h/24 et 7j/7 est disponible sur Trip.com",
+      "ogImage": "",
       "lang": "fr-FR",
-      "canonical": "https://www.anjiamarango-beach-resort.com/",
-      "logo": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/anjihamarango-logo-1.jpg",
-      "googleSearchUrl": "https://www.google.com/search?q=hotel%20nosy%20be%2C%20Madagascar",
+      "canonical": "https://fr.trip.com/fourstars/province/mg-antsiranana.html",
+      "logo": "",
       "gps": null,
       "externalLinks": {
         "appStores": [],
         "downloads": [],
-        "platforms": [
-          {
-            "url": "https://www.tripadvisor.fr/ShowUserReviews-g479206-d1516231-r635197703-Anjiamarango_Beach_Resort-Nosy_Be_Antsiranana_Province.html",
-            "label": "Linda C",
-            "platform": "tripadvisor.fr"
-          }
-        ],
+        "platforms": [],
         "partners": [
           {
-            "url": "http://booking-up.com/",
-            "label": "par Booking UP",
-            "domain": "booking-up.com"
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-3449559/royal-beach-htel/",
+            "label": "Royal Beach Hôtel",
+            "domain": "it.trip.com"
+          },
+          {
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-106967059/royal-andilana-resort-spa/",
+            "label": "Royal Andilana Resort & Spa",
+            "domain": "it.trip.com"
+          },
+          {
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-10737225/palm-beach-resort-and-spa/",
+            "label": "Palm Beach Resort & Spa",
+            "domain": "it.trip.com"
+          },
+          {
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-12260029/manga-soa-lodge/",
+            "label": "Manga Soa Lodge",
+            "domain": "it.trip.com"
+          },
+          {
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-111590273/andriana-resort-spa/",
+            "label": "Andriana Resort & Spa",
+            "domain": "it.trip.com"
+          },
+          {
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-5623723/ravintsara-wellness-hotel/",
+            "label": "Ravintsara Wellness Hotel",
+            "domain": "it.trip.com"
+          },
+          {
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-22830728/htel-villa-les-orchides/",
+            "label": "Hôtel Villa les Orchidées",
+            "domain": "it.trip.com"
           }
         ]
       },
@@ -1204,15 +656,11 @@
       },
       "team": [],
       "technologies": {
-        "cms": [
-          "WordPress"
-        ],
+        "cms": [],
         "frameworks": [
-          "jQuery"
+          "Next.js"
         ],
-        "analytics": [
-          "Google Analytics"
-        ],
+        "analytics": [],
         "marketing": [],
         "chat": [],
         "other": []
@@ -1220,218 +668,516 @@
       "forms": [],
       "navLinks": [
         {
-          "text": "Accueil",
-          "href": "https://www.anjiamarango-beach-resort.com/"
+          "text": "Trip.com",
+          "href": "https://fr.trip.com/"
         },
         {
-          "text": "A propos",
-          "href": "https://www.anjiamarango-beach-resort.com/a-propos/"
+          "text": "Hôtels",
+          "href": "https://fr.trip.com/hotels/"
         },
         {
-          "text": "Bungalows",
-          "href": "https://www.anjiamarango-beach-resort.com/bungalows/"
+          "text": "4 étoiles",
+          "href": "https://fr.trip.com/fourstars.html"
         },
         {
-          "text": "Restaurant",
-          "href": "https://www.anjiamarango-beach-resort.com/restaurant/"
-        },
-        {
-          "text": "Visite des îles",
-          "href": "https://www.anjiamarango-beach-resort.com/quoi-voir-nosybe/visite-des-iles/"
-        },
-        {
-          "text": "Intérieur des terres",
-          "href": "https://www.anjiamarango-beach-resort.com/quoi-faire-a-nosy-be/quad-a-nosy-be/"
-        },
-        {
-          "text": "Observation des baleines et requins baleines",
-          "href": "https://www.anjiamarango-beach-resort.com/quoi-faire-a-nosy-be/randeau-baleines/"
-        },
-        {
-          "text": "Plongée",
-          "href": "https://www.anjiamarango-beach-resort.com/quoi-faire-a-nosy-be/plongee-a-nosy-be/"
-        },
-        {
-          "text": "Pêche",
-          "href": "https://www.anjiamarango-beach-resort.com/quoi-faire-a-nosy-be/peches-sportives/"
-        },
-        {
-          "text": "Activités à l’hôtel",
-          "href": "https://www.anjiamarango-beach-resort.com/activites-hotel/"
-        },
-        {
-          "text": "Utiles",
-          "href": "https://www.anjiamarango-beach-resort.com/actualites/"
-        },
-        {
-          "text": "Comment venir à Nosy Be ?",
-          "href": "https://www.anjiamarango-beach-resort.com/comment-venir-a-nosy-be/"
-        },
-        {
-          "text": "Dictionnaire Malgache",
-          "href": "https://www.anjiamarango-beach-resort.com/dictionnaire-malgache/"
-        },
-        {
-          "text": "Décalage horaire",
-          "href": "https://www.anjiamarango-beach-resort.com/decalage-horaire/"
-        },
-        {
-          "text": "la monnaie locale",
-          "href": "https://www.anjiamarango-beach-resort.com/la-monnaie-locale/"
-        },
-        {
-          "text": "Hôtellerie & restauration",
-          "href": "https://www.anjiamarango-beach-resort.com/hotellerie-restauration/"
-        },
-        {
-          "text": "Recommandations d’usage et à vivre à Nosy Be",
-          "href": "https://www.anjiamarango-beach-resort.com/recommandations-dusage-et-a-vivre-a-nosy-be/"
-        },
-        {
-          "text": "Sanitaire",
-          "href": "https://www.anjiamarango-beach-resort.com/sanitaire/"
-        },
-        {
-          "text": "Télécommunications",
-          "href": "https://www.anjiamarango-beach-resort.com/telecommunications/"
-        },
-        {
-          "text": "tarifs",
-          "href": "https://www.anjiamarango-beach-resort.com/tarifs/"
-        },
-        {
-          "text": "Offres spéciales",
-          "href": "https://www.anjiamarango-beach-resort.com/offres-speciales/"
-        },
-        {
-          "text": "Contact",
-          "href": "https://www.anjiamarango-beach-resort.com/contact/"
-        },
-        {
-          "text": "Menu\n\t\t\t\tFermer",
-          "href": "https://www.anjiamarango-beach-resort.com/#mobile-menu-toggle"
-        },
-        {
-          "text": "Mention légale",
-          "href": "https://www.anjiamarango-beach-resort.com/mention-legale/"
-        },
-        {
-          "text": "Politique de confidentialité",
-          "href": "https://www.anjiamarango-beach-resort.com/politique-de-confidentialite/"
+          "text": "Hôtels 4 étoiles en Madagascar",
+          "href": "https://fr.trip.com/fourstars/country/madagascar.html"
         }
       ],
-      "mainContent": "Le domaine hôtelier d’Anjiamarango Beach Resort est situé à proximité du petit village de Befotaka à la pointe Nord-Ouest de l’île aux parfums et à 20 minutes de l’aéroport international de Fascène.\n\n16 bungalows climatisés à moins de 10 mètres de la mer à marée haute\n\nL’hôtel présente 35 bungalows individuels tous orientés mer et bénéficiant d’une vue imprenable sur la baie, de conception par Claude Roure architecte inspirée par l’architecture malgache, une vrai source de dépaysement et gage de repos et de bien-être.\n\nEn famille, en voyage de Noce, en weekend ?Nous avons une solutions pour vous !\n\nNos animateurs et partenaires locaux vous proposeront diverses activités à travers la découverte de l’île de Nosy Be et faite de ballades pédestres, en VTT, de sorties quad avec guides, de sorties en mer en kayaks, en pêche traditionnelle à la palangrotte, ou en pêche sportive, de plongée sous-marine et snorkeling en face du domaine et la visite des îles voisines comme Nosy Fanihy, Nosy Komba, Nosy Tanikely, ou encore Nosy Iranja…",
+      "mainContent": "Entrez vos dates de voyage pour voir les offres et la disponibilité.",
       "structuredData": [
+        [
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://fr.trip.com/hotels/nosy-be-hotel-detail-22830728/htel-villa-les-orchides/",
+            "name": "Hôtel Villa les Orchidées",
+            "description": " En choisissant Villa les Orchidées à Nosy Be, vous serez à 0,5 km de Plage de Madirokely et à 11,2 km de Arbre sacré de Mahatsinjo. Cette maison d'hôtes se trouve à 15,7 km de Parc national de Lokobe et à 15,9 km de Réserve naturelle de Lokobe.\r\nN'hésitez pas à profiter des nombreuses infrastructures de loisirs à disposition et qui incluent notamment une discothèque et une piscine extérieure. Parmi les services et équipements offerts par cette maison d'hôtes de style Belle Époque, vous trouverez aussi l'accès Wi-Fi à Internet gratuit, un service de conciergerie et un service de garde d'enfants (en supplément). Si vous souhaitez passer la journée dans le parc de loisirs voisin, grimpez à bord e la navette payante !\r\nPrenez un délicieux repas au restaurant et comblez tous vos petits creux en profitant du service d'étage (horaires limités) proposé par cette maison d'hôtes. La journée a été harassante ? L'hébergement abrite un bar / salon et un bar en bord de piscine, idéal pour se détendre autour d'un verre de vin ou d'un cocktail rafraîchissant. Un petit déjeuner continental est servi tous les jours de 07 h 00 à 09 h 30 moyennant un supplément. Le petit-déjeuner est gratuit pour les enfants âgés de 5 an(s) et moins.\r\nLes équipements et services proposés incluent un service de nettoyage à sec / blanchisserie, une réception ouverte 24 h/24 et un personnel polyglotte. En échange d'un supplément, l'hébergement vous propose une navette vers et depuis l'aéroport (24 h/24) et une navette vers le terminal des ferrys.\r\nAvec un ameublement personnalisé, les 15 chambres de l'hébergement vous invitent à la détente et comprennent un minibar et une télévision à écran plat. Votre chambre est dotée d'un lit avec surmatelas. Les chambres sont dotées d'un balcon aménagé. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde et votre divertissement est assuré par des chaînes par satellite. Une salle de bain privée avec des articles de toilette gratuits et un sèche-cheveux est à votre disposition.",
+            "image": "https://ak-d.tripcdn.com/images/0226z12000l1ujl7x5B0C_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "review": {
+              "@type": "Review",
+              "publisher": {
+                "@type": "Organization",
+                "name": "Trip.com"
+              },
+              "reviewRating": {
+                "@type": "AggregateRating",
+                "reviewCount": 40,
+                "ratingValue": 8.6,
+                "bestRating": 10,
+                "worstRating": 0
+              },
+              "author": {
+                "@type": "Person",
+                "name": "Invité"
+              },
+              "reviewBody": "Hotel pluses: Une spacieuse chambre (nous disposions d'une suite panoramique avec vue sur la mer et le jardin) avec une grande salle de bains (douche) et une vaste terrasse avec vue incroyable! La chambre dispose de tout ce dont vous avez besoin (condi, ventilateur, pot de thé, réfrigérateur), le pipeline est nouveau dans une excellente condition. Grand lit. Tout est très cool. L'hôtel est très propre, propre. Le personnel de l'hôtel est très gentil, essaie de vous en tenir. Ils organisent des transferts à partir de l'aéroport (80 000 personnes), vous pouvez prendre des tours (prix comme partout). \n\nDéfauts : Il n'y a presque aucune zone, il n'y a qu'une petite piscine mais jolie sur 5-6 (tout libre). Parmi les désavantages, très faible petit déjeuner (bres, yogurt, samsa, biscuits, petit fruit, boissons), pour les œufs et omlets il est nécessaire de payer extra (5.6 mille locals). L'eau dans la chambre n'est pas fournie. De soap seulement soap.\n\nMais pour un look chic et un grand nombre vous pouvez oublier le minus :)",
+              "datePublished": "2025-05-02 20:38:29"
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://fr.trip.com/hotels/nosy-be-hotel-detail-5623723/ravintsara-wellness-hotel/",
+            "name": "Ravintsara Wellness Hotel",
+            "description": " En choisissant Ravintsara Wellness Hotel à Nosy Be, vous profiterez d'un séjour au bord de la plage, à 8,6 km de Plage de Madirokely et à 14,2 km de Mont Passot. Ce lodge au bord de la plage se trouve à 17,7 km de Arbre sacré de Mahatsinjo et à 22,1 km de Parc national de Lokobe.\r\nRejoignez le spa de l'hébergement, un centre bien-être qui propose des massages, des soins corporels et des soins du visage, et permettez qu'on prenne soin de vous. Si vous mettez la détente avant toute autre chose, n'hésitez pas à profiter des nombreuses infrastructures de loisirs proposées par l'hébergement et qui incluent notamment une piscine extérieure, un sauna et un centre de fitness. Parmi les équipements et services offerts par ce lodge vous trouvez également l'accès Wi-Fi à Internet gratuit, un service de conciergerie et un service de garde d'enfants (en supplément). Une navette payante vous conduit à proximité de la plage ou devant un centre commercial.\r\nToutes les saveurs Cuisine internationale vous attendent à OCEANA GARDEN, un restaurant avec une jolie vue sur le jardin, idéal pour un dîner détente en amoureux ou en famille. Si vous préférez cependant le confort de votre chambre, un service d'étage 24 h/24 est à votre disposition. Étant donné que l'hébergement propose un bar à la plage et un bar en bord de piscine, vous pouvez vous détendre devant un verre autant de fois que vous le souhaitez. N'hésitez pas non plus à aller vous rafraîchir dans un de ses 2 bars/lounges.\r\nLes équipements et services proposés incluent un poste informatique, un service d'arrivée express et des journaux gratuits dans le hall. En échange d'un supplément, l'hébergement vous propose une navette vers l'hôtel au départ de l'aéroport (24 h/24) et une navette vers le terminal des paquebots de croisière.\r\nLes 40 chambres de l'hébergement vous invitent à la détente et comprennent un minibar et une TV connectée. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde et votre divertissement est assuré par des chaînes par satellite. Une salle de bain privée avec une baignoire et une douche séparées est à votre disposition. Vous y trouvez également une baignoire à jets et un pommeau de douche à « effet pluie ». Les équipements et services offerts par l'hébergement comprennent un téléphone, mais aussi un coffre-fort et un bureau.",
+            "image": "https://ak-d.tripcdn.com/images/0223j1200099z02ge9509_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "review": {
+              "@type": "Review",
+              "publisher": {
+                "@type": "Organization",
+                "name": "Trip.com"
+              },
+              "reviewRating": {
+                "@type": "AggregateRating",
+                "reviewCount": 61,
+                "ratingValue": 8.9,
+                "bestRating": 10,
+                "worstRating": 0
+              },
+              "author": {
+                "@type": "Person",
+                "name": "Invité"
+              },
+              "reviewBody": "L'enregistrement s'est super bien passé, le service était également très bon, l'environnement de l'hôtel est très bon, le service est attentionné, la chambre est grande, surtout le coucher de soleil est particulièrement beau ! ! Fortement recommandé et je reviendrai la prochaine fois !",
+              "datePublished": "2024-06-23 14:51:29"
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://fr.trip.com/hotels/antsiranana-hotel-detail-13750171/le-grand-htel-diego/",
+            "name": "Le Grand Hotel",
+            "description": " En choisissant Le Grand Hotel Diego, vous profiterez d'un séjour en plein centre de Antsiranana, à seulement 4 min à pied de Cathédrale Antsiranana et à 9 minutes de marche de Place de l'Indépendance. Cet hôtel au bord de la plage se trouve à 2,3 km de Université du nord de Madagascar et à 13 km de Emerald Beach.\r\nPassez de purs moments de détente dans l'incroyable spa de l'hébergement, un centre bien-être qui propose des massages, des soins corporels et des soins du visage. Parmi les équipements et services offerts par cet hôtel vous trouvez également l'accès Wi-Fi à Internet gratuit, un service de conciergerie et un service de garde d'enfants (en supplément).\r\nPendant votre séjour, ne manquez pas de faire halte à OASIS, un restaurant gastronomique de en bord de piscine qui abrite un bar / salon plein de charme. Si vous préférez une soirée cocooning, l'hébergement propose aussi un service d'étage 24 h/24. L'hébergement vous invite à rejoindre son bar en bord de piscine pour une petite pause bien méritée. Un petit déjeuner buffet gratuit est servi en semaine de 06 h 00 à 10 h 00 et le week-end de 06 h 00 à 10 h 30.\r\nLes équipements et services proposés incluent un centre d'affaires ouvert 24 h/24, une réception ouverte 24 h/24 et un personnel polyglotte. En échange d'un supplément, l'hébergement propose une navette vers et depuis l'aéroport (24 h/24) et un parking gratuit se trouve dans l'enceinte de l'hébergement.\r\nLes 66 chambres climatisées de l'hébergement vous invitent à la détente et comprennent un minibar et une télévision à écran plat. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde. Une salle de bain privée avec une douche est à votre disposition. Vous y trouvez également des articles de toilette gratuits et un bidet. Les équipements et services offerts par l'hébergement comprennent un coffre-fort et un bureau. Le service d'entretien est assuré tous les jours.",
+            "image": "https://ak-d.tripcdn.com/images/0224312000k69sdto8DC1_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "reviewCount": 14,
+              "ratingValue": 7.7,
+              "bestRating": 10,
+              "worstRating": 0
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://fr.trip.com/hotels/nosy-be-hotel-detail-22869840/nosy-be-hotel-spa/",
+            "name": "Nosy Be Hotel & Spa",
+            "description": " En choisissant Nosy Be Hotel & Spa à Nosy Be, vous profiterez d'un séjour au bord de la plage, à 4,7 km de Plage de Madirokely et à 10,2 km de Mont Passot. Cet hôtel au bord de la plage se trouve à 12,3 km de Arbre sacré de Mahatsinjo et à 17,7 km de Parc national de Lokobe.\r\nRejoignez le spa de l'hébergement, un centre bien-être qui propose des massages, des soins corporels et des soins du visage, et permettez qu'on prenne soin de vous. Parmi les équipements et services offerts par cet hôtel de style colonial, vous trouverez aussi l'accès Wi-Fi à Internet gratuit, un service de garde d'enfants (en supplément) et une boutique de souvenirs/un kiosque à journaux.\r\nDe délicieuses spécialités Cuisine internationale vous attendent à Alta Marea, un restaurant en bord de plage idéal pour un dîner détente en amoureux ou en famille. Si vous préférez cependant le confort de votre chambre, un service d'étage est à votre disposition. Pour que vous puissiez faire connaissance avec les autres convives, l'hébergement vous invite à participer à une réception gratuite organisée tous les jours. Pour bien finir la journée, rien de tel qu'un moment de détente autour d'un cocktail ou d'un verre de vin ! Et vous avez de la chance puisque vous trouverez sur place un bar / salon, un bar à la plage et un bar en bord de piscine. Un petit déjeuner buffet est servi tous les jours de 06 h 30 à 10 h 00 moyennant un supplément.\r\nLes équipements et services proposés incluent un service de nettoyage à sec / blanchisserie, une réception ouverte 24 h/24 et une consigne à bagages. Si vous devez organiser une réunion à Nosy Be, faites confiance à cet hôtel qui dispose d'espaces événements mesurant 100 mètres carrés et comprenant un espace de conférence et une salle de réunion. En échange d'un supplément, l'hébergement propose une navette vers et depuis l'aéroport (24 h/24) et un parking gratuit se trouve dans l'enceinte de l'hébergement.\r\nAvec une décoration personnalisée, les 50 chambres de l'hébergement vous invitent à la détente et comprennent un minibar et une télévision à écran plat. Votre lit Select Comfort est préparé avec une couette en duvet d'oie et des draps en coton égyptien. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde et votre divertissement est assuré par des chaînes par câble. Les salles de bain comprennent des articles de toilette gratuits et un sèche-cheveux.",
+            "image": "https://ak-d.tripcdn.com/images/0225f12000l51vzw537F0_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "reviewCount": 15,
+              "ratingValue": 8.4,
+              "bestRating": 10,
+              "worstRating": 0
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://fr.trip.com/hotels/nosy-be-hotel-detail-12260029/manga-soa-lodge/",
+            "name": "Manga Soa Lodge",
+            "description": " En choisissant Manga Soa Lodge à Nosy Be, vous profiterez d'un séjour au bord de l'eau, à 7,9 km de Mont Passot et à 15,9 km de Parc national de Lokobe. Cet hôtel au bord de la plage se trouve à 16,8 km de Réserve naturelle de Lokobe et à 18,5 km de Arbre sacré de Mahatsinjo.\r\nPrenez soin de vous en profitant des massages et des soins corporels qui vous sont proposés dans l'enceinte de l'hébergement. Non seulement vous pouvez vous faire bronzer sur la plage privée, mais vous pouvez également profiter des nombreuses infrastructures de loisirs à votre disposition, notamment une piscine extérieure. Cet hôtel propose également l'accès Wi-Fi à Internet gratuit, un service de conciergerie et des rangements pour vélos. Une navette payante vous conduit dans les principales destinations aux alentours de l'hébergement.\r\nDe délicieuses spécialités Cuisine locale vous attendent à VUE OCEAN, un restaurant en bord de plage qui offre une sympathique vue sur le jardin et qui abrite un bar, un bar / salon, parfait pour prendre un verre avant le dîner. Si vous préférez une soirée cocooning, un service d'étage 24 h/24 est à votre disposition. Pour que vous puissiez faire connaissance avec les autres convives, l'hébergement vous invite à participer à une réception gratuite organisée tous les jours. Pour bien finir la journée, vous trouverez sur place un bar en bord de piscine. Un petit déjeuner continental est servi tous les jours de 06 h 30 à 10 h 00 moyennant un supplément.\r\nLes équipements et services proposés incluent une consigne à bagages, une laverie et une bibliothèque. En échange d'un supplément, l'hébergement propose une navette vers et depuis l'aéroport (24 h/24) et un parking gratuit se trouve dans l'enceinte de l'hébergement.\r\nLes 10 chambres de l'hébergement vous invitent à la détente et comprennent un mini-bar avec certains articles gratuits. Votre chambre est dotée d'un lit avec surmatelas. Les chambres sont dotées d'un patio. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde. Une salle de bain privée avec une douche est à votre disposition. Vous y trouvez également un pommeau de douche à « effet pluie » et des articles de toilette gratuits.",
+            "image": "https://ak-d.tripcdn.com/images/1ik6d12000r25o8h78F5F_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "review": {
+              "@type": "Review",
+              "publisher": {
+                "@type": "Organization",
+                "name": "Trip.com"
+              },
+              "reviewRating": {
+                "@type": "AggregateRating",
+                "reviewCount": 34,
+                "ratingValue": 8.8,
+                "bestRating": 10,
+                "worstRating": 0
+              },
+              "author": {
+                "@type": "Person",
+                "name": "Invité"
+              },
+              "reviewBody": "Cadre très joli SERVICE au top, par contre, au niveau du choix de la nourriture, c’est désirer, ainsi que la qualité alors que nous sommes dans un établissement trois-étoiles",
+              "datePublished": "2025-10-29 19:45:50"
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://fr.trip.com/hotels/nosy-be-hotel-detail-3449559/royal-beach-htel/",
+            "name": "Royal Beach Hôtel",
+            "description": " Nosy Be ne manque pas de choses à découvrir : Royal Beach Hôtel vous fait profiter d'un séjour près de l'océan et se trouve à seulement quelques pas du site Plage de Madirokely. Cet hôtel au bord de la plage se trouve à 11,2 km de Arbre sacré de Mahatsinjo et à 15,6 km de Parc national de Lokobe.\r\nPassez de purs moments de détente dans l'incroyable spa de l'hébergement, un centre bien-être qui propose des massages, des soins corporels et des soins du visage. Si vous mettez la détente avant toute autre chose, n'hésitez pas à profiter des nombreuses infrastructures de loisirs proposées par l'hébergement et qui incluent notamment une piscine extérieure, un hammam et un centre de fitness. Parmi les services et équipements offerts par cet hôtel vous trouvez également l'accès Wi-Fi à Internet gratuit, un service de conciergerie et un salon de coiffure.\r\nVous profiterez de repas savoureux au restaurant de Royal Beach Hôtel qui dispose également d'un snack bar/épicerie fine où vous pourrez faire vos achats. Si vous avez envie de vous détendre devant un petit verre, pas de panique, l'hébergement abrite un bar / salon et un bar à la plage.\r\nLes équipements et services proposés incluent une réception ouverte 24 h/24, une consigne à bagages et une laverie. En échange d'un supplément, l'hébergement propose une navette vers et depuis l'aéroport (24 h/24) et un parking gratuit se trouve dans l'enceinte de l'hébergement.\r\nLes 72 chambres climatisées de l'hébergement vous invitent à la détente et comprennent une télévision à écran plasma. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde et votre divertissement est assuré par des chaînes par satellite. Les équipements et services offerts par l'hébergement comprennent un coffre-fort et un bureau. Le service d'entretien est assuré tous les jours.",
+            "image": "https://ak-d.tripcdn.com/images/02X4j120009ivff2h9E34_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "review": {
+              "@type": "Review",
+              "publisher": {
+                "@type": "Organization",
+                "name": "Trip.com"
+              },
+              "reviewRating": {
+                "@type": "AggregateRating",
+                "reviewCount": 46,
+                "ratingValue": 9.1,
+                "bestRating": 10,
+                "worstRating": 0
+              },
+              "author": {
+                "@type": "Person",
+                "name": "Invité"
+              },
+              "reviewBody": "Check-in: 5/5\nThe check-in process was fast and efficient. All advance requests regarding the room were fulfilled perfectly, and the staff responded to my pre-arrival emails promptly and clearly.\nNo security deposit was required. \nNo welcome drinks were offered.\nInternet vouchers are available immediately at check-in, with a unique password provided for each device. \nA towel card for beach towels is also given. Reputable hotels should abandon the outdated practice of towel cards, especially since the towels themselves are worn and unlikely to be taken as souvenirs by guests.\n\nCheck-out: 4/5\nCheck-out is strictly at 11:00. At 10:50 housekeeping was already waiting by the door.\nA two-hour late check-out came with an unfriendly surcharge of 50 EUR.\n\nRoom (#814): 4/5\nThe room is spacious and well-appointed for a 4-star property, but I have to lower my rating due to visible wear and tear. \nThe toilet paper holder was loose and falling off the wall.\nBoth the shower and sink faucets were leaking and splashing water in all directions, causing water to seep from the bathroom into the corridor and the room itself. Hot water pressure was generally good, with only one disruption during a two-week stay. Toiletries are basic: shower gel, shampoo, and soap. The bathroom lighting is very dim.\nWardrobe doors are saggy and do not close completely. \nThe balcony door also does not close fully, so the latch cannot be engaged. While the hotel and island felt very safe (no risk of a break-in), if a neighbour on the adjacent balcony smokes, the smell is distinctly noticeable inside the room.\nThe balcony view itself is pleasant.\nThe in-room safe is spacious enough to fit a laptop easily.\nA mini-fridge is available but barely cools, and the minibar is empty. \nOnly one small bottle of drinking water is provided upon arrival; guests must purchase any additional water thereafter, which is unusual for a hotel at this level – an odd area of cost-cutting.\nThe air conditioner works efficiently. \nI found the mattress and pillows uncomfortable and slept poorly.\nThe room is exceptionally quiet – no noise from neighbours or hotel staff. The only sound was a cow mooing in the nearby village in the mornings, which didn't bother me much.\nHousekeeping does not intrude early; cleaning is conducted discreetly, quickly, and to a high standard. \nUseful extras included a large beach bag and two umbrellas.\nThere were occasional power outages, lasting from 5 to 30 seconds.\n\nBreakfast: 5/5\nBreakfast is very good for a 4-star hotel, with a fairly wide selection, though the menu is identical each day except for two varieties of freshly squeezed juice that rotate daily. \nFruits are limited to melon, pineapple, papaya, and bananas.\nService is attentive and efficient, with plenty of available tables, including many with beautiful sea and beach views. There are never any lines. The only minor drawback: omelets were prepared slowly, likely due to low stove power rather than staff efficiency.\n\nBeach: 5/5\nThe beach is spacious, clean, and well-maintained, with sun loungers and umbrellas always available. Hotel staff regularly clean seaweed from the beach. Security guards are always present, so belongings could be left unattended without worry. Beach vendors keep a respectful distance and do not bother guests. The sea is generally clean, although occasional seaweed may drift in. Tides are minimal and do not cause inconvenience. The sun is very intense; sunscreen of at least SPF 50 is highly recommended during the first days.\n\nPools: 5/5\nThe hotel has two nice swimming pools, both with plenty of loungers and umbrellas available at any time.\n\nGuests:\nThe atmosphere is relaxed, mostly attracting couples without children. The majority of guests were from Eastern Europe (Poles, Czechs or Slovaks). I did not encounter any Russian-speaking guests at the hotel during my stay.",
+              "datePublished": "2025-09-28 23:41:22"
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://fr.trip.com/hotels/nosy-be-hotel-detail-10737225/palm-beach-resort-and-spa/",
+            "name": "Palm Beach Resort & Spa",
+            "description": " En choisissant Palm Beach Resort & Spa à Nosy Be, vous serez à 11,5 km de Arbre sacré de Mahatsinjo et à 15,9 km de Parc national de Lokobe. Cet hôtel au bord de la plage se trouve à 16,1 km de Réserve naturelle de Lokobe et à 21,1 km de Mont Passot.\r\nPassez de purs moments de détente dans l'incroyable spa de l'hébergement, un centre bien-être qui propose des massages, des soins corporels et des soins du visage. Certains préféreront passer la soirée au casino, d'autres profiteront des nombreuses infrastructures de loisirs proposées par l'hébergement et qui incluent notamment courts de tennis extérieurs et une piscine extérieure. Parmi les équipements et services offerts par cet hôtel vous trouvez également l'accès Wi-Fi à Internet gratuit, une salle de jeux vidéo et des magasins.\r\nVous profiterez de repas savoureux à VOANIO , le restaurant de Palm Beach Resort & Spa qui dispose également d'un snack bar/épicerie fine. Pour bien finir la journée, rien de tel qu'un moment de détente autour d'un cocktail ou d'un verre de vin ! Et vous avez de la chance puisque vous trouverez sur place un bar / salon, un bar à la plage et un bar en bord de piscine. Un petit déjeuner buffet gratuit est servi tous les jours de 07 h 00 à 10 h 00.\r\nLes équipements et services proposés incluent un service de nettoyage à sec / blanchisserie, une réception ouverte 24 h/24 et une consigne à bagages. Si vous devez organiser une réunion à Nosy Be, faites confiance à cet hôtel qui dispose d'espaces événements mesurant 60 mètres carrés et comprenant un espace de conférence et des salles de réunion. En échange d'un supplément, l'hébergement propose une navette vers et depuis l'aéroport (24 h/24) et un parking gratuit se trouve dans l'enceinte de l'hébergement.\r\nLes 63 chambres climatisées de l'hébergement vous invitent à la détente et comprennent un minibar. Les chambres sont dotées d'un balcon ou un patio. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde et votre divertissement est assuré par des chaînes par câble. Les salles de bain comprennent des articles de toilette gratuits et un sèche-cheveux.",
+            "image": "https://ak-d.tripcdn.com/images/02X1j120008uer0tp1CAD_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "review": {
+              "@type": "Review",
+              "publisher": {
+                "@type": "Organization",
+                "name": "Trip.com"
+              },
+              "reviewRating": {
+                "@type": "AggregateRating",
+                "reviewCount": 70,
+                "ratingValue": 9,
+                "bestRating": 10,
+                "worstRating": 0
+              },
+              "author": {
+                "@type": "Person",
+                "name": "Pifpaf"
+              },
+              "reviewBody": "Nous avons découvert cet hôtel car cela faisait un moment que nous n'étions pas venus à Nosy Bé. Nous ne regrettons absolument pas notre choix. De la navette d'arrivée à la navette de départ tout a été parfait. Une belle structure, une plage nettoyée tous les jours, le personnel toujours souriant et compétent, la bonne nourriture, les activités proposées, la piscine face à la mer et le superbe coucher de soleil. Un petit mot aussi pour son directeur très accessible et bienveillant. Bref tout cela pour dire que nous reviendrons et recommandons le Palm Beach Resort and Spa de Nosy Bé",
+              "datePublished": "2025-05-06 00:23:39"
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://fr.trip.com/hotels/nosy-be-hotel-detail-106967059/royal-andilana-resort-spa/",
+            "name": "Royal Andilana Resort & Spa",
+            "description": " En choisissant Royal Andilana Resort & Spa à Nosy Be, vous serez à 12,5 km de Mont Passot et à 18,3 km de Plage de Madirokely. Ce complexe touristique au bord de la plage se trouve à 27,6 km de Arbre sacré de Mahatsinjo et à 32 km de Parc national de Lokobe.\r\nRejoignez le spa de l'hébergement, un centre bien-être qui propose des massages et des soins du visage, et permettez qu'on prenne soin de vous. N'hésitez surtout pas à profiter des nombreuses infrastructures de loisirs qui incluent notamment 3 piscines extérieures et un court de tennis extérieur. Parmi les services et équipements offerts par ce complexe touristique vous trouvez également l'accès Wi-Fi à Internet gratuit, un service de conciergerie et une salle de jeux vidéo.\r\nPendant votre séjour, vous vous régalerez à Tany's Restaurant, l'un des 2 restaurants de ce complexe touristique et profiterez d'un service d'étage 24 h/24. Idéal pour une soirée cocooning pleine de saveurs ! Pour bien finir la journée, vous trouverez sur place un bar à la plage. Un petit déjeuner complet gratuit est servi tous les jours de 07 h 00 à 10 h 00.\r\nLes équipements et services proposés incluent un service de nettoyage à sec / blanchisserie, une réception ouverte 24 h/24 et un personnel polyglotte. Si vous devez organiser une réunion à Nosy Be, faites confiance à ce complexe touristique qui dispose d'espaces événements mesurant 345 mètres carrés et comprenant un espace de conférence et des salles de réunion. En échange d'un supplément, l'hébergement propose une navette vers et depuis l'aéroport (24 h/24) et un parking gratuit se trouve dans l'enceinte de l'hébergement.\r\nLes 174 chambres climatisées de l'hébergement vous invitent à la détente et comprennent une télévision à écran plat. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde et votre divertissement est assuré par des chaînes par satellite. Les salles de bain comprennent une baignoire et une douche séparées, des articles de toilette gratuits et un sèche-cheveux. Les équipements et services offerts par l'hébergement comprennent un téléphone, mais aussi un coffre-fort et un bureau.",
+            "image": "https://ak-d.tripcdn.com/images/0224u12000lbw520928F2_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "review": {
+              "@type": "Review",
+              "publisher": {
+                "@type": "Organization",
+                "name": "Trip.com"
+              },
+              "reviewRating": {
+                "@type": "AggregateRating",
+                "reviewCount": 53,
+                "ratingValue": 9.6,
+                "bestRating": 10,
+                "worstRating": 0
+              },
+              "author": {
+                "@type": "Person",
+                "name": "iuliia"
+              },
+              "reviewBody": "Un grand hôtel par tous les paramètres.Très délicieux aliments principalement restaurant, juste chic, très délicieux rum.Chaque personnel est ami, diligent, bonne foi. Les gens essaient vraiment de faire le séjour très agréable.Nous avons changé la chambre à mieux.La plage avec du sable et de l'eau propres.Les vendeurs de souvenirs ne se préoccupent pas, la sécurité est worth.Comfortable lie, grandes parapluies pour shadow.Comfortable et bel territoire.Dans la piscine Bonsoir.DJ Mike très ami, répondit à la demande de pistes musicales.Bon à un restaurant près de la plage pour boire du thé, du rom, du coke. très bon repos, de grandes mémoires.",
+              "datePublished": "2025-05-06 23:53:30"
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://fr.trip.com/hotels/nosy-be-hotel-detail-28798375/voi-andilana-beach-resort/",
+            "name": "VOI Andilana Beach Resort",
+            "description": " En choisissant Andilana Beach Resort à Nosy Be, vous profiterez d'un agréable séjour à 12,6 km de Mont Passot et à 18,5 km de Plage de Madirokely. Cet hôtel tout inclus se trouve à 27,7 km de Arbre sacré de Mahatsinjo et à 32,1 km de Parc national de Lokobe.\r\nRejoignez le spa de l'hébergement, un centre bien-être qui propose des massages et des soins du visage, et permettez qu'on prenne soin de vous. 3 piscines extérieures vous attendent pour un petit plongeon avant de rejoindre la plage privée pour de purs moments de détente. Parmi les équipements et services offerts par cet hôtel vous trouvez également l'accès Wi-Fi à Internet gratuit, une boutique de souvenirs/un kiosque à journaux et un salon de coiffure.\r\nLaissez vous tenter par un large choix de spécialités Cuisine internationale que propose Ravinala Restaurant, l'un des 3 restaurants de cet hôtel. Étant donné que l'hébergement propose un bar à la plage et un bar en bord de piscine, vous pouvez vous détendre devant un verre autant de fois que vous le souhaitez. N'hésitez pas non plus à aller vous rafraîchir dans un de ses 3 bars/lounges. Un petit déjeuner buffet est offert gratuitement.\r\nLes équipements et services proposés incluent un service de nettoyage à sec / blanchisserie, une réception ouverte 24 h/24 et un personnel polyglotte. Une navette vers et depuis l'aéroport est disponible en échange d'un supplément (24 h/24).\r\nLes 204 chambres climatisées de l'hébergement vous invitent à la détente et comprennent un minibar et une télévision à écran plat. Les chambres sont dotées d'un balcon ou un patio. Des chaînes par câble sont à votre disposition et vous invitent au divertissement. Les salles de bain comprennent une douche avec un pommeau de douche à « effet pluie » et des articles de toilette gratuits.",
+            "image": "https://ak-d.tripcdn.com/images/0583k12000l3i6nbkB714_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "reviewCount": 43,
+              "ratingValue": 8.9,
+              "bestRating": 10,
+              "worstRating": 0
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://fr.trip.com/hotels/nosy-be-hotel-detail-130013235/oceanfront-luxury-villa-with-private-pool/",
+            "name": "Oceanfront Luxury Villa with Private Pool",
+            "description": "Situé dans Nosy Be, Oceanfront Luxury Villa with Private Pool constitue un point de départ idéal pour explorer la ville.\r\nAllez nager dans le piscine de la propriété. Vous pouvez également consulter piscine avec vue. Allez à la plage pendant votre séjour. Oceanfront Luxury Villa with Private Pool possède une plage exclusive et propose des activités telles que snorkeling et plongée. Pendant votre séjour, offrez-vous une visite au spa sur place. Le salle de sport offre aux clients un endroit pour s'entraîner. Cette propriété propose kayak, terrain de tennis, équitation, terrain de golf et pêche, vous offrant de nombreuses opportunités de rester en forme.\r\nTu veux prendre quelque chose à boire ? Rendez-vous au bar ou au café sur place.\r\nÀ ce villa, vous aurez accès à un jardin et à un terrain de jeux.\r\nLorsque vous arrivez à l'établissement en voiture, vous pouvez utiliser le parking gratuit.",
+            "image": "https://ak-d.tripcdn.com/images/1z63012000lucr66rD8EF_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            }
+          }
+        ],
         {
           "@context": "https://schema.org",
-          "@graph": [
+          "@type": "DataFeedItem",
+          "name": "update",
+          "dateModified": "20 mars 2026"
+        },
+        [
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-3449559/royal-beach-htel/",
+            "name": "Royal Beach Hôtel",
+            "description": " Nosy Be ne manque pas de choses à découvrir : Royal Beach Hôtel vous fait profiter d'un séjour près de l'océan et se trouve à seulement quelques pas du site Plage de Madirokely. Cet hôtel au bord de la plage se trouve à 11,2 km de Arbre sacré de Mahatsinjo et à 15,6 km de Parc national de Lokobe.\r\nPassez de purs moments de détente dans l'incroyable spa de l'hébergement, un centre bien-être qui propose des massages, des soins corporels et des soins du visage. Si vous mettez la détente avant toute autre chose, n'hésitez pas à profiter des nombreuses infrastructures de loisirs proposées par l'hébergement et qui incluent notamment une piscine extérieure, un hammam et un centre de fitness. Parmi les services et équipements offerts par cet hôtel vous trouvez également l'accès Wi-Fi à Internet gratuit, un service de conciergerie et un salon de coiffure.\r\nVous profiterez de repas savoureux au restaurant de Royal Beach Hôtel qui dispose également d'un snack bar/épicerie fine où vous pourrez faire vos achats. Si vous avez envie de vous détendre devant un petit verre, pas de panique, l'hébergement abrite un bar / salon et un bar à la plage.\r\nLes équipements et services proposés incluent une réception ouverte 24 h/24, une consigne à bagages et une laverie. En échange d'un supplément, l'hébergement propose une navette vers et depuis l'aéroport (24 h/24) et un parking gratuit se trouve dans l'enceinte de l'hébergement.\r\nLes 72 chambres climatisées de l'hébergement vous invitent à la détente et comprennent une télévision à écran plasma. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde et votre divertissement est assuré par des chaînes par satellite. Les équipements et services offerts par l'hébergement comprennent un coffre-fort et un bureau. Le service d'entretien est assuré tous les jours.",
+            "image": "https://ak-d.tripcdn.com/images//ak-d.tripcdn.com/images//02X4j120009ivff2h9E34_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "reviewCount": 46,
+              "ratingValue": 9.1,
+              "bestRating": 10,
+              "worstRating": 0
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-106967059/royal-andilana-resort-spa/",
+            "name": "Royal Andilana Resort & Spa",
+            "description": " En choisissant Royal Andilana Resort & Spa à Nosy Be, vous serez à 12,5 km de Mont Passot et à 18,3 km de Plage de Madirokely. Ce complexe touristique au bord de la plage se trouve à 27,6 km de Arbre sacré de Mahatsinjo et à 32 km de Parc national de Lokobe.\r\nRejoignez le spa de l'hébergement, un centre bien-être qui propose des massages et des soins du visage, et permettez qu'on prenne soin de vous. N'hésitez surtout pas à profiter des nombreuses infrastructures de loisirs qui incluent notamment 3 piscines extérieures et un court de tennis extérieur. Parmi les services et équipements offerts par ce complexe touristique vous trouvez également l'accès Wi-Fi à Internet gratuit, un service de conciergerie et une salle de jeux vidéo.\r\nPendant votre séjour, vous vous régalerez à Tany's Restaurant, l'un des 2 restaurants de ce complexe touristique et profiterez d'un service d'étage 24 h/24. Idéal pour une soirée cocooning pleine de saveurs ! Pour bien finir la journée, vous trouverez sur place un bar à la plage. Un petit déjeuner complet gratuit est servi tous les jours de 07 h 00 à 10 h 00.\r\nLes équipements et services proposés incluent un service de nettoyage à sec / blanchisserie, une réception ouverte 24 h/24 et un personnel polyglotte. Si vous devez organiser une réunion à Nosy Be, faites confiance à ce complexe touristique qui dispose d'espaces événements mesurant 345 mètres carrés et comprenant un espace de conférence et des salles de réunion. En échange d'un supplément, l'hébergement propose une navette vers et depuis l'aéroport (24 h/24) et un parking gratuit se trouve dans l'enceinte de l'hébergement.\r\nLes 174 chambres climatisées de l'hébergement vous invitent à la détente et comprennent une télévision à écran plat. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde et votre divertissement est assuré par des chaînes par satellite. Les salles de bain comprennent une baignoire et une douche séparées, des articles de toilette gratuits et un sèche-cheveux. Les équipements et services offerts par l'hébergement comprennent un téléphone, mais aussi un coffre-fort et un bureau.",
+            "image": "https://ak-d.tripcdn.com/images//ak-d.tripcdn.com/images//0224u12000lbw520928F2_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "reviewCount": 53,
+              "ratingValue": 9.6,
+              "bestRating": 10,
+              "worstRating": 0
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-10737225/palm-beach-resort-and-spa/",
+            "name": "Palm Beach Resort & Spa",
+            "description": " En choisissant Palm Beach Resort & Spa à Nosy Be, vous serez à 11,5 km de Arbre sacré de Mahatsinjo et à 15,9 km de Parc national de Lokobe. Cet hôtel au bord de la plage se trouve à 16,1 km de Réserve naturelle de Lokobe et à 21,1 km de Mont Passot.\r\nPassez de purs moments de détente dans l'incroyable spa de l'hébergement, un centre bien-être qui propose des massages, des soins corporels et des soins du visage. Certains préféreront passer la soirée au casino, d'autres profiteront des nombreuses infrastructures de loisirs proposées par l'hébergement et qui incluent notamment courts de tennis extérieurs et une piscine extérieure. Parmi les équipements et services offerts par cet hôtel vous trouvez également l'accès Wi-Fi à Internet gratuit, une salle de jeux vidéo et des magasins.\r\nVous profiterez de repas savoureux à VOANIO , le restaurant de Palm Beach Resort & Spa qui dispose également d'un snack bar/épicerie fine. Pour bien finir la journée, rien de tel qu'un moment de détente autour d'un cocktail ou d'un verre de vin ! Et vous avez de la chance puisque vous trouverez sur place un bar / salon, un bar à la plage et un bar en bord de piscine. Un petit déjeuner buffet gratuit est servi tous les jours de 07 h 00 à 10 h 00.\r\nLes équipements et services proposés incluent un service de nettoyage à sec / blanchisserie, une réception ouverte 24 h/24 et une consigne à bagages. Si vous devez organiser une réunion à Nosy Be, faites confiance à cet hôtel qui dispose d'espaces événements mesurant 60 mètres carrés et comprenant un espace de conférence et des salles de réunion. En échange d'un supplément, l'hébergement propose une navette vers et depuis l'aéroport (24 h/24) et un parking gratuit se trouve dans l'enceinte de l'hébergement.\r\nLes 63 chambres climatisées de l'hébergement vous invitent à la détente et comprennent un minibar. Les chambres sont dotées d'un balcon ou un patio. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde et votre divertissement est assuré par des chaînes par câble. Les salles de bain comprennent des articles de toilette gratuits et un sèche-cheveux.",
+            "image": "https://ak-d.tripcdn.com/images//ak-d.tripcdn.com/images//02X1j120008uer0tp1CAD_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "reviewCount": 70,
+              "ratingValue": 9,
+              "bestRating": 10,
+              "worstRating": 0
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-12260029/manga-soa-lodge/",
+            "name": "Manga Soa Lodge",
+            "description": " En choisissant Manga Soa Lodge à Nosy Be, vous profiterez d'un séjour au bord de l'eau, à 7,9 km de Mont Passot et à 15,9 km de Parc national de Lokobe. Cet hôtel au bord de la plage se trouve à 16,8 km de Réserve naturelle de Lokobe et à 18,5 km de Arbre sacré de Mahatsinjo.\r\nPrenez soin de vous en profitant des massages et des soins corporels qui vous sont proposés dans l'enceinte de l'hébergement. Non seulement vous pouvez vous faire bronzer sur la plage privée, mais vous pouvez également profiter des nombreuses infrastructures de loisirs à votre disposition, notamment une piscine extérieure. Cet hôtel propose également l'accès Wi-Fi à Internet gratuit, un service de conciergerie et des rangements pour vélos. Une navette payante vous conduit dans les principales destinations aux alentours de l'hébergement.\r\nDe délicieuses spécialités Cuisine locale vous attendent à VUE OCEAN, un restaurant en bord de plage qui offre une sympathique vue sur le jardin et qui abrite un bar, un bar / salon, parfait pour prendre un verre avant le dîner. Si vous préférez une soirée cocooning, un service d'étage 24 h/24 est à votre disposition. Pour que vous puissiez faire connaissance avec les autres convives, l'hébergement vous invite à participer à une réception gratuite organisée tous les jours. Pour bien finir la journée, vous trouverez sur place un bar en bord de piscine. Un petit déjeuner continental est servi tous les jours de 06 h 30 à 10 h 00 moyennant un supplément.\r\nLes équipements et services proposés incluent une consigne à bagages, une laverie et une bibliothèque. En échange d'un supplément, l'hébergement propose une navette vers et depuis l'aéroport (24 h/24) et un parking gratuit se trouve dans l'enceinte de l'hébergement.\r\nLes 10 chambres de l'hébergement vous invitent à la détente et comprennent un mini-bar avec certains articles gratuits. Votre chambre est dotée d'un lit avec surmatelas. Les chambres sont dotées d'un patio. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde. Une salle de bain privée avec une douche est à votre disposition. Vous y trouvez également un pommeau de douche à « effet pluie » et des articles de toilette gratuits.",
+            "image": "https://ak-d.tripcdn.com/images//ak-d.tripcdn.com/images//1ik6d12000r25o8h78F5F_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "reviewCount": 34,
+              "ratingValue": 8.8,
+              "bestRating": 10,
+              "worstRating": 0
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-111590273/andriana-resort-spa/",
+            "name": "Andriana Resort & Spa",
+            "description": " Nosy Be ne manque pas de choses à découvrir : Andriana Resort & Spa vous fait profiter d'un séjour près d'un golf et se trouve à seulement 10 min en voiture de Plage de Madirokely. Cet hôtel avec golf se trouve à 11,6 km de Arbre sacré de Mahatsinjo et à 16,1 km de Parc national de Lokobe.\r\nRejoignez le spa de l'hébergement, un centre bien-être qui propose des massages, des soins corporels et des soins du visage, et permettez qu'on prenne soin de vous. Parmi les équipements et services offerts par cet hôtel vous trouvez également l'accès Wi-Fi à Internet gratuit, un service de conciergerie et un salon de coiffure. Vous pouvez monter à bord d'une navette payante vous conduisant au bord de la plage ou devant plusieurs magasins.\r\nVous pourrez reprendre des forces à restaurant ou dans un des un café de cet hôtel. Pour que vous puissiez faire connaissance avec les autres convives, l'hébergement vous invite à participer à une réception gratuite organisée tous les jours. Pour bien finir la journée, vous trouverez sur place un bar / salon. Un petit déjeuner complet gratuit est servi tous les jours de 07 h 00 à 10 h 00.\r\nLes équipements et services proposés incluent un centre d'affaires, un service de nettoyage à sec / blanchisserie et une réception ouverte 24 h/24. Si vous devez organiser une réunion à Nosy Be, faites confiance à cet hôtel qui dispose d'espaces événements mesurant 36 mètres carrés et comprenant un centre de conférence et des salles de réunion. Un parking gratuit est disponible dans l'enceinte de l'hébergement.\r\nAvec une décoration personnalisée, les 9 chambres de l'hébergement vous invitent à la détente et comprennent une tablette numérique et un minibar. Votre chambre est équipée d'un lit Select Comfort préparé avec des draps en coton égyptien. Une télévision à écran plat 100 cm avec chaînes par satellite assure votre divertissement et l'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde. Une salle de bain privée avec une baignoire ou une douche est à votre disposition. Vous y trouvez également un pommeau de douche à « effet pluie » et des articles de toilette de luxe.",
+            "image": "https://ak-d.tripcdn.com/images//ak-d.tripcdn.com/images//0225612000ls0j6120172_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "reviewCount": 33,
+              "ratingValue": 8.8,
+              "bestRating": 10,
+              "worstRating": 0
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-5623723/ravintsara-wellness-hotel/",
+            "name": "Ravintsara Wellness Hotel",
+            "description": " En choisissant Ravintsara Wellness Hotel à Nosy Be, vous profiterez d'un séjour au bord de la plage, à 8,6 km de Plage de Madirokely et à 14,2 km de Mont Passot. Ce lodge au bord de la plage se trouve à 17,7 km de Arbre sacré de Mahatsinjo et à 22,1 km de Parc national de Lokobe.\r\nRejoignez le spa de l'hébergement, un centre bien-être qui propose des massages, des soins corporels et des soins du visage, et permettez qu'on prenne soin de vous. Si vous mettez la détente avant toute autre chose, n'hésitez pas à profiter des nombreuses infrastructures de loisirs proposées par l'hébergement et qui incluent notamment une piscine extérieure, un sauna et un centre de fitness. Parmi les équipements et services offerts par ce lodge vous trouvez également l'accès Wi-Fi à Internet gratuit, un service de conciergerie et un service de garde d'enfants (en supplément). Une navette payante vous conduit à proximité de la plage ou devant un centre commercial.\r\nToutes les saveurs Cuisine internationale vous attendent à OCEANA GARDEN, un restaurant avec une jolie vue sur le jardin, idéal pour un dîner détente en amoureux ou en famille. Si vous préférez cependant le confort de votre chambre, un service d'étage 24 h/24 est à votre disposition. Étant donné que l'hébergement propose un bar à la plage et un bar en bord de piscine, vous pouvez vous détendre devant un verre autant de fois que vous le souhaitez. N'hésitez pas non plus à aller vous rafraîchir dans un de ses 2 bars/lounges.\r\nLes équipements et services proposés incluent un poste informatique, un service d'arrivée express et des journaux gratuits dans le hall. En échange d'un supplément, l'hébergement vous propose une navette vers l'hôtel au départ de l'aéroport (24 h/24) et une navette vers le terminal des paquebots de croisière.\r\nLes 40 chambres de l'hébergement vous invitent à la détente et comprennent un minibar et une TV connectée. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde et votre divertissement est assuré par des chaînes par satellite. Une salle de bain privée avec une baignoire et une douche séparées est à votre disposition. Vous y trouvez également une baignoire à jets et un pommeau de douche à « effet pluie ». Les équipements et services offerts par l'hébergement comprennent un téléphone, mais aussi un coffre-fort et un bureau.",
+            "image": "https://ak-d.tripcdn.com/images//ak-d.tripcdn.com/images//0223j1200099z02ge9509_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "reviewCount": 61,
+              "ratingValue": 8.9,
+              "bestRating": 10,
+              "worstRating": 0
+            }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "Hotel",
+            "url": "https://it.trip.com/hotels/nosy-be-hotel-detail-22830728/htel-villa-les-orchides/",
+            "name": "Hôtel Villa les Orchidées",
+            "description": " En choisissant Villa les Orchidées à Nosy Be, vous serez à 0,5 km de Plage de Madirokely et à 11,2 km de Arbre sacré de Mahatsinjo. Cette maison d'hôtes se trouve à 15,7 km de Parc national de Lokobe et à 15,9 km de Réserve naturelle de Lokobe.\r\nN'hésitez pas à profiter des nombreuses infrastructures de loisirs à disposition et qui incluent notamment une discothèque et une piscine extérieure. Parmi les services et équipements offerts par cette maison d'hôtes de style Belle Époque, vous trouverez aussi l'accès Wi-Fi à Internet gratuit, un service de conciergerie et un service de garde d'enfants (en supplément). Si vous souhaitez passer la journée dans le parc de loisirs voisin, grimpez à bord e la navette payante !\r\nPrenez un délicieux repas au restaurant et comblez tous vos petits creux en profitant du service d'étage (horaires limités) proposé par cette maison d'hôtes. La journée a été harassante ? L'hébergement abrite un bar / salon et un bar en bord de piscine, idéal pour se détendre autour d'un verre de vin ou d'un cocktail rafraîchissant. Un petit déjeuner continental est servi tous les jours de 07 h 00 à 09 h 30 moyennant un supplément. Le petit-déjeuner est gratuit pour les enfants âgés de 5 an(s) et moins.\r\nLes équipements et services proposés incluent un service de nettoyage à sec / blanchisserie, une réception ouverte 24 h/24 et un personnel polyglotte. En échange d'un supplément, l'hébergement vous propose une navette vers et depuis l'aéroport (24 h/24) et une navette vers le terminal des ferrys.\r\nAvec un ameublement personnalisé, les 15 chambres de l'hébergement vous invitent à la détente et comprennent un minibar et une télévision à écran plat. Votre chambre est dotée d'un lit avec surmatelas. Les chambres sont dotées d'un balcon aménagé. L'accès Wi-Fi à Internet gratuit vous permet de rester en contact avec le reste du monde et votre divertissement est assuré par des chaînes par satellite. Une salle de bain privée avec des articles de toilette gratuits et un sèche-cheveux est à votre disposition.",
+            "image": "https://ak-d.tripcdn.com/images//ak-d.tripcdn.com/images//0226z12000l1ujl7x5B0C_R_300_225_R5.webp",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Province de Diego-Suarez",
+              "addressCountry": "Madagascar"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "reviewCount": 40,
+              "ratingValue": 8.6,
+              "bestRating": 10,
+              "worstRating": 0
+            }
+          }
+        ],
+        {
+          "@context": "https://schema.org",
+          "@type": "DataFeedItem",
+          "name": "update",
+          "dateModified": "20 mars 2026"
+        },
+        {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          "mainEntity": [
             {
-              "@type": "WebPage",
-              "@id": "https://www.anjiamarango-beach-resort.com/",
-              "url": "https://www.anjiamarango-beach-resort.com/",
-              "name": "Hôtel à Nosy Be- Anjiamarango Beach Resort",
-              "isPartOf": {
-                "@id": "https://www.anjiamarango-beach-resort.com/#website"
-              },
-              "about": {
-                "@id": "https://www.anjiamarango-beach-resort.com/#organization"
-              },
-              "primaryImageOfPage": {
-                "@id": "https://www.anjiamarango-beach-resort.com/#primaryimage"
-              },
-              "image": {
-                "@id": "https://www.anjiamarango-beach-resort.com/#primaryimage"
-              },
-              "thumbnailUrl": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/Anjiamarango-Nosy-Be-piscine.jpg",
-              "datePublished": "2016-05-18T09:55:16+00:00",
-              "dateModified": "2024-11-17T04:59:50+00:00",
-              "description": "Le domaine hôtelier d’Anjiamarango est situé à proximité du village de Befotaka à la pointe Nord-Ouest de l’île aux parfums et à 15 minutes de l’aéroport",
-              "breadcrumb": {
-                "@id": "https://www.anjiamarango-beach-resort.com/#breadcrumb"
-              },
-              "inLanguage": "fr-FR",
-              "potentialAction": [
-                {
-                  "@type": "ReadAction",
-                  "target": [
-                    "https://www.anjiamarango-beach-resort.com/"
-                  ]
-                }
-              ]
+              "@type": "Question",
+              "name": "Comment réserver un hôtel sur Trip.com ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Pour réserver un hôtel sur Trip.com, il vous suffit d'indiquer votre destination, vos dates de voyage et le nombre de personnes sur la page. Parcourez ensuite les hôtels disponibles et sélectionnez celui que vous souhaitez réserver. Suivez les instructions pour entrer vos informations de paiement et effectuer la réservation."
+              }
             },
             {
-              "@type": "ImageObject",
-              "inLanguage": "fr-FR",
-              "@id": "https://www.anjiamarango-beach-resort.com/#primaryimage",
-              "url": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/Anjiamarango-Nosy-Be-piscine.jpg",
-              "contentUrl": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/Anjiamarango-Nosy-Be-piscine.jpg",
-              "width": 2500,
-              "height": 1094,
-              "caption": "Piscine hôtel Anjiamarango Nosy Be"
+              "@type": "Question",
+              "name": "Comment trouver des offres d'hôtels sur Trip.com ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Il y a plusieurs façons de découvrir des hôtels abordables sur Trip.com. Vous pouvez réduire les résultats de votre recherche en filtrant les hôtels en fonction de votre fourchette de prix préférée, ou vous pouvez trier les résultats par prix pour afficher les options les moins chères en premier."
+              }
             },
             {
-              "@type": "BreadcrumbList",
-              "@id": "https://www.anjiamarango-beach-resort.com/#breadcrumb",
-              "itemListElement": [
-                {
-                  "@type": "ListItem",
-                  "position": 1,
-                  "name": "Accueil"
-                }
-              ]
+              "@type": "Question",
+              "name": "Où puis-je trouver des offres d'hôtels sur Trip.com ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Trip.com propose une sélection variée d'offres et de promotions sur les hôtels, disponibles tout au long de l'année. Vous pouvez facilement trouver ces promotions spéciales sur notre page d'offres <a href=\"https://fr.trip.com/sale/deals/\"></a>. De plus, si vous êtes membre de notre programme de fidélité, vous pouvez vous connecter à votre compte et découvrir des tarifs réduits exclusifs sur les pages de la liste des hôtels."
+              }
             },
             {
-              "@type": "WebSite",
-              "@id": "https://www.anjiamarango-beach-resort.com/#website",
-              "url": "https://www.anjiamarango-beach-resort.com/",
-              "name": "Anjiamarango",
-              "description": "Hôtel à Nosy Be",
-              "publisher": {
-                "@id": "https://www.anjiamarango-beach-resort.com/#organization"
-              },
-              "potentialAction": [
-                {
-                  "@type": "SearchAction",
-                  "target": {
-                    "@type": "EntryPoint",
-                    "urlTemplate": "https://www.anjiamarango-beach-resort.com/?s={search_term_string}"
-                  },
-                  "query-input": {
-                    "@type": "PropertyValueSpecification",
-                    "valueRequired": true,
-                    "valueName": "search_term_string"
-                  }
-                }
-              ],
-              "inLanguage": "fr-FR"
+              "@type": "Question",
+              "name": "Comment obtenir des prix plus bas sur les hôtels ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Il est parfois plus avantageux de réserver un hôtel en milieu de semaine, mais cela dépend aussi de la saison."
+              }
             },
             {
-              "@type": "Organization",
-              "@id": "https://www.anjiamarango-beach-resort.com/#organization",
-              "name": "Anjiamarango",
-              "url": "https://www.anjiamarango-beach-resort.com/",
-              "logo": {
-                "@type": "ImageObject",
-                "inLanguage": "fr-FR",
-                "@id": "https://www.anjiamarango-beach-resort.com/#/schema/logo/image/",
-                "url": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/anjihamarango-logo-1.jpg",
-                "contentUrl": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/anjihamarango-logo-1.jpg",
-                "width": 462,
-                "height": 93,
-                "caption": "Anjiamarango"
-              },
-              "image": {
-                "@id": "https://www.anjiamarango-beach-resort.com/#/schema/logo/image/"
-              },
-              "sameAs": [
-                "https://www.facebook.com/anjiamarango-beach-resort-449245910150/"
-              ]
+              "@type": "Question",
+              "name": "Combien d'hôtels sont répertoriés sur Trip.com ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Trip.com propose plus de 1,5 million d'hôtels dans plus de 230 pays ou régions. Vous n'avez pas encore décidé quel hôtel réserver ? Parcourez notre site pour trouver des idées !"
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Puis-je annuler ou modifier mes réservations d'hôtel sur Trip.com ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Cela dépend de la politique de l'hôtel et de la date d'annulation. Veuillez consulter la section des politiques de l'hôtel concerné. Pour annuler ou modifier vos réservations, connectez-vous à votre compte Trip.com, allez dans « Mes réservations » et suivez les instructions."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Comment puis-je contacter le service clients de Trip.com ?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Vous pouvez contacter le service clients de Trip.com 24h/24 et 7j/7 en visitant le Centre d'aide sur Trip.com et en soumettant une demande. Vous pouvez également nous contacter par téléphone ou par chat, en fonction de l'endroit où vous êtes."
+              }
             }
           ]
         }
       ],
       "certifications": [],
-      "scrapedAt": "2026-03-20T07:26:02.398Z",
+      "scrapedAt": "2026-03-20T12:03:33.718Z",
       "platform": "Site Officiel (Google Search)"
     }
   ]
