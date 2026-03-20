@@ -52,7 +52,6 @@ CREATE TABLE public.campaign_recipients (
   opened_at TIMESTAMPTZ,
   clicked_at TIMESTAMPTZ,
   bounce_reason TEXT,
-  brevo_message_id VARCHAR(200),             -- ID de tracking Brevo
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

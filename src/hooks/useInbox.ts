@@ -62,9 +62,13 @@ export function useInbox() {
   // ── Chargement des fils ─────────────────────────────────────────────────────
 
   const fetchThreads = useCallback(async () => {
-    if (!user) return;
+    if (!user) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     try {
+      console.log("[useInbox] Fetching threads for user:", user.id);
       const { data, error } = await supabase
         .from("inbox_threads_view")
         .select("*")
@@ -72,14 +76,18 @@ export function useInbox() {
         .eq("is_archived", false)
         .order("last_message_at", { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error("[useInbox] Error fetching threads:", error);
+        throw error;
+      }
+      console.log("[useInbox] Threads fetched:", data?.length || 0);
       setThreads(data || []);
     } catch (err: any) {
       toast({ title: "Erreur", description: "Impossible de charger les conversations.", variant: "destructive" });
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  }, [user, toast]);
 
   // ── Chargement des messages d'un fil ───────────────────────────────────────
 

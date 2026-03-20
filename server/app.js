@@ -19,8 +19,10 @@ import fetch from 'node-fetch';
 
 // Initialize background campaign scheduled jobs
 import './campaignCron.js';
+import { runImapSync } from './imapPoller.js';
 
 const require = createRequire(import.meta.url);
+const imaps = require('imap-simple');
 
 // ─── URL publique pour le tracking d'ouverture ───────────────────────────────
 const TUNNEL_URL_FILE = path.resolve(__dirname, '../.tunnel-url');
@@ -243,6 +245,34 @@ function setupScraperEndpoint(app, endpoint, scriptName, getArgs) {
         return;
       }
 
+      // ── Google Web Search : lit last_google_search_results.json ─────────
+      if (scriptName === 'scraper_google.cjs') {
+        const outputPath = path.resolve(rootDir, 'scripts', 'last_google_search_results.json');
+        if (fs.existsSync(outputPath)) {
+          try {
+            const output = JSON.parse(fs.readFileSync(outputPath, 'utf-8'));
+            const all = output.enterprises || [];
+            all.forEach(item => {
+              if (item && !item.error) {
+                res.write(`data: ${JSON.stringify({ result: item })}\n\n`);
+              }
+            });
+            res.write(`data: ${JSON.stringify({
+              percentage: 100,
+              message: `Terminé — ${all.length} site(s) extrait(s)`,
+              total: all.length,
+            })}\n\n`);
+          } catch (e) {
+            console.error('[Google] Erreur lecture JSON final:', e.message);
+            res.write(`data: ${JSON.stringify({ percentage: 100, message: 'Terminé' })}\n\n`);
+          }
+        } else {
+          res.write(`data: ${JSON.stringify({ percentage: 100, message: 'Terminé' })}\n\n`);
+        }
+        res.end();
+        return;
+      }
+
       res.write(`data: ${JSON.stringify({ percentage: 100, message: 'Terminé' })}\n\n`);
       res.end();
     });
@@ -396,6 +426,37 @@ app.post('/api/email/send-smtp', async (req, res) => {
   } catch (err) {
     console.error('[SMTP] Send failed:', err.message);
     res.status(500).json({ error: `Erreur SMTP : ${err.message}` });
+  }
+});
+
+// ─── IMAP ─────────────────────────────────────────────────────────────────────
+
+// TEST IMAP CONNECTION
+app.post('/api/email/imap-test', async (req, res) => {
+  const { host, port, user, pass } = req.body;
+  if (!host || !user || !pass) {
+    return res.status(400).json({ error: 'Host, user and pass are required' });
+  }
+
+  const config = {
+    imap: {
+      user: user,
+      password: pass,
+      host: host,
+      port: parseInt(port) || 993,
+      tls: true,
+      authTimeout: 10000,
+      tlsOptions: { rejectUnauthorized: false }
+    }
+  };
+
+  try {
+    const connection = await imaps.connect(config);
+    connection.end();
+    res.json({ message: '✅ Connexion IMAP réussie !' });
+  } catch (err) {
+    console.error('[IMAP TEST ERROR]', err.message);
+    res.status(500).json({ error: `Échec IMAP : ${err.message}` });
   }
 });
 
@@ -926,6 +987,11 @@ app.get(/(.*)/, (req, res) => {
     return res.status(404).json({ error: 'Route API non trouvée' });
   }
   res.sendFile(path.resolve(rootDir, 'dist', 'index.html'));
+});
+
+// Run IMAP Sync every 15 minutes
+cron.schedule('*/15 * * * *', () => {
+  runImapSync().catch(err => console.error('[IMAP Sync Error] Top-level:', err));
 });
 
 app.listen(PORT, () => {

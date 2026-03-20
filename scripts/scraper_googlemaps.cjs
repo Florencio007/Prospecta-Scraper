@@ -24,7 +24,7 @@ const CONFIG = {
   searchQuery: `${QUERY} ${LOCATION}`.trim(),
   maxHotels: MAX_RESULTS,
   outputFile: 'last_gmaps_results.json',
-  headless: true, // forcé à true en backend
+  headless: false, // forcé à true en backend
   delayBetweenHotels: 1000,
 };
 
@@ -440,12 +440,12 @@ async function main() {
           if (requestedFields.includes('rating')) allowedKeys.add('rating');
           if (requestedFields.includes('review_count')) allowedKeys.add('totalScore');
           if (requestedFields.includes('description') || requestedFields.includes('about')) { allowedKeys.add('about'); allowedKeys.add('category'); }
-          
+
           allowedKeys.add('contractDetails');
           allowedKeys.add('aiIntelligence');
 
           for (const key of Object.keys(payload)) {
-             if (!allowedKeys.has(key)) delete payload[key];
+            if (!allowedKeys.has(key)) delete payload[key];
           }
         }
 

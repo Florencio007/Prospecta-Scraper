@@ -2,10 +2,10 @@
 CREATE TABLE public.user_api_keys (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
-  provider VARCHAR(50) NOT NULL,         -- 'openai' | 'brevo' | 'twilio' | 'facebook' | 'linkedin' | 'google_maps'
+  provider VARCHAR(50) NOT NULL,         -- 'openai' | 'twilio' | 'facebook' | 'linkedin' | 'google_maps' | 'smtp'
   api_key TEXT NOT NULL,                 -- Clé API (chiffrée côté app avant stockage)
   api_secret TEXT,                       -- Secret optionnel (OAuth apps)
-  label VARCHAR(100),                    -- Nom personnalisé ex: "Clé Brevo Production"
+  label VARCHAR(100),                    -- Nom personnalisé ex: "SMTP Production"
   is_active BOOLEAN DEFAULT true,
   last_tested_at TIMESTAMPTZ,
   last_test_status VARCHAR(20),          -- 'success' | 'failed' | 'pending'

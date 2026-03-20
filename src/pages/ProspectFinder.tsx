@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Search, MapPin, Globe, Loader2, Sparkles, Filter, Database, Plus, ChevronRight, CheckCircle2, AlertCircle, X, SlidersHorizontal, Square, XCircle, Info, Eye, EyeOff, ShieldAlert } from "lucide-react";
+import { Search, MapPin, Globe, Loader2, Sparkles, Filter, Database, Plus, ChevronRight, CheckCircle2, AlertCircle, X, SlidersHorizontal, Square, XCircle, Info, Eye, EyeOff, ShieldAlert, Mail, Phone, Linkedin, Facebook, LayoutGrid, List } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import Header from "@/components/dashboard/Header";
 import ProspectDetailView from "@/components/dashboard/ProspectDetailView";
@@ -93,6 +93,11 @@ const CHANNEL_DATA_FIELDS: Record<string, { key: string; label: string; icon: st
     { key: "description", label: "Bio / Description", icon: "📝" },
     { key: "email", label: "Email", icon: "📧" },
     { key: "phone", label: "Téléphone", icon: "📞" },
+    { key: "address", label: "Adresse", icon: "📍" },
+    { key: "openingHours", label: "Horaires d'ouverture", icon: "⏰" },
+    { key: "team", label: "Équipe / Dirigeants", icon: "👥" },
+    { key: "technologies", label: "Technologies Web", icon: "🛠️" },
+    { key: "rating", label: "Note / Avis", icon: "⭐" },
     { key: "linkedin", label: "LinkedIn", icon: "🔗" },
     { key: "facebook", label: "Facebook", icon: "🔗" },
     { key: "instagram", label: "Instagram", icon: "🔗" },
@@ -183,6 +188,7 @@ const ProspectFinder = () => {
   const [agentPort, setAgentPort] = useState(DEFAULT_AGENT_PORT);
   const [agentOnline, setAgentOnline] = useState<boolean | null>(null);
   const [showInstallModal, setShowInstallModal] = useState(false);
+  const [viewMode, setViewMode] = useState<"list" | "grid">("list");
 
   useEffect(() => {
     const checkAgent = async () => {
@@ -507,33 +513,47 @@ const ProspectFinder = () => {
     return filterType === 'Entreprise' ? 'company' : 'person';
   };
 
-  const calculateInitialScore = (item: any) => {
-    let score = 15; // Score de base
+  const calculateInitialScore = (item: any, requestedFields: string[] = []) => {
+    let score = 10; // Score de base
     
-    // Valeur des données de contact
-    if (item.website || item.url) score += 15;
-    if (item.email || (item.emails && item.emails.length > 0)) score += 25;
-    if (item.phone || item.phoneUnformatted) score += 15;
-    
-    // Présence digitale
-    if (item.profileUrl) score += 10;
-    if (item.industry || item.categoryName || item.category) score += 10;
-    
-    // Preuve sociale (Google Maps)
-    if (item.totalScore) {
-      score += Math.round(item.totalScore * 4); // 5 étoiles = +20 pts
-    }
-    if (item.reviewsCount && item.reviewsCount > 10) score += 5;
+    // Si aucun champ n'est sélectionné, on utilise une logique par défaut
+    const fieldsToTrack = requestedFields.length > 0 ? requestedFields : ["name", "email", "phone", "website"];
+    const weightPerField = 85 / fieldsToTrack.length;
 
-    // Malus pour manque critique d'infos
-    if (!item.email && !item.phone && !item.website && !item.profileUrl) {
-      score -= 10;
-    }
+    fieldsToTrack.forEach(field => {
+      let found = false;
+      const val = item[field];
+      
+      if (field === 'email') {
+        found = !!(val || (item.emails && item.emails.length > 0) || (item.contractDetails?.emails && item.contractDetails.emails.length > 0));
+      } else if (field === 'phone') {
+        found = !!(val || item.phoneUnformatted || (item.contractDetails?.phones && item.contractDetails.phones.length > 0));
+      } else if (field === 'website') {
+        found = !!(val || item.url || item.website_url);
+      } else if (field === 'rating') {
+        found = !!(val || item.totalScore || item.rating);
+      } else if (field === 'openingHours') {
+        found = !!(val || item.opening_hours);
+      } else if (field === 'team' || field === 'dirigeant') {
+        found = !!(val || (item.contractDetails?.team?.length > 0) || (item.contractDetails?.dirigeants?.length > 0));
+      } else {
+        found = !!val;
+      }
 
+      if (found) {
+        score += weightPerField;
+      }
+    });
+
+    // Bonus de preuve sociale (Google Maps) si présent
+    if (item.totalScore && item.totalScore >= 4) {
+      score += 5;
+    }
+    
     // Malus pour nom suspect (trop court)
-    if ((item.name || "").length < 3) score -= 20;
+    if ((item.name || "").length < 3) score -= 15;
 
-    return Math.max(5, Math.min(95, score)); // Entre 5 et 95
+    return Math.max(5, Math.min(98, Math.round(score)));
   };
 
   /**
@@ -680,7 +700,8 @@ const ProspectFinder = () => {
                   id: item.notice_id, name: item.contact_name || item.agency,
                   initials: (item.agency?.[0] || "G").toUpperCase(),
                   position: item.title, company: item.agency, source: "govcon",
-                  score: calculateInitialScore(item), email: item.contact_email,
+                  requestedFields: selectedFields,
+                  score: calculateInitialScore(item, selectedFields), email: item.contact_email,
                   website: item.sam_url, city: item.performance_city_name,
                   tags: [item.naics].flat(), contractDetails: item
                 }));
@@ -715,7 +736,8 @@ const ProspectFinder = () => {
                   id: `gmap_${Math.random().toString(36).substr(2, 9)}`,
                   name: d.result.name, initials: (d.result.name?.[0] || "G").toUpperCase(),
                   position: d.result.category, company: d.result.name, source: "google_maps",
-                  score: calculateInitialScore(d.result), email: d.result.phone ? "Extraction..." : "",
+                  requestedFields: selectedFields,
+                  score: calculateInitialScore(d.result, selectedFields), email: d.result.phone ? "Extraction..." : "",
                   phone: d.result.phone || "", website: d.result.website || "",
                   city: filters.city || "", tags: [d.result.category].filter(Boolean),
                   contractDetails: d.result.contractDetails || d.result,
@@ -750,6 +772,8 @@ const ProspectFinder = () => {
                   ...d.result,
                   id: d.result.id || `li_${Math.random().toString(36).substr(2, 9)}`,
                   source: "linkedin",
+                  requestedFields: selectedFields,
+                  score: calculateInitialScore(d.result, selectedFields),
                   prospect_type: detectProspectType(d.result, filters.type === 'Entreprise' ? 'company' : 'person')
                 };
                 setPendingProspects(prev => {
@@ -781,6 +805,8 @@ const ProspectFinder = () => {
                   ...d.result,
                   id: d.result.id || `fb_${Math.random().toString(36).substr(2, 9)}`,
                   source: "facebook",
+                  requestedFields: selectedFields,
+                  score: calculateInitialScore(d.result, selectedFields),
                   prospect_type: detectProspectType(d.result, filters.type === 'Entreprise' ? 'company' : 'person')
                 };
                 setPendingProspects(prev => {
@@ -807,18 +833,31 @@ const ProspectFinder = () => {
               if (d.percentage !== undefined) updateChannelPct(d.percentage, d.message || "");
               if (d.error && typeof d.error === 'string') addLog(`❌ Erreur: ${d.error}`, 'error');
               if (d.result) {
+                const prospectType = detectProspectType(d.result, filters.type === t("enterprise") ? 'company' : 'person');
                 const mapped = {
                   ...d.result,
                   id: d.result.id || `goog_${Math.random().toString(36).substr(2, 9)}`,
                   source: "google",
-                  prospect_type: "company"
+                  prospect_type: prospectType,
+                  requestedFields: selectedFields,
+                  description: d.result.snippet || d.result.description || "",
+                  email: d.result.contacts?.emails?.[0] || d.result.email || "",
+                  phone: d.result.contacts?.phones?.[0] || d.result.phone || "",
+                  website: d.result.url || d.result.website || "",
+                  company: d.result.company || d.result.name,
+                  position: d.result.position || d.result.services?.categories?.[0] || "",
+                  socialLinks: d.result.socials || {},
+                  city: d.result.contacts?.city || d.result.contacts?.addresses?.[0] || d.result.city || "",
+                  score: calculateInitialScore(d.result, selectedFields),
+                  contractDetails: d.result 
                 };
                 setPendingProspects(prev => {
                    if (prev.some(p => p.website === mapped.website)) return prev;
                    return [...prev, mapped];
                 });
                 setSelectedProspectIds(prev => new Set(prev).add(mapped.id));
-                addLog(`🌐 Google: ${mapped.name}`, 'success');
+                const displayName = mapped.name || mapped.company || mapped.website || "Prospect Web";
+                addLog(`🌐 Google: ${displayName}`, 'success');
               }
               if (d.percentage === 100 || d.error || d.done) { es.close(); resolveChannel(); }
             };
@@ -1722,57 +1761,182 @@ const ProspectFinder = () => {
                   <h2 className="text-lg font-bold flex items-center gap-2">
                     <CheckCircle2 className="text-accent" /> {t("validateResults")} ({pendingProspects.length})
                   </h2>
-                  <div className="flex gap-2">
-                    <Button variant="ghost" size="sm" onClick={() => setPendingProspects([])}>
-                      <XCircle className="mr-2" size={16} /> {t("ignore")}
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={handleAddToCampaign}
-                      className="border-accent text-accent hover:bg-accent/10"
-                      disabled={selectedProspectIds.size === 0 || isSavingForCampaign}
-                    >
-                      {isSavingForCampaign ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2" size={16} />}
-                      {t("addToCampaign")} ({selectedProspectIds.size})
-                    </Button>
-                    <Button size="sm" onClick={handleSaveSelected} className="bg-accent" disabled={selectedProspectIds.size === 0}>
-                      <Plus className="mr-2" size={16} /> {t("import")} ({selectedProspectIds.size})
-                    </Button>
+                  <div className="flex items-center gap-4">
+                    {/* View Mode Switcher */}
+                    <div className="flex items-center bg-secondary/50 border rounded-lg p-1">
+                      <Button
+                        variant={viewMode === "list" ? "secondary" : "ghost"}
+                        size="icon"
+                        onClick={() => setViewMode("list")}
+                        className={`h-8 w-8 ${viewMode === "list" ? "shadow-sm" : ""}`}
+                        title="Vue Liste"
+                      >
+                        <List size={16} />
+                      </Button>
+                      <Button
+                        variant={viewMode === "grid" ? "secondary" : "ghost"}
+                        size="icon"
+                        onClick={() => setViewMode("grid")}
+                        className={`h-8 w-8 ${viewMode === "grid" ? "shadow-sm" : ""}`}
+                        title="Vue Grille"
+                      >
+                        <LayoutGrid size={16} />
+                      </Button>
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Button variant="ghost" size="sm" onClick={() => setPendingProspects([])}>
+                        <XCircle className="mr-2" size={16} /> {t("ignore")}
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleAddToCampaign}
+                        className="border-accent text-accent hover:bg-accent/10"
+                        disabled={selectedProspectIds.size === 0 || isSavingForCampaign}
+                      >
+                        {isSavingForCampaign ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2" size={16} />}
+                        {t("addToCampaign")} ({selectedProspectIds.size})
+                      </Button>
+                      <Button size="sm" onClick={handleSaveSelected} className="bg-accent" disabled={selectedProspectIds.size === 0}>
+                        <Plus className="mr-2" size={16} /> {t("import")} ({selectedProspectIds.size})
+                      </Button>
+                    </div>
                   </div>
                 </div>
 
-                <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
-                  <Table>
-                    <TableHeader className="bg-secondary/30">
-                      <TableRow>
-                        <TableHead className="w-10">
-                          <Checkbox
-                            checked={selectedProspectIds.size === pendingProspects.length && pendingProspects.length > 0}
-                            onCheckedChange={toggleSelectAll}
-                          />
-                        </TableHead>
-                        <TableHead>{t("name")}</TableHead>
-                        <TableHead>{t("company")}</TableHead>
-                        <TableHead>{t("source")}</TableHead>
-                        <TableHead>{t("score")}</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {currentProspects.map(p => (
-                        <TableRow key={p.id} className="cursor-pointer hover:bg-accent/5 group" onClick={() => handleViewProspect(p)}>
-                          <TableCell onClick={(e) => e.stopPropagation()}>
-                            <Checkbox checked={selectedProspectIds.has(p.id)} onCheckedChange={() => toggleProspectSelection(p.id)} />
-                          </TableCell>
-                          <TableCell className="font-bold">{p.name}</TableCell>
-                          <TableCell>{p.company}</TableCell>
-                          <TableCell><Badge variant="outline">{p.source}</Badge></TableCell>
-                          <TableCell><Badge variant="secondary">{p.score}%</Badge></TableCell>
+                {viewMode === "list" ? (
+                  <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+                    <Table>
+                      <TableHeader className="bg-secondary/30">
+                        <TableRow>
+                          <TableHead className="w-10">
+                            <Checkbox
+                              checked={selectedProspectIds.size === pendingProspects.length && pendingProspects.length > 0}
+                              onCheckedChange={toggleSelectAll}
+                            />
+                          </TableHead>
+                          <TableHead>{t("name")}</TableHead>
+                          <TableHead>{t("company")}</TableHead>
+                          <TableHead>{t("source")}</TableHead>
+                          <TableHead>{t("score")}</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
+                      </TableHeader>
+                      <TableBody>
+                        {currentProspects.map(p => (
+                          <TableRow key={p.id} className="cursor-pointer hover:bg-accent/5 group transition-colors duration-200" onClick={() => handleViewProspect(p)}>
+                            <TableCell onClick={(e) => e.stopPropagation()}>
+                              <Checkbox checked={selectedProspectIds.has(p.id)} onCheckedChange={() => toggleProspectSelection(p.id)} />
+                            </TableCell>
+                            <TableCell className="font-bold text-slate-900 dark:text-slate-100 font-outfit text-sm">
+                              {p.name || p.website}
+                            </TableCell>
+                            <TableCell className="text-slate-600 dark:text-slate-400 font-medium text-xs">
+                              {p.company || "—"}
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-1.5">
+                                <div className={`p-1 rounded-md ${
+                                  p.source === 'google' ? 'bg-blue-100 text-blue-600' : 
+                                  p.source === 'linkedin' ? 'bg-sky-100 text-sky-700' : 
+                                  'bg-slate-100 text-slate-600'
+                                }`}>
+                                  {p.source === 'google' ? <Globe size={12} /> : 
+                                   p.source === 'linkedin' ? <Linkedin size={12} /> : 
+                                   <Search size={12} />}
+                                </div>
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">{p.source}</span>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-2">
+                                <div className="w-12 bg-slate-100 dark:bg-slate-800 rounded-full h-1.5 overflow-hidden shadow-inner">
+                                  <div className={`h-full rounded-full transition-all duration-500 ${p.score >= 80 ? 'bg-emerald-500' : p.score >= 50 ? 'bg-amber-500' : 'bg-slate-400'}`} style={{width: `${p.score}%`}} />
+                                </div>
+                                <span className="text-[10px] font-extrabold text-slate-600">{p.score}%</span>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-4">
+                    {currentProspects.map((p) => (
+                      <div 
+                        key={p.id} 
+                        className={`relative group bg-card p-5 rounded-2xl border transition-all duration-300 hover:shadow-lg hover:-translate-y-1 cursor-pointer overflow-hidden ${selectedProspectIds.has(p.id) ? 'border-accent ring-1 ring-accent/20 bg-accent/5' : 'border-slate-200 dark:border-slate-800'}`}
+                        onClick={() => handleViewProspect(p)}
+                      >
+                        {/* Selection Checkbox */}
+                        <div className="absolute top-3 left-3 z-10 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
+                          <Checkbox
+                            checked={selectedProspectIds.has(p.id)}
+                            onCheckedChange={() => toggleProspectSelection(p.id)}
+                            className="h-5 w-5 rounded-full border-accent/30 data-[state=checked]:bg-accent"
+                          />
+                        </div>
+
+                        {/* Score Badge */}
+                        <div className="absolute top-3 right-3 text-center">
+                          <div className={`px-2 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase border shadow-sm ${
+                            p.score >= 80 ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 
+                            p.score >= 50 ? 'bg-amber-500/10 text-amber-600 border-amber-500/20' : 
+                            'bg-slate-500/10 text-slate-500 border-slate-500/20'
+                          }`}>
+                            {p.score}%
+                          </div>
+                        </div>
+
+                        <div className="flex flex-col items-center text-center mt-4">
+                          <div className="relative mb-4">
+                            <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center font-bold text-2xl text-accent group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                              {p.initials}
+                            </div>
+                            <div className={`absolute -bottom-1 -right-1 p-1 rounded-lg border-2 border-card shadow-sm ${
+                              p.source === 'google' ? 'bg-blue-500 text-white' : 
+                              p.source === 'linkedin' ? 'bg-sky-600 text-white' : 
+                              'bg-slate-500 text-white'
+                            }`}>
+                              {p.source === 'google' ? <Globe size={10} /> : 
+                               p.source === 'linkedin' ? <Linkedin size={10} /> : 
+                               <Search size={10} />}
+                            </div>
+                          </div>
+                          <h3 className="font-bold text-slate-900 dark:text-slate-100 line-clamp-1 mb-1 font-outfit tracking-tight">{p.name || p.website}</h3>
+                          <p className="text-[11px] font-medium text-slate-500 dark:text-slate-400 line-clamp-1 mb-4 uppercase tracking-wider">{p.company || "—"}</p>
+                          
+                          <div className="flex gap-2 mb-4">
+                            <Badge variant="outline" className="text-[10px] py-0 px-2 h-5 font-normal">
+                              {p.source}
+                            </Badge>
+                            {p.email && <Mail size={12} className="text-accent" />}
+                            {p.phone && <Phone size={12} className="text-accent" />}
+                          </div>
+                          
+                          <div className="w-full pt-4 border-t border-slate-100 dark:border-slate-800 flex justify-center gap-4">
+                             {p.website && (
+                               <a href={p.website.startsWith('http') ? p.website : `https://${p.website}`} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                                 <Globe size={14} className="text-slate-400 hover:text-accent" />
+                               </a>
+                             )}
+                             {p.socials?.linkedin && (
+                               <a href={p.socials.linkedin} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                                 <Linkedin size={14} className="text-slate-400 hover:text-accent" />
+                               </a>
+                             )}
+                             {p.socials?.facebook && (
+                               <a href={p.socials.facebook} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                                 <Facebook size={14} className="text-slate-400 hover:text-accent" />
+                               </a>
+                             )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 {/* Pagination Controls */}
                 <div className="flex items-center justify-between bg-card p-4 rounded-lg border">

@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 
-export type ApiProvider = 'brevo' | 'openai' | 'google_maps' | 'facebook' | 'linkedin' | 'twilio' | 'smtp';
+export type ApiProvider = 'openai' | 'google_maps' | 'facebook' | 'linkedin' | 'twilio' | 'smtp';
 
 export interface ApiKey {
     id: string;

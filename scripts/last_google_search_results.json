@@ -1,0 +1,1438 @@
+{
+  "scrapedAt": "2026-03-20T07:26:04.200Z",
+  "query": "hotel nosy be, Madagascar",
+  "location": "nosy be, Madagascar",
+  "stats": {
+    "total": 5,
+    "avecTelephone": 5,
+    "avecEmail": 5,
+    "avecWhatsApp": 0,
+    "avecAdresse": 2,
+    "avecGPS": 0,
+    "avecReseaux": 5,
+    "avecHoraires": 1,
+    "avecEquipe": 0,
+    "avecServices": 5,
+    "avecAvis": 0,
+    "avecTarifs": 0,
+    "avecFormulaire": 1,
+    "avecAppStore": 0,
+    "avecDownloads": 0,
+    "avecPlateformes": 3,
+    "avecPartenaires": 2
+  },
+  "enterprises": [
+    {
+      "name": "Quel est le plus bel endroit à Nosy Be ?",
+      "googleTitle": "Quel est le plus bel endroit à Nosy Be ? - Voyage Madagascar",
+      "googleSnippet": "",
+      "googlePosition": 1,
+      "url": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be",
+      "domain": "madagascar-sur-mesure.com",
+      "contacts": {
+        "phones": [
+          "0189717115",
+          "01 89 71 71"
+        ],
+        "emails": [
+          "madagascarsurmesure@gmail.com"
+        ],
+        "whatsapp": [],
+        "addresses": [
+          "22 rue Andrianary Ratianarivo",
+          "Antananarivo & les Hautes terres",
+          "Antananarivo & les Hautes Terres",
+          "Antananarivo"
+        ],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "socials": {
+        "facebook": [
+          "https://www.facebook.com/madagascarsurmesure"
+        ],
+        "instagram": [
+          "https://www.instagram.com/bynativ"
+        ]
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": []
+      },
+      "services": {
+        "list": [
+          "Le parc national de Lokobe",
+          "Nosy Komba",
+          "Nosy Iranja",
+          "La montagne sacrée de Nosy Be",
+          "Plongée et snorkeling",
+          "Découverte des plantations d’ylang-ylang",
+          "Sortie en mer et observation des baleines",
+          "Le marché d’Ambatoloaka",
+          "Hébergements",
+          "Exploration du Nord en famille",
+          "Périple dans le nord malgache",
+          "Des Hautes Terres au Canal des pangalanes",
+          "Au cœur de Madagascar"
+        ],
+        "categories": [
+          "Nos voyages",
+          "Par régions",
+          "Nosy Be & le Nord",
+          "Antananarivo  & les Hautes terres",
+          "Sainte-Marie & l'Est",
+          "L'Ouest Malgache & Tuléar",
+          "Fort-Dauphin & le Grand Sud",
+          "Par envies",
+          "Incontournables",
+          "Voyage de noces",
+          "En famille",
+          "Nature & Aventure",
+          "Îles & Farniente",
+          "Culture & Traditions",
+          "Trouvailles",
+          "bynativ",
+          "Communauté bynativ",
+          "Vols internationaux",
+          "Conseils santé",
+          "L'agence",
+          "Qui sommes-nous ?",
+          "Notre équipe",
+          "Témoignages",
+          "Conseils voyage",
+          "Que faire à Madagascar ?",
+          "Où aller à Madagascar ?",
+          "Tout savoir sur Madagascar",
+          "Infos pratiques Madagascar",
+          "Culture & Traditions Malgaches"
+        ],
+        "prices": []
+      },
+      "slogan": "",
+      "pageTitle": "Quel est le plus bel endroit à Nosy Be ?",
+      "metaDescription": "Découvrez Nosy Be, l’île aux parfums de Madagascar : plages de rêve, faune exotique, plongée, ylang-ylang et traditions locales. Le guide complet pour préparer votre voyage.",
+      "ogImage": "https://www.madagascar-sur-mesure.com/uploads/sites/67/2023/10/nosy-be-madagascar.jpeg",
+      "lang": "fr",
+      "canonical": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be",
+      "logo": "https://www.madagascar-sur-mesure.com/uploads/sites/67/2025/10/madagascar-2.png",
+      "googleSearchUrl": "https://www.google.com/search?q=hotel%20nosy%20be%2C%20Madagascar",
+      "gps": null,
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [],
+        "partners": []
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": [
+          "lundi au vendredi de 7h à 15h30 – appel local gratuit"
+        ]
+      },
+      "team": [],
+      "technologies": {
+        "cms": [
+          "WordPress"
+        ],
+        "frameworks": [],
+        "analytics": [
+          "Google Analytics",
+          "Hotjar"
+        ],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [],
+      "navLinks": [
+        {
+          "text": "DEVIS",
+          "href": "https://www.madagascar-sur-mesure.com/espace-client/travel-request"
+        },
+        {
+          "text": "01 89 71 71 15",
+          "href": "tel:01 89 71 71 15"
+        },
+        {
+          "text": "Espace client",
+          "href": "https://www.madagascar-sur-mesure.com/espace-client"
+        },
+        {
+          "text": "Demander un devis",
+          "href": "https://www.madagascar-sur-mesure.com/espace-client/travel-request"
+        },
+        {
+          "text": "Nos voyages",
+          "href": "https://www.madagascar-sur-mesure.com/voyage/tous-nos-voyages"
+        },
+        {
+          "text": "Par régions",
+          "href": "https://www.madagascar-sur-mesure.com/region"
+        },
+        {
+          "text": "Nosy Be & le Nord",
+          "href": "https://www.madagascar-sur-mesure.com/region/nosy-be-nord"
+        },
+        {
+          "text": "Antananarivo  & les Hautes terres",
+          "href": "https://www.madagascar-sur-mesure.com/region/antananarivo-hautes-terres"
+        },
+        {
+          "text": "Sainte-Marie & l'Est",
+          "href": "https://www.madagascar-sur-mesure.com/region/sainte-marie-est"
+        },
+        {
+          "text": "L'Ouest Malgache & Tuléar",
+          "href": "https://www.madagascar-sur-mesure.com/region/ouest-malgache"
+        },
+        {
+          "text": "Fort-Dauphin & le Grand Sud",
+          "href": "https://www.madagascar-sur-mesure.com/region/fort-dauphin-grand-sud"
+        },
+        {
+          "text": "Par envies",
+          "href": "https://www.madagascar-sur-mesure.com/envie"
+        },
+        {
+          "text": "Incontournables",
+          "href": "https://www.madagascar-sur-mesure.com/envie/incontournables"
+        },
+        {
+          "text": "Voyage de noces",
+          "href": "https://www.madagascar-sur-mesure.com/envie/voyage-noces"
+        },
+        {
+          "text": "En famille",
+          "href": "https://www.madagascar-sur-mesure.com/envie/famille"
+        },
+        {
+          "text": "Nature & Aventure",
+          "href": "https://www.madagascar-sur-mesure.com/envie/nature-aventure"
+        },
+        {
+          "text": "Îles & Farniente",
+          "href": "https://www.madagascar-sur-mesure.com/envie/iles-farniente"
+        },
+        {
+          "text": "Culture & Traditions",
+          "href": "https://www.madagascar-sur-mesure.com/envie/culture-traditions"
+        },
+        {
+          "text": "Trouvailles",
+          "href": "https://www.madagascar-sur-mesure.com/envie/trouvailles"
+        },
+        {
+          "text": "bynativ",
+          "href": "https://www.madagascar-sur-mesure.com/bynativ"
+        },
+        {
+          "text": "Communauté bynativ",
+          "href": "https://www.madagascar-sur-mesure.com/bynativ/communaute-bynativ"
+        },
+        {
+          "text": "Vols internationaux",
+          "href": "https://www.madagascar-sur-mesure.com/bynativ/vols-internationaux"
+        },
+        {
+          "text": "Conseils santé",
+          "href": "https://www.madagascar-sur-mesure.com/bynativ/conseils-sante"
+        },
+        {
+          "text": "L'agence",
+          "href": "https://www.madagascar-sur-mesure.com/agence-locale"
+        },
+        {
+          "text": "Qui sommes-nous ?",
+          "href": "https://www.madagascar-sur-mesure.com/agence-locale/qui-sommes-nous"
+        },
+        {
+          "text": "Notre équipe",
+          "href": "https://www.madagascar-sur-mesure.com/agence-locale/equipe"
+        },
+        {
+          "text": "Témoignages",
+          "href": "https://www.madagascar-sur-mesure.com/agence-locale/temoignage"
+        },
+        {
+          "text": "Conseils voyage",
+          "href": "https://www.madagascar-sur-mesure.com/conseils-voyage"
+        },
+        {
+          "text": "Que faire à Madagascar ?",
+          "href": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire"
+        },
+        {
+          "text": "Où aller à Madagascar ?",
+          "href": "https://www.madagascar-sur-mesure.com/conseils-voyage/ou-aller"
+        },
+        {
+          "text": "Tout savoir sur Madagascar",
+          "href": "https://www.madagascar-sur-mesure.com/conseils-voyage/tout-savoir"
+        },
+        {
+          "text": "Infos pratiques Madagascar",
+          "href": "https://www.madagascar-sur-mesure.com/infos-pratiques"
+        },
+        {
+          "text": "Culture & Traditions Malgaches",
+          "href": "https://www.madagascar-sur-mesure.com/conseils-voyage/culture-traditions"
+        }
+      ],
+      "mainContent": "Nosy Be, surnommée “l’île aux parfums”, est située au nord-ouest de Madagascar. Elle est connue pour ses paysages tropicaux et son ambiance chaleureuse. Cela en fait une destination prisée par les voyageurs en quête de repos, de plongée sous-marine ou de découvertes culturelles. Dans cet article, nous vous expliquons tout ce que vous devez savoir avant votre voyage.\n\nLe parc national de Lokobe se trouve au sud-est de l’île. Il s’agit d’une réserve naturelle abritant une faune et une flore uniques. Vous pourrez y observer des lémuriens, des caméléons colorés et une végétation luxuriante. L’accès se fait généralement en pirogue traditionnelle, ce qui offre une expérience immersive !\n\nLa petite île montagneuse de Nosy Komba est à quelques kilomètres seulement de Nosy Be. Elle a la particularité d’abriter de nombreux lémuriens en liberté qu’il est possible d’approcher. En plus de sa faune riche, l’île est réputée pour ses villages de pêcheurs et son artisanat local.\n\nConnue pour son spectaculaire banc de sable reliant deux îlots à marée basse, Nosy Iranja est un véritable paradis. C’est l’endroit idéal pour une excursion à la journée, avec des eaux turquoise et une plage de sable blanc qui s’étend à perte de vue.\n\nSi vous voulez profiter d’une vue panoramique à couper le souffle, nous vous conseillons de grimper au sommet du Mont Passot. Il s’agit du point culminant de l’île duquel il y a une vue imprenable sur les lacs volcaniques et l’océan Indien.\n\nL’archipel de Nosy Be est l’un des meilleurs spots de plongée de Madagascar. Les endroits plus célèbres sont Nosy Tanikely ou les récifs de l’archipel des Mitsio. Vous aurez l’occasion d’y apercevoir des coraux multicolores, des tortues marines, ou encore des poissons tropicaux.\n\nLes fleurs d’ylang-ylang sont utilisées pour concevoir des parfums. Il existe de nombreuses plantations sur l’île. Une visite guidée vous permettra de découvrir ce savoir-faire traditionnel et de sentir les arômes typiques de Nosy Be.\n\nEntre juillet et octobre, les baleines à bosse migrent vers les eaux chaudes de Madagascar. Elles sont visibles lors d’excursions en bateau. Si vous êtes chanceux, vous pourrez même voir des dauphines et des requins-baleines.\n\nAmbatoloaka est considéré le cœur animé de Nosy Be, notamment en soirée. Entre les marchés, les restaurants en bord de plage et les bars, c’est l’endroit idéal pour s’imprégner de l’ambiance locale et goûter aux spécialités malgaches.\n\nUn large choix d’hébergements est disponible à Nosy Be, allant des hôtels luxueux aux bungalows. Il y en a pour tous les goûts !\n\nSi vous voyagez à Nosy Be, vous ne pouvez pas repartir sans avoir goûté au romazava, un ragoût malgache. Vous devez également tester les brochettes de zébu et les grillades de fruits de mer fraîchement pêchés. Nous vous conseillons les restaurants « Chez Loulou » et « Le Papillon ».\n\nNosy Be est une destination prisée, mais le tourisme a aussi un impact sur son environnement fragile. Voici quelques gestes simples pour voyager de manière plus responsable.\n\nTout d’abord, il est préférable de privilégier les hébergements éco-responsables. Pour les reconnaître, vous pouvez vous appuyer sur différents labels, comme Green Key.\n\nLors de votre séjour, évitez les plastiques à usage unique et utilisez plutôt une gourde réutilisable. Cela réduit le nombre de déchets.\n\nIl est également souhaitable de réserver des excursions encadrées par des guides locaux afin de soutenir l’économie locale. Durant vos randonnées ou vos plongées, vous devez impérativement respecter la faune et la flore.\n\nQuelle est la meilleure période pour visiter Nosy Be ? La saison sèche, de mai à octobre, est idéale pour profiter pleinement de Nosy Be. C’est aussi le moment parfait pour observer les baleines et profiter d’un climat agréable.\n\nComment se déplacer à Nosy Be ? Plusieurs options sont disponibles en fonction de vos besoins :\n\nQuels sont les impacts du tourisme sur l’environnement ? Le développement touristique a contribué à l’économie locale, mais a aussi entraîné des problèmes comme la pollution plastique et la pression sur les ressources naturelles.\n\nSéjour organisé ou voyage en solo : que choisir ? Un séjour organisé garantit un certain confort et une logistique bien rodée. Toutefois, un voyage individuel offre plus de flexibilité et de liberté. Le choix dépend de vos préférences et de votre budget.",
+      "structuredData": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": "/conseils-voyage/que-faire/nosy-be",
+              "url": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be",
+              "name": "Quel est le plus bel endroit à Nosy Be ?",
+              "isPartOf": {
+                "@id": "https://www.madagascar-sur-mesure.com/#website"
+              },
+              "primaryImageOfPage": {
+                "@id": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be#primaryimage"
+              },
+              "image": {
+                "@id": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be#primaryimage"
+              },
+              "thumbnailUrl": "/uploads/sites/67/2023/10/nosy-be-madagascar.jpeg",
+              "datePublished": "2025-04-01T14:47:40+00:00",
+              "dateModified": "2025-04-02T08:37:47+00:00",
+              "description": "Découvrez Nosy Be, l’île aux parfums de Madagascar : plages de rêve, faune exotique, plongée, ylang-ylang et traditions locales. Le guide complet pour préparer votre voyage.",
+              "breadcrumb": {
+                "@id": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be#breadcrumb"
+              },
+              "inLanguage": "fr-FR",
+              "potentialAction": [
+                {
+                  "@type": "ReadAction",
+                  "target": [
+                    "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be"
+                  ]
+                }
+              ]
+            },
+            {
+              "@type": "ImageObject",
+              "inLanguage": "fr-FR",
+              "@id": "https://www.madagascar-sur-mesure.com/conseils-voyage/que-faire/nosy-be#primaryimage",
+              "url": "/uploads/sites/67/2023/10/nosy-be-madagascar.jpeg",
+              "contentUrl": "/uploads/sites/67/2023/10/nosy-be-madagascar.jpeg",
+              "width": 1920,
+              "height": 1080,
+              "caption": "©mirecca"
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://www.madagascar-sur-mesure.com/#website",
+              "url": "https://www.madagascar-sur-mesure.com/",
+              "name": "Madagascar sur Mesure",
+              "description": "",
+              "potentialAction": [
+                {
+                  "@type": "SearchAction",
+                  "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://www.madagascar-sur-mesure.com/?s={search_term_string}"
+                  },
+                  "query-input": {
+                    "@type": "PropertyValueSpecification",
+                    "valueRequired": true,
+                    "valueName": "search_term_string"
+                  }
+                }
+              ],
+              "inLanguage": "fr-FR"
+            }
+          ]
+        }
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T07:24:56.226Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Quel budget prévoir pour son séjour à Nosy Be ?",
+      "googleTitle": "Quel budget prévoir pour son séjour à Nosy Be ? - Corail Noir",
+      "googleSnippet": "",
+      "googlePosition": 2,
+      "url": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/#:~:text=Le%20co%C3%BBt%20moyen%20d'une,et%20150%20%E2%82%AC%20par%20nuit.",
+      "domain": "corailnoirmadagascar.com",
+      "contacts": {
+        "phones": [
+          "+261345357718"
+        ],
+        "emails": [
+          "booking@corailnoirmadagascar.com"
+        ],
+        "whatsapp": [],
+        "addresses": [
+          "BP 501 Ambaro Dzamandzar",
+          "Antananarivo",
+          "Antananarivo. Le coût varie en fonction de la durée de votre séjour.",
+          "Madagascar",
+          "madagascar.com"
+        ],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "socials": {
+        "facebook": [
+          "https://www.facebook.com/corailnoirhotel"
+        ],
+        "instagram": [
+          "https://www.instagram.com/corailnoirhotel"
+        ]
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": []
+      },
+      "services": {
+        "list": [],
+        "categories": [
+          "L’hôtel",
+          "Hébergements",
+          "Restaurant",
+          "Espace Bien-être",
+          "Expériences",
+          "Excursions",
+          "Plongée",
+          "Notre philosophie",
+          "Nos engagements",
+          "Infos pratiques",
+          "FAQ",
+          "Venir au Corail Noir",
+          "Contact",
+          "Actualités",
+          "Réserver"
+        ],
+        "prices": []
+      },
+      "slogan": "",
+      "pageTitle": "Quel budget prévoir pour son séjour à Nosy Be ?",
+      "metaDescription": "Combien faut-il prévoir pour un séjour à Nosy Be ? Le budget à envisager dépend de nombreux facteurs, tels que la saison, le type d’hébergement ou encore les activités prévues.",
+      "ogImage": "",
+      "lang": "fr-FR",
+      "canonical": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/",
+      "logo": "https://corailnoirmadagascar.com/wp-content/themes/amanta/dist/logo/hotel-nosy-be.png",
+      "googleSearchUrl": "https://www.google.com/search?q=hotel%20nosy%20be%2C%20Madagascar",
+      "gps": null,
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [
+          {
+            "url": "https://www.secure-hotel-booking.com/Corail-Noir/JKG7/fr",
+            "label": "Réserver",
+            "platform": "secure-hotel-booking.com"
+          },
+          {
+            "url": "https://www.tripadvisor.fr/Hotel_Review-g479206-d1167312-Reviews-AHG_Corail_Noir_Hotel-Nosy_Be_Antsiranana_Province.html",
+            "label": "tripadvisor.fr",
+            "platform": "tripadvisor.fr"
+          },
+          {
+            "url": "https://www.secure-hotel-booking.com/d-edge/Corail-Noir/JKG7/fr-FR/DateSelection?_gl=1*ouswu7*_gcl_au*MTI2MDk5NDkwMC4xNzYzNTU2OTI1*_ga*MTA3ODk0ODIwMC4xNzY0MjMwNjYy*_ga_DJ8WQM28YV*czE3NjU1MzE4MTgkbzgkZzEkdDE3NjU1MzUyMTgkajYwJGwwJGgw",
+            "label": "EUROS (€)",
+            "platform": "secure-hotel-booking.com"
+          }
+        ],
+        "partners": [
+          {
+            "url": "https://www.aquamadagascar.com/",
+            "label": "Aqua Diving",
+            "domain": "aquamadagascar.com"
+          },
+          {
+            "url": "https://www.nosykomba.com/",
+            "label": "Nosy Komba",
+            "domain": "nosykomba.com"
+          },
+          {
+            "url": "https://amanta-resorts.com/",
+            "label": "Le groupe AMANTA",
+            "domain": "amanta-resorts.com"
+          },
+          {
+            "url": "https://antsanitia.com/",
+            "label": "Antsanitia Resort - Madagascar",
+            "domain": "antsanitia.com"
+          },
+          {
+            "url": "https://hotel-jardin-maore.com/",
+            "label": "Jardin Maore - Mayotte",
+            "domain": "hotel-jardin-maore.com"
+          },
+          {
+            "url": "https://lagonmaore.com/",
+            "label": "Lagon Maore - Mayotte",
+            "domain": "lagonmaore.com"
+          },
+          {
+            "url": "https://hotel-ledimitile.com/",
+            "label": "Le Dimitile Hôtel & Spa - La Réunion",
+            "domain": "hotel-ledimitile.com"
+          },
+          {
+            "url": "https://cote-ocean.com/",
+            "label": "Côté Océan - Angoulins",
+            "domain": "cote-ocean.com"
+          },
+          {
+            "url": "https://athomeresidence.fr/",
+            "label": "Athome Résidence & Spa - La Rochelle",
+            "domain": "athomeresidence.fr"
+          },
+          {
+            "url": "https://association-amada.org/",
+            "label": "L'association Amada",
+            "domain": "association-amada.org"
+          },
+          {
+            "url": "https://booking.corailnoirmadagascar.com/reservation/search",
+            "label": "ARIARY (MGA)",
+            "domain": "booking.corailnoirmadagascar.com"
+          },
+          {
+            "url": "https://consenthub.utiq.com/pages/privacy-statement#telecom-operators",
+            "label": "connexion internet compatible",
+            "domain": "consenthub.utiq.com"
+          },
+          {
+            "url": "https://consenthub.utiq.com/",
+            "label": "portail d’Utiq (consenthub)",
+            "domain": "consenthub.utiq.com"
+          },
+          {
+            "url": "https://consenthub.utiq.com/pages/privacy-statement",
+            "label": "Politique de protection des données personnelles d’Utiq",
+            "domain": "consenthub.utiq.com"
+          }
+        ]
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "technologies": {
+        "cms": [
+          "WordPress"
+        ],
+        "frameworks": [
+          "jQuery"
+        ],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [
+          "Facebook Pixel"
+        ],
+        "chat": [],
+        "other": []
+      },
+      "forms": [],
+      "navLinks": [
+        {
+          "text": "L’hôtel",
+          "href": "https://corailnoirmadagascar.com/corail-noir/corail-noir-hotel-nosy-be/"
+        },
+        {
+          "text": "Hébergements",
+          "href": "https://corailnoirmadagascar.com/hebergements/"
+        },
+        {
+          "text": "Restaurant",
+          "href": "https://corailnoirmadagascar.com/corail-noir/restaurant-nosy-be/"
+        },
+        {
+          "text": "Espace Bien-être",
+          "href": "https://corailnoirmadagascar.com/corail-noir/hotel-spa-nosy-be/"
+        },
+        {
+          "text": "Expériences",
+          "href": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/#"
+        },
+        {
+          "text": "Excursions",
+          "href": "https://corailnoirmadagascar.com/excursions-nosy-be-madagascar/"
+        },
+        {
+          "text": "Plongée",
+          "href": "https://www.aquamadagascar.com/"
+        },
+        {
+          "text": "Nos engagements",
+          "href": "https://corailnoirmadagascar.com/engagements-sociaux-et-environnementaux/"
+        },
+        {
+          "text": "Infos pratiques",
+          "href": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/#"
+        },
+        {
+          "text": "FAQ",
+          "href": "https://corailnoirmadagascar.com/faq/"
+        },
+        {
+          "text": "Venir au Corail Noir",
+          "href": "https://corailnoirmadagascar.com/corail-noir/venir-au-corail-noir/"
+        },
+        {
+          "text": "Contact",
+          "href": "https://corailnoirmadagascar.com/contact/"
+        },
+        {
+          "text": "Actualités",
+          "href": "https://corailnoirmadagascar.com/actualites-nosy-be/"
+        },
+        {
+          "text": "Réserver",
+          "href": "https://www.secure-hotel-booking.com/Corail-Noir/JKG7/fr"
+        },
+        {
+          "text": "FR",
+          "href": "javascript:void(0);"
+        },
+        {
+          "text": "EN",
+          "href": "https://corailnoirmadagascar.com/en/"
+        },
+        {
+          "text": "IT",
+          "href": "https://corailnoirmadagascar.com/it/guida/soggiorno-a-nosy-be/soggiornare-a-nosy-be-quanto-costa/"
+        }
+      ],
+      "mainContent": "Nichée dans les eaux saphir de l’océan Indien, Nosy Be, la plus grande île de Madagascar, est un véritable joyau de la nature. Saisissez l’occasion de vous immerger dans la beauté spectaculaire de ses plages de sable blanc, de ses eaux cristallines et de sa luxuriante forêt tropicale. Son allure paradisiaque attire des voyageurs du monde entier, cherchant à s’évader dans ce sanctuaire préservé où le temps semble s’arrêter.\n\nMais, combien faut-il prévoir pour un séjour à Nosy Be ? Le budget à envisager dépend de nombreux facteurs, tels que la saison, le type d’hébergement ou encore les activités prévues. Cette analyse détaillée vous fournira un aperçu précis du coût de vos prochaines vacances à Nosy Be.\n\nNosy Be, destination phare de Madagascar, offre à ses visiteurs un environnement idyllique. Les voyageurs sont conquis par la diversité de ses paysages, entre mer et forêt tropicale, et la richesse de sa faune et de sa flore.\n\nSituée au nord-ouest de Madagascar, Nosy Be est une île paradisiaque qui se distingue par ses plages de sable fin et son eau d’un bleu incroyable.\n\nLa ville principale, Hell-Ville, est un véritable mélange de cultures, où les traditions malgaches rencontrent l’héritage colonial français. Avec un climat tropical, Nosy Be offre une température moyenne agréable tout au long de l’année, rendant chaque saison propice au voyage.\n\nNosy Be offre une multitude d’activités pour tous les goûts. Les amoureux de la nature seront comblés par la découverte du parc de Lokobe, réserve naturelle abritant une faune et une flore endémiques.\n\nLes adeptes de la plage et des sports nautiques ne seront pas en reste, avec de nombreuses plages et des spots de plongée réputés.\n\nAux alentours de Nosy Be, plusieurs autres îles méritent le détour. De Nosy Komba avec son marché artisanal, à Nosy Iranja et ses plages de rêve, chaque île offre une expérience unique.\n\nLa préparation d’un voyage à Nosy Be implique de prévoir les coûts associés au transport, aux formalités administratives et à la santé.\n\nEn moyenne, il faut compter entre 600 et 1 000 € pour un aller-retour Paris-Antananarivo, la capitale de Madagascar. De là, il vous faudra prendre un vol interne ou un bateau pour rejoindre Nosy Be, ce qui représente un coût supplémentaire.\n\nPour un séjour à Nosy Be, il vous faut un visa que vous pouvez obtenir à votre arrivée à Antananarivo. Le coût varie en fonction de la durée de votre séjour.\n\nIl est également recommandé de prévoir un budget pour les vaccinations et autres frais de santé.\n\nLe choix de l’hébergement à Nosy Be est vaste, et le coût varie en fonction du niveau de confort souhaité.\n\nNosy Be propose une grande variété d’hébergements pour tous les budgets. Des hôtels de luxe avec vue sur la mer aux locations de vacances plus abordables en ville, il y en a pour tous les goûts.\n\nLe prix d’une nuit d’hôtel à Nosy Be varie considérablement en fonction de l’établissement choisi et de la saison. En moyenne, il faut compter entre 30 et 150 € par nuit.\n\nDe nombreux hôtels à Nosy Be proposent des offres spéciales pour les familles, par exemple des chambres communicantes ou des tarifs préférentiels pour les enfants.\n\nCertains établissements offrent également des packages pour les couples en lune de miel ou pour les groupes.\n\nNosy Be offre une variété de choix en matière de restauration, allant des restaurants gastronomiques aux petites échoppes de rue.\n\nEn moyenne, un repas dans un restaurant local coûte entre 3 et 10 €, tandis qu’un repas dans un restaurant haut de gamme peut coûter entre 15 et 30 €.\n\nNosy Be propose une cuisine malgache riche et variée, avec une influence française notable. Vous trouverez aussi bien des restaurants servant des spécialités locales, que des établissements proposant des plats internationaux.\n\nParmi les plats à ne pas manquer à Nosy Be, on compte le Romazava, un ragoût de viande et de brèdes, et le Ravitoto, du porc cuit avec des feuilles de manioc. La variété de fruits de mer disponibles est également un régal pour les amateurs.\n\nNosy Be offre une panoplie d’activités pour tous les budgets.\n\nLe coût des activités à Nosy Be varie en fonction de la nature de l’activité. Une excursion d’une journée en bateau peut coûter entre 20 et 50 €, tandis qu’une plongée sous-marine coûtera environ 30 €.\n\nPour se déplacer à Nosy Be, il est possible de louer un véhicule ou d’utiliser les services de taxis locaux. Le coût d’une location de voiture est d’environ 25 € par jour, tandis qu’un trajet en taxi coûtera environ 2 €.\n\nIl existe de nombreuses activités gratuites ou à faible coût à Nosy Be, telles que :\n\nIl est toujours prudent de prévoir un budget supplémentaire pour les dépenses imprévues.\n\nLe coût des souvenirs à Nosy Be varie en fonction de l’article et du lieu d’achat. Il est recommandé de prévoir un budget pour cela, surtout si vous envisagez d’acheter des articles artisanaux locaux.\n\nIl est courant de laisser un pourboire dans les restaurants et les hôtels à Nosy Be. De plus, certaines activités peuvent inclure des frais d’entrée ou des taxes qui ne sont pas incluses dans le prix initial.\n\nIl est toujours recommandé de prévoir un budget pour les frais imprévus, tels que les frais médicaux, les pertes de bagages ou autres dépenses inattendues.\n\nPrévoir un budget pour un voyage à Nosy Be n’est pas une tâche facile, mais avec les bonnes informations, vous pouvez organiser un voyage mémorable qui respecte votre budget. Que vous prévoyiez un voyage en famille, une escapade romantique ou une aventure en solo, Nosy Be a quelque chose à offrir à tout le monde. Alors, pourquoi ne pas commencer à planifier votre voyage dès aujourd’hui ? Nosy Be vous attend !",
+      "structuredData": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebSite",
+              "@id": "https://corailnoirmadagascar.com/#/schema/WebSite",
+              "url": "https://corailnoirmadagascar.com/",
+              "name": "Hôtel Corail Noir",
+              "inLanguage": "fr-FR",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": {
+                  "@type": "EntryPoint",
+                  "urlTemplate": "https://corailnoirmadagascar.com/search/{search_term_string}/"
+                },
+                "query-input": "required name=search_term_string"
+              },
+              "publisher": {
+                "@type": "Organization",
+                "@id": "https://corailnoirmadagascar.com/#/schema/Organization",
+                "name": "Hôtel Corail Noir",
+                "url": "https://corailnoirmadagascar.com/"
+              }
+            },
+            {
+              "@type": "WebPage",
+              "@id": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/",
+              "url": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/",
+              "name": "Quel budget prévoir pour son séjour à Nosy Be ?",
+              "description": "Combien faut-il prévoir pour un séjour à Nosy Be ? Le budget à envisager dépend de nombreux facteurs, tels que la saison, le type d’hébergement ou encore les activités prévues.",
+              "inLanguage": "fr-FR",
+              "isPartOf": {
+                "@id": "https://corailnoirmadagascar.com/#/schema/WebSite"
+              },
+              "breadcrumb": {
+                "@type": "BreadcrumbList",
+                "@id": "https://corailnoirmadagascar.com/#/schema/BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "item": "https://corailnoirmadagascar.com/",
+                    "name": "Hôtel Corail Noir"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "item": "https://corailnoirmadagascar.com/guide/",
+                    "name": "Guide"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 3,
+                    "item": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/",
+                    "name": "Séjour Nosy Be"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 4,
+                    "name": "Quel budget prévoir pour son séjour à Nosy Be ?"
+                  }
+                ]
+              },
+              "potentialAction": {
+                "@type": "ReadAction",
+                "target": "https://corailnoirmadagascar.com/guide/sejour-nosy-be/quel-budget-prevoir-sejour-nosy-be/"
+              }
+            }
+          ]
+        },
+        [
+          {
+            "@context": "https://schema.org",
+            "@type": "LocalBusiness",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Nosy Be",
+              "postalCode": "207",
+              "streetAddress": "BP 501 Ambaro Dzamandzar",
+              "addressCountry": "Madagascar"
+            },
+            "image": "https://corailnoirmadagascar.com/wp-content/themes/amanta/dist/logo/hotel-nosy-be.png",
+            "name": "Hôtel Corail Noir",
+            "telephone": "+261345357718",
+            "url": "https://corailnoirmadagascar.com/"
+          }
+        ]
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T07:25:15.200Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Hotel Nosy Be",
+      "googleTitle": "Hotel Nosy Be | Nosy Be Hôtel Resort & Spa **** |",
+      "googleSnippet": "Nosy Be Hôtel Resort & Spa est un hôtel quatre étoiles avec un accès calme et paisible à la plage, situé dans l'archipel de Nosy Be.",
+      "googlePosition": 3,
+      "url": "https://www.nosybehotel.com/",
+      "domain": "nosybehotel.com",
+      "contacts": {
+        "phones": [
+          "32 11 952 00"
+        ],
+        "emails": [
+          "e.ross@nosybehotel.com"
+        ],
+        "whatsapp": [],
+        "addresses": [],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "socials": {
+        "facebook": [
+          "https://www.facebook.com/nosybehotel"
+        ],
+        "instagram": [
+          "https://www.instagram.com/nosybehotel"
+        ],
+        "twitter": [
+          "https://x.com/bolt-performance"
+        ]
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": []
+      },
+      "services": {
+        "list": [],
+        "categories": [
+          "Accueil",
+          "Chambres & Suites",
+          "Restaurant & Bar",
+          "Excursions",
+          "Spa",
+          "Mariage",
+          "L'histoire",
+          "Galerie"
+        ],
+        "prices": []
+      },
+      "slogan": "",
+      "pageTitle": "Hotel Nosy Be | Nosy Be Hôtel Resort & Spa **** |",
+      "metaDescription": "Nosy Be Hôtel Resort & Spa est un hôtel quatre étoiles avec un accès calme et paisible à la plage, situé dans l’archipel de Nosy Be.\nIl est à l’écoute de l’environnement grâce à une conception réfléchie qui respecte le patrimoine Malgache.",
+      "ogImage": "https://static.wixstatic.com/media/d279b5_e51a773450704b39ad622a3cd2121422~mv2_d_4032_3024_s_4_2.jpg/v1/fill/w_2500,h_1875,al_c/d279b5_e51a773450704b39ad622a3cd2121422~mv2_d_4032_3024_s_4_2.jpg",
+      "lang": "fr",
+      "canonical": "https://www.nosybehotel.com",
+      "logo": "https://static.wixstatic.com/media/d3e4bc_f694a2c3636a42a980e7e4eda1dbbb9c~mv2.jpg/v1/fill/w_123,h_100,al_c,q_80,usm_0.66_1.00_0.01,enc_avif,quality_auto/Logo%20NBH%20NOIR_edited.jpg",
+      "googleSearchUrl": "https://www.google.com/search?q=hotel%20nosy%20be%2C%20Madagascar",
+      "gps": null,
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [],
+        "partners": []
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "technologies": {
+        "cms": [
+          "Wix"
+        ],
+        "frameworks": [
+          "React",
+          "Bootstrap"
+        ],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [],
+      "navLinks": [
+        {
+          "text": "Accueil",
+          "href": "https://www.nosybehotel.com/"
+        },
+        {
+          "text": "Chambres & Suites",
+          "href": "https://www.nosybehotel.com/chambres-et-suites"
+        },
+        {
+          "text": "Restaurant & Bar",
+          "href": "https://www.nosybehotel.com/altamarea-restaurant"
+        },
+        {
+          "text": "Excursions",
+          "href": "https://www.nosybehotel.com/excursions"
+        },
+        {
+          "text": "Spa",
+          "href": "https://www.nosybehotel.com/spa"
+        },
+        {
+          "text": "Mariage",
+          "href": "https://www.nosybehotel.com/wedding"
+        },
+        {
+          "text": "L'histoire",
+          "href": "https://www.nosybehotel.com/histoire"
+        },
+        {
+          "text": "Galerie",
+          "href": "https://www.nosybehotel.com/gallerie"
+        }
+      ],
+      "mainContent": "Découvrez un coin de paradis niché au cœur de l'archipel de Nosy Be, où le rêve devient réalité. Nosy Be Hôtel & Spa, un boutique hôtel depuis sa fondation en 1993, vous invite à vivre des moments uniques au sein d'un jardin luxuriant de plus de 35 000 mètres carrés, bordant une plage immaculée. Ici, chaque moment devient une aventure, chaque détail est soigné avec passion, et chaque sourire est sincère.\n\nL'emplacement privilégié de l'hôtel, situé plein ouest, offre l'opportunité d'admirer les couchers de soleil les plus spectaculaires tout au long de l'année. Avec l'îlot de Nosy Tanga en toile de fond, le paysage devient une véritable œuvre d'art naturelle, ajoutant une touche de beauté inégalée à votre séjour.\n\nPlongez dans un monde d'élégance et de raffinement avec nos 7 catégories de chambres. Chacune d'entre elles raconte une histoire unique, une ode à Madagascar, utilisant des matériaux précieux pour créer un havre de confort où vous vous sentirez chez vous.\n\nLe restaurant Alta Marea est bien plus qu'un simple lieu de restauration. C'est une expérience gastronomique qui vous transporte dans un coin de paradis, là où l'Italie et la Méditerranée se rencontrent au cœur de la splendeur tropicale de Madagascar.\n\n« Séjour merveilleux dans cet hôtel où tout était parfait. Les chambres très propres, bien insonorisées. Le personnel aux petits soins toujours disponible. Le cadre magnifique, jardin luxuriant, plage déserte, piscine très agréable. Le restaurant propose également de très bons plats et buffets. Tout était génial! »",
+      "structuredData": [
+        {
+          "@context": "https://schema.org/",
+          "@type": "WebSite",
+          "name": "Nosybehotel",
+          "url": "https://www.nosybehotel.com"
+        }
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T07:25:22.003Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Hôtel Résidence Au Sable Blanc à Nosy-Be",
+      "googleTitle": "Hôtel Résidence Au Sable Blanc à Nosy-Be - Madagascar",
+      "googleSnippet": "Notre hôtel Résidence propose en location des appartements & studios tout confort les pieds dans l'eau à Nosy-Be à 40€ avec pdj - Madagascar.",
+      "googlePosition": 4,
+      "url": "https://www.au-sable-blanc.com/",
+      "domain": "au-sable-blanc.com",
+      "contacts": {
+        "phones": [
+          "+261 34 40 886 32",
+          "+261 32 11 105 52"
+        ],
+        "emails": [
+          "info@au-sable-blanc.com",
+          "direction@au-sable-blanc.com"
+        ],
+        "whatsapp": [],
+        "addresses": [],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "socials": {
+        "facebook": [
+          "https://www.facebook.com/au.sable.blanc",
+          "http://www.facebook.com/https://www.facebook.com/au.sable.blanc"
+        ],
+        "twitter": [
+          "https://x.com/ausableblanc"
+        ]
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": [
+          "Gayraud - Janvier 2020 Nous avions réservé les 2 appartements du premier étage, côté plage, le séjour a été parfait. Couchers de soleil incroyables, personnel au petit soin. Propreté des appartements. Il est possible de réserver en plus la demi pension (ce que nous avions fait), à un prix très raisonnable avec un bon choix de produits frais. Nous reviendrons"
+        ]
+      },
+      "services": {
+        "list": [
+          "Plongée sous marine",
+          "Pêche à Nosy-Be",
+          "Cafétéria",
+          "Parking Service",
+          "Cuisine équipée",
+          "Nosy-be de Madagascar ne faillit pas à sa réputation quand il s’agit de parler de plongée sous-marine",
+          "Les eaux de Nosy be à Madagascar sont un lieu de pêche privilégié pour les accros de la pêche sportive comme pour ceux qui souhaitent s’initier.",
+          "Uniquement avec les produits locaux.",
+          "Parking sécurisé 24H/24",
+          "Le principe de la Résidence Au sable blanc est l’autonomie"
+        ],
+        "categories": [
+          "Rappels & règles de la Résidence"
+        ],
+        "prices": []
+      },
+      "slogan": "",
+      "pageTitle": "Hôtel Résidence Au Sable Blanc à Nosy-Be - Madagascar",
+      "metaDescription": "Notre hôtel Résidence propose en location des appartements & studios tout confort les pieds dans l'eau à Nosy-Be à 40€ avec pdj - Madagascar",
+      "ogImage": "",
+      "lang": "fr-FR",
+      "canonical": "https://www.au-sable-blanc.com/",
+      "logo": "https://www.au-sable-blanc.com/wp-content/uploads/2024/09/logo-ausableblanc-2024-2.png",
+      "googleSearchUrl": "https://www.google.com/search?q=hotel%20nosy%20be%2C%20Madagascar",
+      "gps": null,
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [
+          {
+            "url": "http://tripadvisor.com/https://www.tripadvisor.fr/Hotel_Review-g9859511-d3333399-Reviews-Hotel_Residence_Au_Sable_Blanc-Madirokely_Nosy_Be_Antsiranana_Province.html",
+            "label": "",
+            "platform": "tripadvisor.com"
+          },
+          {
+            "url": "https://www.tripadvisor.fr/Hotel_Review-g9859511-d3333399-Reviews-Hotel_Residence_Au_Sable_Blanc-Madirokely_Nosy_Be_Antsiranana_Province.html",
+            "label": "tripadvisor.fr",
+            "platform": "tripadvisor.fr"
+          }
+        ],
+        "partners": []
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "technologies": {
+        "cms": [
+          "WordPress"
+        ],
+        "frameworks": [
+          "jQuery"
+        ],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [
+        {
+          "action": "https://booking.roomcloud.net/be/se2/hotel.jsp",
+          "method": "post",
+          "hasFile": false,
+          "fields": [
+            {
+              "type": "text",
+              "name": "checkin"
+            },
+            {
+              "type": "text",
+              "name": "checkout"
+            },
+            {
+              "type": "number",
+              "name": "adults"
+            },
+            {
+              "type": "number",
+              "name": "children"
+            }
+          ]
+        }
+      ],
+      "navLinks": [
+        {
+          "text": "Rappels & règles de la Résidence",
+          "href": "https://www.au-sable-blanc.com/regles-hotel/"
+        }
+      ],
+      "mainContent": "",
+      "structuredData": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": "https://www.au-sable-blanc.com/",
+              "url": "https://www.au-sable-blanc.com/",
+              "name": "Hôtel Résidence Au Sable Blanc à Nosy-Be - Madagascar",
+              "isPartOf": {
+                "@id": "https://www.au-sable-blanc.com/#website"
+              },
+              "about": {
+                "@id": "https://www.au-sable-blanc.com/#organization"
+              },
+              "datePublished": "2018-09-03T17:11:29+00:00",
+              "dateModified": "2026-02-19T10:23:02+00:00",
+              "description": "Notre hôtel Résidence propose en location des appartements & studios tout confort les pieds dans l'eau à Nosy-Be à 40€ avec pdj - Madagascar",
+              "breadcrumb": {
+                "@id": "https://www.au-sable-blanc.com/#breadcrumb"
+              },
+              "inLanguage": "fr-FR",
+              "potentialAction": [
+                {
+                  "@type": "ReadAction",
+                  "target": [
+                    "https://www.au-sable-blanc.com/"
+                  ]
+                }
+              ]
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://www.au-sable-blanc.com/#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Accueil"
+                }
+              ]
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://www.au-sable-blanc.com/#website",
+              "url": "https://www.au-sable-blanc.com/",
+              "name": "Au Sable Blanc",
+              "description": "Hôtel Résidence Au Sable Blanc",
+              "publisher": {
+                "@id": "https://www.au-sable-blanc.com/#organization"
+              },
+              "potentialAction": [
+                {
+                  "@type": "SearchAction",
+                  "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://www.au-sable-blanc.com/?s={search_term_string}"
+                  },
+                  "query-input": {
+                    "@type": "PropertyValueSpecification",
+                    "valueRequired": true,
+                    "valueName": "search_term_string"
+                  }
+                }
+              ],
+              "inLanguage": "fr-FR"
+            },
+            {
+              "@type": "Organization",
+              "@id": "https://www.au-sable-blanc.com/#organization",
+              "name": "Hôtel Nosy-Be Au Sable Blanc",
+              "url": "https://www.au-sable-blanc.com/",
+              "logo": {
+                "@type": "ImageObject",
+                "inLanguage": "fr-FR",
+                "@id": "https://www.au-sable-blanc.com/#/schema/logo/image/",
+                "url": "https://www.au-sable-blanc.com/wp-content/uploads/2020/05/logo-ausableblanc-couleur.png",
+                "contentUrl": "https://www.au-sable-blanc.com/wp-content/uploads/2020/05/logo-ausableblanc-couleur.png",
+                "width": 230,
+                "height": 77,
+                "caption": "Hôtel Nosy-Be Au Sable Blanc"
+              },
+              "image": {
+                "@id": "https://www.au-sable-blanc.com/#/schema/logo/image/"
+              },
+              "sameAs": [
+                "https://www.facebook.com/au.sable.blanc",
+                "https://x.com/ausableblanc"
+              ]
+            }
+          ]
+        }
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T07:25:47.776Z",
+      "platform": "Site Officiel (Google Search)"
+    },
+    {
+      "name": "Anjiamarango Beach Resort: Hôtel à Nosy Be",
+      "googleTitle": "Anjiamarango Beach Resort: Hôtel à Nosy Be",
+      "googleSnippet": "L'hôtel présente 35 bungalows individuels tous orientés mer et bénéficiant d'une vue imprenable sur la baie, de conception par Claude Roure architecte inspirée ...",
+      "googlePosition": 5,
+      "url": "https://www.anjiamarango-beach-resort.com/",
+      "domain": "anjiamarango-beach-resort.com",
+      "contacts": {
+        "phones": [
+          "+261320265598",
+          "+261344284606",
+          "+261 32 02 655 98",
+          "+261 34 42 84 606"
+        ],
+        "emails": [
+          "contact@anjiamarango-beach-resort.com"
+        ],
+        "whatsapp": [],
+        "addresses": [],
+        "postalCode": "",
+        "city": "",
+        "country": ""
+      },
+      "socials": {
+        "facebook": [
+          "https://www.facebook.com/anjiamarango-beach-resort-449245910150"
+        ]
+      },
+      "reputation": {
+        "overallRating": "",
+        "reviewCount": "",
+        "reviews": [],
+        "widgets": [
+          "helenePerpignan Nous venons de passer une semaine absolument magnifique nous étions 3 générations réunis de 30 à 80 ans et nous sommes revenus émerveillés. Philippe et son équipe ont tout mis en œuvre pour que ce séjour soit parfait et c’est réussi. Christine Wälti Séjour paradisiaque. Le bungalow et la mer à 20m. La nourriture extra et l'accueil très sympathique. Que demander de plus ? Linda C Pour ceux souhaitant un hôtel typiquement malgache ne cherchez plus. Les bungalows respectueux de l’environnement ont été fait pour entrer dans le décor. Tout en bois, très spacieux , ils disposent tous d’une plage privée avec transat cocotier et palmier. Jeannel Y Tot Nai Très bel endroit et savoureux mélange d'exotisme...Dépaysement assuré Philippe fait preuve de professionnalisme ainsi que toute son équipe. Côté cuisine Roger est à votre écoute pour vos désirs...A voir absolument. Jean Guillon Superbe séjour, un \"sans faute\" gastronomique: nourriture parfaitement préparée avec une présentation impeccable. Le bar est très agréable juste avant le repas. helenePerpignan Nous venons de passer une semaine absolument magnifique nous étions 3 générations réunis de 30 à 80 ans et nous sommes revenus émerveillés. Philippe et son équipe ont tout mis en œuvre pour que ce séjour soit parfait et c’est réussi. Christine Wälti Séjour paradisiaque. Le bungalow et la mer à 20m. La nourriture extra et l'accueil très sympathique. Que demander de plus ? Linda C Pour ceux souhaitant un hôtel typiquement malgache ne cherchez plus. Les bungalows respectueux de l’environnement ont été fait pour entrer dans le décor. Tout en bois, très spacieux , ils disposent tous d’une plage privée avec transat cocotier et palmier. Jeannel Y Tot Nai Très bel endroit et savoureux mélange d'exotisme...Dépaysement assuré Philippe fait preuve de professionnalisme ainsi que toute son équipe. Côté cuisine Roger est à votre écoute pour vos désirs...A voir absolument. Jean Guillon Superbe séjour, un \"sans faute\" gastronomique: nourriture parfaitement préparée avec une présentation impeccable. Le bar est très agréable juste avant le repas. helenePerpignan Nous venons de passer une semaine absolument magnifique nous étions 3 générations réunis de 30 à 80 ans et nous sommes revenus émerveillés. Philippe et son équipe ont tout mis en œuvre pour que ce séjour soit parfait et c’est réussi. Christine Wälti Séjour paradisiaque. Le bungalow et la mer à 20m. La nourriture extra et l'accueil très sympathique. Que demander de plus ? Linda C Pour ceux souhaitant un hôtel typiquement malgache ne cherchez plus. Les bungalows respectueux de l’environnement ont été fait pour entrer dans le décor. Tout en bois, très spacieux , ils disposent tous d’une plage privée avec transat cocotier et palmier.",
+          "helenePerpignan Nous venons de passer une semaine absolument magnifique nous étions 3 générations réunis de 30 à 80 ans et nous sommes revenus émerveillés. Philippe et son équipe ont tout mis en œuvre pour que ce séjour soit parfait et c’est réussi."
+        ]
+      },
+      "services": {
+        "list": [
+          "Voyage en famille",
+          "Voyage de noce",
+          "Week-end",
+          "Vous souhaitez en savoir plus sur notre histoire ?"
+        ],
+        "categories": [
+          "Accueil",
+          "A propos",
+          "Bungalows",
+          "Restaurant",
+          "Activités",
+          "Visite des îles",
+          "Intérieur des terres",
+          "Observation des baleines et requins baleines",
+          "Plongée",
+          "Pêche",
+          "Activités à l’hôtel",
+          "Utiles",
+          "Comment venir à Nosy Be ?",
+          "Dictionnaire Malgache",
+          "Décalage horaire",
+          "la monnaie locale",
+          "Hôtellerie & restauration",
+          "Recommandations d’usage et à vivre à Nosy Be",
+          "Sanitaire",
+          "Télécommunications",
+          "tarifs",
+          "Offres spéciales",
+          "Contact",
+          "Mention légale",
+          "Politique de confidentialité",
+          "Accueil",
+          "A propos",
+          "Bungalows",
+          "Restaurant",
+          "Activités",
+          "Visite des îles",
+          "Intérieur des terres",
+          "Observation des baleines et requins baleines",
+          "Plongée",
+          "Pêche",
+          "Activités à l’hôtel",
+          "Utiles",
+          "Comment venir à Nosy Be ?",
+          "Dictionnaire Malgache",
+          "Décalage horaire",
+          "la monnaie locale",
+          "Hôtellerie & restauration",
+          "Recommandations d’usage et à vivre à Nosy Be",
+          "Sanitaire",
+          "Télécommunications",
+          "tarifs",
+          "Offres spéciales",
+          "Contact"
+        ],
+        "prices": []
+      },
+      "slogan": "",
+      "pageTitle": "Hôtel à Nosy Be- Anjiamarango Beach Resort",
+      "metaDescription": "Le domaine hôtelier d’Anjiamarango est situé à proximité du village de Befotaka à la pointe Nord-Ouest de l’île aux parfums et à 15 minutes de l’aéroport",
+      "ogImage": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/Anjiamarango-Nosy-Be-piscine.jpg",
+      "lang": "fr-FR",
+      "canonical": "https://www.anjiamarango-beach-resort.com/",
+      "logo": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/anjihamarango-logo-1.jpg",
+      "googleSearchUrl": "https://www.google.com/search?q=hotel%20nosy%20be%2C%20Madagascar",
+      "gps": null,
+      "externalLinks": {
+        "appStores": [],
+        "downloads": [],
+        "platforms": [
+          {
+            "url": "https://www.tripadvisor.fr/ShowUserReviews-g479206-d1516231-r635197703-Anjiamarango_Beach_Resort-Nosy_Be_Antsiranana_Province.html",
+            "label": "Linda C",
+            "platform": "tripadvisor.fr"
+          }
+        ],
+        "partners": [
+          {
+            "url": "http://booking-up.com/",
+            "label": "par Booking UP",
+            "domain": "booking-up.com"
+          }
+        ]
+      },
+      "hours": {
+        "raw": [],
+        "structured": {},
+        "notes": []
+      },
+      "team": [],
+      "technologies": {
+        "cms": [
+          "WordPress"
+        ],
+        "frameworks": [
+          "jQuery"
+        ],
+        "analytics": [
+          "Google Analytics"
+        ],
+        "marketing": [],
+        "chat": [],
+        "other": []
+      },
+      "forms": [],
+      "navLinks": [
+        {
+          "text": "Accueil",
+          "href": "https://www.anjiamarango-beach-resort.com/"
+        },
+        {
+          "text": "A propos",
+          "href": "https://www.anjiamarango-beach-resort.com/a-propos/"
+        },
+        {
+          "text": "Bungalows",
+          "href": "https://www.anjiamarango-beach-resort.com/bungalows/"
+        },
+        {
+          "text": "Restaurant",
+          "href": "https://www.anjiamarango-beach-resort.com/restaurant/"
+        },
+        {
+          "text": "Visite des îles",
+          "href": "https://www.anjiamarango-beach-resort.com/quoi-voir-nosybe/visite-des-iles/"
+        },
+        {
+          "text": "Intérieur des terres",
+          "href": "https://www.anjiamarango-beach-resort.com/quoi-faire-a-nosy-be/quad-a-nosy-be/"
+        },
+        {
+          "text": "Observation des baleines et requins baleines",
+          "href": "https://www.anjiamarango-beach-resort.com/quoi-faire-a-nosy-be/randeau-baleines/"
+        },
+        {
+          "text": "Plongée",
+          "href": "https://www.anjiamarango-beach-resort.com/quoi-faire-a-nosy-be/plongee-a-nosy-be/"
+        },
+        {
+          "text": "Pêche",
+          "href": "https://www.anjiamarango-beach-resort.com/quoi-faire-a-nosy-be/peches-sportives/"
+        },
+        {
+          "text": "Activités à l’hôtel",
+          "href": "https://www.anjiamarango-beach-resort.com/activites-hotel/"
+        },
+        {
+          "text": "Utiles",
+          "href": "https://www.anjiamarango-beach-resort.com/actualites/"
+        },
+        {
+          "text": "Comment venir à Nosy Be ?",
+          "href": "https://www.anjiamarango-beach-resort.com/comment-venir-a-nosy-be/"
+        },
+        {
+          "text": "Dictionnaire Malgache",
+          "href": "https://www.anjiamarango-beach-resort.com/dictionnaire-malgache/"
+        },
+        {
+          "text": "Décalage horaire",
+          "href": "https://www.anjiamarango-beach-resort.com/decalage-horaire/"
+        },
+        {
+          "text": "la monnaie locale",
+          "href": "https://www.anjiamarango-beach-resort.com/la-monnaie-locale/"
+        },
+        {
+          "text": "Hôtellerie & restauration",
+          "href": "https://www.anjiamarango-beach-resort.com/hotellerie-restauration/"
+        },
+        {
+          "text": "Recommandations d’usage et à vivre à Nosy Be",
+          "href": "https://www.anjiamarango-beach-resort.com/recommandations-dusage-et-a-vivre-a-nosy-be/"
+        },
+        {
+          "text": "Sanitaire",
+          "href": "https://www.anjiamarango-beach-resort.com/sanitaire/"
+        },
+        {
+          "text": "Télécommunications",
+          "href": "https://www.anjiamarango-beach-resort.com/telecommunications/"
+        },
+        {
+          "text": "tarifs",
+          "href": "https://www.anjiamarango-beach-resort.com/tarifs/"
+        },
+        {
+          "text": "Offres spéciales",
+          "href": "https://www.anjiamarango-beach-resort.com/offres-speciales/"
+        },
+        {
+          "text": "Contact",
+          "href": "https://www.anjiamarango-beach-resort.com/contact/"
+        },
+        {
+          "text": "Menu\n\t\t\t\tFermer",
+          "href": "https://www.anjiamarango-beach-resort.com/#mobile-menu-toggle"
+        },
+        {
+          "text": "Mention légale",
+          "href": "https://www.anjiamarango-beach-resort.com/mention-legale/"
+        },
+        {
+          "text": "Politique de confidentialité",
+          "href": "https://www.anjiamarango-beach-resort.com/politique-de-confidentialite/"
+        }
+      ],
+      "mainContent": "Le domaine hôtelier d’Anjiamarango Beach Resort est situé à proximité du petit village de Befotaka à la pointe Nord-Ouest de l’île aux parfums et à 20 minutes de l’aéroport international de Fascène.\n\n16 bungalows climatisés à moins de 10 mètres de la mer à marée haute\n\nL’hôtel présente 35 bungalows individuels tous orientés mer et bénéficiant d’une vue imprenable sur la baie, de conception par Claude Roure architecte inspirée par l’architecture malgache, une vrai source de dépaysement et gage de repos et de bien-être.\n\nEn famille, en voyage de Noce, en weekend ?Nous avons une solutions pour vous !\n\nNos animateurs et partenaires locaux vous proposeront diverses activités à travers la découverte de l’île de Nosy Be et faite de ballades pédestres, en VTT, de sorties quad avec guides, de sorties en mer en kayaks, en pêche traditionnelle à la palangrotte, ou en pêche sportive, de plongée sous-marine et snorkeling en face du domaine et la visite des îles voisines comme Nosy Fanihy, Nosy Komba, Nosy Tanikely, ou encore Nosy Iranja…",
+      "structuredData": [
+        {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "WebPage",
+              "@id": "https://www.anjiamarango-beach-resort.com/",
+              "url": "https://www.anjiamarango-beach-resort.com/",
+              "name": "Hôtel à Nosy Be- Anjiamarango Beach Resort",
+              "isPartOf": {
+                "@id": "https://www.anjiamarango-beach-resort.com/#website"
+              },
+              "about": {
+                "@id": "https://www.anjiamarango-beach-resort.com/#organization"
+              },
+              "primaryImageOfPage": {
+                "@id": "https://www.anjiamarango-beach-resort.com/#primaryimage"
+              },
+              "image": {
+                "@id": "https://www.anjiamarango-beach-resort.com/#primaryimage"
+              },
+              "thumbnailUrl": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/Anjiamarango-Nosy-Be-piscine.jpg",
+              "datePublished": "2016-05-18T09:55:16+00:00",
+              "dateModified": "2024-11-17T04:59:50+00:00",
+              "description": "Le domaine hôtelier d’Anjiamarango est situé à proximité du village de Befotaka à la pointe Nord-Ouest de l’île aux parfums et à 15 minutes de l’aéroport",
+              "breadcrumb": {
+                "@id": "https://www.anjiamarango-beach-resort.com/#breadcrumb"
+              },
+              "inLanguage": "fr-FR",
+              "potentialAction": [
+                {
+                  "@type": "ReadAction",
+                  "target": [
+                    "https://www.anjiamarango-beach-resort.com/"
+                  ]
+                }
+              ]
+            },
+            {
+              "@type": "ImageObject",
+              "inLanguage": "fr-FR",
+              "@id": "https://www.anjiamarango-beach-resort.com/#primaryimage",
+              "url": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/Anjiamarango-Nosy-Be-piscine.jpg",
+              "contentUrl": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/Anjiamarango-Nosy-Be-piscine.jpg",
+              "width": 2500,
+              "height": 1094,
+              "caption": "Piscine hôtel Anjiamarango Nosy Be"
+            },
+            {
+              "@type": "BreadcrumbList",
+              "@id": "https://www.anjiamarango-beach-resort.com/#breadcrumb",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Accueil"
+                }
+              ]
+            },
+            {
+              "@type": "WebSite",
+              "@id": "https://www.anjiamarango-beach-resort.com/#website",
+              "url": "https://www.anjiamarango-beach-resort.com/",
+              "name": "Anjiamarango",
+              "description": "Hôtel à Nosy Be",
+              "publisher": {
+                "@id": "https://www.anjiamarango-beach-resort.com/#organization"
+              },
+              "potentialAction": [
+                {
+                  "@type": "SearchAction",
+                  "target": {
+                    "@type": "EntryPoint",
+                    "urlTemplate": "https://www.anjiamarango-beach-resort.com/?s={search_term_string}"
+                  },
+                  "query-input": {
+                    "@type": "PropertyValueSpecification",
+                    "valueRequired": true,
+                    "valueName": "search_term_string"
+                  }
+                }
+              ],
+              "inLanguage": "fr-FR"
+            },
+            {
+              "@type": "Organization",
+              "@id": "https://www.anjiamarango-beach-resort.com/#organization",
+              "name": "Anjiamarango",
+              "url": "https://www.anjiamarango-beach-resort.com/",
+              "logo": {
+                "@type": "ImageObject",
+                "inLanguage": "fr-FR",
+                "@id": "https://www.anjiamarango-beach-resort.com/#/schema/logo/image/",
+                "url": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/anjihamarango-logo-1.jpg",
+                "contentUrl": "https://www.anjiamarango-beach-resort.com/wp-content/uploads/anjihamarango-logo-1.jpg",
+                "width": 462,
+                "height": 93,
+                "caption": "Anjiamarango"
+              },
+              "image": {
+                "@id": "https://www.anjiamarango-beach-resort.com/#/schema/logo/image/"
+              },
+              "sameAs": [
+                "https://www.facebook.com/anjiamarango-beach-resort-449245910150/"
+              ]
+            }
+          ]
+        }
+      ],
+      "certifications": [],
+      "scrapedAt": "2026-03-20T07:26:02.398Z",
+      "platform": "Site Officiel (Google Search)"
+    }
+  ]
+}

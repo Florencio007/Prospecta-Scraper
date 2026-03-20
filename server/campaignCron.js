@@ -162,15 +162,21 @@ async function processCampaigns() {
         }
 
         // Fetch SMTP config for the user
-        const { data: keys } = await supabase
-            .from('user_api_keys')
+        const { data: smtpSettings, error: sError } = await supabase
+            .from('smtp_settings')
             .select('*')
             .eq('user_id', campaign.user_id)
-            .eq('provider', 'smtp');
+            .maybeSingle();
             
         let smtpConfig = null;
-        if (keys && keys.length > 0 && keys[0].api_key) {
-            try { smtpConfig = JSON.parse(keys[0].api_key); } catch {}
+        if (smtpSettings) {
+            smtpConfig = {
+                host: smtpSettings.host,
+                port: smtpSettings.port,
+                user: smtpSettings.username,
+                pass: smtpSettings.password,
+                fromEmail: smtpSettings.from_email
+            };
         }
         
         if (!smtpConfig) {
@@ -262,6 +268,16 @@ async function processCampaigns() {
 
                     if (thread) {
                         // 2. Insert the sent message into email_messages
+                        // Clean HTML to plain text: remove tags and decode entities
+                        const cleanText = finalHtml
+                            .replace(/<[^>]*>/g, '') // Remove HTML tags
+                            .replace(/&nbsp;/g, ' ')
+                            .replace(/&lt;/g, '<')
+                            .replace(/&gt;/g, '>')
+                            .replace(/&amp;/g, '&')
+                            .trim()
+                            .slice(0, 2000);
+
                         await supabase.from('email_messages').insert({
                             thread_id: thread.id,
                             user_id: campaign.user_id,
@@ -270,10 +286,10 @@ async function processCampaigns() {
                             from_name: campaign.from_name,
                             to_email: recipient.email,
                             subject: campaign.subject,
-                            body_text: finalHtml.replace(/<[^>]*>?/gm, '').slice(0, 1000), // Clean text version
+                            body_text: cleanText,
                             body_html: finalHtml,
                             is_read: true,
-                            message_id_header: success ? (errorMessage || '') : '', // reusing for temporary ID if needed
+                            ai_status: 'none',
                             received_at: new Date().toISOString()
                         });
                     }

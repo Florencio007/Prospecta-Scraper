@@ -65,7 +65,6 @@ CREATE TABLE IF NOT EXISTS public.campaign_recipients (
     email TEXT NOT NULL,
     status TEXT NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'sent', 'opened', 'clicked', 'replied', 'bounced', 'failed', 'unsubscribed')),
     bounce_reason TEXT,
-    brevo_message_id TEXT,
     sent_at TIMESTAMPTZ,
     opened_at TIMESTAMPTZ,
     clicked_at TIMESTAMPTZ,

@@ -1,1894 +1,32 @@
 {
-  "scrapedAt": "2026-03-19T14:58:56.685Z",
-  "query": "hotel antsiranana, Madagascar",
-  "total": 20,
+  "scrapedAt": "2026-03-20T07:20:49.892Z",
+  "query": "hotel nosy be, Madagascar",
+  "total": 6,
   "hotels": [
     {
-      "name": "LOTUS HOTEL",
-      "category": "",
-      "address": "78BIS Rue Colbert, Antsiranana 201",
-      "phone": "034 91 907 05",
-      "website": "",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/LOTUS+HOTEL/@-12.277206,49.2917077,17z/data=!4m11!3m10!1s0x226b1c7d75cbf887:0x554d4dfcf72bb3aa!5m2!4m1!1i2!8m2!3d-12.277206!4d49.2917077!9m1!1b1!16s%2Fg%2F11td3f4wvc?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.277206,
-        "lng": 49.2917077
-      },
-      "platform": "Google Maps",
-      "about": {
-        "amenities": [],
-        "description": ""
-      },
-      "reviews": [],
-      "contractDetails": {
-        "name": "LOTUS HOTEL",
-        "address": "78BIS Rue Colbert, Antsiranana 201",
-        "phone": "034 91 907 05",
-        "website": "",
-        "plusCode": "P7FR+4M",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.277206,
-          "lng": 49.2917077
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": ""
-        },
-        "reviews": [],
-        "url": "https://www.google.com/maps/place/LOTUS+HOTEL/@-12.277206,49.2917077,17z/data=!4m11!3m10!1s0x226b1c7d75cbf887:0x554d4dfcf72bb3aa!5m2!4m1!1i2!8m2!3d-12.277206!4d49.2917077!9m1!1b1!16s%2Fg%2F11td3f4wvc?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Google Maps"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "034 91 907 05"
-          ],
-          "emails": [],
-          "addresses": [
-            "78BIS Rue Colbert, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Établissement professionnel listé sur Google Maps.",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "Le Valiha",
-      "category": "",
-      "address": "41 Rue Colbert, Antsiranana 201",
-      "phone": "032 07 789 95",
-      "website": "",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Le+Valiha/@-12.2730039,49.2928128,17z/data=!4m10!3m9!1s0x226b1c866cc2d411:0xd52c3fdb9d36ee76!5m2!4m1!1i2!8m2!3d-12.2730039!4d49.2928128!10e1!16s%2Fg%2F1tfz7lg9?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2730039,
-        "lng": 49.2928128
-      },
-      "platform": "Google Maps",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Piscine Climatisation Accepte les animaux Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport"
-      },
-      "reviews": [],
-      "contractDetails": {
-        "name": "Le Valiha",
-        "address": "41 Rue Colbert, Antsiranana 201",
-        "phone": "032 07 789 95",
-        "website": "",
-        "plusCode": "P7GV+Q4",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2730039,
-          "lng": 49.2928128
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": "Wi-Fi gratuit Piscine Climatisation Accepte les animaux Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport"
-        },
-        "reviews": [],
-        "url": "https://www.google.com/maps/place/Le+Valiha/@-12.2730039,49.2928128,17z/data=!4m10!3m9!1s0x226b1c866cc2d411:0xd52c3fdb9d36ee76!5m2!4m1!1i2!8m2!3d-12.2730039!4d49.2928128!10e1!16s%2Fg%2F1tfz7lg9?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Google Maps"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "032 07 789 95"
-          ],
-          "emails": [],
-          "addresses": [
-            "41 Rue Colbert, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Piscine Climatisation Accepte les animaux Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "Hôtel Le Petit Paradis",
-      "category": "",
-      "address": "Rue de la Prison, Antsiranana 201",
-      "phone": "032 47 891 13",
-      "website": "https://hotelpetitparadis.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel+Le+Petit+Paradis/@-12.2821293,49.2963033,17z/data=!4m10!3m9!1s0x226b1c636f625f21:0x8bdef65f2f4c3373!5m2!4m1!1i2!8m2!3d-12.2821293!4d49.2963033!10e1!16s%2Fg%2F1tl6n6cm?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2821293,
-        "lng": 49.2963033
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Piscine Climatisation Accepte les animaux Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport"
-      },
-      "reviews": [
-        {
-          "author": "Feno Randrianirina",
-          "text": "Poser ses valises à l’Hôtel Le Petit Paradis, c’est se glisser dans une bulle de quiétude en plein cœur d’Antsiranana, à deux pas de la vibrante rue Colbert. Le matin, le chant discret des oiseaux se mêle au parfum des fleurs du patio, … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "leforban974",
-          "text": "Hôtel propre, simple, convivial, personnel agréable, serviable. Bon petit déjeuner. Un peu vétuste mais ça passe très bien.",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "estournel frantz",
-          "text": "Chambre très bien tenue , literie de bonne qualité. Le vrai plus , le personnel adorable , toujours souriant.  Merci à Andrea , Acieta , Lauri et Dieu donné pour nous avoir accueilli si chaleureusement Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Frederika Riat",
-          "text": "Un petit paradis comme son nom l’indique et au calme.\nPropreté impeccable et personnel aux petits soins.\nUn bonheur! Merci l’Equipe♥️ Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Philippe Casadei",
-          "text": "J'ai passé un excellent séjour de 3 semaines au petit paradis, les chambres sont propres et l'hôtel est bien placé. Une note spéciale à laurie et les filles , et au veilleur de nuit. Ils sont attentif a vos besoins et sont là pour rentre le séjours très agréable.     Merci et à bientôt  Philippe Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "jurami",
-          "text": "Petit établissement de 6 chambres, dans le quartier calme du consulat. Eau chaude et bonne literie ! Super après quelques jours de brousse. |Le petit jardin à l’arrière permet de prendre un dernier verre. |Merci pour votre accueil très sympathique. |Nous reviendrons avec plaisir",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Baptiste M",
-          "text": "Mauvais rapport qualité-prix\n\nNous avons été déposés ici par erreur du tuk après 41h de taxibrousse depuis … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Manuuuu976",
-          "text": "Le propriétaire a changé depuis quelques mois mais sinon le Petit Paradis est toujours un havre de paix...et même encore mieux. Calme, accueillant, simple et d'un rapport qualité prix imbattable, vous y trouvez les meilleurs petits déjeuners de Diego. |Vous pouvez y aller les yeux fermés. |Mention spéciale pour la chambre n 2.",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "justine farina",
-          "text": "Hébergement calme et excentré.\nLes chambres ne sont pas de première jeunesse mais propre quand même. Il y a de l’eau chaude et électricité. … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Maried3273",
-          "text": "Un mois inoubliable passé au petit paradis entre amies. ||Passage inévitable en séjour à Diego.||Petits déjeuners délicieux, accueil chaleureux, conseils avisés, bonne humeur quotidienne, merci à Jessica, Laurie, Rissia et bien sûr Joseph de nous avoir permis de nous sentir chez nous...",
-          "date": "",
-          "rating": ""
-        }
-      ],
-      "contractDetails": {
-        "name": "Hôtel Le Petit Paradis",
-        "address": "Rue de la Prison, Antsiranana 201",
-        "phone": "032 47 891 13",
-        "website": "https://hotelpetitparadis.com/",
-        "plusCode": "P79W+4G",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2821293,
-          "lng": 49.2963033
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": "Wi-Fi gratuit Piscine Climatisation Accepte les animaux Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport"
-        },
-        "reviews": [
-          {
-            "author": "Feno Randrianirina",
-            "text": "Poser ses valises à l’Hôtel Le Petit Paradis, c’est se glisser dans une bulle de quiétude en plein cœur d’Antsiranana, à deux pas de la vibrante rue Colbert. Le matin, le chant discret des oiseaux se mêle au parfum des fleurs du patio, … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "leforban974",
-            "text": "Hôtel propre, simple, convivial, personnel agréable, serviable. Bon petit déjeuner. Un peu vétuste mais ça passe très bien.",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "estournel frantz",
-            "text": "Chambre très bien tenue , literie de bonne qualité. Le vrai plus , le personnel adorable , toujours souriant.  Merci à Andrea , Acieta , Lauri et Dieu donné pour nous avoir accueilli si chaleureusement Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Frederika Riat",
-            "text": "Un petit paradis comme son nom l’indique et au calme.\nPropreté impeccable et personnel aux petits soins.\nUn bonheur! Merci l’Equipe♥️ Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Philippe Casadei",
-            "text": "J'ai passé un excellent séjour de 3 semaines au petit paradis, les chambres sont propres et l'hôtel est bien placé. Une note spéciale à laurie et les filles , et au veilleur de nuit. Ils sont attentif a vos besoins et sont là pour rentre le séjours très agréable.     Merci et à bientôt  Philippe Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "jurami",
-            "text": "Petit établissement de 6 chambres, dans le quartier calme du consulat. Eau chaude et bonne literie ! Super après quelques jours de brousse. |Le petit jardin à l’arrière permet de prendre un dernier verre. |Merci pour votre accueil très sympathique. |Nous reviendrons avec plaisir",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Baptiste M",
-            "text": "Mauvais rapport qualité-prix\n\nNous avons été déposés ici par erreur du tuk après 41h de taxibrousse depuis … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Manuuuu976",
-            "text": "Le propriétaire a changé depuis quelques mois mais sinon le Petit Paradis est toujours un havre de paix...et même encore mieux. Calme, accueillant, simple et d'un rapport qualité prix imbattable, vous y trouvez les meilleurs petits déjeuners de Diego. |Vous pouvez y aller les yeux fermés. |Mention spéciale pour la chambre n 2.",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "justine farina",
-            "text": "Hébergement calme et excentré.\nLes chambres ne sont pas de première jeunesse mais propre quand même. Il y a de l’eau chaude et électricité. … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Maried3273",
-            "text": "Un mois inoubliable passé au petit paradis entre amies. ||Passage inévitable en séjour à Diego.||Petits déjeuners délicieux, accueil chaleureux, conseils avisés, bonne humeur quotidienne, merci à Jessica, Laurie, Rissia et bien sûr Joseph de nous avoir permis de nous sentir chez nous...",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/H%C3%B4tel+Le+Petit+Paradis/@-12.2821293,49.2963033,17z/data=!4m10!3m9!1s0x226b1c636f625f21:0x8bdef65f2f4c3373!5m2!4m1!1i2!8m2!3d-12.2821293!4d49.2963033!10e1!16s%2Fg%2F1tl6n6cm?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "032 47 891 13"
-          ],
-          "emails": [],
-          "addresses": [
-            "Rue de la Prison, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Piscine Climatisation Accepte les animaux Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "Le DIEGO Hôtel",
-      "category": "",
-      "address": "Antsiranana 201",
-      "phone": "032 46 403 70",
-      "website": "",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Le+DIEGO+H%C3%B4tel/@-12.2805625,49.2919375,17z/data=!4m11!3m10!1s0x226b1d6aefbcc627:0x4d998be96766fddb!5m2!4m1!1i2!8m2!3d-12.2805625!4d49.2919375!9m1!1b1!16s%2Fg%2F11hy_zck53?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2805625,
-        "lng": 49.2919375
-      },
-      "platform": "Google Maps",
-      "about": {
-        "amenities": [],
-        "description": ""
-      },
-      "reviews": [],
-      "contractDetails": {
-        "name": "Le DIEGO Hôtel",
-        "address": "Antsiranana 201",
-        "phone": "032 46 403 70",
-        "website": "",
-        "plusCode": "P79R+QQ",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2805625,
-          "lng": 49.2919375
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": ""
-        },
-        "reviews": [],
-        "url": "https://www.google.com/maps/place/Le+DIEGO+H%C3%B4tel/@-12.2805625,49.2919375,17z/data=!4m11!3m10!1s0x226b1d6aefbcc627:0x4d998be96766fddb!5m2!4m1!1i2!8m2!3d-12.2805625!4d49.2919375!9m1!1b1!16s%2Fg%2F11hy_zck53?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Google Maps"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "032 46 403 70"
-          ],
-          "emails": [],
-          "addresses": [
-            "Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Établissement professionnel listé sur Google Maps.",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "Hôtel de la Poste",
-      "category": "",
-      "address": "Boulevard Bascilles, Antsiranana 201",
-      "phone": "032 04 785 75",
-      "website": "http://www.diego-hoteldelaposte.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel+de+la+Poste/@-12.2688338,49.2917689,17z/data=!4m10!3m9!1s0x226b1c852701d2df:0x94e0cc848182f9be!5m2!4m1!1i2!8m2!3d-12.2688338!4d49.2917689!10e1!16s%2Fg%2F1wck04zn?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2688338,
-        "lng": 49.2917689
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [
-          "Hôtel"
-        ],
-        "description": "Wi-Fi gratuit Parking gratuit Piscine extérieure Climatisation Service de blanchisserie Accepte les animaux Adapté aux enfants Restaurant Centre de fitness Bar"
-      },
-      "reviews": [],
-      "contractDetails": {
-        "name": "Hôtel de la Poste",
-        "address": "Boulevard Bascilles, Antsiranana 201",
-        "phone": "032 04 785 75",
-        "website": "http://www.diego-hoteldelaposte.com/",
-        "plusCode": "P7JR+FP",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2688338,
-          "lng": 49.2917689
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [
-            "Hôtel"
-          ],
-          "description": "Wi-Fi gratuit Parking gratuit Piscine extérieure Climatisation Service de blanchisserie Accepte les animaux Adapté aux enfants Restaurant Centre de fitness Bar"
-        },
-        "reviews": [],
-        "url": "https://www.google.com/maps/place/H%C3%B4tel+de+la+Poste/@-12.2688338,49.2917689,17z/data=!4m10!3m9!1s0x226b1c852701d2df:0x94e0cc848182f9be!5m2!4m1!1i2!8m2!3d-12.2688338!4d49.2917689!10e1!16s%2Fg%2F1wck04zn?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "032 04 785 75"
-          ],
-          "emails": [],
-          "addresses": [
-            "Boulevard Bascilles, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Parking gratuit Piscine extérieure Climatisation Service de blanchisserie Accepte les animaux Adapté aux enfants Restaurant Centre de fitness Bar",
-        "companyCulture": {
-          "mission": "Équipements et services : Hôtel"
-        }
-      }
-    },
-    {
-      "name": "Sanjeela Plage Coco",
-      "category": "",
-      "address": "Plage Coco, Antsiranana 201",
-      "phone": "034 47 380 99",
-      "website": "",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Sanjeela+Plage+Coco/@-12.3003726,49.3016923,17z/data=!4m10!3m9!1s0x226b1dd300715e69:0x34ad2dca423ff464!5m2!4m1!1i2!8m2!3d-12.3003726!4d49.3016923!10e1!16s%2Fg%2F11fd4wh8ms?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.3003726,
-        "lng": 49.3016923
-      },
-      "platform": "Google Maps",
-      "about": {
-        "amenities": [
-          "Hôtel"
-        ],
-        "description": "Wi-Fi gratuit Parking gratuit Piscine Accepte les animaux Accès à la plage Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport Centre de fitness"
-      },
-      "reviews": [
-        {
-          "author": "Paradise773131",
-          "text": "Parfait en tous points.|Au calme, avec sa plage et le pain de sucre mythique.|Est il besoin de s'étendre sur les qualités de Laurent le propriétaire ? Et ses précieux conseils ?|Bref nous y avons passé 10 jours enchantés à déambuler en … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "delduc Augustin",
-          "text": "Super hôtel avec des bungalows confortables (ventilateurs, grands lits, salle de bain...) juste devant la plage et à 10 minutes du centre ville. C'est un endroit parfait pour visiter Diego et sa région tout en restant au calme et l'hôte, Laurent, est très sympathique et se rend toujours disponible pour améliorer votre séjour! Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Arnaud Dupuis",
-          "text": "Bungalow simple et bien situé, offrant une belle vue sur le pain de sucre. Le propriétaire Laurent est super sympa. Petit déjeuner excellent, le tout pour un prix plus qu'abordable.\nMerci pour tout. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Mélanie Sagicorn",
-          "text": "Ah vous cherchez le paradis ? Bonne nouvelle, il est ici  🌈  Je voyage pas mal et je sais reconnaître une pépite quand j'en croise une ! … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Léo Gonin",
-          "text": "Bungalows simples mais fonctionnels en bordure de Diego\nEmplacement idéal, face au pain de sucre tout en étant très proche de la ville (5 min en tuk tuk, 1€) … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Emilie La Rou",
-          "text": "Tres chouette endroit pied ds le sable. Tres bien recu par Laurent et son equipe, accueil super chaleureux. Je recommande 😍 …",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Olivier Kautz",
-          "text": "Comme beaucoup d'autres google guides je partage leur avis, c'est un endroit idéal pour séjourner et découvrir la région de Diego-Suarez.\nLes chambres sont dans 8 bungalows identiques. C'est très simple, mais tellement … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Feno Randrianirina",
-          "text": "Séjourner au Sanjeela Plage Coco, c’est s’offrir une parenthèse hors du temps, à seulement quelques kilomètres du centre de Diego. Dès les premiers instants, le calme ambiant et la vue imprenable sur le Pain de Sucre imposent une forme de … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Clément Debosque",
-          "text": "Super spot à Diego ! Laurent le propriétaire est très sympa et toujours à l'écoute :) … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "philippe hildenbrand",
-          "text": "Hôtel dont l’emplacement est exceptionnel.\nLes bungalows sont simples mais confortables. La propriétaire est très gentille et arrangeante. Idéal pour les petits budgets. Plus",
-          "date": "",
-          "rating": ""
-        }
-      ],
-      "contractDetails": {
-        "name": "Sanjeela Plage Coco",
-        "address": "Plage Coco, Antsiranana 201",
-        "phone": "034 47 380 99",
-        "website": "",
-        "plusCode": "M8X2+VM",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.3003726,
-          "lng": 49.3016923
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [
-            "Hôtel"
-          ],
-          "description": "Wi-Fi gratuit Parking gratuit Piscine Accepte les animaux Accès à la plage Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport Centre de fitness"
-        },
-        "reviews": [
-          {
-            "author": "Paradise773131",
-            "text": "Parfait en tous points.|Au calme, avec sa plage et le pain de sucre mythique.|Est il besoin de s'étendre sur les qualités de Laurent le propriétaire ? Et ses précieux conseils ?|Bref nous y avons passé 10 jours enchantés à déambuler en … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "delduc Augustin",
-            "text": "Super hôtel avec des bungalows confortables (ventilateurs, grands lits, salle de bain...) juste devant la plage et à 10 minutes du centre ville. C'est un endroit parfait pour visiter Diego et sa région tout en restant au calme et l'hôte, Laurent, est très sympathique et se rend toujours disponible pour améliorer votre séjour! Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Arnaud Dupuis",
-            "text": "Bungalow simple et bien situé, offrant une belle vue sur le pain de sucre. Le propriétaire Laurent est super sympa. Petit déjeuner excellent, le tout pour un prix plus qu'abordable.\nMerci pour tout. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Mélanie Sagicorn",
-            "text": "Ah vous cherchez le paradis ? Bonne nouvelle, il est ici  🌈  Je voyage pas mal et je sais reconnaître une pépite quand j'en croise une ! … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Léo Gonin",
-            "text": "Bungalows simples mais fonctionnels en bordure de Diego\nEmplacement idéal, face au pain de sucre tout en étant très proche de la ville (5 min en tuk tuk, 1€) … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Emilie La Rou",
-            "text": "Tres chouette endroit pied ds le sable. Tres bien recu par Laurent et son equipe, accueil super chaleureux. Je recommande 😍 …",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Olivier Kautz",
-            "text": "Comme beaucoup d'autres google guides je partage leur avis, c'est un endroit idéal pour séjourner et découvrir la région de Diego-Suarez.\nLes chambres sont dans 8 bungalows identiques. C'est très simple, mais tellement … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Feno Randrianirina",
-            "text": "Séjourner au Sanjeela Plage Coco, c’est s’offrir une parenthèse hors du temps, à seulement quelques kilomètres du centre de Diego. Dès les premiers instants, le calme ambiant et la vue imprenable sur le Pain de Sucre imposent une forme de … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Clément Debosque",
-            "text": "Super spot à Diego ! Laurent le propriétaire est très sympa et toujours à l'écoute :) … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "philippe hildenbrand",
-            "text": "Hôtel dont l’emplacement est exceptionnel.\nLes bungalows sont simples mais confortables. La propriétaire est très gentille et arrangeante. Idéal pour les petits budgets. Plus",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/Sanjeela+Plage+Coco/@-12.3003726,49.3016923,17z/data=!4m10!3m9!1s0x226b1dd300715e69:0x34ad2dca423ff464!5m2!4m1!1i2!8m2!3d-12.3003726!4d49.3016923!10e1!16s%2Fg%2F11fd4wh8ms?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Google Maps"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "034 47 380 99"
-          ],
-          "emails": [],
-          "addresses": [
-            "Plage Coco, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Parking gratuit Piscine Accepte les animaux Accès à la plage Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport Centre de fitness",
-        "companyCulture": {
-          "mission": "Équipements et services : Hôtel"
-        }
-      }
-    },
-    {
-      "name": "HAVANA RESTAURANT BAR HÔTEL",
-      "category": "Repas sur place",
-      "address": "1 Rue Francois de Mahy, Antsiranana 201",
-      "phone": "032 05 252 55",
-      "website": "",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/HAVANA+RESTAURANT+BAR+H%C3%94TEL/@-12.2778724,49.291971,17z/data=!4m10!3m9!1s0x226b1d0069a2f241:0x3e461af0137a82ff!5m2!4m1!1i2!8m2!3d-12.2778724!4d49.291971!10e1!16s%2Fg%2F11wpvq9wpr?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2778724,
-        "lng": 49.291971
-      },
-      "platform": "Google Maps",
-      "about": {
-        "amenities": [
-          "Repas sur place",
-          "Excellent café",
-          "Déjeuner",
-          "Dîner",
-          "Dîner en solo",
-          "Alcools",
-          "Bière",
-          "Cafés",
-          "Petites portions à partager",
-          "Spiritueux",
-          "Desserts",
-          "Service à table",
-          "Ambiance décontractée",
-          "Cadre agréable",
-          "Groupes",
-          "Touristes",
-          "Réservations acceptées",
-          "Convient aux enfants",
-          "Restaurant"
-        ],
-        "description": ""
-      },
-      "reviews": [],
-      "contractDetails": {
-        "name": "HAVANA RESTAURANT BAR HÔTEL",
-        "address": "1 Rue Francois de Mahy, Antsiranana 201",
-        "phone": "032 05 252 55",
-        "website": "",
-        "plusCode": "P7CR+VQ",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2778724,
-          "lng": 49.291971
-        },
-        "category": "Repas sur place",
-        "starRating": "",
-        "about": {
-          "amenities": [
-            "Repas sur place",
-            "Excellent café",
-            "Déjeuner",
-            "Dîner",
-            "Dîner en solo",
-            "Alcools",
-            "Bière",
-            "Cafés",
-            "Petites portions à partager",
-            "Spiritueux",
-            "Desserts",
-            "Service à table",
-            "Ambiance décontractée",
-            "Cadre agréable",
-            "Groupes",
-            "Touristes",
-            "Réservations acceptées",
-            "Convient aux enfants",
-            "Restaurant"
-          ],
-          "description": ""
-        },
-        "reviews": [],
-        "url": "https://www.google.com/maps/place/HAVANA+RESTAURANT+BAR+H%C3%94TEL/@-12.2778724,49.291971,17z/data=!4m10!3m9!1s0x226b1d0069a2f241:0x3e461af0137a82ff!5m2!4m1!1i2!8m2!3d-12.2778724!4d49.291971!10e1!16s%2Fg%2F11wpvq9wpr?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Google Maps"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "032 05 252 55"
-          ],
-          "emails": [],
-          "addresses": [
-            "1 Rue Francois de Mahy, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "HAVANA RESTAURANT BAR HÔTEL est un établissement de type \"Repas sur place\".",
-        "companyCulture": {
-          "mission": "Équipements et services : Repas sur place, Excellent café, Déjeuner, Dîner, Dîner en solo, Alcools, Bière, Cafés, Petites portions à partager, Spiritueux, Desserts, Service à table, Ambiance décontractée, Cadre agréable, Groupes, Touristes, Réservations acceptées, Convient aux enfants, Restaurant"
-        }
-      }
-    },
-    {
-      "name": "Motel Au Petit Vatel",
-      "category": "",
-      "address": "Lot 3, Soafeno, 608 04, Antsiranana 201",
-      "phone": "032 04 101 22",
-      "website": "https://motel-au-petit-vatel.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Motel+Au+Petit+Vatel/@-12.2975899,49.2918305,17z/data=!4m10!3m9!1s0x226b1c0dab485ba3:0x96eb2b1755283b7!5m2!4m1!1i2!8m2!3d-12.2975899!4d49.2918305!10e1!16s%2Fg%2F11fy_dbydq?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2975899,
-        "lng": 49.2918305
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [
-          "Hôtel"
-        ],
-        "description": "Wi-Fi gratuit Piscine Accepte les animaux Cuisine dans certaines ch. Navette aéroport Centre de fitness"
-      },
-      "reviews": [
-        {
-          "author": "Bli Bla",
-          "text": "À mon arrivée à l'hôtel, l'adresse sur Google Maps était erronée (à seulement deux rues de là). Dès que je suis entré dans la chambre, j'ai su que c'était le genre d'hôtel où le propriétaire est vraiment attentionné : c'est propre, bien … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Ernst Frueh",
-          "text": "Confort de sommeil exceptionnel à Diego grâce à des matelas européens et des sommiers à lattes réglables... excellente cuisine... service impeccable",
-          "date": "",
-          "rating": ""
-        }
-      ],
-      "contractDetails": {
-        "name": "Motel Au Petit Vatel",
-        "address": "Lot 3, Soafeno, 608 04, Antsiranana 201",
-        "phone": "032 04 101 22",
-        "website": "https://motel-au-petit-vatel.com/",
-        "plusCode": "P72R+XP",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2975899,
-          "lng": 49.2918305
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [
-            "Hôtel"
-          ],
-          "description": "Wi-Fi gratuit Piscine Accepte les animaux Cuisine dans certaines ch. Navette aéroport Centre de fitness"
-        },
-        "reviews": [
-          {
-            "author": "Bli Bla",
-            "text": "À mon arrivée à l'hôtel, l'adresse sur Google Maps était erronée (à seulement deux rues de là). Dès que je suis entré dans la chambre, j'ai su que c'était le genre d'hôtel où le propriétaire est vraiment attentionné : c'est propre, bien … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Ernst Frueh",
-            "text": "Confort de sommeil exceptionnel à Diego grâce à des matelas européens et des sommiers à lattes réglables... excellente cuisine... service impeccable",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/Motel+Au+Petit+Vatel/@-12.2975899,49.2918305,17z/data=!4m10!3m9!1s0x226b1c0dab485ba3:0x96eb2b1755283b7!5m2!4m1!1i2!8m2!3d-12.2975899!4d49.2918305!10e1!16s%2Fg%2F11fy_dbydq?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "032 04 101 22"
-          ],
-          "emails": [],
-          "addresses": [
-            "Lot 3, Soafeno, 608 04, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Piscine Accepte les animaux Cuisine dans certaines ch. Navette aéroport Centre de fitness",
-        "companyCulture": {
-          "mission": "Équipements et services : Hôtel"
-        }
-      }
-    },
-    {
-      "name": "Hôtel Le Village Diego",
-      "category": "",
-      "address": "P75R+38, lot: 3.232.02 Av. Philibert Tsiranana, Antsiranana 201",
-      "phone": "032 02 306 78",
-      "website": "https://levillage-diego.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel+Le+Village+Diego/@-12.2925115,49.2905112,17z/data=!4m10!3m9!1s0x226b1c73a09a85b5:0x985460309f511065!5m2!4m1!1i2!8m2!3d-12.2925115!4d49.2905112!10e1!16s%2Fg%2F11b61s14hj?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2925115,
-        "lng": 49.2905112
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Piscine extérieure Climatisation Service de blanchisserie Accepte les animaux Service de chambre Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport Centre de fitness Bar"
-      },
-      "reviews": [],
-      "contractDetails": {
-        "name": "Hôtel Le Village Diego",
-        "address": "P75R+38, lot: 3.232.02 Av. Philibert Tsiranana, Antsiranana 201",
-        "phone": "032 02 306 78",
-        "website": "https://levillage-diego.com/",
-        "plusCode": "",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2925115,
-          "lng": 49.2905112
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Piscine extérieure Climatisation Service de blanchisserie Accepte les animaux Service de chambre Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport Centre de fitness Bar"
-        },
-        "reviews": [],
-        "url": "https://www.google.com/maps/place/H%C3%B4tel+Le+Village+Diego/@-12.2925115,49.2905112,17z/data=!4m10!3m9!1s0x226b1c73a09a85b5:0x985460309f511065!5m2!4m1!1i2!8m2!3d-12.2925115!4d49.2905112!10e1!16s%2Fg%2F11b61s14hj?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "032 02 306 78"
-          ],
-          "emails": [],
-          "addresses": [
-            "P75R+38, lot: 3.232.02 Av. Philibert Tsiranana, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Piscine extérieure Climatisation Service de blanchisserie Accepte les animaux Service de chambre Adapté aux enfants Restaurant Cuisine dans certaines ch. Navette aéroport Centre de fitness Bar",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "La Belle Aventure",
-      "category": "",
-      "address": "13 Rue Freppel, Antsiranana 201",
-      "phone": "032 44 153 83",
-      "website": "https://labellaventure-diego.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/La+Belle+Aventure/@-12.2776031,49.2939366,17z/data=!4m10!3m9!1s0x226b1c8790170d33:0x85e53a6cb6299c66!5m2!4m1!1i2!8m2!3d-12.2776031!4d49.2939366!10e1!16s%2Fg%2F11b6dggkyl?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2776031,
-        "lng": 49.2939366
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [
-          "Hébergement"
-        ],
-        "description": "Wi-Fi gratuit Piscine Climatisation Accepte les animaux Restaurant Navette aéroport Centre de fitness"
-      },
-      "reviews": [],
-      "contractDetails": {
-        "name": "La Belle Aventure",
-        "address": "13 Rue Freppel, Antsiranana 201",
-        "phone": "032 44 153 83",
-        "website": "https://labellaventure-diego.com/",
-        "plusCode": "P7CV+XH",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2776031,
-          "lng": 49.2939366
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [
-            "Hébergement"
-          ],
-          "description": "Wi-Fi gratuit Piscine Climatisation Accepte les animaux Restaurant Navette aéroport Centre de fitness"
-        },
-        "reviews": [],
-        "url": "https://www.google.com/maps/place/La+Belle+Aventure/@-12.2776031,49.2939366,17z/data=!4m10!3m9!1s0x226b1c8790170d33:0x85e53a6cb6299c66!5m2!4m1!1i2!8m2!3d-12.2776031!4d49.2939366!10e1!16s%2Fg%2F11b6dggkyl?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "032 44 153 83"
-          ],
-          "emails": [],
-          "addresses": [
-            "13 Rue Freppel, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Piscine Climatisation Accepte les animaux Restaurant Navette aéroport Centre de fitness",
-        "companyCulture": {
-          "mission": "Équipements et services : Hébergement"
-        }
-      }
-    },
-    {
-      "name": "HOTEL GOLDEN HOUSE",
-      "category": "",
-      "address": "Route pyrothechnie, Bazar Grand-Pavois, Antsiranana 202",
-      "phone": "+262 639 21 60 35",
-      "website": "https://www.hotel-goldenhouse.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/HOTEL+GOLDEN+HOUSE/@-12.2910225,49.2883929,17z/data=!4m10!3m9!1s0x226b1dd57c240df3:0xe6ac554ee6f19fc2!5m2!4m1!1i2!8m2!3d-12.2910225!4d49.2883929!10e1!16s%2Fg%2F11jgvt771h?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2910225,
-        "lng": 49.2883929
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [
-          "Hôtel"
-        ],
-        "description": "Wi-Fi gratuit Petit déjeuner payant Parking Piscine Climatisation Accepte les animaux Service de chambre Restaurant Cuisine dans certaines ch. Navette aéroport"
-      },
-      "reviews": [
-        {
-          "author": "Oustade Bii",
-          "text": "Lieu accueillant et chaleureux. Une ambiance de famille avec des colocataires sympa et avec de très bons employer. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Maëlyse Kadri Afani",
-          "text": "ExcellentChambres : 5Service… Plus",
-          "date": "",
-          "rating": ""
-        }
-      ],
-      "contractDetails": {
-        "name": "HOTEL GOLDEN HOUSE",
-        "address": "Route pyrothechnie, Bazar Grand-Pavois, Antsiranana 202",
-        "phone": "+262 639 21 60 35",
-        "website": "https://www.hotel-goldenhouse.com/",
-        "plusCode": "P75Q+H9",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2910225,
-          "lng": 49.2883929
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [
-            "Hôtel"
-          ],
-          "description": "Wi-Fi gratuit Petit déjeuner payant Parking Piscine Climatisation Accepte les animaux Service de chambre Restaurant Cuisine dans certaines ch. Navette aéroport"
-        },
-        "reviews": [
-          {
-            "author": "Oustade Bii",
-            "text": "Lieu accueillant et chaleureux. Une ambiance de famille avec des colocataires sympa et avec de très bons employer. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Maëlyse Kadri Afani",
-            "text": "ExcellentChambres : 5Service… Plus",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/HOTEL+GOLDEN+HOUSE/@-12.2910225,49.2883929,17z/data=!4m10!3m9!1s0x226b1dd57c240df3:0xe6ac554ee6f19fc2!5m2!4m1!1i2!8m2!3d-12.2910225!4d49.2883929!10e1!16s%2Fg%2F11jgvt771h?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "+262 639 21 60 35"
-          ],
-          "emails": [],
-          "addresses": [
-            "Route pyrothechnie, Bazar Grand-Pavois, Antsiranana 202"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Petit déjeuner payant Parking Piscine Climatisation Accepte les animaux Service de chambre Restaurant Cuisine dans certaines ch. Navette aéroport",
-        "companyCulture": {
-          "mission": "Équipements et services : Hôtel"
-        }
-      }
-    },
-    {
-      "name": "Lasirene hôtel",
-      "category": "",
-      "address": "1 rue Le Bd Le Myre De Villers, Antsiranana 201",
-      "phone": "+33 6 44 38 24 92",
-      "website": "",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Lasirene+h%C3%B4tel/@-12.2761629,49.2965196,17z/data=!4m11!3m10!1s0x226b1c884bd09313:0xbf2d3ca9ece3803a!5m2!4m1!1i2!8m2!3d-12.2761629!4d49.2965196!9m1!1b1!16s%2Fg%2F11x16vyysv?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2761629,
-        "lng": 49.2965196
-      },
-      "platform": "Google Maps",
-      "about": {
-        "amenities": [],
-        "description": ""
-      },
-      "reviews": [
-        {
-          "author": "Salim Moussa",
-          "text": "Un Lieu magnifique !!!!  paradisiaque avec diverses plantes naturelles splendides accompagné d’une piscine naturelle qui fais ressortir toutes la beauté du décor. L’emplacement et en bords de mer et un bar-restaurant et à dispositions .Les … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "anouchka darianne",
-          "text": "Un petit hôtel de charme, proche de la mer. On se sent comme dans un havre de paix entouré par la nature, au milieu de la ville. Mention spéciale pour la piscine naturelle il fait bon de s’y plonger, très rafraîchissant par jour de chaleur. … Plus",
-          "date": "",
-          "rating": ""
-        }
-      ],
-      "contractDetails": {
-        "name": "Lasirene hôtel",
-        "address": "1 rue Le Bd Le Myre De Villers, Antsiranana 201",
-        "phone": "+33 6 44 38 24 92",
-        "website": "",
-        "plusCode": "P7FW+GJ",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2761629,
-          "lng": 49.2965196
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": ""
-        },
-        "reviews": [
-          {
-            "author": "Salim Moussa",
-            "text": "Un Lieu magnifique !!!!  paradisiaque avec diverses plantes naturelles splendides accompagné d’une piscine naturelle qui fais ressortir toutes la beauté du décor. L’emplacement et en bords de mer et un bar-restaurant et à dispositions .Les … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "anouchka darianne",
-            "text": "Un petit hôtel de charme, proche de la mer. On se sent comme dans un havre de paix entouré par la nature, au milieu de la ville. Mention spéciale pour la piscine naturelle il fait bon de s’y plonger, très rafraîchissant par jour de chaleur. … Plus",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/Lasirene+h%C3%B4tel/@-12.2761629,49.2965196,17z/data=!4m11!3m10!1s0x226b1c884bd09313:0xbf2d3ca9ece3803a!5m2!4m1!1i2!8m2!3d-12.2761629!4d49.2965196!9m1!1b1!16s%2Fg%2F11x16vyysv?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Google Maps"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "+33 6 44 38 24 92"
-          ],
-          "emails": [],
-          "addresses": [
-            "1 rue Le Bd Le Myre De Villers, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Établissement professionnel listé sur Google Maps.",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "Hôtel Victoria",
-      "category": "",
-      "address": "40 Rue Rigault, Antsiranana 201",
-      "phone": "020 82 225 44",
-      "website": "http://www.hotelvictoriadiego.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel+Victoria/@-12.2804941,49.29371,17z/data=!4m10!3m9!1s0x226b1c7cb7d168e1:0xb890725ce4dfa47a!5m2!4m1!1i2!8m2!3d-12.2804941!4d49.29371!10e1!16s%2Fg%2F11b6356d49?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2804941,
-        "lng": 49.29371
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Parking gratuit Piscine Climatisation Adapté aux enfants Centre de fitness"
-      },
-      "reviews": [
-        {
-          "author": "Jaona",
-          "text": "Chambres confortables, prix très correctes. Environ 30 euros. Les employés sont très serviables et souriants.\nLieu tranquille car pas beaucoup de trafic auto.\nJe recommande. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "fourchettenzinc",
-          "text": "C'est un très bon hotel de centre ville. L'emplacement est agréable car un peu plus loin que l'agitation des rues principales.|Tout fonctionne parfaitement. Un groupe électrogène palie les pannes assez récurantes de la girama (l'edf … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Christian Bemananjara",
-          "text": "Les chambres sont spacieuses et confortables, avec un bon rapport qualité-prix! Le personnel accueillant et souriante!\nA améliorer : la connexion wifi au 2eme étage! Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "H7050RGericm",
-          "text": "Excellent rapport qualité prix |Chambre et salle d'eau très spacieuses |Gros groupe électrogène en cas de coupure d'électricité permettant un accès continu à la Wi-Fi, climatisation et lumière |Aucune humidité |Ménage tous les jours avec … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Fouj9210",
-          "text": "Bonne surprise ! Des chambres agréables une belle douche à l’italienne,climatisation,coffre ,mini bar tout ça pour 25€ et un petit-déjeuner copieux à 15000 ariary ,bien situé et nombreux tuktuk pour ceux qui ne veulent pas marcher |Prévoir quand même les boules quies,si l’on ne veut pas être dérangé par l’appel de la première prière",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "bibi1658",
-          "text": "Nous sommes 3 couples et avons passé 8 nuits dans cet hôtel bien situé pas loin du centre ville, très calme. Le cadre est très agréable magniquement paysagé face à la mer. Le personnel a été particulièrement à nos petits soins et le jeune … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "514fr_dc",
-          "text": "Hôtel  présentant un rapport qualité / prix super. Légèrement excentré du centre ville, à pied il faut entre 5 et 6 minutes montre en main. Les chambres sont propres et spacieuses. Le personnel est souriant et disponible. même si l'hôtel ne … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "imprimente",
-          "text": "Acceuil charmant, les personnels de lhotels tres gentil on etaient bien acceuilli. bon petit dejeuner mais il faut juste ajouter quelque chose de salé . le jour de notre depart c'est lhotel qui s'occupe du transfert hotel - aeroport.",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Dominique Aiss",
-          "text": "Hôtel pas trop loin du centre-ville.\nTrois étoiles (cotation africaine)\nAccueil très médiocre personnel plus zélé à faire des photocopies de passeport … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "U4811UGninar",
-          "text": "une très belle Hôtel et luxueux très agréable a passer des vacances en familles ou entre amies très bien servie aussi avec les employer aussi souriant et très chaleureux et très serviable aussi un Hôtel de Luxe bien sécurisé pour passer des vacances tranquille",
-          "date": "",
-          "rating": ""
-        }
-      ],
-      "contractDetails": {
-        "name": "Hôtel Victoria",
-        "address": "40 Rue Rigault, Antsiranana 201",
-        "phone": "020 82 225 44",
-        "website": "http://www.hotelvictoriadiego.com/",
-        "plusCode": "P79V+RF",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2804941,
-          "lng": 49.29371
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": "Wi-Fi gratuit Parking gratuit Piscine Climatisation Adapté aux enfants Centre de fitness"
-        },
-        "reviews": [
-          {
-            "author": "Jaona",
-            "text": "Chambres confortables, prix très correctes. Environ 30 euros. Les employés sont très serviables et souriants.\nLieu tranquille car pas beaucoup de trafic auto.\nJe recommande. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "fourchettenzinc",
-            "text": "C'est un très bon hotel de centre ville. L'emplacement est agréable car un peu plus loin que l'agitation des rues principales.|Tout fonctionne parfaitement. Un groupe électrogène palie les pannes assez récurantes de la girama (l'edf … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Christian Bemananjara",
-            "text": "Les chambres sont spacieuses et confortables, avec un bon rapport qualité-prix! Le personnel accueillant et souriante!\nA améliorer : la connexion wifi au 2eme étage! Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "H7050RGericm",
-            "text": "Excellent rapport qualité prix |Chambre et salle d'eau très spacieuses |Gros groupe électrogène en cas de coupure d'électricité permettant un accès continu à la Wi-Fi, climatisation et lumière |Aucune humidité |Ménage tous les jours avec … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Fouj9210",
-            "text": "Bonne surprise ! Des chambres agréables une belle douche à l’italienne,climatisation,coffre ,mini bar tout ça pour 25€ et un petit-déjeuner copieux à 15000 ariary ,bien situé et nombreux tuktuk pour ceux qui ne veulent pas marcher |Prévoir quand même les boules quies,si l’on ne veut pas être dérangé par l’appel de la première prière",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "bibi1658",
-            "text": "Nous sommes 3 couples et avons passé 8 nuits dans cet hôtel bien situé pas loin du centre ville, très calme. Le cadre est très agréable magniquement paysagé face à la mer. Le personnel a été particulièrement à nos petits soins et le jeune … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "514fr_dc",
-            "text": "Hôtel  présentant un rapport qualité / prix super. Légèrement excentré du centre ville, à pied il faut entre 5 et 6 minutes montre en main. Les chambres sont propres et spacieuses. Le personnel est souriant et disponible. même si l'hôtel ne … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "imprimente",
-            "text": "Acceuil charmant, les personnels de lhotels tres gentil on etaient bien acceuilli. bon petit dejeuner mais il faut juste ajouter quelque chose de salé . le jour de notre depart c'est lhotel qui s'occupe du transfert hotel - aeroport.",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Dominique Aiss",
-            "text": "Hôtel pas trop loin du centre-ville.\nTrois étoiles (cotation africaine)\nAccueil très médiocre personnel plus zélé à faire des photocopies de passeport … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "U4811UGninar",
-            "text": "une très belle Hôtel et luxueux très agréable a passer des vacances en familles ou entre amies très bien servie aussi avec les employer aussi souriant et très chaleureux et très serviable aussi un Hôtel de Luxe bien sécurisé pour passer des vacances tranquille",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/H%C3%B4tel+Victoria/@-12.2804941,49.29371,17z/data=!4m10!3m9!1s0x226b1c7cb7d168e1:0xb890725ce4dfa47a!5m2!4m1!1i2!8m2!3d-12.2804941!4d49.29371!10e1!16s%2Fg%2F11b6356d49?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "020 82 225 44"
-          ],
-          "emails": [],
-          "addresses": [
-            "40 Rue Rigault, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Parking gratuit Piscine Climatisation Adapté aux enfants Centre de fitness",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "Le Grand Hôtel",
-      "category": "",
-      "address": "77 Rue Colbert, Antsiranana 201",
-      "phone": "032 40 881 43",
-      "website": "https://www.facebook.com/grandhoteldiego/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Le+Grand+H%C3%B4tel/@-12.2765423,49.2921101,17z/data=!4m10!3m9!1s0x226b1c8788eb49e5:0x8606b0f34263f5e9!5m2!4m1!1i2!8m2!3d-12.2765423!4d49.2921101!10e1!16s%2Fg%2F1tdr5ljg?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2765423,
-        "lng": 49.2921101
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Petit-déjeuner Piscine extérieure Climatisation Service de blanchisserie Service de chambre Adapté aux enfants Restaurant Navette aéroport Spa Bar"
-      },
-      "reviews": [
-        {
-          "author": "Attoumani Dar",
-          "text": "Le personnel est vraiment bien. Mais il faut absolument revoir les chambres. Décoration démodée issu d'une autre âge. Il faut donner un peu de fraîcheur et de modernité aux chambres Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Delphine",
-          "text": "Un hôtel soit disant 4 étoiles mais des prestations très insuffisantes pour un prix élevé . La Clim de la chambre 15 ne marchait pas à mon retour du dîner et le technicien n’a pas pu la réparer. Il faisait 32-33 degrés dans la chambre j’ai … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "kunka_11",
-          "text": "Très bel hôtel au centre de Diego, la chambre est bien insonorisée et surtout l’électricité fonctionne 24/24 grâce à leur groupe électrogène.|Chambre spacieuse et matelas confortable, les oreillers sont de bonnes qualité.|Le petit déjeuner  est bon sans plus, il faut dire que le buffet n'est vraiment pas mis en valeur.",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "patricia saholy",
-          "text": "Très belle emplacement en centre ville, proche de toutes commodités.\nTrès bon petit déjeuner, le vary amin'anana Très savoureux. Très varié. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Ugo Favretti",
-          "text": "Petit déjeuner sympa grand buffet chambre très propre discothèques avec bruit jusqu’à 5 h du matin l horreur Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Christian D",
-          "text": "Hôtel très bien situé à proximité du centre ville dans un quartier commerçant. L'environnement est parfois bruyant car il y a une discothèque à proximité, même si l'hôtel lui-même est un havre de paix. Personnel très serviable et gentil. Le … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "289philipper",
-          "text": "Petit-déjeuner en terrasse. Nous sommes deux et la serveuse prend une seule commande qu’elle sert.  Moi, rien. ....je demande à commander.||Vient l’addition, j’attends la monnaie qui ne vient pas. Je me déplace à la caisse. La serveuse n’a … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "PomPom75",
-          "text": "Dormi 15 nuits en janvier 5 ème séjour dans cet hôtel. Bel hôtel idéalement situé car il est proche des commerces, restaurants et débits de boissons. Le personnel est sympatique et efficace. Les chambres côté piscine beaucoup plus calmes … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Eric Eric",
-          "text": "L'ensemble du personnel est d'une extrême gentillesse s'ils ressentent que c'est réciproque.\nLa chambre est très spacieuse. … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Romain Lagache",
-          "text": "Malheureusement, l'établissement a beaucoup perdu en qualité notamment au niveau restauration. Les prix sont élevés par rapport à la qualité des plats alors que dans la rue il y a de magnifiques plats a des prix largement plus bas. … Plus",
-          "date": "",
-          "rating": ""
-        }
-      ],
-      "contractDetails": {
-        "name": "Le Grand Hôtel",
-        "address": "77 Rue Colbert, Antsiranana 201",
-        "phone": "032 40 881 43",
-        "website": "https://www.facebook.com/grandhoteldiego/",
-        "plusCode": "P7FR+9R",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2765423,
-          "lng": 49.2921101
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": "Wi-Fi gratuit Petit-déjeuner Piscine extérieure Climatisation Service de blanchisserie Service de chambre Adapté aux enfants Restaurant Navette aéroport Spa Bar"
-        },
-        "reviews": [
-          {
-            "author": "Attoumani Dar",
-            "text": "Le personnel est vraiment bien. Mais il faut absolument revoir les chambres. Décoration démodée issu d'une autre âge. Il faut donner un peu de fraîcheur et de modernité aux chambres Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Delphine",
-            "text": "Un hôtel soit disant 4 étoiles mais des prestations très insuffisantes pour un prix élevé . La Clim de la chambre 15 ne marchait pas à mon retour du dîner et le technicien n’a pas pu la réparer. Il faisait 32-33 degrés dans la chambre j’ai … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "kunka_11",
-            "text": "Très bel hôtel au centre de Diego, la chambre est bien insonorisée et surtout l’électricité fonctionne 24/24 grâce à leur groupe électrogène.|Chambre spacieuse et matelas confortable, les oreillers sont de bonnes qualité.|Le petit déjeuner  est bon sans plus, il faut dire que le buffet n'est vraiment pas mis en valeur.",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "patricia saholy",
-            "text": "Très belle emplacement en centre ville, proche de toutes commodités.\nTrès bon petit déjeuner, le vary amin'anana Très savoureux. Très varié. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Ugo Favretti",
-            "text": "Petit déjeuner sympa grand buffet chambre très propre discothèques avec bruit jusqu’à 5 h du matin l horreur Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Christian D",
-            "text": "Hôtel très bien situé à proximité du centre ville dans un quartier commerçant. L'environnement est parfois bruyant car il y a une discothèque à proximité, même si l'hôtel lui-même est un havre de paix. Personnel très serviable et gentil. Le … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "289philipper",
-            "text": "Petit-déjeuner en terrasse. Nous sommes deux et la serveuse prend une seule commande qu’elle sert.  Moi, rien. ....je demande à commander.||Vient l’addition, j’attends la monnaie qui ne vient pas. Je me déplace à la caisse. La serveuse n’a … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "PomPom75",
-            "text": "Dormi 15 nuits en janvier 5 ème séjour dans cet hôtel. Bel hôtel idéalement situé car il est proche des commerces, restaurants et débits de boissons. Le personnel est sympatique et efficace. Les chambres côté piscine beaucoup plus calmes … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Eric Eric",
-            "text": "L'ensemble du personnel est d'une extrême gentillesse s'ils ressentent que c'est réciproque.\nLa chambre est très spacieuse. … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Romain Lagache",
-            "text": "Malheureusement, l'établissement a beaucoup perdu en qualité notamment au niveau restauration. Les prix sont élevés par rapport à la qualité des plats alors que dans la rue il y a de magnifiques plats a des prix largement plus bas. … Plus",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/Le+Grand+H%C3%B4tel/@-12.2765423,49.2921101,17z/data=!4m10!3m9!1s0x226b1c8788eb49e5:0x8606b0f34263f5e9!5m2!4m1!1i2!8m2!3d-12.2765423!4d49.2921101!10e1!16s%2Fg%2F1tdr5ljg?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "032 40 881 43"
-          ],
-          "emails": [],
-          "addresses": [
-            "77 Rue Colbert, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Petit-déjeuner Piscine extérieure Climatisation Service de blanchisserie Service de chambre Adapté aux enfants Restaurant Navette aéroport Spa Bar",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "HOTEL RIZIKY",
-      "category": "",
-      "address": "Antsiranana 201",
-      "phone": "032 18 014 64",
-      "website": "",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/HOTEL+RIZIKY/@-12.2834258,49.3104917,17z/data=!4m11!3m10!1s0x226b1de78b56d685:0xe56f17150493f263!5m2!4m1!1i2!8m2!3d-12.2834258!4d49.3104917!9m1!1b1!16s%2Fg%2F11vlg2m451?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2834258,
-        "lng": 49.3104917
-      },
-      "platform": "Google Maps",
-      "about": {
-        "amenities": [],
-        "description": ""
-      },
-      "reviews": [
-        {
-          "author": "Maude Cochonneau",
-          "text": "J'ai été très bien accueillie ! Ma chambre était propre mais quelques détails mériteraient d'être modifiés (la porte qui ne s'ouvre pas bien, la moustiquaire du lit qui ne ferme pas complément, l'accès  à la plage non aménagé par exemple). … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Véronique Cieslar",
-          "text": "Petite structure familiale dans un cadre idéal vue sur baie des Français. Les petits-déjeuners sont copieux et variés( du fait maison).\nLes repas du soir avec poissons pêchés par le frère et très bien préparés par … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Géraldine Bourdier",
-          "text": "Nous avons passé 11 nuits dans ce charmant hôtel familial en périphérie de Diego, calme assuré, personnel à l'écoute. Les repas proposés sont d'une grande qualité, le poisson est pêché le matin dans la baie, les crêpes du petit déjeuner sont un régal. Établissement que nous recommandons vivement. Nous y reviendrons. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "raynard anais",
-          "text": "Nous avons passé un super séjour à l’hôtel. Notre chambre offrait une belle vue sur la mer, et la cuisine de l’hôtel était excellente. Les petits dej très copieux, vue mer, juste incroyable. L’hôtel nous a également organisé une excursion à … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Pascal Benquet",
-          "text": "Lieu exceptionnel. L'hotel est tenu par une famille charmante tres agreable. Les chambres sont spatieuses, tres propres et confortables, face à la mer. Possibilité de snorkling juste en face de l'hotel. Parfait. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Hamza El Abida",
-          "text": "Super hotel, les gens y sont très accueillant,  très bonne cuisine,  très belle vue, baignade avec plage privée.",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Breughel nandez",
-          "text": "Les chambres étaient impeccables, spacieuses et  décorées avec goût, offrant tout le confort nécessaire pour un séjour relaxant.L'emplacement de l'hôtel est vraiment idéal au bord de la plage. Je recommande vivement  cet hôtel à tous ceux qui cherchent une expérience inoubliable. Nous reviendrons sans aucun doute! Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Marie Goy",
-          "text": "Les prestations ne sont pas à la hauteur et loin de ce qui est annoncé ! Un filet d’eau froide uniquement à la douche, salle de bain moyenâgeuse et une restauration très légère, sans entrées et très peu de choix. Ni coffre ni télé … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Philippe Tedesco",
-          "text": "Un endroit  splendide, calme et d'une  toutes beauté ! Balcon avec Une vue imprenable sur la baie des français ! Chambre  spacieuse et tres bien  décorées  matelas de bonne qualité . Petit déjeuner inclus et tres copieux ! Restauration  de très  bonne qualité ! A recommander fortement Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Aurélien Marot",
-          "text": "Hôtel de charme situé au bord de la mer, écarté du centre ville et de son effervescence. Vue magnifique sur la baie. La chambre est confortable et propre avec eau chaude, wifi et coffre fort. Le personnel est adorable, au petits soins et … Plus",
-          "date": "",
-          "rating": ""
-        }
-      ],
-      "contractDetails": {
-        "name": "HOTEL RIZIKY",
-        "address": "Antsiranana 201",
-        "phone": "032 18 014 64",
-        "website": "",
-        "plusCode": "P886+J5",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2834258,
-          "lng": 49.3104917
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": ""
-        },
-        "reviews": [
-          {
-            "author": "Maude Cochonneau",
-            "text": "J'ai été très bien accueillie ! Ma chambre était propre mais quelques détails mériteraient d'être modifiés (la porte qui ne s'ouvre pas bien, la moustiquaire du lit qui ne ferme pas complément, l'accès  à la plage non aménagé par exemple). … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Véronique Cieslar",
-            "text": "Petite structure familiale dans un cadre idéal vue sur baie des Français. Les petits-déjeuners sont copieux et variés( du fait maison).\nLes repas du soir avec poissons pêchés par le frère et très bien préparés par … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Géraldine Bourdier",
-            "text": "Nous avons passé 11 nuits dans ce charmant hôtel familial en périphérie de Diego, calme assuré, personnel à l'écoute. Les repas proposés sont d'une grande qualité, le poisson est pêché le matin dans la baie, les crêpes du petit déjeuner sont un régal. Établissement que nous recommandons vivement. Nous y reviendrons. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "raynard anais",
-            "text": "Nous avons passé un super séjour à l’hôtel. Notre chambre offrait une belle vue sur la mer, et la cuisine de l’hôtel était excellente. Les petits dej très copieux, vue mer, juste incroyable. L’hôtel nous a également organisé une excursion à … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Pascal Benquet",
-            "text": "Lieu exceptionnel. L'hotel est tenu par une famille charmante tres agreable. Les chambres sont spatieuses, tres propres et confortables, face à la mer. Possibilité de snorkling juste en face de l'hotel. Parfait. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Hamza El Abida",
-            "text": "Super hotel, les gens y sont très accueillant,  très bonne cuisine,  très belle vue, baignade avec plage privée.",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Breughel nandez",
-            "text": "Les chambres étaient impeccables, spacieuses et  décorées avec goût, offrant tout le confort nécessaire pour un séjour relaxant.L'emplacement de l'hôtel est vraiment idéal au bord de la plage. Je recommande vivement  cet hôtel à tous ceux qui cherchent une expérience inoubliable. Nous reviendrons sans aucun doute! Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Marie Goy",
-            "text": "Les prestations ne sont pas à la hauteur et loin de ce qui est annoncé ! Un filet d’eau froide uniquement à la douche, salle de bain moyenâgeuse et une restauration très légère, sans entrées et très peu de choix. Ni coffre ni télé … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Philippe Tedesco",
-            "text": "Un endroit  splendide, calme et d'une  toutes beauté ! Balcon avec Une vue imprenable sur la baie des français ! Chambre  spacieuse et tres bien  décorées  matelas de bonne qualité . Petit déjeuner inclus et tres copieux ! Restauration  de très  bonne qualité ! A recommander fortement Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Aurélien Marot",
-            "text": "Hôtel de charme situé au bord de la mer, écarté du centre ville et de son effervescence. Vue magnifique sur la baie. La chambre est confortable et propre avec eau chaude, wifi et coffre fort. Le personnel est adorable, au petits soins et … Plus",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/HOTEL+RIZIKY/@-12.2834258,49.3104917,17z/data=!4m11!3m10!1s0x226b1de78b56d685:0xe56f17150493f263!5m2!4m1!1i2!8m2!3d-12.2834258!4d49.3104917!9m1!1b1!16s%2Fg%2F11vlg2m451?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Google Maps"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "032 18 014 64"
-          ],
-          "emails": [],
-          "addresses": [
-            "Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Établissement professionnel listé sur Google Maps.",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "Le Colbert Diego Suarez",
-      "category": "",
-      "address": "51 Rue Colbert, Antsiranana 201",
-      "phone": "034 07 666 13",
-      "website": "https://hotellecolbert-diego.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Le+Colbert+Diego+Suarez/@-12.2744236,49.2925376,17z/data=!4m10!3m9!1s0x226b1c864b6fce13:0x1416e749479e2f5b!5m2!4m1!1i2!8m2!3d-12.2744236!4d49.2925376!10e1!16s%2Fg%2F1td8w6gy?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2744236,
-        "lng": 49.2925376
-      },
-      "platform": "Site propre",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine Climatisation Service de blanchisserie Accepte les animaux Adapté aux enfants Restaurant Navette aéroport Centre de fitness"
-      },
-      "reviews": [
-        {
-          "author": "Xavier Malvert",
-          "text": "Très bonne adresse pour séjourner à Diego suarez...bien situé dans l'axe principale, rapport qualité prix imbattables, du personnel à l'écoute et très professionnel, un grand merci au gérant Pierre qui a su me donner de bons conseils et les … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "em_renciat2024",
-          "text": "Je suis agréablement surprise par l'excellent rapport qualité-prix de cet hôtel. Malgré des tarifs abordables, j'ai pu profiter d'un séjour des plus confortables. L'emplacement idéal, le personnel accueillant, et le confort offert font de cet établissement une véritable perle à découvrir lors de votre prochain voyage. Je recommande.",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "lebastard james",
-          "text": "Excellent séjour...chambre spacieuse et confortable...  Le patron Pierre est adorable gentil toujours prêt à aider...Le personnel est charmant et accueillant. Je recommande vivement. Allez-y!!!.   James de la Réunion Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Anony mous",
-          "text": "L'hôtel est très bien situé et offre un emplacement pratique pour visiter la ville,\nl'expérience a été affectée par le comportement du gérant Français, qui semble … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "The Godfather",
-          "text": "L’emplacement de l’hôtel est idéal, proche de tout ce qu’on peut visiter mais l’expérience a été gâchée par le comportement du gérant, qui est souvent ivre et agit de manière inappropriée lorsqu’il boit. Dommage, car l’hôtel pourrait vraiment être agréable. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Laurent Laurent",
-          "text": "Petit déjeuner médiocre, on a pas ce qu'on a demandé.\nQualité prix mauvaisType de voyage… Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Anthony Piot (Malcom 32100)",
-          "text": "Galère pour avoir de l eau chaude ,wifi qui bug et télé qui marche pas pour une chambre a 140 000 ariay c est moyen Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "sgamgan974",
-          "text": "Hôtel sympa, bon rapport qualité prix et idéalement situé. Le restaurant idem : service et repas excellents. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Darshan52",
-          "text": "Hôtel atypique du centre ville de Tana. Le service y est très appréciable et de qualité. Nous avons été très bien accueilli dans une jolie petite chambre. Très calme! Les prestations sont bonnes. Il y a de nombreuses possibilités( bars, … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Mouss Hayon",
-          "text": "Hôtel sympa et en plein centre ! Personnel aux petits soins ! Tout ce qu'on cherche pour les vacances ! Plus",
-          "date": "",
-          "rating": ""
-        }
-      ],
-      "contractDetails": {
-        "name": "Le Colbert Diego Suarez",
-        "address": "51 Rue Colbert, Antsiranana 201",
-        "phone": "034 07 666 13",
-        "website": "https://hotellecolbert-diego.com/",
-        "plusCode": "P7GV+62",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2744236,
-          "lng": 49.2925376
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine Climatisation Service de blanchisserie Accepte les animaux Adapté aux enfants Restaurant Navette aéroport Centre de fitness"
-        },
-        "reviews": [
-          {
-            "author": "Xavier Malvert",
-            "text": "Très bonne adresse pour séjourner à Diego suarez...bien situé dans l'axe principale, rapport qualité prix imbattables, du personnel à l'écoute et très professionnel, un grand merci au gérant Pierre qui a su me donner de bons conseils et les … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "em_renciat2024",
-            "text": "Je suis agréablement surprise par l'excellent rapport qualité-prix de cet hôtel. Malgré des tarifs abordables, j'ai pu profiter d'un séjour des plus confortables. L'emplacement idéal, le personnel accueillant, et le confort offert font de cet établissement une véritable perle à découvrir lors de votre prochain voyage. Je recommande.",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "lebastard james",
-            "text": "Excellent séjour...chambre spacieuse et confortable...  Le patron Pierre est adorable gentil toujours prêt à aider...Le personnel est charmant et accueillant. Je recommande vivement. Allez-y!!!.   James de la Réunion Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Anony mous",
-            "text": "L'hôtel est très bien situé et offre un emplacement pratique pour visiter la ville,\nl'expérience a été affectée par le comportement du gérant Français, qui semble … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "The Godfather",
-            "text": "L’emplacement de l’hôtel est idéal, proche de tout ce qu’on peut visiter mais l’expérience a été gâchée par le comportement du gérant, qui est souvent ivre et agit de manière inappropriée lorsqu’il boit. Dommage, car l’hôtel pourrait vraiment être agréable. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Laurent Laurent",
-            "text": "Petit déjeuner médiocre, on a pas ce qu'on a demandé.\nQualité prix mauvaisType de voyage… Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Anthony Piot (Malcom 32100)",
-            "text": "Galère pour avoir de l eau chaude ,wifi qui bug et télé qui marche pas pour une chambre a 140 000 ariay c est moyen Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "sgamgan974",
-            "text": "Hôtel sympa, bon rapport qualité prix et idéalement situé. Le restaurant idem : service et repas excellents. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Darshan52",
-            "text": "Hôtel atypique du centre ville de Tana. Le service y est très appréciable et de qualité. Nous avons été très bien accueilli dans une jolie petite chambre. Très calme! Les prestations sont bonnes. Il y a de nombreuses possibilités( bars, … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Mouss Hayon",
-            "text": "Hôtel sympa et en plein centre ! Personnel aux petits soins ! Tout ce qu'on cherche pour les vacances ! Plus",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/Le+Colbert+Diego+Suarez/@-12.2744236,49.2925376,17z/data=!4m10!3m9!1s0x226b1c864b6fce13:0x1416e749479e2f5b!5m2!4m1!1i2!8m2!3d-12.2744236!4d49.2925376!10e1!16s%2Fg%2F1td8w6gy?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Site propre"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "034 07 666 13"
-          ],
-          "emails": [],
-          "addresses": [
-            "51 Rue Colbert, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Petit déjeuner payant Parking gratuit Accès handicapés Piscine Climatisation Service de blanchisserie Accepte les animaux Adapté aux enfants Restaurant Navette aéroport Centre de fitness",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "Hôtel Espace Kaled",
-      "category": "ven. 20 mars",
-      "address": "RN6 Rte De L'Ankarana, Antsiranana 201",
+      "name": "Nosy Be Hotel",
       "phone": "",
-      "website": "",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel+Espace+Kaled/@-12.2881101,49.2938011,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c702e5830d3:0x2b8549836fc9ab12!5m2!4m1!1i2!8m2!3d-12.2881101!4d49.2938011!16s%2Fg%2F11x0gtcrpv?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2881101,
-        "lng": 49.2938011
-      },
-      "platform": "Google Maps",
-      "about": {
-        "amenities": [],
-        "description": ""
-      },
-      "reviews": [],
+      "website": "http://www.nosybehotel.com/",
+      "mapsUrl": "https://www.google.com/maps/place/Nosy+Be+Hotel/data=!4m10!3m9!1s0x2213c9cff33b2b4f:0xf6ec66407e25f958!5m2!4m1!1i2!8m2!3d-13.3666238!4d48.1900355!16s%2Fg%2F1wjw921d!19sChIJTys788_JEyIRWPklfkBm7PY?authuser=0&hl=fr&rclk=1",
+      "platform": "Site propre",
       "contractDetails": {
-        "name": "Hôtel Espace Kaled",
-        "address": "RN6 Rte De L'Ankarana, Antsiranana 201",
+        "name": "Nosy Be Hotel",
+        "address": "Plage des cocotiers, Ambaro",
         "phone": "",
-        "website": "",
-        "plusCode": "P76V+QG",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2881101,
-          "lng": 49.2938011
-        },
-        "category": "ven. 20 mars",
+        "website": "http://www.nosybehotel.com/",
+        "plusCode": "J5MR+92",
+        "rating": "4,1",
+        "reviewCount": "215",
+        "gps": null,
+        "category": "lun. 6 avr.",
         "starRating": "",
         "about": {
           "amenities": [],
           "description": ""
         },
         "reviews": [],
-        "url": "https://www.google.com/maps/place/H%C3%B4tel+Espace+Kaled/@-12.2881101,49.2938011,17z/data=!3m1!4b1!4m9!3m8!1s0x226b1c702e5830d3:0x2b8549836fc9ab12!5m2!4m1!1i2!8m2!3d-12.2881101!4d49.2938011!16s%2Fg%2F11x0gtcrpv?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Google Maps"
+        "url": "https://www.google.com/maps/place/Nosy+Be+Hotel/data=!4m10!3m9!1s0x2213c9cff33b2b4f:0xf6ec66407e25f958!5m2!4m1!1i2!8m2!3d-13.3666238!4d48.1900355!16s%2Fg%2F1wjw921d!19sChIJTys788_JEyIRWPklfkBm7PY?authuser=0&hl=fr&rclk=1",
+        "platform": "Site propre"
       },
       "aiIntelligence": {
         "activities": {
@@ -1899,176 +37,41 @@
           "phones": [],
           "emails": [],
           "addresses": [
-            "RN6 Rte De L'Ankarana, Antsiranana 201"
+            "Plage des cocotiers, Ambaro"
           ]
         },
-        "executiveSummary": "Hôtel Espace Kaled est un établissement de type \"ven. 20 mars\".",
+        "executiveSummary": "Nosy Be Hotel est un établissement de type \"lun. 6 avr.\".",
         "companyCulture": {
           "mission": ""
         }
       }
     },
     {
-      "name": "Regina Lodge",
-      "category": "",
-      "address": "Route de l'aéroport, SCAMA, PK7 LOT 464 SD, Antsiranana 201",
-      "phone": "032 55 501 93",
-      "website": "https://reginalodge.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Regina+Lodge/@-12.3273909,49.2971804,17z/data=!4m11!3m10!1s0x226b1f2eb7860a37:0x83bd8be30661f79b!5m2!4m1!1i2!8m2!3d-12.3273909!4d49.2971804!9m1!1b1!16s%2Fg%2F11pcbwvb0v?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.3273909,
-        "lng": 49.2971804
-      },
+      "name": "Hôtel-Résidence Au Sable Blanc",
+      "phone": "032 11 105 52",
+      "website": "https://www.au-sable-blanc.com/",
+      "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel-R%C3%A9sidence+Au+Sable+Blanc/@-13.3907345,48.2018605,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c8537f2cc883:0xb432685699baf117!5m2!4m1!1i2!8m2!3d-13.3907345!4d48.2018605!16s%2Fg%2F1hhwv7n9b?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
       "platform": "Site propre",
-      "about": {
-        "amenities": [],
-        "description": ""
-      },
-      "reviews": [
-        {
-          "author": "Ugo Favretti",
-          "text": "Cet endroit est merveilleux, c’est la deuxième fois que je reviens en un an, vous pouvez compter toujours sur l’aide d’Angelo ainsi que du gérant Antonio restaurant à disposition piscine, je recommande cet endroit comparé à ce que j’ai vu … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "laurentpZ5201AU",
-          "text": "Nous avons séjourné 5 nuits et 6 jours dans ce charmant petit hôtel situé à l'entrée de Diego. Niché dans une ruelle calme, il est idéalement placé, à seulement 5 minutes en tuk-tuk du centre-ville. C'est l'endroit parfait pour poser ses … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "véronique dexon",
-          "text": "C'est un endroit agréable qui permet de se déconnecter sauf les jours de fêtes, où on a l'impression d'être dans un lieu dédié aux enfants et à des adolescents qui écoutent de la musique différentes  dans chaque coin et beaucoup trop fort … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "jennifervN3199FE",
-          "text": "charmant petit hôtel à l’entrée de la ville . Dans une ruelle au CALME et à 5 min du centre ville et 40 min de Ramena en tuk tuk. Idéal pour poser vos valises le temps d’un séjour à diego. |Quelques chambres disposées autour d’une piscine. … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Stéphane Reyssie",
-          "text": "Belle hôtel en léger retrait de la ville de Diego-Suarez.\nBeaucoup de choses sont parfaites, à commencer par le personnel incroyablement gentil et d'une grande disponibilité, particulièrement, Laura, Léa, Julidia et … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "skye_summers_off",
-          "text": "Un hôtel merveilleux, proche du centre ville et à 5 minutes seulement de l’aéroport. Le personnel est aux petits soins, la cuisine est délicieuse, les chambres sont très propres et confortables, nous avons vraiment passé un super séjour … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Gwladys M",
-          "text": "Nous avons été déçu. En effet 4 jours là bas et rien n´allait. Nous sommes arrivés 2h en avance et la chambre n´était pas prête, ni nettoyé à part le lit. Le WiFi ne fonctionne pas, la clim est soit éteint par leur soin en journée soit en … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "jean-yves VENAULT",
-          "text": "L’hôtel est situé dans un endroit calme à 6km du centre et à proximité de l'aéroport. Proche de la nationale, il permet facilement de prendre un tuk tuk pour se déplacer. Antonio et sa charmante équipe vous réserve un accueil chaleureux. Le … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "fenohasinar2023",
-          "text": "Dans un quartier très calme, un établissement tout confort et très propre, le clim, la TV (canalsat) et le frigo marchent bien, la piscine est à température ambiante idéale pour se baigner même très tard dans la soirée, le personnel est au … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "alex sky",
-          "text": "Appartement parfait pour un séjour un peu plus long . Pour ceux qui séjournent moins longtemps il y a des chambres. Tout est bien tenu . Le restaurant est très bon . La piscine fait beaucoup de bien pour la chaleur. Antonio, le gérant est … Plus",
-          "date": "",
-          "rating": ""
-        }
-      ],
       "contractDetails": {
-        "name": "Regina Lodge",
-        "address": "Route de l'aéroport, SCAMA, PK7 LOT 464 SD, Antsiranana 201",
-        "phone": "032 55 501 93",
-        "website": "https://reginalodge.com/",
-        "plusCode": "M7FW+2V",
-        "rating": "",
-        "reviewCount": "",
+        "name": "Hôtel-Résidence Au Sable Blanc",
+        "address": "Madirokely Nosy be, 207",
+        "phone": "032 11 105 52",
+        "website": "https://www.au-sable-blanc.com/",
+        "plusCode": "J652+PP",
+        "rating": "4,4",
+        "reviewCount": "48",
         "gps": {
-          "lat": -12.3273909,
-          "lng": 49.2971804
+          "lat": -13.3907345,
+          "lng": 48.2018605
         },
-        "category": "",
+        "category": "lun. 23 mars",
         "starRating": "",
         "about": {
           "amenities": [],
           "description": ""
         },
-        "reviews": [
-          {
-            "author": "Ugo Favretti",
-            "text": "Cet endroit est merveilleux, c’est la deuxième fois que je reviens en un an, vous pouvez compter toujours sur l’aide d’Angelo ainsi que du gérant Antonio restaurant à disposition piscine, je recommande cet endroit comparé à ce que j’ai vu … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "laurentpZ5201AU",
-            "text": "Nous avons séjourné 5 nuits et 6 jours dans ce charmant petit hôtel situé à l'entrée de Diego. Niché dans une ruelle calme, il est idéalement placé, à seulement 5 minutes en tuk-tuk du centre-ville. C'est l'endroit parfait pour poser ses … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "véronique dexon",
-            "text": "C'est un endroit agréable qui permet de se déconnecter sauf les jours de fêtes, où on a l'impression d'être dans un lieu dédié aux enfants et à des adolescents qui écoutent de la musique différentes  dans chaque coin et beaucoup trop fort … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "jennifervN3199FE",
-            "text": "charmant petit hôtel à l’entrée de la ville . Dans une ruelle au CALME et à 5 min du centre ville et 40 min de Ramena en tuk tuk. Idéal pour poser vos valises le temps d’un séjour à diego. |Quelques chambres disposées autour d’une piscine. … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Stéphane Reyssie",
-            "text": "Belle hôtel en léger retrait de la ville de Diego-Suarez.\nBeaucoup de choses sont parfaites, à commencer par le personnel incroyablement gentil et d'une grande disponibilité, particulièrement, Laura, Léa, Julidia et … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "skye_summers_off",
-            "text": "Un hôtel merveilleux, proche du centre ville et à 5 minutes seulement de l’aéroport. Le personnel est aux petits soins, la cuisine est délicieuse, les chambres sont très propres et confortables, nous avons vraiment passé un super séjour … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Gwladys M",
-            "text": "Nous avons été déçu. En effet 4 jours là bas et rien n´allait. Nous sommes arrivés 2h en avance et la chambre n´était pas prête, ni nettoyé à part le lit. Le WiFi ne fonctionne pas, la clim est soit éteint par leur soin en journée soit en … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "jean-yves VENAULT",
-            "text": "L’hôtel est situé dans un endroit calme à 6km du centre et à proximité de l'aéroport. Proche de la nationale, il permet facilement de prendre un tuk tuk pour se déplacer. Antonio et sa charmante équipe vous réserve un accueil chaleureux. Le … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "fenohasinar2023",
-            "text": "Dans un quartier très calme, un établissement tout confort et très propre, le clim, la TV (canalsat) et le frigo marchent bien, la piscine est à température ambiante idéale pour se baigner même très tard dans la soirée, le personnel est au … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "alex sky",
-            "text": "Appartement parfait pour un séjour un peu plus long . Pour ceux qui séjournent moins longtemps il y a des chambres. Tout est bien tenu . Le restaurant est très bon . La piscine fait beaucoup de bien pour la chaleur. Antonio, le gérant est … Plus",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/Regina+Lodge/@-12.3273909,49.2971804,17z/data=!4m11!3m10!1s0x226b1f2eb7860a37:0x83bd8be30661f79b!5m2!4m1!1i2!8m2!3d-12.3273909!4d49.2971804!9m1!1b1!16s%2Fg%2F11pcbwvb0v?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
+        "reviews": [],
+        "url": "https://www.google.com/maps/place/H%C3%B4tel-R%C3%A9sidence+Au+Sable+Blanc/@-13.3907345,48.2018605,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c8537f2cc883:0xb432685699baf117!5m2!4m1!1i2!8m2!3d-13.3907345!4d48.2018605!16s%2Fg%2F1hhwv7n9b?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
         "platform": "Site propre"
       },
       "aiIntelligence": {
@@ -2078,363 +81,45 @@
         },
         "contactInfo": {
           "phones": [
-            "032 55 501 93"
+            "032 11 105 52"
           ],
           "emails": [],
           "addresses": [
-            "Route de l'aéroport, SCAMA, PK7 LOT 464 SD, Antsiranana 201"
+            "Madirokely Nosy be, 207"
           ]
         },
-        "executiveSummary": "Établissement professionnel listé sur Google Maps.",
+        "executiveSummary": "Hôtel-Résidence Au Sable Blanc est un établissement de type \"lun. 23 mars\".",
         "companyCulture": {
           "mission": ""
         }
       }
     },
     {
-      "name": "Jardin Exotique",
-      "category": "",
-      "address": "9 Rue Louis Brunet, Antsiranana 201",
-      "phone": "032 25 338 12",
-      "website": "",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/Jardin+Exotique/@-12.2784947,49.2944339,17z/data=!4m10!3m9!1s0x226b1c7d3262b8b5:0x9218a4a5fe1bbcd!5m2!4m1!1i2!8m2!3d-12.2784947!4d49.2944339!10e1!16s%2Fg%2F1td8g2h7?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.2784947,
-        "lng": 49.2944339
-      },
-      "platform": "Google Maps",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Parking gratuit Piscine Climatisation Adapté aux enfants Navette aéroport Centre de fitness"
-      },
-      "reviews": [
-        {
-          "author": "Nicolas Deschamps",
-          "text": "Je suis resté 2 jours chambre 19 a 220.000 ar la nuit. Bon emplacement,  Chambre petite a mon goût au vu du tarif. Personnel sympas.tv en décoration,  aucune chaine ne marche. Mais le gros problème vient de la sirène de l'église a côté tous les jours a 5h et a 6h du matin qui ma réveillé,  je ne reviendrais pas même gratuitement. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "annamariamd2025",
-          "text": "Nous avons séjourné deux semaines dans cet hôtel avec notre bébé d’1 an.|Dès l’arrivée, nous avons été déplacés dans une chambre sans terrasse alors que nous avions réservé et payé pour une chambre double avec terrasse. La raison évoquée : … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Eric Grandjean",
-          "text": "Excellent compromis entre le prix et le confort des chambres. Personnel très souriant et très disponible. Magnifique cadre de vie, et emplacement au top a quelques minutes a pieds du centre ville. Petit déjeuner satisfaisant. Je recommande ! Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Peter Wirtz",
-          "text": "Attention à cet hôtel ! J'ai été volé, le soi-disant gérant, un petit homme à la peau mate, a fini par me mettre à la porte et m'a même menacé d'appeler la police, alors que j'avais été cambriolé. Quel hôtel de malfrats ! Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "cedric salin",
-          "text": "Hôtel vieillissant à fuir, chambres de plus en plus vétustes !!! J’ai séjourné deux semaines dans cet hôtel très mal insonorisé en ayant réservé une chambre avec terrasse. À mon arrivée, on m’a déplacé dans une chambre sans terrasse, … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Loréna rxl",
-          "text": "Très belle découverte !\nL’extérieur de l’hôtel est charmant et bien entretenu. La chambre était propre, spacieuse et confortable. … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Nathalie Le Bris",
-          "text": "Petit hôtel bien situé près de la rue principale, de ses restzurabts et des boutiques. Joli jardin luxuriant et fleuri. Chambre propre, spacieuse et confortable avec minibar, climatisation et ventilateur. Personnel très accueillant et efficace pour organiser les sorties ou transferts. Bon rapport qualité prix. +++ Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "jacquesrossi",
-          "text": "Cette hôtel est bien placé. Quelques chambre avec une vue. Pas de restaurant. La chambre de luxe est très bien. Pas chère. Tranquille sans bruit. Le personnel est très gentille. Le petit déjeuner n’ai pas vraiment frugal. Pain beurre confiture. Mais cette chambre est bien. Éviter certaine chambre genre sans vu et  dans un couloir.",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "estournel frantz",
-          "text": "Très bien placé, à l'abri du bruit de la rue Colbert, cet hôtel est idéal pour un court ou un long séjour.  Le jardin est magnifique, les chambres très sympa. La vue pour le petit déjeuner est superbe. Le personnel tant pour l'accueil, la … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "rodriguezm174",
-          "text": "Nous avons passé quatre nuits dans cet hôtel. Il est idéalement bien placé, à quelques minutes à pied de la rue principale. Bon rapport qualité prix. Bon accueil, beau jardin, jolie terrasse vue sur la mer. La chambre était très propre, … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        }
-      ],
-      "contractDetails": {
-        "name": "Jardin Exotique",
-        "address": "9 Rue Louis Brunet, Antsiranana 201",
-        "phone": "032 25 338 12",
-        "website": "",
-        "plusCode": "P7CV+JQ",
-        "rating": "",
-        "reviewCount": "",
-        "gps": {
-          "lat": -12.2784947,
-          "lng": 49.2944339
-        },
-        "category": "",
-        "starRating": "",
-        "about": {
-          "amenities": [],
-          "description": "Wi-Fi gratuit Parking gratuit Piscine Climatisation Adapté aux enfants Navette aéroport Centre de fitness"
-        },
-        "reviews": [
-          {
-            "author": "Nicolas Deschamps",
-            "text": "Je suis resté 2 jours chambre 19 a 220.000 ar la nuit. Bon emplacement,  Chambre petite a mon goût au vu du tarif. Personnel sympas.tv en décoration,  aucune chaine ne marche. Mais le gros problème vient de la sirène de l'église a côté tous les jours a 5h et a 6h du matin qui ma réveillé,  je ne reviendrais pas même gratuitement. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "annamariamd2025",
-            "text": "Nous avons séjourné deux semaines dans cet hôtel avec notre bébé d’1 an.|Dès l’arrivée, nous avons été déplacés dans une chambre sans terrasse alors que nous avions réservé et payé pour une chambre double avec terrasse. La raison évoquée : … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Eric Grandjean",
-            "text": "Excellent compromis entre le prix et le confort des chambres. Personnel très souriant et très disponible. Magnifique cadre de vie, et emplacement au top a quelques minutes a pieds du centre ville. Petit déjeuner satisfaisant. Je recommande ! Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Peter Wirtz",
-            "text": "Attention à cet hôtel ! J'ai été volé, le soi-disant gérant, un petit homme à la peau mate, a fini par me mettre à la porte et m'a même menacé d'appeler la police, alors que j'avais été cambriolé. Quel hôtel de malfrats ! Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "cedric salin",
-            "text": "Hôtel vieillissant à fuir, chambres de plus en plus vétustes !!! J’ai séjourné deux semaines dans cet hôtel très mal insonorisé en ayant réservé une chambre avec terrasse. À mon arrivée, on m’a déplacé dans une chambre sans terrasse, … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Loréna rxl",
-            "text": "Très belle découverte !\nL’extérieur de l’hôtel est charmant et bien entretenu. La chambre était propre, spacieuse et confortable. … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Nathalie Le Bris",
-            "text": "Petit hôtel bien situé près de la rue principale, de ses restzurabts et des boutiques. Joli jardin luxuriant et fleuri. Chambre propre, spacieuse et confortable avec minibar, climatisation et ventilateur. Personnel très accueillant et efficace pour organiser les sorties ou transferts. Bon rapport qualité prix. +++ Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "jacquesrossi",
-            "text": "Cette hôtel est bien placé. Quelques chambre avec une vue. Pas de restaurant. La chambre de luxe est très bien. Pas chère. Tranquille sans bruit. Le personnel est très gentille. Le petit déjeuner n’ai pas vraiment frugal. Pain beurre confiture. Mais cette chambre est bien. Éviter certaine chambre genre sans vu et  dans un couloir.",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "estournel frantz",
-            "text": "Très bien placé, à l'abri du bruit de la rue Colbert, cet hôtel est idéal pour un court ou un long séjour.  Le jardin est magnifique, les chambres très sympa. La vue pour le petit déjeuner est superbe. Le personnel tant pour l'accueil, la … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "rodriguezm174",
-            "text": "Nous avons passé quatre nuits dans cet hôtel. Il est idéalement bien placé, à quelques minutes à pied de la rue principale. Bon rapport qualité prix. Bon accueil, beau jardin, jolie terrasse vue sur la mer. La chambre était très propre, … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/Jardin+Exotique/@-12.2784947,49.2944339,17z/data=!4m10!3m9!1s0x226b1c7d3262b8b5:0x9218a4a5fe1bbcd!5m2!4m1!1i2!8m2!3d-12.2784947!4d49.2944339!10e1!16s%2Fg%2F1td8g2h7?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-        "platform": "Google Maps"
-      },
-      "aiIntelligence": {
-        "activities": {
-          "posts": [],
-          "comments": []
-        },
-        "contactInfo": {
-          "phones": [
-            "032 25 338 12"
-          ],
-          "emails": [],
-          "addresses": [
-            "9 Rue Louis Brunet, Antsiranana 201"
-          ]
-        },
-        "executiveSummary": "Wi-Fi gratuit Parking gratuit Piscine Climatisation Adapté aux enfants Navette aéroport Centre de fitness",
-        "companyCulture": {
-          "mission": ""
-        }
-      }
-    },
-    {
-      "name": "Hôtel de la Baie",
-      "category": "",
-      "address": "Pk 2 Route De Ramena, Antsiranana 201",
-      "phone": "032 64 457 82",
-      "website": "http://www.hoteldelabaiediego.com/",
-      "rating": "",
-      "totalScore": "",
-      "mapsUrl": "https://www.google.com/maps/place/H%C3%B4tel+de+la+Baie/@-12.3025405,49.2992592,17z/data=!4m10!3m9!1s0x226b1c113317432f:0xe4e69ac8eba9f68b!5m2!4m1!1i2!8m2!3d-12.3025405!4d49.2992592!10e1!16s%2Fg%2F11cm_hwdw0?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
-      "gps": {
-        "lat": -12.3025405,
-        "lng": 49.2992592
-      },
+      "name": "Royal Beach Hotel & Spa",
+      "phone": "032 05 322 44",
+      "website": "http://www.royalbeach.mg/",
+      "mapsUrl": "https://www.google.com/maps/place/Royal+Beach+Hotel+%26+Spa/@-13.392224,48.2044747,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c856a63f44b1:0xb89e3a3ff27a2c50!5m2!4m1!1i2!8m2!3d-13.392224!4d48.2044747!16s%2Fg%2F11b6_v58d5?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
       "platform": "Site propre",
-      "about": {
-        "amenities": [],
-        "description": "Wi-Fi gratuit Parking gratuit Piscine extérieure Climatisation Accepte les animaux Restaurant Cuisine dans certaines ch. Centre de fitness"
-      },
-      "reviews": [
-        {
-          "author": "Yves Hernandez",
-          "text": "Nous somme allé manger avec des amis arrive vers 12h00 ,nous avons passé l'après midi à boire profiter de la piscine manger pizzas et autre et à partir de 18h00 on nous a dit que nous avions passé trop de temps et qu'il fallait que l'on … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "pierregS6384YA",
-          "text": "La patronne fait payer d avance,j ai du partir 11 jours plus tôt, je n ai eu droit à aucun remboursement, donc la patronne n à rien voulu savoir,et, a garder mon argent des 11 jours payés |Beaucoup  de personnes auraient trouvés  un … En savoir plus sur Tripadvisor",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Arnaud Ferrari",
-          "text": "Un accueil excellent, un personnel très sympa, de bons coktails et de bons jus frais au bar, le restaurant est parfait, on y mange de délicieux plats...\nUn lieu très agréable, une superbe vue, un beau jardin avec une belle piscine! Un séjour très plaisant. Metci Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "VANESSA COUTARD",
-          "text": "Très beau lieu endroit très calme,le personnel toujours présent quand on a besoin.\nBelle vue sur la mer. … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Valerie Leray",
-          "text": "Nous sommes venues pour déjeuner avec ma fille, le service est long, la pâte à pizza pas assez cuite, la mousse au chocolat ferme au dessus et liquide au fond et après 30mn d'attente je n'ai toujours pas mon café. Très déçu et je ne reviendrai pas déjeuner. Dommage.",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Olivier Kautz",
-          "text": "Nous sommes allés dîner avec ma femme. Le restaurant est situé autour d'une piscine à l'eau pratiquement claire, sur une grande terrasse. Il y a un bar d'un côté et le restaurant de l'autre. C'est plutôt spacieux et bien agencé. … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Joji Vuvo",
-          "text": "J’y suis aller pour manger et franchement pas top, tu attends 1 heure pour manger pour environ 25 000 Ariary. A la fin tu as encore faim à éviter. Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Oliver Faucaud",
-          "text": "A 14h on ne mange plus ,c est pizza ou pizza même les crudités y a pas ??? C est Mada sans doute le Ramadan. Hôtel à la restauration de petite semaine qui doit informer sa clientèle des heures pour manger . En résumé à éviter si cous aimez … Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Daniel Baudouin",
-          "text": "Excellent service, restauration avec certains jours un fabuleux couscous.  Merci pour le très sympathique accueil Plus",
-          "date": "",
-          "rating": ""
-        },
-        {
-          "author": "Audrey BZH",
-          "text": "Les chambres sont confortables et bien équipées. Le personnel est toujours disponible.",
-          "date": "",
-          "rating": ""
-        }
-      ],
       "contractDetails": {
-        "name": "Hôtel de la Baie",
-        "address": "Pk 2 Route De Ramena, Antsiranana 201",
-        "phone": "032 64 457 82",
-        "website": "http://www.hoteldelabaiediego.com/",
-        "plusCode": "M7WX+XP",
-        "rating": "",
-        "reviewCount": "",
+        "name": "Royal Beach Hotel & Spa",
+        "address": "BP58 Madirokely Nosy Be, 207",
+        "phone": "032 05 322 44",
+        "website": "http://www.royalbeach.mg/",
+        "plusCode": "J653+4Q",
+        "rating": "4,7",
+        "reviewCount": "797",
         "gps": {
-          "lat": -12.3025405,
-          "lng": 49.2992592
+          "lat": -13.392224,
+          "lng": 48.2044747
         },
-        "category": "",
+        "category": "mer. 15 avr.",
         "starRating": "",
         "about": {
           "amenities": [],
-          "description": "Wi-Fi gratuit Parking gratuit Piscine extérieure Climatisation Accepte les animaux Restaurant Cuisine dans certaines ch. Centre de fitness"
+          "description": ""
         },
-        "reviews": [
-          {
-            "author": "Yves Hernandez",
-            "text": "Nous somme allé manger avec des amis arrive vers 12h00 ,nous avons passé l'après midi à boire profiter de la piscine manger pizzas et autre et à partir de 18h00 on nous a dit que nous avions passé trop de temps et qu'il fallait que l'on … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "pierregS6384YA",
-            "text": "La patronne fait payer d avance,j ai du partir 11 jours plus tôt, je n ai eu droit à aucun remboursement, donc la patronne n à rien voulu savoir,et, a garder mon argent des 11 jours payés |Beaucoup  de personnes auraient trouvés  un … En savoir plus sur Tripadvisor",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Arnaud Ferrari",
-            "text": "Un accueil excellent, un personnel très sympa, de bons coktails et de bons jus frais au bar, le restaurant est parfait, on y mange de délicieux plats...\nUn lieu très agréable, une superbe vue, un beau jardin avec une belle piscine! Un séjour très plaisant. Metci Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "VANESSA COUTARD",
-            "text": "Très beau lieu endroit très calme,le personnel toujours présent quand on a besoin.\nBelle vue sur la mer. … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Valerie Leray",
-            "text": "Nous sommes venues pour déjeuner avec ma fille, le service est long, la pâte à pizza pas assez cuite, la mousse au chocolat ferme au dessus et liquide au fond et après 30mn d'attente je n'ai toujours pas mon café. Très déçu et je ne reviendrai pas déjeuner. Dommage.",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Olivier Kautz",
-            "text": "Nous sommes allés dîner avec ma femme. Le restaurant est situé autour d'une piscine à l'eau pratiquement claire, sur une grande terrasse. Il y a un bar d'un côté et le restaurant de l'autre. C'est plutôt spacieux et bien agencé. … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Joji Vuvo",
-            "text": "J’y suis aller pour manger et franchement pas top, tu attends 1 heure pour manger pour environ 25 000 Ariary. A la fin tu as encore faim à éviter. Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Oliver Faucaud",
-            "text": "A 14h on ne mange plus ,c est pizza ou pizza même les crudités y a pas ??? C est Mada sans doute le Ramadan. Hôtel à la restauration de petite semaine qui doit informer sa clientèle des heures pour manger . En résumé à éviter si cous aimez … Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Daniel Baudouin",
-            "text": "Excellent service, restauration avec certains jours un fabuleux couscous.  Merci pour le très sympathique accueil Plus",
-            "date": "",
-            "rating": ""
-          },
-          {
-            "author": "Audrey BZH",
-            "text": "Les chambres sont confortables et bien équipées. Le personnel est toujours disponible.",
-            "date": "",
-            "rating": ""
-          }
-        ],
-        "url": "https://www.google.com/maps/place/H%C3%B4tel+de+la+Baie/@-12.3025405,49.2992592,17z/data=!4m10!3m9!1s0x226b1c113317432f:0xe4e69ac8eba9f68b!5m2!4m1!1i2!8m2!3d-12.3025405!4d49.2992592!10e1!16s%2Fg%2F11cm_hwdw0?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNS4wIKXMDSoASAFQAw%3D%3D",
+        "reviews": [],
+        "url": "https://www.google.com/maps/place/Royal+Beach+Hotel+%26+Spa/@-13.392224,48.2044747,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c856a63f44b1:0xb89e3a3ff27a2c50!5m2!4m1!1i2!8m2!3d-13.392224!4d48.2044747!16s%2Fg%2F11b6_v58d5?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
         "platform": "Site propre"
       },
       "aiIntelligence": {
@@ -2444,14 +129,158 @@
         },
         "contactInfo": {
           "phones": [
-            "032 64 457 82"
+            "032 05 322 44"
           ],
           "emails": [],
           "addresses": [
-            "Pk 2 Route De Ramena, Antsiranana 201"
+            "BP58 Madirokely Nosy Be, 207"
           ]
         },
-        "executiveSummary": "Wi-Fi gratuit Parking gratuit Piscine extérieure Climatisation Accepte les animaux Restaurant Cuisine dans certaines ch. Centre de fitness",
+        "executiveSummary": "Royal Beach Hotel & Spa est un établissement de type \"mer. 15 avr.\".",
+        "companyCulture": {
+          "mission": ""
+        }
+      }
+    },
+    {
+      "name": "Anjiamarango Beach Resort",
+      "phone": "032 02 655 98",
+      "website": "http://www.anjiamarango-beach-resort.com/",
+      "mapsUrl": "https://www.google.com/maps/place/Anjiamarango+Beach+Resort/@-13.240962,48.253424,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c7b0880df185:0xc9b4a983f53b59f0!5m2!4m1!1i2!8m2!3d-13.240962!4d48.253424!16s%2Fg%2F113hj7hbp?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "platform": "Site propre",
+      "contractDetails": {
+        "name": "Anjiamarango Beach Resort",
+        "address": "Befotaka",
+        "phone": "032 02 655 98",
+        "website": "http://www.anjiamarango-beach-resort.com/",
+        "plusCode": "Q753+J9",
+        "rating": "4,4",
+        "reviewCount": "202",
+        "gps": {
+          "lat": -13.240962,
+          "lng": 48.253424
+        },
+        "category": "lun. 20 avr.",
+        "starRating": "",
+        "about": {
+          "amenities": [],
+          "description": ""
+        },
+        "reviews": [],
+        "url": "https://www.google.com/maps/place/Anjiamarango+Beach+Resort/@-13.240962,48.253424,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c7b0880df185:0xc9b4a983f53b59f0!5m2!4m1!1i2!8m2!3d-13.240962!4d48.253424!16s%2Fg%2F113hj7hbp?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+        "platform": "Site propre"
+      },
+      "aiIntelligence": {
+        "activities": {
+          "posts": [],
+          "comments": []
+        },
+        "contactInfo": {
+          "phones": [
+            "032 02 655 98"
+          ],
+          "emails": [],
+          "addresses": [
+            "Befotaka"
+          ]
+        },
+        "executiveSummary": "Anjiamarango Beach Resort est un établissement de type \"lun. 20 avr.\".",
+        "companyCulture": {
+          "mission": ""
+        }
+      }
+    },
+    {
+      "name": "L'heure Bleue",
+      "phone": "034 50 484 25",
+      "website": "http://www.heurebleue.com/",
+      "mapsUrl": "https://www.google.com/maps/place/L'heure+Bleue/@-13.3893434,48.1973615,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c9ac63761d0d:0x7c874150c0edc0e4!5m2!4m1!1i2!8m2!3d-13.3893434!4d48.1973615!16s%2Fg%2F1tg_0srs?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "platform": "Site propre",
+      "contractDetails": {
+        "name": "L'heure Bleue",
+        "address": "Madirokely plage Nosy Be, 207",
+        "phone": "034 50 484 25",
+        "website": "http://www.heurebleue.com/",
+        "plusCode": "J56W+7W",
+        "rating": "4,1",
+        "reviewCount": "199",
+        "gps": {
+          "lat": -13.3893434,
+          "lng": 48.1973615
+        },
+        "category": "ven. 20 mars",
+        "starRating": "",
+        "about": {
+          "amenities": [],
+          "description": ""
+        },
+        "reviews": [],
+        "url": "https://www.google.com/maps/place/L'heure+Bleue/@-13.3893434,48.1973615,17z/data=!3m1!4b1!4m9!3m8!1s0x2213c9ac63761d0d:0x7c874150c0edc0e4!5m2!4m1!1i2!8m2!3d-13.3893434!4d48.1973615!16s%2Fg%2F1tg_0srs?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+        "platform": "Site propre"
+      },
+      "aiIntelligence": {
+        "activities": {
+          "posts": [],
+          "comments": []
+        },
+        "contactInfo": {
+          "phones": [
+            "034 50 484 25"
+          ],
+          "emails": [],
+          "addresses": [
+            "Madirokely plage Nosy Be, 207"
+          ]
+        },
+        "executiveSummary": "L'heure Bleue est un établissement de type \"ven. 20 mars\".",
+        "companyCulture": {
+          "mission": ""
+        }
+      }
+    },
+    {
+      "name": "Vanila Hotel & Spa",
+      "phone": "032 03 921 01",
+      "website": "http://vanila-hotel.com/",
+      "mapsUrl": "https://www.google.com/maps/place/Vanila+Hotel+%26+Spa/@-13.3209451,48.1852268,17z/data=!3m1!4b1!4m9!3m8!1s0x2213b658d5d90b9d:0x4c15c112593ecbe0!5m2!4m1!1i2!8m2!3d-13.3209451!4d48.1852268!16s%2Fg%2F1thlqc6g?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+      "platform": "Site propre",
+      "contractDetails": {
+        "name": "Vanila Hotel & Spa",
+        "address": "Route de l'Ouest Nosy Be, 207",
+        "phone": "032 03 921 01",
+        "website": "http://vanila-hotel.com/",
+        "plusCode": "M5HP+J3",
+        "rating": "4,6",
+        "reviewCount": "385",
+        "gps": {
+          "lat": -13.3209451,
+          "lng": 48.1852268
+        },
+        "category": "lun. 30 mars",
+        "starRating": "",
+        "about": {
+          "amenities": [],
+          "description": ""
+        },
+        "reviews": [],
+        "url": "https://www.google.com/maps/place/Vanila+Hotel+%26+Spa/@-13.3209451,48.1852268,17z/data=!3m1!4b1!4m9!3m8!1s0x2213b658d5d90b9d:0x4c15c112593ecbe0!5m2!4m1!1i2!8m2!3d-13.3209451!4d48.1852268!16s%2Fg%2F1thlqc6g?authuser=0&hl=fr&entry=ttu&g_ep=EgoyMDI2MDMxNy4wIKXMDSoASAFQAw%3D%3D",
+        "platform": "Site propre"
+      },
+      "aiIntelligence": {
+        "activities": {
+          "posts": [],
+          "comments": []
+        },
+        "contactInfo": {
+          "phones": [
+            "032 03 921 01"
+          ],
+          "emails": [],
+          "addresses": [
+            "Route de l'Ouest Nosy Be, 207"
+          ]
+        },
+        "executiveSummary": "Vanila Hotel & Spa est un établissement de type \"lun. 30 mars\".",
         "companyCulture": {
           "mission": ""
         }

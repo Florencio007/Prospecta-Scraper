@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { Plus, Search, Filter, Mail, Linkedin, Facebook, MessageCircle, Globe, Instagram, Music, Zap, CheckCircle2, XCircle, MoreVertical, Trash2, Phone, ExternalLink, Loader2, Building2, User, Download } from "lucide-react";
+import { Plus, Search, Filter, Mail, Linkedin, Facebook, MessageCircle, Globe, Instagram, Music, Zap, CheckCircle2, XCircle, MoreVertical, Trash2, Phone, ExternalLink, Loader2, Building2, User, Download, LayoutGrid, List } from "lucide-react";
 import Header from "@/components/dashboard/Header";
 import ProspectDetailView from "@/components/dashboard/ProspectDetailView";
 import CampaignSelectionDialog from "@/components/dashboard/CampaignSelectionDialog";
@@ -81,6 +81,7 @@ const Prospects = () => {
   const [isBulkDeleteConfirmOpen, setIsBulkDeleteConfirmOpen] = useState(false);
   const [isCleanConfirmOpen, setIsCleanConfirmOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [viewMode, setViewMode] = useState<"list" | "grid">("list");
   const lastScrollY = useRef(0);
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [sortBy, setSortBy] = useState<string>("date");
@@ -712,6 +713,27 @@ const Prospects = () => {
               <Zap size={16} />
               <span className="hidden md:inline">Nettoyer doublons</span>
             </Button>
+
+            <div className="flex items-center bg-background/50 border rounded-lg p-1 ml-auto">
+              <Button
+                variant={viewMode === "list" ? "secondary" : "ghost"}
+                size="icon"
+                onClick={() => setViewMode("list")}
+                className={`h-8 w-8 ${viewMode === "list" ? "shadow-sm" : ""}`}
+                title="Vue Liste"
+              >
+                <List size={16} />
+              </Button>
+              <Button
+                variant={viewMode === "grid" ? "secondary" : "ghost"}
+                size="icon"
+                onClick={() => setViewMode("grid")}
+                className={`h-8 w-8 ${viewMode === "grid" ? "shadow-sm" : ""}`}
+                title="Vue Grille"
+              >
+                <LayoutGrid size={16} />
+              </Button>
+            </div>
           </div>
 
           <div className="flex items-center gap-1 mt-4 border-t pt-4">
@@ -750,56 +772,123 @@ const Prospects = () => {
           </div>
         </div>
 
-        <div className="rounded-xl border bg-card shadow-sm overflow-hidden">
+        <div className="rounded-xl overflow-hidden">
           {isLoading ? (
-            <div className="p-20 text-center flex flex-col items-center justify-center gap-4">
+            <div className="p-20 text-center flex flex-col items-center justify-center gap-4 bg-card border rounded-xl shadow-sm">
               <Loader2 className="h-10 w-10 animate-spin text-accent" />
               <p className="text-sm text-slate-500 font-medium">{t("cloudSync")}</p>
             </div>
           ) : filteredProspects.length === 0 ? (
-            <div className="p-20 text-center text-muted-foreground">{t("noProspectsFound")}</div>
-          ) : (
-            <Table>
-              <TableHeader className="bg-secondary/30">
-                <TableRow>
-                  <TableHead className="w-12">
-                    <Checkbox
-                      checked={selectedIds.size === filteredProspects.length && filteredProspects.length > 0}
-                      onCheckedChange={toggleSelectAll}
-                    />
-                  </TableHead>
-                  <TableHead>{t("nameAndEntity")}</TableHead>
-                  <TableHead>{t("source")}</TableHead>
-                  <TableHead>{t("score")}</TableHead>
-                  <TableHead className="text-right">{t("actions")}</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filteredProspects.map((p) => (
-                  <TableRow key={p.id} className={`hover:bg-accent/5 cursor-pointer group ${selectedIds.has(p.id) ? 'bg-accent/5' : ''}`} onClick={() => { setSelectedViewProspect(p); setIsDetailViewOpen(true); }}>
-                    <TableCell onClick={(e) => e.stopPropagation()}>
+            <div className="p-20 text-center text-muted-foreground bg-card border rounded-xl shadow-sm">{t("noProspectsFound")}</div>
+          ) : viewMode === "list" ? (
+            <div className="border bg-card shadow-sm rounded-xl overflow-hidden">
+              <Table>
+                <TableHeader className="bg-secondary/30">
+                  <TableRow>
+                    <TableHead className="w-12">
                       <Checkbox
-                        checked={selectedIds.has(p.id)}
-                        onCheckedChange={() => toggleSelect(p.id)}
+                        checked={selectedIds.size === filteredProspects.length && filteredProspects.length > 0}
+                        onCheckedChange={toggleSelectAll}
                       />
-                    </TableCell>
-                    <TableCell><div className="flex items-center gap-3"><div className="h-9 w-9 rounded-full bg-accent/10 flex items-center justify-center font-bold text-accent">{p.initials}</div><div><div className="font-bold flex items-center gap-2">{getTypeIcon(p.prospect_type)} {p.name}</div><div className="text-xs text-muted-foreground">{p.company}</div></div></div></TableCell>
-                    <TableCell><Badge variant="outline" className="font-normal">{getSourceIcon(p.source)} {formatSource(p.source)}</Badge></TableCell>
-                    <TableCell><Badge variant={getScoreVariant(p.score)}>{p.score}%</Badge></TableCell>
-                    <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="text-slate-400 hover:text-destructive hover:bg-destructive/10 transition-colors"
-                        onClick={(e) => { e.stopPropagation(); setDeleteId(p.id); }}
-                      >
-                        <Trash2 size={16} />
-                      </Button>
-                    </TableCell>
+                    </TableHead>
+                    <TableHead>{t("nameAndEntity")}</TableHead>
+                    <TableHead>{t("source")}</TableHead>
+                    <TableHead>{t("score")}</TableHead>
+                    <TableHead className="text-right">{t("actions")}</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filteredProspects.map((p) => (
+                    <TableRow key={p.id} className={`hover:bg-accent/5 cursor-pointer group ${selectedIds.has(p.id) ? 'bg-accent/5' : ''}`} onClick={() => { setSelectedViewProspect(p); setIsDetailViewOpen(true); }}>
+                      <TableCell onClick={(e) => e.stopPropagation()}>
+                        <Checkbox
+                          checked={selectedIds.has(p.id)}
+                          onCheckedChange={() => toggleSelect(p.id)}
+                        />
+                      </TableCell>
+                      <TableCell><div className="flex items-center gap-3"><div className="h-9 w-9 rounded-full bg-accent/10 flex items-center justify-center font-bold text-accent">{p.initials}</div><div><div className="font-bold flex items-center gap-2">{getTypeIcon(p.prospect_type)} {p.name}</div><div className="text-xs text-muted-foreground">{p.company}</div></div></div></TableCell>
+                      <TableCell><Badge variant="outline" className="font-normal">{getSourceIcon(p.source)} {formatSource(p.source)}</Badge></TableCell>
+                      <TableCell><Badge variant={getScoreVariant(p.score)}>{p.score}%</Badge></TableCell>
+                      <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="text-slate-400 hover:text-destructive hover:bg-destructive/10 transition-colors"
+                          onClick={(e) => { e.stopPropagation(); setDeleteId(p.id); }}
+                        >
+                          <Trash2 size={16} />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 animate-in fade-in duration-500">
+              {filteredProspects.map((p) => (
+                <div 
+                  key={p.id} 
+                  className={`relative group bg-card p-6 rounded-2xl border transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer overflow-hidden ${selectedIds.has(p.id) ? 'border-accent ring-1 ring-accent/20 bg-accent/5' : 'border-slate-200 dark:border-slate-800'}`}
+                  onClick={() => { setSelectedViewProspect(p); setIsDetailViewOpen(true); }}
+                >
+                  {/* Selection Checkbox */}
+                  <div className="absolute top-4 left-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity" onClick={(e) => e.stopPropagation()}>
+                    <Checkbox
+                      checked={selectedIds.has(p.id)}
+                      onCheckedChange={() => toggleSelect(p.id)}
+                      className="h-5 w-5 rounded-full border-accent/30 data-[state=checked]:bg-accent"
+                    />
+                  </div>
+
+                  {/* Score Badge */}
+                  <div className="absolute top-4 right-4 text-center">
+                    <div className={`px-2 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase border shadow-sm ${
+                      p.score >= 80 ? 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20' : 
+                      p.score >= 50 ? 'bg-amber-500/10 text-amber-600 border-amber-500/20' : 
+                      'bg-slate-500/10 text-slate-500 border-slate-500/20'
+                    }`}>
+                      {p.score}% Score
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex flex-col items-center text-center mt-4">
+                    <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-accent/20 to-accent/5 flex items-center justify-center font-black text-2xl text-accent mb-4 shadow-inner ring-4 ring-white dark:ring-slate-900 group-hover:scale-110 transition-transform duration-300">
+                      {p.initials}
+                    </div>
+                    
+                    <h3 className="font-bold text-lg text-slate-800 dark:text-slate-100 line-clamp-1 mb-1">
+                      {p.name}
+                    </h3>
+                    
+                    <div className="flex items-center gap-1 text-sm text-muted-foreground mb-4">
+                      {getTypeIcon(p.prospect_type)}
+                      <span className="truncate max-w-[150px]">{p.company || "Entreprise inconnue"}</span>
+                    </div>
+
+                    <div className="w-full flex items-center justify-between pt-4 border-t border-slate-100 dark:border-slate-800">
+                      <div className="flex items-center gap-1">
+                        <Badge variant="outline" className="text-[10px] font-medium py-0 px-2 h-5 border-slate-200 bg-slate-50 text-slate-500 rounded-full flex items-center gap-1">
+                           {getSourceIcon(p.source)} {formatSource(p.source)}
+                        </Badge>
+                      </div>
+
+                      <div className="flex gap-1" onClick={(e) => e.stopPropagation()}>
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          className="h-8 w-8 rounded-full text-slate-400 hover:text-destructive hover:bg-destructive/10 transition-colors"
+                          onClick={(e) => { e.stopPropagation(); setDeleteId(p.id); }}
+                        >
+                          <Trash2 size={14} />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </div>
 

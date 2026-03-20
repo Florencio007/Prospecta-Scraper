@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Mail, Phone, Globe, MessageCircle, ExternalLink, ShieldCheck, Zap, Linkedin, Facebook, Instagram, Twitter, Youtube, Pin, Share2, Copy, Save, X, MapPin, Sparkles, Loader2, Plus, Clock, Users, MessageSquare, ThumbsUp, Star, Info, Building2, User } from "lucide-react";
+import { Mail, Phone, Globe, MessageCircle, ExternalLink, ShieldCheck, Zap, Linkedin, Facebook, Instagram, Twitter, Youtube, Pin, Share2, Copy, Search, Save, X, MapPin, Sparkles, Loader2, Plus, Clock, Users, MessageSquare, ThumbsUp, Star, Info, Building2, User, Tag, BadgeEuro, Link2, Cpu, FileText, Layout, ListChecks, Music2, Ticket, Menu, Settings2, MousePointer2 } from "lucide-react";
 import { Prospect } from "@/data/mockData";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useToast } from "@/hooks/use-toast";
@@ -73,7 +73,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
         }
     }
 
-    const currentProspect = localProspect || prospect;
+    const currentProspect = (localProspect || prospect) as any;
 
 
     // Debug logging
@@ -343,6 +343,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
         if (lowerUrl.includes("instagram.com")) return { icon: <Instagram size={14} />, color: "text-pink-500", bgColor: "bg-pink-500/10", borderColor: "hover:border-pink-500/30", label: "Instagram" };
         if (lowerUrl.includes("twitter.com") || lowerUrl.includes("x.com")) return { icon: <Twitter size={14} />, color: "text-blue-300", bgColor: "bg-blue-300/10", borderColor: "hover:border-blue-300/30", label: "Twitter (X)" };
         if (lowerUrl.includes("youtube.com")) return { icon: <Youtube size={14} />, color: "text-red-500", bgColor: "bg-red-500/10", borderColor: "hover:border-red-500/30", label: "YouTube" };
+        if (lowerUrl.includes("tiktok.com")) return { icon: <Music2 size={14} />, color: "text-zinc-900", bgColor: "bg-zinc-900/10", borderColor: "hover:border-zinc-900/30", label: "TikTok" };
         if (lowerUrl.includes("pinterest.com") || lowerUrl.includes("pinterest.fr")) return { icon: <Pin size={14} />, color: "text-red-600", bgColor: "bg-red-600/10", borderColor: "hover:border-red-600/30", label: "Pinterest" };
         return { icon: <Globe size={14} />, color: "text-muted-foreground", bgColor: "bg-muted", borderColor: "hover:border-accent/30", label: t("visitWebsite") };
     };
@@ -512,15 +513,18 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                 <div className="space-y-6">
                                     <div className="text-center">
                                         <div className="relative inline-block mb-4">
-                                            {currentProspect.photo || (currentProspect.contractDetails as any)?.photo ? (
+                                            {currentProspect.logo || currentProspect.ogImage || currentProspect.photo || (currentProspect.contractDetails as any)?.photo ? (
                                                 <img
-                                                    src={currentProspect.photo || (currentProspect.contractDetails as any)?.photo}
+                                                    src={currentProspect.logo || currentProspect.ogImage || currentProspect.photo || (currentProspect.contractDetails as any)?.photo}
                                                     alt={currentProspect.name}
-                                                    className="h-24 w-24 rounded-full border-4 border-accent/20 object-cover shadow-lg"
+                                                    className="h-24 w-24 rounded-full border-4 border-accent/20 object-cover shadow-lg bg-card"
+                                                    onError={(e) => {
+                                                        (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentProspect.name || "P")}&background=random`;
+                                                    }}
                                                 />
                                             ) : (
                                                 <div className="h-24 w-24 rounded-full bg-accent/10 border-4 border-accent/20 flex items-center justify-center text-3xl font-bold text-accent shadow-lg">
-                                                    {currentProspect.initials || "?"}
+                                                    {currentProspect.initials || (currentProspect.name ? currentProspect.name.charAt(0) : "?")}
                                                 </div>
                                             )}
                                             <div className="absolute bottom-0 right-0 h-6 w-6 bg-green-500 rounded-full border-4 border-card"></div>
@@ -597,28 +601,99 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                         </Button>
                                     </div>
 
-                                    <div className={`rounded-2xl p-4 border transition-all duration-500 ${currentProspect.aiIntelligence ? 'bg-emerald-500/5 border-emerald-500/20' : 'bg-secondary/30 border-border/50'} flex items-center justify-between`}>
-                                        <div className="space-y-1">
-                                            <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t("leadScore")}</span>
-                                            <div className="flex items-center gap-2">
-                                                <span className={`text-2xl font-black transition-colors duration-500 ${currentProspect.aiIntelligence ? 'text-emerald-500' : 'text-foreground'}`}>
-                                                    {currentProspect.score || 0}%
-                                                </span>
-                                                <Badge className={`${currentProspect.aiIntelligence ? 'bg-emerald-500/20 text-emerald-500' : 'bg-accent/20 text-accent'} border-none text-[10px] px-1.5 py-0 transition-colors duration-500`}>
-                                                    {t("highIntent")}
-                                                </Badge>
+                                    {(() => {
+                                        const calculateScore = () => {
+                                            // Si on a déjà un score élevé calculé par l'IA d'enrichissement, on le garde
+                                            if (currentProspect.score && currentProspect.score > 70 && currentProspect.aiIntelligence) return currentProspect.score;
+                                            
+                                            // Calcul dynamique basé sur la complétude par rapport aux attentes
+                                            const requested = currentProspect.requestedFields || ["name", "email", "phone", "website"];
+                                            let score = 10;
+                                            const weight = 88 / requested.length;
+
+                                            requested.forEach((field: string) => {
+                                                let found = false;
+                                                if (field === 'email') found = !!(currentProspect.email || currentProspect.aiIntelligence?.contactInfo?.emails?.length > 0);
+                                                else if (field === 'phone') found = !!(currentProspect.phone || currentProspect.aiIntelligence?.contactInfo?.phones?.length > 0);
+                                                else if (field === 'website') found = !!currentProspect.website;
+                                                else if (field === 'team' || field === 'equipe') found = !!(currentProspect.contractDetails?.team?.length > 0 || currentProspect.aiIntelligence?.keyPeople?.length > 0);
+                                                else if (field === 'technologies') found = !!(currentProspect.contractDetails?.technologies?.length > 0);
+                                                else if (field === 'rating') found = !!(currentProspect.contractDetails?.rating || currentProspect.contractDetails?.totalScore);
+                                                else found = !!currentProspect[field as keyof typeof currentProspect];
+
+                                                if (found) score += weight;
+                                            });
+                                            
+                                            return Math.min(Math.round(score), 98);
+                                        };
+                                        
+                                        const displayScore = calculateScore();
+                                        const scoreColor = displayScore > 70 ? 'text-emerald-500' : displayScore > 40 ? 'text-amber-500' : 'text-rose-500';
+                                        const scoreBg = displayScore > 70 ? 'bg-emerald-500/10' : displayScore > 40 ? 'bg-amber-500/10' : 'bg-rose-500/10';
+                                        const scoreBorder = displayScore > 70 ? 'border-emerald-500/20' : displayScore > 40 ? 'border-amber-500/20' : 'border-rose-500/20';
+
+                                        return (
+                                            <div className={`rounded-2xl p-4 border transition-all duration-500 ${scoreBg} ${scoreBorder} flex items-center justify-between`}>
+                                                <div className="space-y-1">
+                                                    <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">{t("leadScore")}</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className={`text-2xl font-black transition-colors duration-500 ${scoreColor}`}>
+                                                            {displayScore}%
+                                                        </span>
+                                                        <Badge className={`${displayScore > 60 ? 'bg-emerald-500/20 text-emerald-500' : 'bg-accent/20 text-accent'} border-none text-[10px] px-1.5 py-0 transition-colors duration-500`}>
+                                                            {displayScore > 60 ? t("highIntent") : 'Potentiel moyen'}
+                                                        </Badge>
+                                                    </div>
+                                                </div>
+                                                <div className="relative h-14 w-14 flex items-center justify-center">
+                                                    <svg className="h-full w-full transform -rotate-90">
+                                                        <circle
+                                                            cx="28"
+                                                            cy="28"
+                                                            r="24"
+                                                            stroke="currentColor"
+                                                            strokeWidth="4"
+                                                            fill="transparent"
+                                                            className="text-muted/20"
+                                                        />
+                                                        <circle
+                                                            cx="28"
+                                                            cy="28"
+                                                            r="24"
+                                                            stroke="currentColor"
+                                                            strokeWidth="4"
+                                                            fill="transparent"
+                                                            strokeDasharray={150}
+                                                            strokeDashoffset={150 - (150 * displayScore) / 100}
+                                                            strokeLinecap="round"
+                                                            className={`${scoreColor} transition-all duration-1000 ease-out`}
+                                                        />
+                                                    </svg>
+                                                    <span className={`absolute inset-0 flex items-center justify-center text-[11px] font-black ${scoreColor}`}>
+                                                        {displayScore}
+                                                    </span>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div className={`h-10 w-10 rounded-full border-4 transition-colors duration-500 ${currentProspect.aiIntelligence ? 'border-emerald-500/30' : 'border-border'} flex items-center justify-center`}>
-                                            <div className={`h-2 w-2 rounded-full animate-pulse transition-colors duration-500 ${currentProspect.aiIntelligence ? 'bg-emerald-500' : 'bg-accent'}`}></div>
-                                        </div>
-                                    </div>
+                                        );
+                                    })()}
 
                                     <div className="space-y-2 pt-2 border-t border-border/50 mt-2">
                                         <div className="flex items-center justify-between px-1">
                                             <span className="text-[10px] uppercase font-bold text-accent tracking-wider">{t("businessDetails")}</span>
                                         </div>
                                         <div className="bg-secondary/30 p-3 rounded-xl border border-border/50 space-y-3">
+                                            {currentProspect.source === 'google' && (currentProspect as any).googleSearchUrl && (
+                                                <a
+                                                    href={(currentProspect as any).googleSearchUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="flex items-center gap-2 px-3 py-2 bg-blue-500 text-white shadow-sm rounded-lg border border-blue-600 hover:bg-blue-600 transition-all group"
+                                                >
+                                                    <Search size={14} />
+                                                    <span className="text-[10px] font-bold uppercase tracking-tight">Voir sur Google Search</span>
+                                                    <ExternalLink size={10} className="ml-auto opacity-70" />
+                                                </a>
+                                            )}
                                             {currentProspect.website && !isSocialUrl(currentProspect.website) && isEnrichable(currentProspect.website) && (
                                                 <a
                                                     href={currentProspect.website.startsWith('http') ? currentProspect.website : `https://${currentProspect.website}`}
@@ -635,20 +710,41 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                     <ExternalLink size={10} className="ml-auto text-muted-foreground/60 group-hover:text-blue-400" />
                                                 </a>
                                             )}
-                                            {(isSafeEmail(currentProspect.email) || currentProspect.phone) && (
+                                            {((currentProspect.contacts?.emails && currentProspect.contacts.emails.length > 0) || (currentProspect.contacts?.phones && currentProspect.contacts.phones.length > 0) || currentProspect.email || currentProspect.phone) && (
                                                 <div className="flex flex-col gap-2 pb-2 border-b border-border/10">
-                                                    {isSafeEmail(currentProspect.email) && (
-                                                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                                                    {/* Emails */}
+                                                    {Array.from(new Set([
+                                                        currentProspect.email,
+                                                        ...(currentProspect.contacts?.emails || [])
+                                                    ].filter(isSafeEmail))).map((email, idx) => (
+                                                        <div key={`email-${idx}`} className="flex items-center gap-2 text-xs text-muted-foreground group/contact">
                                                             <Mail size={12} className="text-accent" />
-                                                            <span className="truncate">{currentProspect.email}</span>
+                                                            <span className="truncate group-hover/contact:text-accent transition-colors cursor-pointer">{email}</span>
                                                         </div>
-                                                    )}
-                                                    {currentProspect.phone && (
-                                                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                                                            <Phone size={12} className="text-accent" />
-                                                            <span>{currentProspect.phone}</span>
-                                                        </div>
-                                                    )}
+                                                    ))}
+
+                                                    {/* Phones */}
+                                                    {Array.from(new Set([
+                                                        currentProspect.phone,
+                                                        ...(currentProspect.contacts?.phones || [])
+                                                    ].filter(Boolean).map(h => {
+                                                        try { return decodeURIComponent(h as string); } catch(e) { return h; }
+                                                    }))).map((phone, idx) => {
+                                                        const isWhatsApp = currentProspect.contacts?.whatsapp?.includes(phone) || (currentProspect as any).whatsapp === phone;
+                                                        return (
+                                                            <div key={`phone-${idx}`} className="flex items-center gap-2 text-xs text-muted-foreground group/contact">
+                                                                {isWhatsApp ? (
+                                                                    <div title="WhatsApp disponible">
+                                                                        <MessageCircle size={12} className="text-emerald-500" />
+                                                                    </div>
+                                                                ) : (
+                                                                    <Phone size={12} className="text-accent" />
+                                                                )}
+                                                                <span className="group-hover/contact:text-accent transition-colors cursor-pointer font-medium">{phone as string}</span>
+                                                                {isWhatsApp && <Badge variant="outline" className="ml-auto text-[8px] py-0 px-1 bg-emerald-500/5 text-emerald-600 border-emerald-500/20">WhatsApp</Badge>}
+                                                            </div>
+                                                        );
+                                                    })}
                                                 </div>
                                             )}
 
@@ -690,6 +786,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                             )}
                                         </div>
                                     </div>
+
 
                                     <div className="pt-4 border-t border-border/50 mt-auto">
                                         <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider mb-3 block px-1">{t("socialNetworks")}</span>
@@ -748,7 +845,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                 value="intelligence"
                                                 className="bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-emerald-500 rounded-none px-0 pb-4 text-sm font-medium text-muted-foreground transition-all"
                                             >
-                                                <Globe size={16} className="mr-2" /> {t("webAnalyse")}
+                                                <Zap size={16} className="mr-2 text-emerald-500" /> {currentProspect?.source === 'google' ? 'Intelligence IA' : t("webAnalyse")}
                                             </TabsTrigger>
                                             <TabsTrigger
                                                 value="profile"
@@ -762,6 +859,8 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                             >
                                                 {currentProspect?.source === 'facebook' || currentProspect?.source === 'facebook_page' ? (
                                                     <><Facebook size={16} className="mr-2" /> Activité Facebook</>
+                                                ) : currentProspect?.source === 'google' ? (
+                                                    <><Globe size={16} className="mr-2" /> Activité Web</>
                                                 ) : (
                                                     <><Linkedin size={16} className="mr-2" /> {t("linkedinActivity")}</>
                                                 )}
@@ -829,8 +928,8 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                                     <div key={i} className="p-4 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all">
                                                                         <div className="flex items-center gap-2 mb-2">
                                                                             <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider ${s.type === 'email' ? 'bg-blue-100 text-blue-600' :
-                                                                                    s.type === 'linkedin' ? 'bg-indigo-100 text-indigo-600' :
-                                                                                        'bg-orange-100 text-orange-600'
+                                                                                s.type === 'linkedin' ? 'bg-indigo-100 text-indigo-600' :
+                                                                                    'bg-orange-100 text-orange-600'
                                                                                 }`}>
                                                                                 {s.type}
                                                                             </span>
@@ -851,11 +950,15 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                             </h4>
                                                             <div className="flex flex-wrap gap-2">
                                                                 {currentProspect.aiIntelligence.contactInfo?.phones?.length > 0 ? (
-                                                                    currentProspect.aiIntelligence.contactInfo.phones.map((phone, idx) => (
-                                                                        <a key={idx} href={`tel:${phone}`} className="px-3 py-2 bg-secondary/40 rounded-lg border border-border/50 text-sm text-blue-500 hover:bg-secondary/60 transition-colors">
-                                                                            {phone}
-                                                                        </a>
-                                                                    ))
+                                                                    currentProspect.aiIntelligence.contactInfo.phones.map((phone, idx) => {
+                                                                        let decodedPhone = phone;
+                                                                        try { decodedPhone = decodeURIComponent(phone); } catch(e) {}
+                                                                        return (
+                                                                            <a key={idx} href={`tel:${decodedPhone}`} className="px-3 py-2 bg-secondary/40 rounded-lg border border-border/50 text-sm text-blue-500 hover:bg-secondary/60 transition-colors">
+                                                                                {decodedPhone}
+                                                                            </a>
+                                                                        );
+                                                                    })
                                                                 ) : <p className="text-xs text-muted-foreground italic">{t("noPhoneExtracted")}</p>}
                                                             </div>
                                                         </div>
@@ -1004,21 +1107,98 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                     </div>
                                                 </div>
                                             ) : (
-                                                <div className="flex flex-col items-center justify-center py-20 text-center space-y-4 bg-muted/20 rounded-3xl border border-dashed border-border/50">
-                                                    <div className="h-20 w-20 rounded-full bg-accent/5 flex items-center justify-center text-accent mb-2">
-                                                        <Sparkles size={40} className="animate-pulse" />
+                                                <div className="space-y-6">
+                                                    <div className="flex flex-col items-center justify-center py-10 text-center space-y-4 bg-muted/20 rounded-3xl border border-dashed border-border/50">
+                                                        <div className="h-16 w-16 rounded-full bg-accent/5 flex items-center justify-center text-accent mb-2">
+                                                            <Sparkles size={32} className="animate-pulse" />
+                                                        </div>
+                                                        <h4 className="text-lg font-bold text-foreground">{t("aiAnalysisRequired")}</h4>
+                                                        <p className="text-muted-foreground text-xs max-w-xs mx-auto">
+                                                            {t("extractIntelligenceDesc")}
+                                                        </p>
                                                     </div>
-                                                    <h4 className="text-xl font-bold text-foreground">{t("aiAnalysisRequired")}</h4>
-                                                    <p className="text-muted-foreground text-sm max-w-xs mx-auto">
-                                                        {t("extractIntelligenceDesc")}
-                                                    </p>
-                                                    <Button
-                                                        onClick={handleEnrich}
-                                                        className="bg-accent hover:bg-accent/90 text-white rounded-full px-8 py-6 h-auto shadow-lg shadow-accent/20 transition-all hover:scale-105"
-                                                    >
-                                                        <Sparkles className="mr-2 h-5 w-5" />
-                                                        {t("extractIntelligence")}
-                                                    </Button>
+
+                                                    {/* Raw Scraper Data (if available) */}
+                                                    {(
+                                                        (currentProspect.contractDetails as any)?.technologies?.length > 0 ||
+                                                        (currentProspect.contractDetails as any)?.team?.length > 0 ||
+                                                        (currentProspect.contractDetails as any)?.services?.length > 0 ||
+                                                        (currentProspect.contractDetails as any)?.pricing?.length > 0 ||
+                                                        (currentProspect.contractDetails as any)?.categories?.length > 0
+                                                    ) && (
+                                                        <div className="space-y-6 pt-4 border-t border-border/50">
+                                                            <h4 className="text-sm font-bold flex items-center gap-2">
+                                                                <Info size={16} className="text-blue-500" />
+                                                                Données de l'établissement
+                                                            </h4>
+
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                                {/* Services & Catégories */}
+                                                                {((currentProspect.contractDetails as any)?.services?.length > 0 || (currentProspect.contractDetails as any)?.categories?.length > 0) && (
+                                                                    <div className="space-y-3">
+                                                                        <p className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
+                                                                            <ListChecks size={10} /> Services & Catégories
+                                                                        </p>
+                                                                        <div className="flex flex-wrap gap-1.5">
+                                                                            {[...((currentProspect.contractDetails as any)?.categories || []), ...((currentProspect.contractDetails as any)?.services || [])].map((item: string, i: number) => (
+                                                                                <Badge key={i} variant="outline" className="text-[10px] bg-accent/5 border-accent/20 text-accent">
+                                                                                    {item}
+                                                                                </Badge>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* Tarifs / Pricing */}
+                                                                {(currentProspect.contractDetails as any)?.pricing?.length > 0 && (
+                                                                    <div className="space-y-3">
+                                                                        <p className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
+                                                                            <BadgeEuro size={10} /> Informations Tarifs
+                                                                        </p>
+                                                                        <div className="space-y-1.5">
+                                                                            {(currentProspect.contractDetails as any).pricing.map((price: string, i: number) => (
+                                                                                <div key={i} className="text-[11px] p-2 bg-emerald-500/5 rounded-lg border border-emerald-500/10 text-emerald-700">
+                                                                                    {price}
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* Technologies */}
+                                                                {(currentProspect.contractDetails as any)?.technologies?.length > 0 && (
+                                                                    <div className="space-y-3">
+                                                                        <p className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
+                                                                            <Cpu size={10} /> Technologies Web
+                                                                        </p>
+                                                                        <div className="flex flex-wrap gap-1.5">
+                                                                            {(currentProspect.contractDetails as any).technologies.map((tech: string, i: number) => (
+                                                                                <Badge key={i} variant="outline" className="text-[10px] bg-blue-500/5 border-blue-500/20 text-blue-600">
+                                                                                    {tech}
+                                                                                </Badge>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* Team */}
+                                                                {(currentProspect.contractDetails as any)?.team?.length > 0 && (
+                                                                    <div className="space-y-3">
+                                                                        <p className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
+                                                                            <Users size={10} /> Équipe / Key People
+                                                                        </p>
+                                                                        <div className="space-y-1.5">
+                                                                            {(currentProspect.contractDetails as any).team.map((member: string, i: number) => (
+                                                                                <div key={i} className="text-[11px] p-2 bg-secondary/30 rounded-lg border border-border/50 text-foreground/80">
+                                                                                    {member}
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             )}
                                         </TabsContent>
@@ -1032,13 +1212,28 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                             <Users className="text-primary" size={20} /> Profil {
                                                                 currentProspect.source === 'facebook' || currentProspect.source === 'facebook_page' ? 'Facebook' :
                                                                     currentProspect.source === 'google_maps' ? 'Google Maps' :
-                                                                        currentProspect.source === 'pappers' ? 'Pappers' :
-                                                                            'LinkedIn'
+                                                                        currentProspect.source === 'google' ? 'Google Search' :
+                                                                            currentProspect.source === 'pappers' ? 'Pappers' :
+                                                                                'LinkedIn'
                                                             }
                                                         </h3>
 
                                                         {/* Profile URL links */}
                                                         <div className="flex gap-2">
+                                                            {/* ── Lien Site Web Officiel (Priorité) ── */}
+                                                            {currentProspect.website && (
+                                                                <a
+                                                                    href={currentProspect.website}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="flex items-center gap-2 px-4 py-2 rounded-xl border border-emerald-500/20 bg-emerald-500/5 text-emerald-600 text-sm hover:bg-emerald-500/10 transition-colors w-fit font-bold"
+                                                                >
+                                                                    <Globe size={14} />
+                                                                    Visiter le site web
+                                                                    <ExternalLink size={12} />
+                                                                </a>
+                                                            )}
+
                                                             {currentProspect.socialLinks?.linkedin && (
                                                                 <a
                                                                     href={currentProspect.socialLinks.linkedin}
@@ -1064,7 +1259,7 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                                     <ExternalLink size={12} />
                                                                 </a>
                                                             )}
-                                                            {(currentProspect.socialLinks as any)?.facebook && (
+                                                            {(currentProspect.socialLinks as any)?.facebook && !currentProspect.website && (
                                                                 <a
                                                                     href={(currentProspect.socialLinks as any).facebook}
                                                                     target="_blank"
@@ -1077,6 +1272,21 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                             )}
                                                         </div>
                                                     </div>
+
+                                                    {/* ── DESCRIPTION / GOOGLE SNIPPET ── */}
+                                                    {(currentProspect.description || currentProspect.slogan || currentProspect.metaDescription) && (
+                                                        <div className="p-4 bg-accent/5 rounded-2xl border border-accent/10 relative overflow-hidden group transition-all duration-300 hover:bg-accent/10">
+                                                            <div className="absolute top-0 right-0 p-2 opacity-20 group-hover:opacity-40 transition-opacity">
+                                                                <FileText size={40} className="text-accent" />
+                                                            </div>
+                                                            <h5 className="text-[10px] uppercase font-bold text-accent mb-2 flex items-center gap-2">
+                                                                <FileText size={12} /> À propos / Description
+                                                            </h5>
+                                                            <p className="text-sm text-foreground/80 leading-relaxed italic relative z-10">
+                                                                "{currentProspect.description || currentProspect.slogan || currentProspect.metaDescription}"
+                                                            </p>
+                                                        </div>
+                                                    )}
 
                                                     {currentProspect.source === 'pappers' && (() => {
                                                         const cd = currentProspect.contractDetails as any;
@@ -1126,8 +1336,8 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                                                 <div key={i} className="p-3 bg-secondary/20 rounded-xl border border-border/30 flex flex-col gap-0.5">
                                                                                     <span className="text-[10px] uppercase font-bold text-muted-foreground">{f.label}</span>
                                                                                     <span className={`text-sm font-semibold ${f.special === 'status' && f.value === 'Active' ? 'text-emerald-500' :
-                                                                                            f.special === 'status' && f.value !== 'Active' ? 'text-red-400' :
-                                                                                                'text-foreground/90'
+                                                                                        f.special === 'status' && f.value !== 'Active' ? 'text-red-400' :
+                                                                                            'text-foreground/90'
                                                                                         }`}>{f.value}</span>
                                                                                 </div>
                                                                             ))}
@@ -1289,6 +1499,252 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                             </div>
                                                         );
                                                     })()}
+
+                                                    {/* PROFIL GOOGLE WEB (Contract Details) */}
+                                                    {currentProspect.source === 'google' && currentProspect.contractDetails && (() => {
+                                                        const cd = currentProspect.contractDetails as any;
+                                                        
+                                                        return (
+                                                            <div className="space-y-6 pt-6 border-t border-border/10">
+                                                                {/* Description / Slogan */}
+                                                                {(currentProspect.metaDescription || currentProspect.slogan || cd.description) && (
+                                                                    <div className="bg-accent/5 p-4 rounded-2xl border border-accent/10">
+                                                                        <h5 className="text-[10px] uppercase font-bold text-accent mb-2 flex items-center gap-2">
+                                                                            <FileText size={12} /> À propos de l'établissement
+                                                                        </h5>
+                                                                        <p className="text-sm text-foreground/90 leading-relaxed font-normal">
+                                                                            {currentProspect.metaDescription || currentProspect.slogan || cd.description}
+                                                                        </p>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* Grille de détails (Services, Tech, etc.) */}
+                                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                                    {/* Services & Categories */}
+                                                                    {((cd.services?.length > 0) || (cd.categories?.length > 0)) && (
+                                                                        <div className="space-y-3">
+                                                                            <h5 className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                                                                                <Tag size={12} /> Services & Catégories
+                                                                            </h5>
+                                                                            <div className="flex flex-wrap gap-1.5">
+                                                                                {[...(cd.categories || []), ...(cd.services || [])].map((item: string, i: number) => (
+                                                                                    <Badge key={i} variant="outline" className="text-[10px] bg-accent/5 border-accent/20 text-accent">
+                                                                                        {item}
+                                                                                    </Badge>
+                                                                                ))}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+
+                                                                    {/* Pricing / Fees */}
+                                                                    {cd.pricing?.length > 0 && (
+                                                                        <div className="space-y-3">
+                                                                            <h5 className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                                                                                <BadgeEuro size={12} /> Tarifs & Prix
+                                                                            </h5>
+                                                                            <div className="space-y-1.5">
+                                                                                {cd.pricing.map((price: string, i: number) => (
+                                                                                    <div key={i} className="text-[11px] p-2 bg-emerald-500/5 rounded-lg border border-emerald-500/10 text-emerald-700">
+                                                                                        {price}
+                                                                                    </div>
+                                                                                ))}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+
+                                                                    {/* Technos */}
+                                                                    {cd.technologies?.length > 0 && (
+                                                                        <div className="space-y-3">
+                                                                            <h5 className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                                                                                <Cpu size={12} /> Technologies Web
+                                                                            </h5>
+                                                                            <div className="flex flex-wrap gap-1.5">
+                                                                                {cd.technologies.map((tech: string, i: number) => (
+                                                                                    <Badge key={i} variant="outline" className="text-[10px] bg-blue-500/5 border-blue-500/20 text-blue-600">
+                                                                                        {tech}
+                                                                                    </Badge>
+                                                                                ))}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+
+                                                                    {/* Team */}
+                                                                    {cd.team?.length > 0 && (
+                                                                        <div className="space-y-3">
+                                                                            <h5 className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                                                                                <Users size={12} /> Équipe / Key People
+                                                                            </h5>
+                                                                            <div className="space-y-1.5">
+                                                                                {cd.team.map((member: string, i: number) => (
+                                                                                    <div key={i} className="text-[11px] p-2 bg-secondary/30 rounded-lg border border-border/50 text-foreground/80">
+                                                                                        {member}
+                                                                                    </div>
+                                                                                ))}
+                                                                            </div>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+
+                                                                {/* Liens Externes Catégorisés */}
+                                                                {(cd.externalLinks || currentProspect.externalLinks) && (() => {
+                                                                    const links = cd.externalLinks || currentProspect.externalLinks || {};
+                                                                    const hasLinks = Object.values(links).some((arr: any) => arr?.length > 0);
+                                                                    
+                                                                    if (!hasLinks) return null;
+
+                                                                    return (
+                                                                        <div className="space-y-4">
+                                                                            <h5 className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                                                                                <Link2 size={13} className="text-blue-500" /> Ressources & Liens Externes
+                                                                            </h5>
+                                                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                                                                                {Object.entries(links).map(([category, urls]: [string, any]) => {
+                                                                                    if (!urls || urls.length === 0) return null;
+                                                                                    
+                                                                                    const catLabel = category === 'pdfs' || category === 'downloads' ? 'Documents & Téléchargements' : 
+                                                                                                   category === 'appStores' ? 'Apps Mobiles' :
+                                                                                                   category === 'booking' || category === 'platforms' ? 'Plateformes & Réservations' :
+                                                                                                   category === 'partners' ? 'Partenaires' : category;
+
+                                                                                    return (
+                                                                                        <div key={category} className="space-y-2">
+                                                                                            <p className="text-[10px] uppercase font-bold text-muted-foreground/60 px-1">{catLabel}</p>
+                                                                                            <div className="flex flex-col gap-1.5">
+                                                                                                {urls.map((urlObj: any, idx: number) => {
+                                                                                                    const url = typeof urlObj === 'string' ? urlObj : (urlObj.url || urlObj.href);
+                                                                                                    const label = typeof urlObj === 'string' ? urlObj : (urlObj.text || urlObj.label || urlObj.name || url);
+                                                                                                    const platform = typeof urlObj === 'object' ? (urlObj.platform || urlObj.domain || '') : '';
+                                                                                                    
+                                                                                                    return (
+                                                                                                        <a 
+                                                                                                            key={idx} 
+                                                                                                            href={url} 
+                                                                                                            target="_blank" 
+                                                                                                            rel="noopener noreferrer"
+                                                                                                            className="flex items-center gap-2 p-2 bg-secondary/20 rounded-lg border border-border/30 hover:border-blue-500/30 hover:bg-secondary/40 transition-all group"
+                                                                                                        >
+                                                                                                            <div className="p-1.5 bg-background rounded-md shadow-sm">
+                                                                                                                {category === 'pdfs' || category === 'downloads' ? <FileText size={10} className="text-red-500" /> : 
+                                                                                                                 category === 'appStores' ? <Layout size={10} className="text-indigo-500" /> :
+                                                                                                                 category === 'platforms' || category === 'booking' ? <Ticket size={10} className="text-emerald-500" /> :
+                                                                                                                 <ExternalLink size={10} className="text-blue-500" />}
+                                                                                                            </div>
+                                                                                                            <div className="min-w-0 flex-1">
+                                                                                                                <p className="text-[10px] font-medium truncate">{label}</p>
+                                                                                                                {platform && <p className="text-[8px] text-muted-foreground truncate uppercase">{platform}</p>}
+                                                                                                            </div>
+                                                                                                        </a>
+                                                                                                    );
+                                                                                                })}
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    );
+                                                                                })}
+                                                                            </div>
+                                                                        </div>
+                                                                    );
+                                                                })()}
+                                                                
+                                                                {/* Navigation & Structure du site */}
+                                                                {cd.navLinks?.length > 0 && (
+                                                                    <div className="space-y-3 pt-4 border-t border-border/10">
+                                                                        <h5 className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                                                                            <Menu size={12} className="text-indigo-400" /> Structure & Navigation du site
+                                                                        </h5>
+                                                                        <div className="flex flex-wrap gap-1.5">
+                                                                            {cd.navLinks.map((link: any, i: number) => (
+                                                                                <a 
+                                                                                    key={i} 
+                                                                                    href={link.href} 
+                                                                                    target="_blank" 
+                                                                                    rel="noopener noreferrer"
+                                                                                    className="text-[10px] px-2 py-1 bg-indigo-500/5 hover:bg-indigo-500/10 border border-indigo-500/10 hover:border-indigo-500/30 rounded-md text-indigo-400 transition-colors"
+                                                                                >
+                                                                                    {link.text}
+                                                                                </a>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* Formulaires détectés */}
+                                                                {cd.forms?.length > 0 && (
+                                                                    <div className="space-y-3 pt-4 border-t border-border/10">
+                                                                        <h5 className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                                                                            <Settings2 size={12} className="text-rose-400" /> Formulaires & Interactions
+                                                                        </h5>
+                                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                                                            {cd.forms.map((form: any, i: number) => (
+                                                                                <div key={i} className="p-2.5 bg-rose-500/5 rounded-xl border border-rose-500/10 flex items-center gap-3">
+                                                                                    <div className="p-1.5 bg-rose-500/10 rounded-lg">
+                                                                                        <MousePointer2 size={12} className="text-rose-500" />
+                                                                                    </div>
+                                                                                    <div className="min-w-0">
+                                                                                        <p className="text-[11px] font-bold text-foreground/80 truncate">Formulaire {form.method?.toUpperCase()} détecté</p>
+                                                                                        <p className="text-[9px] text-muted-foreground truncate">{form.fields?.length || 0} champs · {form.action?.substring(0, 30)}...</p>
+                                                                                    </div>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+                                                                
+                                                                {/* Maps Link */}
+                                                                {(cd.googleMapsUrl || cd.mapsUrl) && (
+                                                                    <div className="pt-2">
+                                                                        <a
+                                                                            href={cd.googleMapsUrl || cd.mapsUrl}
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            className="flex items-center gap-2 w-fit text-xs text-blue-500 hover:text-blue-400 transition-colors px-4 py-2 bg-blue-500/5 border border-blue-500/20 rounded-xl hover:bg-blue-500/10 font-bold"
+                                                                        >
+                                                                            <MapPin size={14} /> Voir sur Google Maps
+                                                                            <ExternalLink size={10} />
+                                                                        </a>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* Reputation & Hours */}
+                                                                {(cd.reputation?.overallRating || cd.hours?.notes?.length > 0) && (
+                                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 border-t border-border/10 pt-4">
+                                                                        {cd.reputation?.overallRating && (
+                                                                            <div className="space-y-2">
+                                                                                <h5 className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                                                                                    <Star size={12} className="text-emerald-500" /> Réputation Google
+                                                                                </h5>
+                                                                                <div className="p-3 bg-emerald-500/5 rounded-xl border border-emerald-500/10">
+                                                                                    <div className="flex items-center gap-2 mb-1">
+                                                                                        <span className="text-lg font-bold">{cd.reputation.overallRating}/5</span>
+                                                                                        <div className="flex text-amber-500">
+                                                                                            {[...Array(5)].map((_, i) => (
+                                                                                                <Star key={i} size={10} fill={i < Math.floor(cd.reputation.overallRating) ? "currentColor" : "none"} />
+                                                                                            ))}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    {cd.reputation.widgets?.map((w: string, i: number) => (
+                                                                                        <p key={i} className="text-[10px] text-muted-foreground italic">"{w}"</p>
+                                                                                    ))}
+                                                                                </div>
+                                                                            </div>
+                                                                        )}
+                                                                        {cd.hours?.notes?.length > 0 && (
+                                                                            <div className="space-y-2">
+                                                                                <h5 className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                                                                                    <Clock size={12} className="text-amber-500" /> Horaires d'ouverture
+                                                                                </h5>
+                                                                                <div className="p-3 bg-amber-500/5 rounded-xl border border-amber-500/10">
+                                                                                    {cd.hours.notes.map((h: string, i: number) => (
+                                                                                        <p key={i} className="text-[10px] font-semibold text-foreground/80">{h}</p>
+                                                                                    ))}
+                                                                                </div>
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                )}
+                                                             </div>
+                                                         );
+                                                     })()}
+
 
                                                     {/* Description IA générée automatiquement depuis les données disponibles */}
                                                     {(() => {

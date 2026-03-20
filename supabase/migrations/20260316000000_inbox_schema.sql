@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS public.email_threads (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
   prospect_id UUID REFERENCES public.prospects(id) ON DELETE CASCADE NOT NULL,
-  campaign_id UUID REFERENCES public.campaigns(id) ON DELETE SET NULL,
+  campaign_id UUID REFERENCES public.email_campaigns(id) ON DELETE SET NULL,
   subject TEXT,
   prospect_email TEXT NOT NULL,
   is_archived BOOLEAN DEFAULT false,
@@ -64,7 +64,7 @@ JOIN
 LEFT JOIN 
     public.prospect_data pd ON p.id = pd.prospect_id
 LEFT JOIN 
-    public.campaigns c ON t.campaign_id = c.id
+    public.email_campaigns c ON t.campaign_id = c.id
 LEFT JOIN 
     public.email_messages m ON t.id = m.thread_id
 GROUP BY 

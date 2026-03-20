@@ -985,7 +985,7 @@ const Settings = () => {
           <div className="space-y-4 py-4">
             {mfaEnrollment.qrCode && (
               <div className="flex flex-col items-center space-y-4">
-                <div className="p-4 bg-white rounded-lg">
+                <div className="p-4 bg-background dark:bg-card rounded-lg border border-border">
                   <img
                     src={mfaEnrollment.qrCode}
                     alt="QR Code 2FA"

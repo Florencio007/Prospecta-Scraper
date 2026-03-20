@@ -344,7 +344,6 @@ export interface Database {
                     opened_at: string | null
                     clicked_at: string | null
                     bounce_reason: string | null
-                    brevo_message_id: string | null
                     created_at: string
                 }
                 Insert: {
@@ -362,7 +361,6 @@ export interface Database {
                     opened_at?: string | null
                     clicked_at?: string | null
                     bounce_reason?: string | null
-                    brevo_message_id?: string | null
                     created_at?: string
                 }
                 Update: {
@@ -380,7 +378,6 @@ export interface Database {
                     opened_at?: string | null
                     clicked_at?: string | null
                     bounce_reason?: string | null
-                    brevo_message_id?: string | null
                     created_at?: string
                 }
             },

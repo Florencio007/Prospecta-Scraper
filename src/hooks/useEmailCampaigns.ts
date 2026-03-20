@@ -354,7 +354,7 @@ export function useEmailCampaigns() {
                     status: 'sent',
                     sent_at: new Date().toISOString(),
                     // We keep the column but it's now used for SMTP messageId
-                    brevo_message_id: result.messageId
+                    // brevo_message_id removed - using email_threads/email_messages for tracking instead
                 }).eq('id', recipient.id);
 
             } else {

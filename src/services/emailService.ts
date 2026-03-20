@@ -96,6 +96,23 @@ export async function testSmtpConnection(host: string, port: number, user: strin
     }
 }
 
+export async function testImapConnection(host: string, port: number, user: string, pass: string): Promise<{ ok: boolean; message: string }> {
+    const apiUrl = getAgentApiUrl('/api/email/imap-test');
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ host, port, user, pass }),
+        });
+        const data = await response.json();
+        return response.ok
+            ? { ok: true, message: data.message }
+            : { ok: false, message: data.error };
+    } catch (err) {
+        return { ok: false, message: `Erreur réseau : ${(err as Error).message}` };
+    }
+}
+
 // Personnalisation du template avec les variables
 export function personalizeTemplate(
     template: string,

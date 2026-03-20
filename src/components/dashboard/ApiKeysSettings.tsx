@@ -8,12 +8,19 @@ import { Badge } from '@/components/ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { Eye, EyeOff, ExternalLink, CheckCircle2, XCircle, Clock, AlertTriangle, Key, Server, Trash2 } from 'lucide-react';
+import { 
+    Eye, EyeOff, ExternalLink, CheckCircle2, XCircle, Clock, 
+    AlertTriangle, Key, Server, Trash2, Mail, ShieldCheck, 
+    MailCheck, MailWarning, Settings2, RefreshCw, Save 
+} from 'lucide-react';
 import { LoadingLogo } from '@/components/LoadingLogo';
 import { ConfirmDialog } from './ConfirmDialog';
 import { testEmailSend, testSmtpConnection } from '@/services/emailService';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Sparkles, Brain, Cpu, Zap } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { Switch } from '@/components/ui/switch';
+import { testImapConnection } from '@/services/emailService';
 
 const PROVIDERS_CONFIG = [
     /* openai is now handled by AiModelCard */
@@ -133,55 +140,100 @@ const MaintenanceCard = () => {
 
 // ---- SMTP Configuration Card ----
 const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpdate: () => void }) => {
-    const { saveKey, deleteKey } = useApiKeys();
+    const { deleteKey } = useApiKeys();
     const { toast } = useToast();
 
-    const parseSmtp = (raw?: string) => {
-        if (!raw) return { host: '', port: '587', user: '', pass: '' };
-        try { return JSON.parse(raw); } catch { return { host: raw, port: '587', user: '', pass: '' }; }
-    };
+    const [host, setHost] = useState('');
+    const [port, setPort] = useState('587');
+    const [user, setUser] = useState('');
+    const [pass, setPass] = useState('');
+    const [fromEmail, setFromEmail] = useState('');
+    
+    // IMAP Settings
+    const [imapHost, setImapHost] = useState('');
+    const [imapPort, setImapPort] = useState('993');
+    const [imapEnabled, setImapEnabled] = useState(false);
+    const [imapSecure, setImapSecure] = useState(true);
 
-    const saved = parseSmtp(existingConfig?.api_key);
-    const [host, setHost] = useState(saved.host || '');
-    const [port, setPort] = useState(String(saved.port || '587'));
-    const [user, setUser] = useState(saved.user || '');
-    const [pass, setPass] = useState(saved.pass || '');
     const [showPass, setShowPass] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isTesting, setIsTesting] = useState(false);
+    const [isTestingImap, setIsTestingImap] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
     const [testEmail, setTestEmail] = useState('');
     const [isSendingTest, setIsSendingTest] = useState(false);
-    const [isTestSuccess, setIsTestSuccess] = useState(existingConfig?.last_test_status === 'success');
+    const [isTestSuccess, setIsTestSuccess] = useState(false);
+    const [isImapTestSuccess, setIsImapTestSuccess] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-    useEffect(() => {
-        const s = parseSmtp(existingConfig?.api_key);
-        setHost(s.host || ''); setPort(String(s.port || '587')); setUser(s.user || ''); setPass(s.pass || '');
-        // Only set the initial DB test success status if we don't already have one locally
-        setIsTestSuccess((prev) => prev || existingConfig?.last_test_status === 'success');
-    }, [existingConfig]);
+    const fetchSmtpSettings = async () => {
+        try {
+            const { data: { user: currentUser } } = await supabase.auth.getUser();
+            if (!currentUser) return;
 
-    // Reset test success if credentials changed
+            const { data, error } = await supabase
+                .from('smtp_settings')
+                .select('*')
+                .eq('user_id', currentUser.id)
+                .maybeSingle();
+
+            if (data) {
+                setHost(data.host || '');
+                setPort(String(data.port || '587'));
+                setUser(data.username || '');
+                setPass(data.password || '');
+                setFromEmail(data.from_email || data.username || '');
+                setImapHost(data.imap_host || '');
+                setImapPort(String(data.imap_port || '993'));
+                setImapEnabled(data.imap_enabled || false);
+                setImapSecure(data.imap_secure !== false);
+            }
+        } catch (err) {
+            console.error("Error fetching smtp settings:", err);
+        }
+    };
+
     useEffect(() => {
-        setIsTestSuccess(false);
-    }, [host, port, user, pass]);
+        fetchSmtpSettings();
+    }, []);
 
     const handleSave = async () => {
         if (!host || !user || !pass) {
             toast({ title: 'Erreur', description: 'Host, email et mot de passe sont requis.', variant: 'destructive' }); return;
         }
         setIsSaving(true);
-        const cfg = JSON.stringify({ host, port: parseInt(port) || 587, user, pass });
-        const ok = await saveKey('smtp' as ApiProvider, cfg, 'Serveur SMTP');
-        setIsSaving(false);
-        if (ok) { toast({ title: 'SMTP Sauvegardé', description: 'Configuration SMTP enregistrée.' }); onUpdate(); }
-        else { toast({ title: 'Erreur', description: 'Impossible de sauvegarder.', variant: 'destructive' }); }
+        try {
+            const { data: { user: currentUser } } = await supabase.auth.getUser();
+            if (!currentUser) throw new Error("Utilisateur non connecté");
+
+            const { error } = await supabase
+                .from('smtp_settings')
+                .upsert({
+                    user_id: currentUser.id,
+                    host,
+                    port: parseInt(port) || 587,
+                    username: user,
+                    password: pass,
+                    from_email: fromEmail || user,
+                    imap_host: imapHost,
+                    imap_port: parseInt(imapPort) || 993,
+                    imap_enabled: imapEnabled,
+                    imap_secure: imapSecure,
+                }, { onConflict: 'user_id' });
+
+            if (error) throw error;
+            toast({ title: 'Configuration Email Sauvegardée', description: 'Vos paramètres SMTP et IMAP ont été enregistrés.' });
+            onUpdate();
+        } catch (err: any) {
+            toast({ title: 'Erreur', description: err.message || 'Impossible de sauvegarder.', variant: 'destructive' });
+        } finally {
+            setIsSaving(false);
+        }
     };
 
-    const handleTest = async () => {
+    const handleTestSmtp = async () => {
         if (!host || !user || !pass) {
-            toast({ title: 'Erreur', description: 'Remplissez tous les champs avant de tester.', variant: 'destructive' }); return;
+            toast({ title: 'Erreur', description: 'Remplissez tous les champs SMTP avant de tester.', variant: 'destructive' }); return;
         }
         setIsTesting(true);
         const result = await testSmtpConnection(host, parseInt(port) || 587, user, pass);
@@ -191,8 +243,20 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
             setIsTestSuccess(true);
         }
         else { toast({ title: 'Échec SMTP', description: result.message, variant: 'destructive' }); }
-        // Note: Do NOT call onUpdate() here. Testing a connection doesn't save it to DB,
-        // and calling onUpdate() triggers a parent re-render that might destroy our local isTestSuccess state.
+    };
+
+    const handleTestImap = async () => {
+        if (!imapHost || !user || !pass) {
+            toast({ title: 'Erreur', description: 'Remplissez le host IMAP et vos identifiants.', variant: 'destructive' }); return;
+        }
+        setIsTestingImap(true);
+        const result = await testImapConnection(imapHost, parseInt(imapPort) || 993, user, pass);
+        setIsTestingImap(false);
+        if (result.ok) {
+            toast({ title: '✅ Connexion IMAP réussie !', description: result.message });
+            setIsImapTestSuccess(true);
+        }
+        else { toast({ title: 'Échec IMAP', description: result.message, variant: 'destructive' }); }
     };
 
     const handleSendTestEmail = async () => {
@@ -208,14 +272,13 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                 smtpUser: user,
                 smtpPass: pass,
                 to: [{ email: testEmail, name: 'Test User' }],
-                sender: { email: existingConfig?.api_key ? parseSmtp(existingConfig.api_key).user : user, name: 'Prospectator (Prospecta Motor)' },
+                sender: { email: fromEmail || user, name: 'Prospecta' },
                 subject: 'Test de configuration SMTP - Prospecta',
-                htmlContent: '<h1>Félicitations !</h1><p>Votre configuration SMTP fonctionne parfaitement sur Prospectator (Prospecta Motor).</p>'
+                htmlContent: '<h1>Félicitations !</h1><p>Votre configuration SMTP fonctionne parfaitement sur Prospecta (Prospecta Motor).</p>'
             };
 
-            // Re-use testEmailSend but pass the smtp id since it now handles both internally given the provider logic
             const success = await testEmailSend('smtp', formData);
-            if (success) {
+            if (success && !('error' in success)) {
                 toast({ title: 'Email envoyé !', description: 'Vérifiez votre boîte de réception.' });
                 setTestEmail('');
             } else {
@@ -228,17 +291,24 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
         }
     };
 
-    const handleDelete = async () => {
-        setIsDeleteDialogOpen(true);
-    };
-
     const confirmDelete = async () => {
         setIsDeleting(true);
-        await deleteKey('smtp' as ApiProvider);
-        setIsDeleting(false);
-        setHost(''); setUser(''); setPass('');
-        setIsDeleteDialogOpen(false);
-        toast({ title: 'SMTP Supprimé' }); onUpdate();
+        try {
+            const { data: { user: currentUser } } = await supabase.auth.getUser();
+            if (currentUser) {
+                await supabase.from('smtp_settings').delete().eq('user_id', currentUser.id);
+            }
+            await deleteKey('smtp' as ApiProvider); // Delete legacy if exists
+            
+            setHost(''); setUser(''); setPass(''); setImapHost('');
+            setIsDeleteDialogOpen(false);
+            toast({ title: 'Paramètres Email Supprimés' });
+            onUpdate();
+        } catch (err) {
+             console.error(err);
+        } finally {
+            setIsDeleting(false);
+        }
     };
 
     const gmailGuide = 'https://support.google.com/accounts/answer/185833';
@@ -249,95 +319,125 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                 <div className="flex justify-between items-start">
                     <div className="flex items-center gap-3">
                         <div className="h-10 w-10 rounded-xl bg-emerald-500 flex items-center justify-center">
-                            <Server size={20} className="text-white" />
+                            <Mail size={20} className="text-white" />
                         </div>
                         <div>
                             <CardTitle className="text-lg flex items-center gap-2">
-                                Email SMTP (Sans API)
+                                Configuration Email (SMTP & IMAP)
                                 <Badge className="bg-emerald-500 text-white text-[10px] h-5">Recommandé</Badge>
                             </CardTitle>
-                            <CardDescription className="text-xs">Envoyez via Gmail, OVH, ou votre propre serveur — 0 API, tracking d'ouverture inclus</CardDescription>
+                            <CardDescription className="text-xs">Envoyez via SMTP et recevez vos réponses via IMAP (Gmail, Outlook, etc.)</CardDescription>
                         </div>
                     </div>
-                    {existingConfig && (
-                        <Badge variant={existingConfig.last_test_status === 'success' ? 'default' : 'secondary'}>
-                            {existingConfig.last_test_status === 'success' ? <><CheckCircle2 className="w-3 h-3 mr-1" />Connecté</> : 'Non testé'}
-                        </Badge>
-                    )}
                 </div>
             </CardHeader>
-            <CardContent className="space-y-4 pt-4">
-                <div className="grid grid-cols-3 gap-4">
-                    <div className="col-span-2 space-y-1">
-                        <Label className="text-xs font-semibold">Serveur SMTP (Host)</Label>
-                        <Input placeholder="smtp.gmail.com" value={host} onChange={e => setHost(e.target.value)} className="bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
+            <CardContent className="space-y-6 pt-4">
+                {/* SMTP SECTION */}
+                <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-emerald-600 font-semibold text-sm">
+                        <MailCheck size={16} /> Configuration Envoi (SMTP)
                     </div>
+                    
+                    <div className="grid grid-cols-4 gap-4">
+                        <div className="col-span-3 space-y-1">
+                            <Label className="text-xs font-semibold">Serveur SMTP (Host)</Label>
+                            <Input placeholder="smtp.gmail.com" value={host} onChange={e => setHost(e.target.value)} className="bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
+                        </div>
+                        <div className="space-y-1">
+                            <Label className="text-xs font-semibold">Port</Label>
+                            <Input placeholder="587" value={port} onChange={e => setPort(e.target.value)} className="bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-1">
+                            <Label className="text-xs font-semibold">Email / Utilisateur</Label>
+                            <Input type="email" placeholder="votre@gmail.com" value={user} onChange={e => setUser(e.target.value)} className="bg-slate-50 dark:bg-slate-900 text-sm" />
+                        </div>
+                        <div className="space-y-1">
+                            <Label className="text-xs font-semibold">Nom d'expéditeur (Optionnel)</Label>
+                            <Input placeholder="Votre Nom ou Société" value={fromEmail} onChange={e => setFromEmail(e.target.value)} className="bg-slate-50 dark:bg-slate-900 text-sm" />
+                        </div>
+                    </div>
+
                     <div className="space-y-1">
-                        <Label className="text-xs font-semibold">Port</Label>
-                        <Input placeholder="587" value={port} onChange={e => setPort(e.target.value)} className="bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
+                        <div className="flex justify-between">
+                            <Label className="text-xs font-semibold">Mot de passe / App Password</Label>
+                            <a href={gmailGuide} target="_blank" rel="noopener noreferrer" className="text-[10px] text-emerald-600 hover:underline flex items-center">Guide Gmail <ExternalLink className="w-3 h-3 ml-1" /></a>
+                        </div>
+                        <div className="relative">
+                            <Input type={showPass ? 'text' : 'password'} placeholder="••••••••••••" value={pass} onChange={e => setPass(e.target.value)} className="pr-10 bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
+                            <Button type="button" variant="ghost" size="icon" className="absolute right-0 top-0 h-full px-3" onClick={() => setShowPass(!showPass)}>
+                                {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                            </Button>
+                        </div>
                     </div>
-                </div>
-                <div className="space-y-1">
-                    <Label className="text-xs font-semibold">Email (utilisateur)</Label>
-                    <Input type="email" placeholder="votre@gmail.com" value={user} onChange={e => setUser(e.target.value)} className="bg-slate-50 dark:bg-slate-900 text-sm" />
-                </div>
-                <div className="space-y-1">
-                    <div className="flex justify-between">
-                        <Label className="text-xs font-semibold">Mot de passe / App Password</Label>
-                        <a href={gmailGuide} target="_blank" rel="noopener noreferrer" className="text-[10px] text-emerald-600 hover:underline flex items-center">Guide Gmail <ExternalLink className="w-3 h-3 ml-1" /></a>
-                    </div>
-                    <div className="relative">
-                        <Input type={showPass ? 'text' : 'password'} placeholder="••••••••••••" value={pass} onChange={e => setPass(e.target.value)} className="pr-10 bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
-                        <Button type="button" variant="ghost" size="icon" className="absolute right-0 top-0 h-full px-3" onClick={() => setShowPass(!showPass)}>
-                            {showPass ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    
+                    <div className="flex gap-2">
+                         <Button variant="outline" size="sm" className="w-full text-xs" onClick={handleTestSmtp} disabled={isTesting || !host}>
+                            {isTesting ? <RefreshCw className="w-3 h-3 mr-2 animate-spin" /> : <ShieldCheck className="w-3 h-3 mr-2" />}
+                            Tester SMTP
                         </Button>
                     </div>
                 </div>
-                <div className="bg-blue-50 dark:bg-blue-950/30 p-3 rounded-lg border border-blue-100 dark:border-blue-900 text-[11px] text-blue-700 dark:text-blue-300">
-                    <strong>Gmail :</strong> Activez la 2FA, puis créez un "Mot de passe d'application" (App Password). Utilisez ce mot de passe ici, pas votre mot de passe habituel.
-                </div>
 
-                <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="guide" className="border-none">
-                        <AccordionTrigger className="text-sm font-semibold py-2 hover:no-underline">
-                            Guide de Connexion — Comment obtenir votre mot de passe ?
-                        </AccordionTrigger>
-                        <AccordionContent className="text-sm space-y-4 pt-1">
-                            <div>
-                                <p className="font-medium text-foreground mb-2">Gmail / Google Workspace</p>
-                                <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
-                                    <li>Allez dans <a href="https://myaccount.google.com/security" target="_blank" rel="noopener noreferrer" className="text-emerald-600 dark:text-emerald-400 underline">Sécurité Google</a>.</li>
-                                    <li>Activez la &quot;Validation en 2 étapes&quot; si ce n&apos;est pas fait.</li>
-                                    <li>Cherchez &quot;Mots de passe d&apos;application&quot; dans la barre de recherche.</li>
-                                    <li>Créez-en un nom &quot;Prospecta&quot; et copiez le code à 16 caractères.</li>
-                                </ol>
-                                <Alert className="mt-2 bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800">
-                                    <AlertTitle className="text-xs">Host &amp; Port</AlertTitle>
-                                    <AlertDescription className="text-xs">Host: smtp.gmail.com — Port: 587 (TLS)</AlertDescription>
-                                </Alert>
+                <div className="h-px bg-slate-200 dark:bg-slate-800" />
+
+                {/* IMAP SECTION */}
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-blue-600 font-semibold text-sm">
+                            <Settings2 size={16} /> Configuration Réception (IMAP)
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-[10px] text-muted-foreground">{imapEnabled ? 'Activé' : 'Désactivé'}</span>
+                            <Switch checked={imapEnabled} onCheckedChange={setImapEnabled} />
+                        </div>
+                    </div>
+
+                    {imapEnabled && (
+                        <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                            <div className="grid grid-cols-4 gap-4">
+                                <div className="col-span-3 space-y-1">
+                                    <Label className="text-xs font-semibold">Serveur IMAP (Host)</Label>
+                                    <Input placeholder="imap.gmail.com" value={imapHost} onChange={e => setImapHost(e.target.value)} className="bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
+                                </div>
+                                <div className="space-y-1">
+                                    <Label className="text-xs font-semibold">Port</Label>
+                                    <Input placeholder="993" value={imapPort} onChange={e => setImapPort(e.target.value)} className="bg-slate-50 dark:bg-slate-900 font-mono text-sm" />
+                                </div>
                             </div>
-                            <div>
-                                <p className="font-medium text-foreground mb-2">Outlook / Hotmail</p>
-                                <ol className="list-decimal list-inside space-y-1 text-muted-foreground">
-                                    <li>Allez dans les paramètres de sécurité Microsoft.</li>
-                                    <li>Si &quot;2FA&quot; est actif, créez un mot de passe d&apos;application.</li>
-                                    <li>Sinon, utilisez votre mot de passe habituel.</li>
-                                </ol>
-                                <Alert className="mt-2 bg-slate-50 dark:bg-slate-900/50 border-slate-200 dark:border-slate-800">
-                                    <AlertTitle className="text-xs">Host &amp; Port</AlertTitle>
-                                    <AlertDescription className="text-xs">Host: smtp-mail.outlook.com — Port: 587</AlertDescription>
-                                </Alert>
+                            
+                            <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-2">
+                                    <Switch id="imap-secure" checked={imapSecure} onCheckedChange={setImapSecure} />
+                                    <Label htmlFor="imap-secure" className="text-xs">Connexion Sécurisée (SSL/TLS)</Label>
+                                </div>
                             </div>
-                        </AccordionContent>
-                    </AccordionItem>
-                </Accordion>
+
+                            <div className="flex gap-2">
+                                <Button variant="outline" size="sm" className="w-full text-xs" onClick={handleTestImap} disabled={isTestingImap || !imapHost}>
+                                    {isTestingImap ? <RefreshCw className="w-3 h-3 mr-2 animate-spin" /> : <MailCheck className="w-3 h-3 mr-2" />}
+                                    Tester IMAP
+                                </Button>
+                            </div>
+                            
+                            <Alert className="bg-blue-50/50 dark:bg-blue-900/10 border-blue-200 dark:border-blue-800">
+                                <AlertTriangle className="h-3 w-3 text-blue-600" />
+                                <AlertDescription className="text-[10px] text-blue-700 dark:text-blue-300">
+                                    L'activation de l'IMAP permet à Prospecta de lire vos réponses reçues et de les afficher dans l'Inbox.
+                                </AlertDescription>
+                            </Alert>
+                        </div>
+                    )}
+                </div>
 
                 {isTestSuccess && (
                     <div className="pt-4 border-t border-slate-200 dark:border-slate-800 animate-in fade-in slide-in-from-top-2 duration-300">
-                        <Label className="text-xs mb-2 block font-semibold text-emerald-600 dark:text-emerald-400">2. Envoyer un email de test (Recommandé)</Label>
+                        <Label className="text-xs mb-2 block font-semibold text-emerald-600 dark:text-emerald-400">Envoyer un email de test</Label>
                         <div className="flex gap-2">
                             <Input
-                                placeholder="Email de destination pour le test..."
+                                placeholder="Email de destination..."
                                 value={testEmail}
                                 onChange={(e) => setTestEmail(e.target.value)}
                                 className="flex-1 text-sm bg-slate-50 dark:bg-slate-900"
@@ -346,9 +446,9 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                                 variant="secondary"
                                 onClick={handleSendTestEmail}
                                 disabled={isSendingTest || !testEmail}
-                                className="whitespace-nowrap font-medium text-xs bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700"
+                                className="whitespace-nowrap font-medium text-xs"
                             >
-                                {isSendingTest ? <LoadingLogo size="sm" /> : null}
+                                {isSendingTest ? <RefreshCw className="w-3 h-3 animate-spin mr-2" /> : null}
                                 Envoyer
                             </Button>
                         </div>
@@ -358,14 +458,10 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
             <CardFooter className="bg-slate-50 dark:bg-slate-900/50 flex justify-between rounded-b-lg border-t px-6 py-4">
                 <div />
                 <div className="flex gap-2">
-                    {existingConfig && (
-                        <Button variant="ghost" size="sm" onClick={handleDelete} disabled={isDeleting} className="text-destructive hover:bg-destructive/10">Supprimer</Button>
-                    )}
-                    <Button variant="outline" size="sm" onClick={handleTest} disabled={isTesting || !host}>
-                        {isTesting ? <LoadingLogo size="sm" /> : 'Tester la connexion'}
-                    </Button>
-                    <Button size="sm" onClick={handleSave} disabled={isSaving || !host} className="bg-emerald-600 hover:bg-emerald-700 text-white">
-                        {isSaving ? <LoadingLogo size="sm" /> : null} Sauvegarder
+                    <Button variant="ghost" size="sm" onClick={() => setIsDeleteDialogOpen(true)} disabled={isDeleting} className="text-destructive hover:bg-destructive/10">Supprimer</Button>
+                    <Button size="sm" onClick={handleSave} disabled={isSaving || !host} className="bg-emerald-600 hover:bg-emerald-700 text-white min-w-[120px]">
+                        {isSaving ? <RefreshCw className="w-3 h-3 animate-spin mr-2" /> : <Save size={16} className="mr-2" />}
+                        Sauvegarder
                     </Button>
                 </div>
             </CardFooter>
@@ -374,8 +470,8 @@ const SmtpCard = ({ existingConfig, onUpdate }: { existingConfig?: ApiKey; onUpd
                 isOpen={isDeleteDialogOpen}
                 onOpenChange={setIsDeleteDialogOpen}
                 onConfirm={confirmDelete}
-                title="Supprimer la configuration SMTP ?"
-                description="Êtes-vous sûr de vouloir supprimer ces paramètres ? Vos campagnes ne pourront plus envoyer d'emails tant qu'une nouvelle configuration n'est pas configurée."
+                title="Supprimer la configuration Email ?"
+                description="Êtes-vous sûr de vouloir supprimer ces paramètres ? Vos campagnes et votre Inbox ne seront plus synchronisées."
                 confirmText="Supprimer"
             />
         </Card>
