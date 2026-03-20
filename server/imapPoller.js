@@ -208,11 +208,21 @@ export async function syncUserInbox(userSettings, supabase, days = 1) {
                 }
 
                 if (activeProspectId) {
+                    // Try to find if this prospect belongs to an active campaign for this user
+                    const { data: rec } = await supabase
+                        .from('campaign_recipients')
+                        .select('campaign_id')
+                        .eq('email', fromEmail)
+                        .order('created_at', { ascending: false })
+                        .limit(1)
+                        .maybeSingle();
+
                     const { data: newThread, error: ntErr } = await supabase
                         .from('email_threads')
                         .insert({
                             user_id: user_id,
                             prospect_id: activeProspectId,
+                            campaign_id: rec?.campaign_id || null,
                             prospect_email: fromEmail,
                             subject: subject.replace(/^Re:\s*/i, ''),
                             is_archived: false,

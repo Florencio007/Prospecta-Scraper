@@ -457,7 +457,7 @@ async function main() {
         if (detail.website && isOfficialSite(detail.website)) {
           try {
             emitLog(`   🌐 Enrichissement site officiel : ${detail.website}`);
-            const siteData = await scrapeOfficialSite(page, { url: detail.website, name: detail.name }, { visitContactPage: true, emitLog });
+            const siteData = await scrapeOfficialSite(page, { url: detail.website, name: detail.name, userId: USER_ID }, { visitContactPage: true, emitLog });
             
             // Merge site data into the already-emitted payload
             if (!siteData.loadError) {

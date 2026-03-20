@@ -9,6 +9,7 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
 const readline = require('readline');
+const { scrapeOfficialSite, isOfficialSite } = require('./site_scraper_module.cjs');
 
 function emitLog(msg, pct = undefined) {
   // Console log pour l'exécution locale
@@ -21,7 +22,8 @@ function emitResult(data) {
 }
 
 // ─── CONFIGURATION CLI (alignée finder: type, q, limit) ──────────────────────
-const [, , argType, argQuery, argLimit] = process.argv;
+const [, , argType, argQuery, argLimit, argUserId] = process.argv;
+const BASE = 'https://www.infogreffe.fr';
 
 const CONFIG = {
   mode: 'entreprise',
@@ -166,8 +168,24 @@ async function main() {
                 });
 
                 if (data.denomination) {
-                    // Envoi du prospect converti vers l'application
-                    emitResult(mapToProspect(data));
+                    const prospect = mapToProspect(data);
+                    
+                    // ── Enrichissement IA site officiel
+                    if (prospect.website && isOfficialSite(prospect.website)) {
+                      emitLog(`      🤖 IA Enrichment...`);
+                      try {
+                        const aiData = await scrapeOfficialSite(p2, { url: prospect.website, name: prospect.name }, { visitContactPage: false, emitLog, userId: argUserId });
+                        if (aiData && !aiData.loadError) {
+                          Object.assign(prospect, { aiEnrichment: aiData });
+                          if (aiData.contacts) {
+                             if (aiData.contacts.emails?.length) prospect.email = [...new Set([...(prospect.email ? [prospect.email] : []), ...aiData.contacts.emails])].join(', ');
+                             if (aiData.contacts.phones?.length) prospect.phone = [...new Set([...(prospect.phone ? [prospect.phone] : []), ...aiData.contacts.phones])].join(', ');
+                          }
+                        }
+                      } catch (ae) { emitLog(`      ⚠️ IA Failed: ${ae.message}`); }
+                    }
+
+                    emitResult(prospect);
                 }
             } catch (e) {
                 emitLog(`Erreur lors de l'extraction de ${link.name}: ${e.message}`);

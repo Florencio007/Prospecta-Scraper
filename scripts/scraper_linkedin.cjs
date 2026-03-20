@@ -63,7 +63,7 @@ function emitResult(data) {
   process.stdout.write(`RESULT:${JSON.stringify(finalData)}\n`);
 }
 
-const [, , argEmail, argPass, argQuery, argMax, argMaxPosts, argSearchType, argActivityType, argFields] = process.argv;
+const [, , argEmail, argPass, argQuery, argMax, argMaxPosts, argSearchType, argActivityType, argFields, argUserId] = process.argv;
 const requestedFields = argFields ? argFields.split(',').map(s => s.trim()).filter(Boolean) : [];
 
 // Type finder: "entreprise" | "personne" | "tous" → searchType: "companies" | "people"
@@ -1072,7 +1072,7 @@ async function main() {
             emitLog(`      🌐 Enrichissement site : ${prospectPayload.website}`);
             const ep = await context.newPage();
             try {
-              const siteData = await scrapeOfficialSite(ep, { url: prospectPayload.website, name: prospectPayload.name }, { visitContactPage: false, emitLog });
+              const siteData = await scrapeOfficialSite(ep, { url: prospectPayload.website, name: prospectPayload.name, userId: argUserId || null }, { visitContactPage: false, emitLog });
               if (!siteData.loadError) {
                 prospectPayload.siteEnrichment = siteData;
                 const contacts = siteData.contacts || {};

@@ -58,6 +58,8 @@ export function useInbox() {
   const [loadingMessages, setLoadingMessages] = useState(false);
   const [sending, setSending]               = useState(false);
   const [generatingDraft, setGeneratingDraft] = useState(false);
+  const [campaigns, setCampaigns]             = useState<any[]>([]);
+  const [recipients, setRecipients]           = useState<any[]>([]);
 
   const realtimeRef = useRef<any>(null);
 
@@ -70,21 +72,51 @@ export function useInbox() {
     }
     setLoading(true);
     try {
-      console.log("[useInbox] Fetching threads for user:", user.id);
-      const { data, error } = await supabase
+      console.log("[useInbox] Fetching threads, campaigns and recipients for user:", user.id);
+      
+      // 1. Fetch real threads
+      const { data: threadData, error: threadError } = await supabase
         .from("inbox_threads_view")
         .select("*")
         .eq("user_id", user.id)
         .eq("is_archived", false)
         .order("last_message_at", { ascending: false });
 
-      if (error) {
-        console.error("[useInbox] Error fetching threads:", error);
-        throw error;
+      if (threadError) throw threadError;
+
+      // 2. Fetch active campaigns
+      const { data: campaignData, error: campError } = await supabase
+        .from("email_campaigns")
+        .select("id, name, status")
+        .eq("user_id", user.id)
+        .neq("status", "deleted");
+
+      if (campError) throw campError;
+
+      // 3. Fetch recipients for these campaigns to build full hierarchy
+      // Limit to ensure performance, or fetch only for active/recent campaigns
+      const campaignIds = ((campaignData as any) || []).map((c: any) => c.id);
+      let recipientsData: any[] = [];
+      
+      if (campaignIds.length > 0) {
+        const { data: rData, error: rError } = await supabase
+          .from("campaign_recipients")
+          .select("id, campaign_id, prospect_id, email, first_name, last_name, company, status, sent_at")
+          .in("campaign_id", campaignIds);
+        
+        if (rError) throw rError;
+        recipientsData = rData || [];
       }
-      console.log("[useInbox] Threads fetched:", data?.length || 0);
-      setThreads(data || []);
+
+      console.log("[useInbox] Data fetched - Threads:", threadData?.length, "Campaigns:", campaignData?.length, "Recipients:", recipientsData.length);
+      if (threadData) console.log("[useInbox] Sample thread IDs:", (threadData as any[]).slice(0, 3).map(t => t.id));
+      
+      setThreads((threadData as any) || []);
+      setCampaigns((campaignData as any) || []);
+      setRecipients((recipientsData as any) || []);
+
     } catch (err: any) {
+      console.error("[useInbox] Error fetching data:", err);
       toast({ title: "Erreur", description: "Impossible de charger les conversations.", variant: "destructive" });
     } finally {
       setLoading(false);
@@ -97,37 +129,66 @@ export function useInbox() {
     setSelectedThread(thread);
     setLoadingMessages(true);
     try {
-      const { data, error } = await supabase
-        .from("email_messages")
-        .select("*")
-        .eq("thread_id", thread.id)
-        .order("received_at", { ascending: true });
+      let data: InboxMessage[] = [];
+      let error: any = null;
 
-      if (error) throw error;
+      if (thread.id.startsWith("virtual_")) {
+        // Pour les fils virtuels, on tente de récupérer le message initial par l'email du prospect
+        // en filtrant par l'utilisateur et idéalement la campagne.
+        console.log("[useInbox] Opening virtual thread for:", thread.prospect_email);
+        const { data: vData, error: vError } = await supabase
+          .from("email_messages")
+          .select("*")
+          .eq("user_id", user?.id)
+          .eq("to_email", thread.prospect_email)
+          .order("received_at", { ascending: true });
+        
+        data = vData || [];
+        error = vError;
+      } else {
+        // Fil réel
+        const { data: rData, error: rError } = await supabase
+          .from("email_messages")
+          .select("*")
+          .eq("thread_id", thread.id)
+          .order("received_at", { ascending: true });
+        
+        data = rData || [];
+        error = rError;
+      }
+
+      if (error) {
+        console.error("[useInbox] openThread query error:", error);
+        throw error;
+      }
+      console.log("[useInbox] Messages loaded for thread:", thread.id, "Count:", data?.length);
       setMessages(data || []);
 
       // Marque tous les messages reçus non lus comme lus
-      const unreadIds = (data || [])
-        .filter((m: InboxMessage) => m.direction === "received" && !m.is_read)
-        .map((m: InboxMessage) => m.id);
+      if (!thread.id.startsWith("virtual_")) {
+        const unreadIds = (data || [])
+          .filter((m: InboxMessage) => m.direction === "received" && !m.is_read)
+          .map((m: InboxMessage) => m.id);
 
-      if (unreadIds.length > 0) {
-        await (supabase
-          .from("email_messages") as any)
-          .update({ is_read: true, read_at: new Date().toISOString() })
-          .in("id", unreadIds);
+        if (unreadIds.length > 0) {
+          await (supabase
+            .from("email_messages") as any)
+            .update({ is_read: true, read_at: new Date().toISOString() })
+            .in("id", unreadIds);
 
-        // Met à jour le compteur localement sans refetch
-        setThreads(prev => prev.map(t =>
-          t.id === thread.id ? { ...t, unread_count: 0 } : t
-        ));
+          // Met à jour le compteur localement sans refetch
+          setThreads(prev => prev.map(t =>
+            t.id === thread.id ? { ...t, unread_count: 0 } : t
+          ));
+        }
       }
     } catch (err: any) {
+      console.error("[useInbox] openThread error:", err);
       toast({ title: "Erreur", description: "Impossible de charger les messages.", variant: "destructive" });
     } finally {
       setLoadingMessages(false);
     }
-  }, []);
+  }, [user, toast]);
 
   // ── Envoi d'un message ─────────────────────────────────────────────────────
 
@@ -417,5 +478,7 @@ export function useInbox() {
     toggleStar,
     fetchThreads,
     syncNow,
+    campaigns,
+    recipients,
   };
 }

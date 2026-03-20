@@ -630,7 +630,29 @@ export interface Database {
             }
         },
         Views: {
-            [_ in never]: never
+            inbox_threads_view: {
+                Row: {
+                    id: string
+                    user_id: string
+                    prospect_id: string
+                    campaign_id: string | null
+                    prospect_email: string
+                    subject: string
+                    last_message_at: string
+                    last_direction: 'sent' | 'received'
+                    unread_count: number
+                    message_count: number
+                    is_archived: boolean
+                    is_starred: boolean
+                    prospect_name: string
+                    prospect_company: string | null
+                    prospect_position: string | null
+                    campaign_name: string | null
+                    last_received_preview: string | null
+                    has_pending_ai_draft: boolean
+                    category: 'primary' | 'social' | 'promotions' | 'notifications'
+                }
+            }
         }
         Functions: {
             increment_search_usage: {

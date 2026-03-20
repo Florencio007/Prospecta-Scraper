@@ -7,6 +7,7 @@
 
 const { chromium } = require('playwright');
 const fs = require('fs');
+const { scrapeOfficialSite, isOfficialSite } = require('./site_scraper_module.cjs');
 
 // ─── UTILITAIRES ──────────────────────────────────────────────────────────────
 function emitLog(msg, pct = undefined) {
@@ -20,7 +21,7 @@ const sleep = ms => new Promise(r => setTimeout(r, ms + Math.floor(Math.random()
 const clean = s => (s || '').replace(/\s+/g, ' ').trim();
 
 // ─── CONFIGURATION CLI (alignée finder: type, q, limit) ──────────────────────
-const [, , argType, argQuery, argLimit] = process.argv;
+const [, , argType, argQuery, argLimit, argUserId] = process.argv;
 
 // type finder: "entreprise" | "personne" | "tous" → mode societe: "entreprise" | "dirigeant"
 const mode = (argType && (argType.toLowerCase() === 'personne' || argType.toLowerCase() === 'dirigeant')) ? 'dirigeant' : 'entreprise';
@@ -515,6 +516,23 @@ async function main() {
         const data = await scrapeCompanyPage(context, link);
         if (data.denomination || data.siren) {
           const prospect = mapToProspect(data);
+          
+          // ── Enrichissement IA site officiel
+          if (prospect.website && isOfficialSite(prospect.website)) {
+            emitLog(`      🤖 IA Enrichment...`);
+            try {
+              const aiData = await scrapeOfficialSite(page, { url: prospect.website, name: prospect.name }, { visitContactPage: false, emitLog, userId: argUserId });
+              if (aiData && !aiData.loadError) {
+                Object.assign(prospect, { aiEnrichment: aiData });
+                // Merge contacts
+                if (aiData.contacts) {
+                   if (aiData.contacts.emails?.length) prospect.email = [...new Set([...(prospect.email ? [prospect.email] : []), ...aiData.contacts.emails])].join(', ');
+                   if (aiData.contacts.phones?.length) prospect.phone = [...new Set([...(prospect.phone ? [prospect.phone] : []), ...aiData.contacts.phones])].join(', ');
+                }
+              }
+            } catch (ae) { emitLog(`      ⚠️ IA Failed: ${ae.message}`); }
+          }
+
           emitLog(`      ✅ ${prospect.name} — SIREN: ${prospect.siren || '?'} — ${prospect.statut || ''}`);
           emitResult(prospect);
         }

@@ -1052,7 +1052,7 @@ const ProspectFinder = () => {
     setIsImporting(true);
     try {
       const savedIds = await saveProspectsSequentially(toSave);
-      toast({ title: t("success"), description: `${savedIds.length} ${t("prospectsImported")}` });
+      toast({ title: t("success"), description: t("prospectsImported", { count: savedIds.length }) });
       setPendingProspects([]); // Nettoie la zone tampon après import
       setSelectedProspectIds(new Set());
     } catch (error: any) {

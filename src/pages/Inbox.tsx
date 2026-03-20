@@ -124,6 +124,19 @@ function ThreadCard({
               {thread.campaign_name}
             </span>
           )}
+          {(thread as any).status && (
+            <Badge variant="outline" className={cn(
+              "text-[10px] py-0 px-1.5 h-4 uppercase font-bold tracking-tight",
+              (thread as any).status === 'sent' && "bg-blue-500/10 text-blue-600 border-blue-200",
+              (thread as any).status === 'opened' && "bg-amber-500/10 text-amber-600 border-amber-200",
+              (thread as any).status === 'clicked' && "bg-purple-500/10 text-purple-600 border-purple-200",
+              (thread as any).status === 'replied' && "bg-green-500/10 text-green-600 border-green-200",
+              (thread as any).status === 'bounced' && "bg-red-500/10 text-red-600 border-red-200",
+              (thread as any).status === 'pending' && "bg-muted text-muted-foreground border-muted-foreground/30"
+            )}>
+              {(thread as any).status}
+            </Badge>
+          )}
           {thread.has_pending_ai_draft && (
             <span className="text-[10px] bg-amber-500/10 text-amber-600 dark:text-amber-400 px-1.5 py-0.5 rounded flex items-center gap-0.5 font-medium">
               <Sparkles size={9} /> Draft IA prêt
@@ -162,6 +175,89 @@ function ThreadCard({
   );
 }
 
+// ─── Utilitaire : Détection et formatage des liens ───────────────────────────
+
+function formatMessageBody(text: string) {
+  const URL_REGEX = /(https?:\/\/[^\s]+)/g;
+  const parts = text.split(URL_REGEX);
+  const matches = text.match(URL_REGEX) || [];
+  
+  return parts.map((part, i) => {
+    if ((matches as string[]).includes(part)) {
+      return (
+        <a 
+          key={i} 
+          href={part} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="underline decoration-accent/50 hover:decoration-accent transition-all text-accent group"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {part}
+          <ExternalLink size={10} className="inline ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
+        </a>
+      );
+    }
+    return part;
+  });
+}
+
+// ─── Composant : Aperçu de lien ──────────────────────────────────────────────
+
+function LinkPreview({ url }: { url: string }) {
+  const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/utils/link-preview', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url })
+    })
+    .then(res => res.json())
+    .then(json => {
+      if (!json.error) setData(json);
+    })
+    .catch(() => {})
+    .finally(() => setLoading(false));
+  }, [url]);
+
+  if (loading) return (
+    <div className="mt-2 p-3 bg-muted/30 border border-border/50 rounded-xl animate-pulse flex gap-3 h-20 items-center">
+      <div className="w-14 h-14 bg-muted rounded-lg flex-shrink-0" />
+      <div className="flex-1 space-y-2">
+        <div className="h-3 bg-muted rounded w-3/4" />
+        <div className="h-2 bg-muted rounded w-1/2" />
+      </div>
+    </div>
+  );
+
+  if (!data) return null;
+
+  return (
+    <a 
+      href={url} 
+      target="_blank" 
+      rel="noopener noreferrer"
+      className="block mt-2 bg-muted/50 border border-border/50 rounded-xl overflow-hidden hover:bg-muted/80 transition-all group"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div className="flex">
+        {data.image && (
+          <div className="w-24 h-24 flex-shrink-0 relative overflow-hidden hidden sm:block">
+            <img src={data.image} alt="" className="absolute inset-0 w-full h-full object-cover transition-transform group-hover:scale-105" />
+          </div>
+        )}
+        <div className="p-3 flex-1 min-w-0">
+          <p className="text-[10px] font-semibold text-accent uppercase tracking-wider mb-1 truncate">{data.siteName}</p>
+          <p className="text-xs font-bold text-foreground line-clamp-1 mb-1">{data.title}</p>
+          <p className="text-[11px] text-muted-foreground line-clamp-2 leading-snug">{data.description}</p>
+        </div>
+      </div>
+    </a>
+  );
+}
+
 // ─── Composant : bulle de message ────────────────────────────────────────────
 
 function MessageBubble({
@@ -180,27 +276,34 @@ function MessageBubble({
     ? INTENT_LABELS[message.ai_detected_intent]
     : null;
 
+  const URL_REGEX = /(https?:\/\/[^\s]+)/g;
+  const urls = Array.from(new Set(message.body_text.match(URL_REGEX) || []));
+
   return (
     <div className={cn("flex gap-2 mb-4", isSent ? "flex-row-reverse" : "flex-row")}>
       {/* Avatar */}
       {!isSent && (
         <div className="flex-shrink-0 w-7 h-7 rounded-full bg-muted flex items-center justify-center text-[10px] font-semibold text-muted-foreground mt-1">
-          P
+          {message.from_email?.charAt(0).toUpperCase() || "P"}
         </div>
       )}
 
-      <div className={cn("flex flex-col gap-1.5 max-w-[72%]", isSent && "items-end")}>
+      <div className={cn("flex flex-col gap-1.5 max-w-[85%] sm:max-w-[72%]", isSent && "items-end")}>
         {/* Bulle principale */}
         <div className={cn(
-          "px-4 py-2.5 rounded-[1.25rem] text-sm leading-relaxed whitespace-pre-wrap break-words" + 
-          (isSent ? " break-all" : " break-words"), // Apply break-all for long links to guarantee no overflow
-          "shadow-sm transition-all max-w-full",
+          "px-4 py-2.5 rounded-[1.25rem] text-sm leading-relaxed whitespace-pre-wrap",
           isSent
-            ? "bg-gradient-to-br from-accent to-accent/80 text-white rounded-tr-sm hover:translate-y-[-1px] hover:shadow-md"
-            : "bg-muted/80 backdrop-blur-sm text-foreground rounded-tl-sm border border-border/50 hover:bg-muted"
+            ? "bg-gradient-to-br from-accent to-accent/80 text-white rounded-tr-sm break-all" 
+            : "bg-muted/80 backdrop-blur-sm text-foreground rounded-tl-sm border border-border/50 break-words",
+          "shadow-sm transition-all max-w-full"
         )} style={{ wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
-          {message.body_text}
+          {formatMessageBody(message.body_text)}
         </div>
+
+        {/* Link Previews */}
+        {urls.length > 0 && urls.slice(0, 2).map((url, i) => (
+          <LinkPreview key={i} url={url} />
+        ))}
 
         {/* Horodatage */}
         <span className="text-[11px] text-muted-foreground px-1">
@@ -269,7 +372,8 @@ const Inbox = ({ isStandalone = true }: { isStandalone?: boolean }) => {
     threads, messages, selectedThread, loading, loadingMessages,
     sending, generatingDraft, totalUnread,
     openThread, sendReply, generateAIDraft, dismissAIDraft,
-    archiveThread, archiveThreads, markThreadsAsRead, toggleStar, fetchThreads, syncNow
+    archiveThread, archiveThreads, markThreadsAsRead, toggleStar, fetchThreads, syncNow,
+    campaigns, recipients
   } = useInbox();
 
   const [search, setSearch]           = useState("");
@@ -277,7 +381,6 @@ const Inbox = ({ isStandalone = true }: { isStandalone?: boolean }) => {
   const [selectedCategory, setSelectedCategory] = useState<string>("primary");
 
   const [isLeftSidebarOpen, setIsLeftSidebarOpen] = useState(true);
-  const [isRightSidebarOpen, setIsRightSidebarOpen] = useState(true);
   const [expandedCampaigns, setExpandedCampaigns] = useState<Record<string, boolean>>({});
 
   const [isSelectionMode, setIsSelectionMode] = useState(false);
@@ -328,16 +431,46 @@ const Inbox = ({ isStandalone = true }: { isStandalone?: boolean }) => {
     }
   });
 
-  const groupedByCampaign = filteredThreads.reduce((acc, t) => {
-    if (t.campaign_name) {
-      if (!acc[t.campaign_name]) acc[t.campaign_name] = [];
-      acc[t.campaign_name].push(t);
-    }
-    return acc;
-  }, {} as Record<string, InboxThread[]>);
+  const campaignsHierarchy = [
+    ...campaigns.map(campaign => {
+      const campaignRecipients = recipients.filter(r => r.campaign_id === campaign.id);
+      const campaignThreads = campaignRecipients.map(r => {
+        // Find real thread if exists
+        const realThread = threads.find(t => t.prospect_id === (r.prospect_id || r.id));
+        
+        if (realThread) return { ...realThread, status: r.status };
+        
+        // Return a "virtual" thread for the UI
+        return {
+          id: `virtual_${r.id}`,
+          prospect_id: r.prospect_id || r.id,
+          campaign_id: campaign.id,
+          prospect_email: r.email,
+          prospect_name: `${r.first_name || ''} ${r.last_name || ''}`.trim() || r.email,
+          prospect_company: r.company,
+          campaign_name: campaign.name,
+          subject: "(En attente d'envoi)",
+          last_message_at: r.sent_at || new Date().toISOString(),
+          unread_count: 0,
+          status: r.status
+        } as any;
+      });
 
-  const toggleCampaignExpand = (campaignName: string) => {
-    setExpandedCampaigns(prev => ({ ...prev, [campaignName]: !prev[campaignName] }));
+      return {
+        ...campaign,
+        prospects: campaignThreads
+      };
+    }),
+    // Add "Direct Messages" group for threads without campaign
+    ...(threads.filter(t => !t.campaign_id).length > 0 ? [{
+      id: "direct_messages",
+      name: "Messages Directs / Autres",
+      prospects: threads.filter(t => !t.campaign_id)
+    }] : [])
+  ];
+
+  const toggleCampaignExpand = (campaignId: string) => {
+    setExpandedCampaigns(prev => ({ ...prev, [campaignId]: !prev[campaignId] }));
   };
 
   const handleSelectThread = (thread: InboxThread) => {
@@ -347,7 +480,14 @@ const Inbox = ({ isStandalone = true }: { isStandalone?: boolean }) => {
       );
       return;
     }
-    openThread(thread);
+
+    if (thread.id.startsWith('virtual_')) {
+      // Handle virtual thread: try to fetch any existing message or show as "not sent"
+      // For now, we set it as selected but useInbox might need to handle the fetch
+      openThread(thread);
+    } else {
+      openThread(thread);
+    }
     setMobilePanelOpen(true);
   };
 
@@ -490,7 +630,7 @@ const Inbox = ({ isStandalone = true }: { isStandalone?: boolean }) => {
                 <Loader2 size={20} className="animate-spin mr-2" />
                 Chargement…
               </div>
-            ) : filteredThreads.length === 0 ? (
+            ) : (selectedCategory !== "campaigns" && filteredThreads.length === 0) || (selectedCategory === "campaigns" && campaignsHierarchy.every(c => c.prospects.length === 0)) ? (
               <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
                 <Mail size={32} className="text-muted-foreground/30 mb-3" />
                 <p className="text-sm text-muted-foreground">
@@ -504,22 +644,22 @@ const Inbox = ({ isStandalone = true }: { isStandalone?: boolean }) => {
               </div>
             ) : selectedCategory === "campaigns" ? (
               // Affichage groupé par campagne
-              Object.entries(groupedByCampaign).map(([campaignName, campaignThreads]) => (
-                <div key={campaignName} className="border-b border-border/50">
+              campaignsHierarchy.map((campaign) => (
+                <div key={campaign.id} className="border-b border-border/50">
                   <button 
-                    onClick={() => toggleCampaignExpand(campaignName)}
+                    onClick={() => toggleCampaignExpand(campaign.id)}
                     className="w-full flex items-center justify-between px-4 py-3 bg-muted/20 hover:bg-muted/40 transition-colors"
                   >
                     <div className="flex items-center gap-2">
                       <Hash size={16} className="text-muted-foreground" />
-                      <span className="font-semibold text-sm text-foreground">{campaignName}</span>
-                      <Badge variant="secondary" className="text-[10px] ml-2">{campaignThreads.length}</Badge>
+                      <span className="font-semibold text-sm text-foreground">{campaign.name}</span>
+                      <Badge variant="secondary" className="text-[10px] ml-2">{campaign.prospects.length}</Badge>
                     </div>
-                    {expandedCampaigns[campaignName] !== false ? <ChevronDown size={16} className="text-muted-foreground" /> : <ChevronRight size={16} className="text-muted-foreground" />}
+                    {expandedCampaigns[campaign.id] !== false ? <ChevronDown size={16} className="text-muted-foreground" /> : <ChevronRight size={16} className="text-muted-foreground" />}
                   </button>
-                  {expandedCampaigns[campaignName] !== false && (
+                  {expandedCampaigns[campaign.id] !== false && (
                     <div className="pl-2 bg-muted/5 pb-2">
-                      {campaignThreads.map(thread => (
+                      {campaign.prospects.map((thread: any) => (
                         <ThreadCard
                           key={thread.id}
                           thread={thread}
@@ -592,33 +732,34 @@ const Inbox = ({ isStandalone = true }: { isStandalone?: boolean }) => {
                   <ChevronLeft size={18} />
                 </button>
 
-                {/* Avatar + infos prospect */}
-                <div className="w-9 h-9 rounded-full bg-accent/20 flex items-center justify-center text-xs font-semibold text-accent flex-shrink-0 ml-1">
-                  {getInitials(selectedThread.prospect_name)}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <p className="font-semibold text-sm text-foreground truncate">
-                      {selectedThread.prospect_name}
-                    </p>
-                    {loadingMessages && messages.length > 0 && <Loader2 size={12} className="animate-spin text-muted-foreground/50" />}
+                {/* Avatar + infos prospect clickable */}
+                <div 
+                  className="flex flex-1 min-w-0 items-center gap-3 cursor-pointer hover:bg-muted/30 p-1.5 rounded-xl transition-all"
+                  onClick={() => setIsProspectDetailOpen(true)}
+                  title="Voir les détails du prospect"
+                >
+                  <div className="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center text-sm font-bold flex-shrink-0 shadow-sm">
+                    {getInitials(selectedThread.prospect_name)}
                   </div>
-                  <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
-                    {selectedThread.prospect_company && (
-                      <span className="flex items-center gap-1">
-                        <Building2 size={10} />
-                        {selectedThread.prospect_company}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <p className="font-bold text-sm text-foreground truncate">
+                        {selectedThread.prospect_name}
+                      </p>
+                      {loadingMessages && messages.length > 0 && <Loader2 size={12} className="animate-spin text-muted-foreground/50" />}
+                    </div>
+                    <div className="flex items-center gap-2 text-[11px] text-muted-foreground mt-0.5">
+                      {selectedThread.prospect_company && (
+                        <span className="flex items-center gap-1 font-medium">
+                          <Building2 size={10} />
+                          {selectedThread.prospect_company}
+                        </span>
+                      )}
+                      <span className="flex items-center gap-1 opacity-70">
+                        <Mail size={10} />
+                        {selectedThread.prospect_email}
                       </span>
-                    )}
-                    <span className="flex items-center gap-1">
-                      <Mail size={10} />
-                      {selectedThread.prospect_email}
-                    </span>
-                    {selectedThread.campaign_name && (
-                      <Badge variant="outline" className="ml-2 bg-accent/10 border-accent/30 text-accent text-[10px] py-0 px-2 h-5 uppercase font-bold tracking-wider">
-                        {selectedThread.campaign_name}
-                      </Badge>
-                    )}
+                    </div>
                   </div>
                 </div>
 
@@ -633,14 +774,6 @@ const Inbox = ({ isStandalone = true }: { isStandalone?: boolean }) => {
 
                   <div className="w-px h-5 bg-border mx-1 hidden sm:block" />
 
-                  {/* Toggle Droite (Desktop) */}
-                  <button
-                    className="hidden xl:flex p-2 rounded-full text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
-                    onClick={() => setIsRightSidebarOpen(!isRightSidebarOpen)}
-                    title={isRightSidebarOpen ? "Fermer les infos" : "Ouvrir les infos"}
-                  >
-                    {isRightSidebarOpen ? <PanelRightClose size={18} /> : <PanelRightOpen size={18} />}
-                  </button>
                 </div>
               </div>
 
@@ -671,7 +804,7 @@ const Inbox = ({ isStandalone = true }: { isStandalone?: boolean }) => {
               </div>
 
               {/* Zone de réponse style Messenger */}
-              <div className={cn("px-4 py-3 flex items-center gap-2 border-t border-border bg-background", !isRightSidebarOpen && "pr-16")}>
+              <div className="px-4 py-3 flex items-center gap-2 border-t border-border bg-background">
                 <div className="flex gap-1.5 px-1">
                   <button className="p-2 text-secondary-foreground hover:bg-muted rounded-full transition-colors lg:block hidden"><MoreHorizontal size={20} /></button>
                   <button className="p-2 text-secondary-foreground hover:bg-muted rounded-full transition-colors sm:block hidden"><Image size={20} /></button>
@@ -713,63 +846,7 @@ const Inbox = ({ isStandalone = true }: { isStandalone?: boolean }) => {
           )}
         </div>
 
-        {/* ── Colonne droite : Détails du prospect [NOUVEAU] ────────────────── */}
-        {selectedThread && (
-          <div className={cn(
-            "hidden xl:flex flex-shrink-0 flex-col border-l border-border bg-background overflow-y-auto scrollbar-hide transition-all duration-300 ease-in-out",
-            isRightSidebarOpen ? "w-[300px]" : "w-0 overflow-hidden border-none opacity-0"
-          )}>
-            <div className="min-w-[300px] flex flex-col items-center pt-8 pb-6 px-4">
-              <div className="relative mb-4">
-                <div className="w-24 h-24 rounded-full bg-accent/10 flex items-center justify-center text-2xl font-bold text-accent border-4 border-background shadow-lg">
-                  {getInitials(selectedThread.prospect_name)}
-                </div>
-                <div className="absolute bottom-1 right-1 w-5 h-5 bg-green-500 border-4 border-background rounded-full" />
-              </div>
-              <h2 className="text-xl font-bold text-center mb-1">{selectedThread.prospect_name}</h2>
-              <p className="text-xs text-muted-foreground flex items-center gap-1 mb-6">
-                <span className="w-2 h-2 rounded-full bg-green-500" /> En ligne
-              </p>
-
-              <div className="flex justify-evenly w-full mb-8">
-                <div className="flex flex-col items-center gap-1">
-                  <button className="w-10 h-10 rounded-full bg-muted/60 flex items-center justify-center hover:bg-muted transition-colors"><Mail size={18} /></button>
-                  <span className="text-[10px] text-muted-foreground">Profil</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
-                  <button className="w-10 h-10 rounded-full bg-muted/60 flex items-center justify-center hover:bg-muted transition-colors"><Bell size={18} /></button>
-                  <span className="text-[10px] text-muted-foreground">Sourdine</span>
-                </div>
-                <div className="flex flex-col items-center gap-1">
-                  <button className="w-10 h-10 rounded-full bg-muted/60 flex items-center justify-center hover:bg-muted transition-colors"><Search size={18} /></button>
-                  <span className="text-[10px] text-muted-foreground">Rechercher</span>
-                </div>
-              </div>
-
-              <div className="w-full space-y-1">
-                <button 
-                  onClick={() => setIsProspectDetailOpen(true)}
-                  className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors group"
-                >
-                  <span className="text-sm font-semibold text-foreground/90">Informations sur le prospect</span>
-                  <Info size={16} className="text-muted-foreground group-hover:text-foreground transition-colors" />
-                </button>
-
-                {[
-                  { label: "Campagne associée", icon: Hash },
-                  { label: "Personnaliser la discussion", icon: Edit },
-                  { label: "Fichiers et contenus", icon: Image },
-                  { label: "Sécurité et confidentialité", icon: ExternalLink },
-                ].map((item, idx) => (
-                  <button key={idx} className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-muted/50 transition-colors group">
-                    <span className="text-sm font-semibold text-foreground/90">{item.label}</span>
-                    <item.icon size={16} className="text-muted-foreground group-hover:text-foreground transition-colors" />
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
+        {/* Sidebar Droite Supprimée */}
       </div>
 
       {selectedThread && (

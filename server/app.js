@@ -349,8 +349,8 @@ function createTransporter(cfg) {
   // Config par défaut depuis .env si cfg est vide ou incomplet
   const host = cfg?.host || process.env.SMTP_HOST;
   const port = parseInt(cfg?.port || process.env.SMTP_PORT, 10) || 587;
-  const user = cfg?.user || process.env.SMTP_USER;
-  const pass = cfg?.pass || process.env.SMTP_PASS;
+  const user = cfg?.user || cfg?.username || process.env.SMTP_USER;
+  const pass = cfg?.pass || cfg?.password || process.env.SMTP_PASS;
 
   return nodemailer.createTransport({
     host: host,
@@ -702,6 +702,7 @@ setupScraperEndpoint(app, '/api/scrape/pj', 'scraper_pj.cjs', (req) => [
   req.query.q || 'restaurant',
   req.query.l || 'Paris',
   req.query.limit || '5',
+  req.query.userId || '',
   req.query.type || 'tous',
   req.query.fields || ''
 ]);
@@ -711,6 +712,7 @@ setupScraperEndpoint(app, '/api/scrape/societe', 'scraper_societe.cjs', (req) =>
   req.query.type || 'entreprise',
   req.query.q || '',
   req.query.limit || '5',
+  req.query.userId || '',
   req.query.fields || ''
 ]);
 
@@ -719,20 +721,17 @@ setupScraperEndpoint(app, '/api/scrape/infogreffe', 'scraper_infogreffe.cjs', (r
   req.query.type || 'entreprise',
   req.query.q || '',
   req.query.limit || '5',
+  req.query.userId || '',
   req.query.fields || ''
 ]);
 
 // Pappers
-// Ordre des args : query, location, limit, apiToken, type
-// Token résolu dans l'ordre :
-//   1. req.query.apiToken  (passé par le frontend)
-//   2. process.env.PAPPERS_API_TOKEN  (défini dans .env)
-//   3. '' → mode Playwright sans API
 setupScraperEndpoint(app, '/api/scrape/pappers', 'scraper_pappers.cjs', (req) => [
   req.query.q || 'hotel',
   req.query.l || '',
   req.query.limit || '5',
   req.query.apiToken || process.env.PAPPERS_API_TOKEN || '',
+  req.query.userId || '',
   req.query.type || 'entreprise',
   req.query.fields || ''
 ]);
@@ -742,6 +741,7 @@ setupScraperEndpoint(app, '/api/scrape/google', 'scraper_google.cjs', (req) => [
   req.query.q || '',
   req.query.l || '',
   req.query.limit || '10',
+  req.query.userId || '',
   req.query.type || 'tous',
   req.query.fields || ''
 ]);
@@ -759,7 +759,7 @@ app.get('/api/scrape/linkedin', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
 
   const scriptPath = path.resolve(rootDir, 'scripts', 'scraper_linkedin.cjs');
-  const child = spawn('node', [scriptPath, email, password, q || '', maxProfiles || '10', maxPosts || '30', type || 'tous', activityType || 'all', fields || '']);
+  const child = spawn('node', [scriptPath, email, password, q || '', maxProfiles || '10', maxPosts || '30', type || 'tous', activityType || 'all', fields || '', req.query.userId || '']);
 
   child.stdout.on('data', (data) => {
     data.toString().split('\n').forEach(line => {
@@ -816,7 +816,7 @@ app.get('/api/scrape/facebook', (req, res) => {
   res.writeHead(200, { 'Content-Type': 'text/event-stream', 'Cache-Control': 'no-cache', 'Connection': 'keep-alive' });
 
   const scriptPath = path.resolve(rootDir, 'scripts', 'scraper_facebook.cjs');
-  const child = spawn('node', [scriptPath, email, password, q || '', limit || '5', maxPosts || '10', type || 'tous', activityType || 'all', fields || '']);
+  const child = spawn('node', [scriptPath, email, password, q || '', limit || '5', maxPosts || '10', type || 'tous', activityType || 'all', fields || '', req.query.userId || '']);
 
   child.stdout.on('data', (data) => {
     data.toString().split('\n').forEach(line => {
@@ -864,7 +864,7 @@ app.post('/api/inbox/send', async (req, res) => {
 
     const transporter = createTransporter(smtpCfg);
     const info = await transporter.sendMail({
-      from:     `"${smtpCfg.from_name || ''}" <${smtpCfg.from_email || smtpCfg.username}>`,
+      from:     `"${smtpCfg?.from_name || ''}" <${smtpCfg?.from_email || smtpCfg?.username || process.env.SMTP_USER}>`,
       to:       thread.prospect_email,
       subject:  'Re: ' + thread.subject,
       text:     body,
@@ -1019,6 +1019,157 @@ CONSIGNES :
 
   } catch (err) {
     console.error('[INBOX AI] Erreur:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Route 3 : Extraire les données d'un site via IA ────────────────────────
+app.post('/api/ai/extract-site-data', async (req, res) => {
+  const { rawText, url, userId } = req.body;
+  if (!rawText || !userId) {
+    return res.status(400).json({ error: 'Texte ou UserId manquant' });
+  }
+
+  const supabase = getSupabase();
+  if (!supabase) return res.status(500).json({ error: 'Supabase non disponible' });
+
+  try {
+    const { data: apiKeyRow } = await supabase
+      .from('user_api_keys')
+      .select('api_key')
+      .eq('user_id', userId)
+      .eq('provider', 'openai')
+      .maybeSingle();
+
+    let openaiKey = apiKeyRow?.api_key || process.env.OPENAI_API_KEY;
+    let baseUrl = 'https://api.openai.com/v1/chat/completions';
+    let model = 'gpt-4o-mini';
+
+    if (openaiKey && openaiKey.startsWith('{')) {
+      try {
+        const config = JSON.parse(openaiKey);
+        if (config.apiKey) openaiKey = config.apiKey;
+        if (config.baseUrl) baseUrl = config.baseUrl.replace(/\/$/, '') + '/chat/completions';
+        if (config.model) model = config.model;
+      } catch (e) { }
+    }
+
+    if (!openaiKey) return res.status(400).json({ error: 'Clé AI non configurée' });
+
+    const systemPrompt = `Tu es un expert en extraction de données B2B. Ton but est d'extraire des informations structurées à partir du texte brut d'un site web.
+RÉPONDS UNIQUEMENT AU FORMAT JSON. Ne mets pas de bloc de code markdown, juste le JSON brut.
+
+Structure attendue :
+{
+  "name": "Nom de l'entreprise",
+  "slogan": "Slogan ou tagline",
+  "metaDescription": "Description courte de l'activité",
+  "contacts": {
+    "phones": ["+261..."],
+    "emails": ["contact@..."],
+    "whatsapp": ["+261..."],
+    "addresses": ["Adresse complète..."],
+    "city": "Ville",
+    "country": "Pays"
+  },
+  "socials": {
+    "facebook": ["URL"],
+    "instagram": ["URL"],
+    "linkedin": ["URL"],
+    "twitter": ["URL"],
+    "youtube": ["URL"]
+  },
+  "team": [
+    { "name": "...", "title": "Poste" }
+  ],
+  "services": {
+    "list": ["Nom du service 1", "Nom du service 2"],
+    "prices": ["100€", "Ar..."]
+  },
+  "reputation": {
+    "overallRating": "4.5",
+    "reviewCount": "120"
+  },
+  "technologies": {
+    "cms": ["WordPress", etc.],
+    "chat": ["Crisp", etc.]
+  }
+}`;
+
+    const prompt = `Voici le contenu brut du site web ${url || ''} :
+---
+${rawText.slice(0, 15000)}
+---
+Extrais toutes les informations possibles de ce texte. Sois précis et ne crée pas d'informations fictives.`;
+
+    const response = await fetch(baseUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${openaiKey}`,
+      },
+      body: JSON.stringify({
+        model: model,
+        max_tokens: 1500,
+        temperature: 0,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: prompt }
+        ],
+      }),
+    });
+
+    if (!response.ok) {
+        const errText = await response.text();
+        throw new Error(`AI Provider Error: ${errText}`);
+    }
+
+    const aiRes = await response.json();
+    let content = aiRes.choices?.[0]?.message?.content?.trim();
+    
+    // Nettoyage markdown possible si l'IA en a mis
+    if (content.startsWith('```json')) content = content.replace(/^```json\n?/, '').replace(/\n?```$/, '');
+    else if (content.startsWith('```')) content = content.replace(/^```\n?/, '').replace(/\n?```$/, '');
+
+    const structuredData = JSON.parse(content);
+    res.json(structuredData);
+
+  } catch (err) {
+    console.error('[AI EXTRACTION] Erreur:', err.message);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ── Route 4 : Link Preview ────────────────────────────────────────────────
+app.post('/api/utils/link-preview', async (req, res) => {
+  const { url } = req.body;
+  if (!url) return res.status(400).json({ error: 'URL manquante' });
+
+  try {
+    const response = await fetch(url, {
+      headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Prospecta/1.0' },
+      timeout: 5000
+    });
+    
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    
+    const html = await response.text();
+    
+    const getMeta = (name) => {
+      const match = html.match(new RegExp(`<meta[^>]+(?:property|name)=["']${name}["'][^>]+content=["']([^"']+)["']`, 'i')) ||
+                    html.match(new RegExp(`<meta[^>]+content=["']([^"']+)["'][^>]+(?:property|name)=["']${name}["']`, 'i'));
+      return match ? match[1] : null;
+    };
+
+    const titleMatch = html.match(/<title>([^<]+)<\/title>/i);
+    const title = getMeta('og:title') || (titleMatch ? titleMatch[1] : url);
+    const description = getMeta('og:description') || getMeta('description') || '';
+    const image = getMeta('og:image') || '';
+    const siteName = getMeta('og:site_name') || new URL(url).hostname;
+
+    res.json({ title, description, image, siteName, url });
+  } catch (err) {
+    console.error('[LINK PREVIEW] Erreur:', err.message);
     res.status(500).json({ error: err.message });
   }
 });

@@ -20,7 +20,8 @@ const QUERY = process.argv[2] || 'hotel';
 const LOCATION = process.argv[3] || '';
 const MAX_RESULTS = parseInt(process.argv[4] || '10', 10);
 const API_TOKEN = process.argv[5] || '';
-const TYPE = process.argv[6] || 'entreprise'; // entreprise | dirigeant | tous
+const USER_ID = process.argv[6] || '';
+const TYPE = process.argv[7] || 'entreprise'; // entreprise | dirigeant | tous
 
 const CONFIG = {
   searchQuery: LOCATION ? `${QUERY} ${LOCATION}` : QUERY,
@@ -608,7 +609,7 @@ async function playwrightRun() {
                   emitLog(`   🌐 Enrichissement site : ${payload.website}`);
                   const ep = await context.newPage();
                   try {
-                    const siteData = await scrapeOfficialSite(ep, { url: payload.website, name: payload.name }, { visitContactPage: false, emitLog });
+                    const siteData = await scrapeOfficialSite(ep, { url: payload.website, name: payload.name, userId: USER_ID }, { visitContactPage: false, emitLog });
                     if (!siteData.loadError) {
                       payload.siteEnrichment = siteData;
                       const contacts = siteData.contacts || {};
@@ -643,7 +644,7 @@ async function playwrightRun() {
                   emitLog(`   🌐 Enrichissement site : ${payload.website}`);
                   const ep = await context.newPage();
                   try {
-                    const siteData = await scrapeOfficialSite(ep, { url: payload.website, name: payload.name }, { visitContactPage: false, emitLog });
+                    const siteData = await scrapeOfficialSite(ep, { url: payload.website, name: payload.name, userId: USER_ID }, { visitContactPage: false, emitLog });
                     if (!siteData.loadError) {
                       payload.siteEnrichment = siteData;
                       const contacts = siteData.contacts || {};

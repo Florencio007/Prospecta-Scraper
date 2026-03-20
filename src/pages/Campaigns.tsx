@@ -92,8 +92,8 @@ const Campaigns = () => {
           if (!mp) continue;
           try {
             // Create prospect record (core)
-            const { data: prospectRow } = await supabase
-              .from("prospects")
+            const { data: prospectRow } = await (supabase
+              .from("prospects") as any)
               .insert({ 
                 user_id: user.id, 
                 source: "manual",
@@ -102,16 +102,17 @@ const Campaigns = () => {
               .select("id")
               .single();
               
-            if (prospectRow?.id) {
+            if (prospectRow && (prospectRow as any).id) {
+              const pid = (prospectRow as any).id;
               // Create prospect_data record (details)
-              await supabase.from("prospect_data").insert({
-                prospect_id: prospectRow.id,
+              await (supabase.from("prospect_data") as any).insert({
+                prospect_id: pid,
                 name: mp.name,
                 email: mp.email,
                 company: mp.company,
                 initials: mp.initials
               });
-              realIds.push(prospectRow.id);
+              realIds.push(pid);
             }
           } catch (_) {}
         }

@@ -1,5 +1,6 @@
 const { chromium } = require('playwright');
 const fs = require('fs');
+const { scrapeOfficialSite } = require('./site_scraper_module.cjs');
 
 /**
  * ═══════════════════════════════════════════════════════════════════════════════
@@ -49,6 +50,7 @@ const fs = require('fs');
 const QUERY       = process.argv[2] || 'hotel';
 const LOCATION    = process.argv[3] || 'Antananarivo';
 const MAX_RESULTS = parseInt(process.argv[4] || '20', 10);
+const USER_ID     = process.argv[5] || '';
 
 const CONFIG = {
   maxResults        : MAX_RESULTS,
@@ -1548,6 +1550,26 @@ async function scrapeFullSite(page, siteInfo) {
     scrapedAt : new Date().toISOString(),
     platform  : 'Site Officiel (Google Search)',
   };
+
+  // ── AI ENRICHMENT ──────────────────────────────────────────────────────────
+  try {
+    emitLog(`   🤖 IA Enrichment...`);
+    const siteData = await scrapeOfficialSite(page, { url, name: result.googleName || result.name }, { visitContactPage: false, emitLog, userId: USER_ID });
+    if (siteData && !siteData.loadError) {
+      result.aiEnrichment = siteData;
+      // Merge AI contacts if more complete
+      if (siteData.contacts) {
+        if (siteData.contacts.emails?.length) result.contacts.emails = [...new Set([...result.contacts.emails, ...siteData.contacts.emails])];
+        if (siteData.contacts.phones?.length) result.contacts.phones = [...new Set([...result.contacts.phones, ...siteData.contacts.phones])];
+        if (siteData.contacts.whatsapp?.length) result.contacts.whatsapp = [...new Set([...result.contacts.whatsapp, ...siteData.contacts.whatsapp])];
+      }
+      if (siteData.socials) result.socials = { ...result.socials, ...siteData.socials };
+      if (siteData.technologies) result.technologies = { ...result.technologies, ...siteData.technologies };
+      if (siteData.team) result.team = [...new Set([...result.team, ...(siteData.team || [])])];
+    }
+  } catch (ae) { emitLog(`   ⚠️ IA Enrichment failed: ${ae.message}`); }
+
+  return result;
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

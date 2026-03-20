@@ -21,7 +21,7 @@ function emitResult(data) {
 const sleep = ms => new Promise(r => setTimeout(r, ms + Math.floor(Math.random() * 400)));
 
 // ─── CONFIGURATION CLI (alignée sur les inputs du finder: q, l, limit, type) ───
-const [, , argQuery, argLocation, argMax, argType, argFields] = process.argv;
+const [, , argQuery, argLocation, argMax, argUserId, argType, argFields] = process.argv;
 const requestedFields = argFields ? argFields.split(',').map(s => s.trim()).filter(Boolean) : [];
 
 // type: "entreprise" | "personne" | "tous" (finder) → mode: "entreprise" | "personne"
@@ -537,7 +537,7 @@ async function main() {
           emitLog(`      🌐 Enrichissement site : ${websiteUrl}`);
           const enrichPage = await context.newPage();
           try {
-            const siteData = await scrapeOfficialSite(enrichPage, { url: websiteUrl, name: prospect.name }, { visitContactPage: true, emitLog });
+            const siteData = await scrapeOfficialSite(enrichPage, { url: websiteUrl, name: prospect.name, userId: argUserId || null }, { visitContactPage: true, emitLog });
             
             if (!siteData.loadError) {
               prospect.siteEnrichment = siteData;
