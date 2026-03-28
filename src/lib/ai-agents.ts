@@ -155,7 +155,7 @@ export const chatAgent = async (
         1. PROSPECT FINDER : 
            - Utilise le Multi-Channel Scanning (LinkedIn, Google Maps, Pages Jaunes, Pappers, Societe.com, Facebook).
            - Fonctionne via SSE (Server-Sent Events) pour des résultats en temps réel sans rechargement.
-           - LinkedIn/Facebook : Nécessite des comptes dédiés pour éviter les bans. Utilise des scrapers Puppeteer avancés qui simulent le comportement humain.
+           - LinkedIn/Facebook : Nécessite des comptes dédiés pour éviter les bans. Utilise des scrapers Playwright avancés qui simulent le comportement humain.
         2. E-MAIL CAMPAIGNS :
            - Utilise exclusivement le protocole SMTP (standard industriel) pour l'envoi des messages.
            - Assure une délivrabilité optimale via une configuration personnalisée.

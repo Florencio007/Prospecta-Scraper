@@ -189,6 +189,11 @@ export interface Prospect {
   website?: string;
   city?: string;
   address?: string | null;
+  about_text?: string | null;
+  services?: string[] | null;
+  opening_hours?: Record<string, string> | string[] | null;
+  gps_lat?: number | null;
+  gps_lng?: number | null;
   industry?: string | null;
   tags?: string[];
   photo?: string;

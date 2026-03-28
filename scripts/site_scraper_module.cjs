@@ -60,59 +60,80 @@ function isOfficialSite(url) {
   return true;
 }
 
+const axios = require('axios');
+const cheerio = require('cheerio');
+const pLimit = require('p-limit');
+
 /**
- * Crawl the site to collect substantial text from multiple key pages.
+ * Crawl the site to collect substantial text from multiple key pages using Cheerio (Fast).
  */
-async function crawlSiteText(page, startUrl, emitLog) {
+async function crawlSiteText(startUrl, emitLog) {
   const domain = getRootDomain(startUrl);
   const visited = new Set();
   const toVisit = [startUrl];
   let fullText = '';
   let pagesCollected = 0;
+  const limit = pLimit(3); // Concurrency of 3 pages
 
-  emitLog(`   🕵️ Début du crawling IA pour : ${domain}`);
+  emitLog(`   🕵️ Début du crawling ultra-rapide (Cheerio) pour : ${domain}`);
 
-  while (toVisit.length > 0 && pagesCollected < 5) {
-    const url = toVisit.shift();
-    if (visited.has(url)) continue;
-    visited.add(url);
+  while (toVisit.length > 0 && pagesCollected < 6) {
+    const batch = toVisit.splice(0, 3);
+    const results = await Promise.all(batch.map(url => limit(async () => {
+      if (visited.has(url)) return null;
+      visited.add(url);
 
-    try {
-      emitLog(`      📄 Lecture : ${url}`);
-      await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 15000 });
-      await sleep(1000);
+      try {
+        emitLog(`      📄 Lecture : ${url}`);
+        const response = await axios.get(url, { 
+          timeout: 10000,
+          headers: { 
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36' 
+          }
+        });
 
-      const pageData = await page.evaluate(() => {
-        const text = document.body?.innerText || '';
-        const links = Array.from(document.querySelectorAll('a[href]'))
-          .map(a => a.href.split('#')[0].replace(/\/$/, ''))
-          .filter(href => {
-            try {
-              const u = new URL(href);
-              const linkDomain = u.hostname.replace(/^www\./, '');
-              const currentDomain = window.location.hostname.replace(/^www\./, '');
-              return linkDomain === currentDomain;
-            } catch { return false; }
-          });
-        return { text, links };
-      });
+        if (!response.headers['content-type']?.includes('text/html')) return null;
 
-      fullText += `\n\n--- PAGE: ${url} ---\n${pageData.text}\n`;
+        const $ = cheerio.load(response.data);
+        $('script, style, noscript, iframe', 'head').remove();
+        
+        const text = $('body').text().replace(/\s+/g, ' ').trim();
+        const links = [];
+        
+        $('a[href]').each((_, el) => {
+          try {
+            const href = $(el).attr('href');
+            if (!href) return;
+            const absolute = new URL(href, url).href.split('#')[0].replace(/\/$/, '');
+            const u = new URL(absolute);
+            if (u.hostname.replace(/^www\./, '') === domain) {
+              links.push(absolute);
+            }
+          } catch (e) {}
+        });
+
+        return { text, links, url };
+      } catch (err) {
+        // emitLog(`      ⚠️ Erreur sur ${url} : ${err.message}`);
+        return null;
+      }
+    })));
+
+    for (const res of results) {
+      if (!res) continue;
+      fullText += `\n\n--- PAGE: ${res.url} ---\n${res.text}\n`;
       pagesCollected++;
 
-      // Ajouter de nouveaux liens pertinents (About, Contact, Services, FAQ...)
       const priorityTerms = [/contact/i, /about/i, /a-propos/i, /services/i, /equipe/i, /team/i, /faq/i, /offres/i];
-      for (const link of pageData.links) {
+      for (const link of res.links) {
         if (!visited.has(link) && !toVisit.includes(link)) {
           if (priorityTerms.some(term => term.test(link))) {
-            toVisit.unshift(link); // Priorité
+            toVisit.unshift(link); 
           } else if (toVisit.length < 10) {
             toVisit.push(link);
           }
         }
       }
-    } catch (err) {
-      emitLog(`      ⚠️ Erreur sur ${url} : ${err.message}`);
     }
   }
 
@@ -133,8 +154,8 @@ async function scrapeOfficialSite(page, siteInfo, options = {}) {
     googlePosition: position,
   };
 
-  // ── 1. Crawling du texte ──────────────────────────────────────────────────
-  const rawText = await crawlSiteText(page, url, emitLog);
+  // ── 1. Crawling du texte (Cheerio) ─────────────────────────────────────────
+  const rawText = await crawlSiteText(url, emitLog);
   if (!rawText || rawText.length < 100) {
     result.error = "Contenu insuffisant pour analyse";
     return result;
@@ -181,27 +202,60 @@ async function scrapeOfficialSite(page, siteInfo, options = {}) {
       req.end();
     });
 
-    // ── 4. Assemblage final ──────────────────────────────────────────────────
-    return {
+    // ── 5. Native Extraction (Multi-Source Email/Phone/Socials) ───────────────
+    // On extrait les contacts par regex en plus de l'IA pour maximiser les chances
+    const nativeContacts = {
+      emails: [...new Set(rawText.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g) || [])]
+        .filter(e => !['example','domain','test','sentry'].some(x => e.toLowerCase().includes(x))),
+      phones: [...new Set(rawText.match(/(?:\+?\d[\d\s\-().]{7,18}\d)/g) || [])]
+        .map(p => p.trim()).filter(p => p.length >= 8 && p.length <= 20),
+      socials: {}
+    };
+
+    const socialPatterns = {
+      facebook: /facebook\.com\/[^"'\s?<>#]+/i,
+      instagram: /instagram\.com\/[^"'\s?<>#]+/i,
+      linkedin: /linkedin\.com\/(?:company|in)\/[^"'\s?<>#]+/i,
+      twitter: /(?:twitter|x)\.com\/[^"'\s?<>#]+/i
+    };
+
+    for (const [p, reg] of Object.entries(socialPatterns)) {
+      const m = rawText.match(reg);
+      if (m) nativeContacts.socials[p] = m[0].startsWith('http') ? m[0] : 'https://' + m[0];
+    }
+
+    // Fusionner les résultats Natis + IA
+    const finalResult = {
       ...aiData,
       url,
       domain: result.domain,
       googlePosition: position,
       ogImage: techMeta.ogImage,
-      logo: techMeta.logo || aiData.logo,
+      logo: techMeta.logo || aiData.logo || techMeta.favicon,
       favicon: techMeta.favicon,
       lang: techMeta.lang,
       scrapedAt: new Date().toISOString(),
-      platform: 'Site Officiel (IA Enhanced)',
+      platform: 'Site Officiel (IA + Logic v5)',
       aiEnriched: true
     };
 
+    // Merge contacts
+    finalResult.contacts = finalResult.contacts || {};
+    finalResult.contacts.emails = [...new Set([...(finalResult.contacts.emails || []), ...nativeContacts.emails])];
+    finalResult.contacts.phones = [...new Set([...(finalResult.contacts.phones || []), ...nativeContacts.phones])];
+    finalResult.socials = { ...(finalResult.socials || {}), ...nativeContacts.socials };
+
+    return finalResult;
+
   } catch (err) {
     emitLog(`   ❌ Erreur IA : ${err.message}. Fallback partiel.`);
+    // Fallback minimal sans IA
     return {
       ...result,
+      emails: [...new Set(rawText.match(/[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}/g) || [])],
       error: `AI Error: ${err.message}`,
       scrapedAt: new Date().toISOString(),
+      platform: 'Site Officiel (Logic v5 Only)'
     };
   }
 }

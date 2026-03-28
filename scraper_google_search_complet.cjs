@@ -552,14 +552,35 @@ async function scrapeBing(page, limit) {
     while (results.length < limit && attempts < maxPages) {
       const url = `https://www.bing.com/search?q=${encodeURIComponent(query)}&count=10&first=${first}&setlang=fr&mkt=fr-FR`;
       try {
-        await sleep(1500 + Math.random() * 1500);
-        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
-        await sleep(800 + Math.random() * 600);
+        await sleep(2000 + Math.random() * 1500);
+        // Utiliser une navigation plus robuste
+        await page.goto(url, { waitUntil: 'networkidle', timeout: 45000 }).catch(async () => {
+             // Fallback if networkidle takes too long
+             await page.waitForLoadState('domcontentloaded');
+        });
+        
+        // Attendre que le corps soit là
+        await page.waitForSelector('body', { timeout: 10000 });
+
+        // --- GESTION CONSENTEMENT BING (nouveau) ---
+        try {
+          const consentBtn = await page.$('#bnp_btn_accept, #adlt_set_save, .bnp_btn_accept');
+          if (consentBtn) {
+            await consentBtn.click();
+            await page.waitForLoadState('networkidle', { timeout: 5000 }).catch(() => {});
+          }
+        } catch (_) {}
+
+        await page.waitForSelector('#b_results', { timeout: 15000 }).catch(() => {});
+        await sleep(1000 + Math.random() * 1000);
 
         const items = await page.evaluate(() => {
           const results = [];
           // Résultats organiques Bing
-          document.querySelectorAll('#b_results .b_algo').forEach(card => {
+          const algoCards = document.querySelectorAll('#b_results .b_algo');
+          if (algoCards.length === 0) return [];
+
+          algoCards.forEach(card => {
             const linkEl    = card.querySelector('h2 a');
             const snippetEl = card.querySelector('.b_caption p, .b_snippet');
             const nameEl    = card.querySelector('.b_entityTitle, .b_vPanel h2 a, h2 a');
@@ -637,7 +658,18 @@ async function scrapeDuckDuckGo(page, limit) {
 
       try {
         await sleep(2000 + Math.random() * 2000);
-        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 35000 });
+        
+        // --- GESTION CONSENTEMENT DDG (nouveau) ---
+        try {
+          const ddgConsent = await page.$('.feedback-btn, .modal__btn--primary');
+          if (ddgConsent) {
+            await ddgConsent.click();
+            await sleep(500);
+          }
+        } catch (_) {}
+
+        await page.waitForSelector('.result, .results_links_deep', { timeout: 10000 }).catch(() => {});
         await sleep(800 + Math.random() * 500);
 
         const items = await page.evaluate(() => {
@@ -727,7 +759,18 @@ async function scrapeYahoo(page, limit) {
       const url = `https://search.yahoo.com/search?p=${encodeURIComponent(query)}&b=${b}&pz=10&ei=UTF-8&fr=yfp-t`;
       try {
         await sleep(2000 + Math.random() * 2000);
-        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 25000 });
+        await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 35000 });
+        
+        // --- GESTION CONSENTEMENT YAHOO (nouveau) ---
+        try {
+          const yahooConsent = await page.$('button[name="agree"], .consent-agree');
+          if (yahooConsent) {
+            await yahooConsent.click();
+            await sleep(1000);
+          }
+        } catch (_) {}
+
+        await page.waitForSelector('#web .algo', { timeout: 10000 }).catch(() => {});
         await sleep(800 + Math.random() * 600);
 
         const items = await page.evaluate(() => {
@@ -810,29 +853,28 @@ async function scrapeGoogleFallback(page, limit) {
 
       try {
         await sleep(5000 + Math.random() * 5000);
-        await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 30000 });
-        await sleep(1500 + Math.random() * 1000);
-
-        // Détecter le blocage
-        const blocked = await page.evaluate(() => {
-          const b = document.body?.innerText || '';
-          return b.includes('captcha') || b.includes('CAPTCHA') ||
-            b.includes('unusual traffic') || b.includes('trafic inhabituel') ||
-            !!document.querySelector('#captcha-form, form[action*="sorry"]');
-        }).catch(() => false);
-
-        if (blocked) {
-          emitLog('   🚫 Google CAPTCHA détecté — abandon Google, résultats des autres moteurs utilisés');
-          return results;
-        }
-
-        // Accepter cookies
+        await page.goto(searchUrl, { waitUntil: 'domcontentloaded', timeout: 45000 });
+        
+        // --- GESTION CONSENTEMENT GOOGLE (amélioré) ---
         try {
-          const btn = page.locator('#L2AGLb, button[aria-label*="Accepter"]').first();
-          if (await btn.isVisible({ timeout: 2000 }).catch(() => false)) {
-            await btn.click(); await sleep(1000);
+          const googleConsentSelectors = [
+            '#L2AGLb', 
+            'button[aria-label*="Accepter"]',
+            'button[aria-label*="Agree"]',
+            '#introAgreeButton'
+          ];
+          for (const sel of googleConsentSelectors) {
+            const btn = await page.$(sel);
+            if (btn && await btn.isVisible()) {
+              await btn.click();
+              await sleep(1500);
+              break;
+            }
           }
         } catch (_) {}
+
+        await page.waitForSelector('div.g, div.tF2Cxc, #captcha-form', { timeout: 10000 }).catch(() => {});
+        await sleep(1500 + Math.random() * 1000);
 
         const items = await page.evaluate(() => {
           const items = [];

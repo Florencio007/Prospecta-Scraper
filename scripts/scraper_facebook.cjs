@@ -123,7 +123,7 @@ async function login(page) {
     }
   }
 
-  // 2. Gestion des bannières de consentement (si nécessaire sur la page login)
+  // 2. Gestion des bannières de consentement
   try {
     const consentTexts = ['Accepter tout', 'Accept all', 'Allow all cookies', 'Tout accepter', 'OK', 'Accepter'];
     const buttons = page.locator('button, [role="button"]');
@@ -154,12 +154,11 @@ async function login(page) {
   for (const sel of ['#email', 'input[name="email"]', 'input[type="email"]']) {
     if (await page.locator(sel).first().isVisible({ timeout: 2000 }).catch(() => false)) { emailSel = sel; break; }
   }
-  
+
   if (!emailSel) {
-    emitLog('   ⚠️ Formulaire introuvable ou déjà passé — Vérification finale...');
-    await sleep(2000);
+    emitLog('   💡 Résolvez la connexion manuellement dans Chromium puis appuyez sur ENTRÉE ici...');
+    await new Promise(r => process.stdin.once('data', r));
     if (page.url().includes('/feed')) return;
-    emitLog('   💡 Résolvez la connexion manuellement dans Chromium si besoin...');
   } else {
     await page.locator(emailSel).first().fill(CONFIG.email);
     await sleep(400);

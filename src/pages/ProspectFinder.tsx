@@ -67,6 +67,9 @@ const CHANNEL_DATA_FIELDS: Record<string, { key: string; label: string; icon: st
     { key: "category", label: "Catégorie / Secteur", icon: "🏷️" },
     { key: "rating", label: "Note / Avis", icon: "⭐" },
     { key: "openingHours", label: "Horaires d'ouverture", icon: "⏰" },
+    { key: "about_text", label: "À propos / Description", icon: "📝" },
+    { key: "services", label: "Services / Prestations", icon: "🛠️" },
+    { key: "gps", label: "Coordonnées GPS", icon: "📍" },
   ],
   linkedin: [
     { key: "name", label: "Nom complet", icon: "👤" },
@@ -101,6 +104,8 @@ const CHANNEL_DATA_FIELDS: Record<string, { key: string; label: string; icon: st
     { key: "linkedin", label: "LinkedIn", icon: "🔗" },
     { key: "facebook", label: "Facebook", icon: "🔗" },
     { key: "instagram", label: "Instagram", icon: "🔗" },
+    { key: "about_text", label: "À propos complet", icon: "📝" },
+    { key: "services", label: "Liste des services", icon: "🛠️" },
   ],
   pappers: [
     { key: "name", label: "Raison sociale", icon: "🏢" },
@@ -534,7 +539,13 @@ const ProspectFinder = () => {
       } else if (field === 'rating') {
         found = !!(val || item.totalScore || item.rating);
       } else if (field === 'openingHours') {
-        found = !!(val || item.opening_hours);
+        found = !!(val || item.opening_hours || item.openingHours);
+      } else if (field === 'about_text' || field === 'about') {
+        found = !!(val || item.about_text || item.description || (item.contractDetails?.about));
+      } else if (field === 'services') {
+        found = !!(val || (item.services && item.services.length > 0) || (item.webIntelligence?.services?.length > 0));
+      } else if (field === 'gps') {
+        found = !!(val || item.gps_lat || item.gps_lng || item.gps);
       } else if (field === 'team' || field === 'dirigeant') {
         found = !!(val || (item.contractDetails?.team?.length > 0) || (item.contractDetails?.dirigeants?.length > 0));
       } else {
@@ -732,16 +743,34 @@ const ProspectFinder = () => {
               if (d.percentage !== undefined) updateChannelPct(d.percentage, d.message || "");
               if (d.error && typeof d.error === 'string') addLog(`❌ Erreur: ${d.error}`, 'error');
               if (d.result) {
+                const res = d.result;
                 const mapped = {
-                  ...d.result,
+                  ...res,
                   id: `gmap_${Math.random().toString(36).substr(2, 9)}`,
-                  name: d.result.name, initials: (d.result.name?.[0] || "G").toUpperCase(),
-                  position: d.result.category, company: d.result.name, source: "google_maps",
+                  name: res.name, 
+                  initials: (res.name?.[0] || "G").toUpperCase(),
+                  position: res.sector || res.category, 
+                  company: res.name, 
+                  source: "google_maps",
                   requestedFields: selectedFields,
-                  score: calculateInitialScore(d.result, selectedFields), email: d.result.phone ? "Extraction..." : "",
-                  phone: d.result.phone || "", website: d.result.website || "",
-                  city: filters.city || "", tags: [d.result.category].filter(Boolean),
-                  contractDetails: d.result.contractDetails || d.result,
+                  score: calculateInitialScore(res, selectedFields), 
+                  email: res.email || (res.emails_all?.[0]) || (res.phone ? "Extraction..." : ""),
+                  phone: res.phone || "", 
+                  website: res.website || "",
+                  city: res.city || filters.city || "", 
+                  address: res.address || "",
+                  tags: [res.sector || res.category].filter(Boolean),
+                  // Mappage Maj v5 Riche
+                  about_text: res.about?.all_text || res.description || "",
+                  services: Array.from(new Set([
+                    ...(res.services || []), 
+                    ...(res.about?.services || []),
+                    ...(res.about?.commodites || [])
+                  ])).filter(Boolean),
+                  opening_hours: res.hours || res.hours_raw || null,
+                  gps_lat: res.lat || null,
+                  gps_lng: res.lng || null,
+                  contractDetails: res.contractDetails || res,
                   prospect_type: "company"
                 };
                 setPendingProspects(prev => {

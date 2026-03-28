@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Mail, Phone, Globe, MessageCircle, ExternalLink, ShieldCheck, Zap, Linkedin, Facebook, Instagram, Twitter, Youtube, Pin, Share2, Copy, Search, Save, X, MapPin, Sparkles, Loader2, Plus, Clock, Users, MessageSquare, ThumbsUp, Star, Info, Building2, User, Tag, BadgeEuro, Link2, Cpu, FileText, Layout, ListChecks, Music2, Ticket, Menu, Settings2, MousePointer2 } from "lucide-react";
+import { Accessibility, CreditCard, Smile, Package, Shield, Navigation } from "lucide-react";
 import { Prospect } from "@/data/mockData";
 import { useLanguage } from "@/hooks/useLanguage";
 import { useToast } from "@/hooks/use-toast";
@@ -221,6 +222,9 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                     .update({
                                         phone: updatedProspect.phone,
                                         email: updatedProspect.email,
+                                        about_text: enrichedData.about_text || updatedProspect.about_text,
+                                        services: enrichedData.services || updatedProspect.services,
+                                        opening_hours: enrichedData.opening_hours || updatedProspect.opening_hours,
                                         summary: updatedProspect.aiIntelligence?.executiveSummary,
                                         ai_intelligence: updatedProspect.aiIntelligence
                                     })
@@ -459,6 +463,12 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                     phone: currentProspect.phone,
                     initials: currentProspect.initials,
                     website: currentProspect.website,
+                    address: currentProspect.address || (currentProspect.contractDetails as any)?.address,
+                    about_text: currentProspect.about_text || (currentProspect.contractDetails as any)?.about,
+                    services: currentProspect.services || (currentProspect.contractDetails as any)?.services || [],
+                    opening_hours: currentProspect.opening_hours || (currentProspect.contractDetails as any)?.openingHours || {},
+                    gps_lat: currentProspect.gps_lat || (currentProspect.contractDetails as any)?.latitude,
+                    gps_lng: currentProspect.gps_lng || (currentProspect.contractDetails as any)?.longitude,
                     contract_details: {
                         ...(currentProspect.contractDetails || {}),
                         prospect_type: currentProspect.prospect_type || (currentProspect.contractDetails as any)?.prospect_type || 'person'
@@ -1134,13 +1144,17 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
 
                                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                                 {/* Services & Catégories */}
-                                                                {((currentProspect.contractDetails as any)?.services?.length > 0 || (currentProspect.contractDetails as any)?.categories?.length > 0) && (
+                                                                {((currentProspect.contractDetails as any)?.services?.length > 0 || (currentProspect.contractDetails as any)?.categories?.length > 0 || currentProspect.services?.length > 0) && (
                                                                     <div className="space-y-3">
                                                                         <p className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-1">
                                                                             <ListChecks size={10} /> Services & Catégories
                                                                         </p>
                                                                         <div className="flex flex-wrap gap-1.5">
-                                                                            {[...((currentProspect.contractDetails as any)?.categories || []), ...((currentProspect.contractDetails as any)?.services || [])].map((item: string, i: number) => (
+                                                                            {[
+                                                                                ...((currentProspect.contractDetails as any)?.categories || []),
+                                                                                ...((currentProspect.contractDetails as any)?.services || []),
+                                                                                ...(currentProspect.services || [])
+                                                                            ].filter(Boolean).map((item: string, i: number) => (
                                                                                 <Badge key={i} variant="outline" className="text-[10px] bg-accent/5 border-accent/20 text-accent">
                                                                                     {item}
                                                                                 </Badge>
@@ -1273,8 +1287,8 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                         </div>
                                                     </div>
 
-                                                    {/* ── DESCRIPTION / GOOGLE SNIPPET ── */}
-                                                    {(currentProspect.description || currentProspect.slogan || currentProspect.metaDescription) && (
+                                                    {/* ── DESCRIPTION / GOOGLE SNIPPET / ABOUT TEXT ── */}
+                                                    {(currentProspect.description || currentProspect.slogan || currentProspect.metaDescription || currentProspect.about_text) && (
                                                         <div className="p-4 bg-accent/5 rounded-2xl border border-accent/10 relative overflow-hidden group transition-all duration-300 hover:bg-accent/10">
                                                             <div className="absolute top-0 right-0 p-2 opacity-20 group-hover:opacity-40 transition-opacity">
                                                                 <FileText size={40} className="text-accent" />
@@ -1282,9 +1296,13 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                             <h5 className="text-[10px] uppercase font-bold text-accent mb-2 flex items-center gap-2">
                                                                 <FileText size={12} /> À propos / Description
                                                             </h5>
-                                                            <p className="text-sm text-foreground/80 leading-relaxed italic relative z-10">
-                                                                "{currentProspect.description || currentProspect.slogan || currentProspect.metaDescription}"
-                                                            </p>
+                                                            <div className="text-sm text-foreground/80 leading-relaxed italic relative z-10 whitespace-pre-wrap">
+                                                                {currentProspect.about_text ? (
+                                                                    <span>{currentProspect.about_text}</span>
+                                                                ) : (
+                                                                    <span>"{currentProspect.description || currentProspect.slogan || currentProspect.metaDescription}"</span>
+                                                                )}
+                                                            </div>
                                                         </div>
                                                     )}
 
@@ -1496,6 +1514,87 @@ const ProspectDetailView = ({ prospect, isOpen, onOpenChange, agentOnline, onAge
                                                                     </div>
                                                                 )}
 
+                                                            </div>
+                                                        );
+                                                    })()}
+
+                                                    {/* PROFIL GOOGLE MAPS (Riche v5) */}
+                                                    {currentProspect.source === 'google_maps' && (() => {
+                                                        const about = (currentProspect as any).about || {};
+                                                        const hours = currentProspect.opening_hours as any;
+                                                        
+                                                        const aboutSections = [
+                                                            { title: 'Équipements & Services', items: about.commodites, icon: <Zap size={12} /> },
+                                                            { title: 'Accessibilité', items: about.accessibilite, icon: <Accessibility size={12} /> },
+                                                            { title: 'Paiements', items: about.paiements, icon: <CreditCard size={12} /> },
+                                                            { title: 'Ambiance', items: about.ambiance, icon: <Smile size={12} /> },
+                                                            { title: 'Services proposés', items: about.services, icon: <Package size={12} /> },
+                                                            { title: 'Public & Enfants', items: [...(about.public_cible || []), ...(about.enfants || [])], icon: <Users size={12} /> },
+                                                            { title: 'Santé & Sécurité', items: about.sante_securite, icon: <Shield size={12} /> },
+                                                        ].filter(s => s.items?.length > 0);
+
+                                                        return (
+                                                            <div className="space-y-6 pt-6 border-t border-border/10">
+                                                                {/* Grille des caractéristiques */}
+                                                                {aboutSections.length > 0 && (
+                                                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                        {aboutSections.map((sec, idx) => (
+                                                                            <div key={idx} className="space-y-2">
+                                                                                <h6 className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                                                                                    {sec.icon} {sec.title}
+                                                                                </h6>
+                                                                                <div className="flex flex-wrap gap-1">
+                                                                                    {sec.items.map((item: string, i: number) => (
+                                                                                        <Badge key={i} variant="secondary" className="text-[9px] py-0 px-1.5 bg-accent/10 text-accent border-none">
+                                                                                            {item}
+                                                                                        </Badge>
+                                                                                    ))}
+                                                                                </div>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                )}
+
+                                                                {/* Horaires détaillés */}
+                                                                {hours && typeof hours === 'object' && Object.keys(hours).length > 0 && (
+                                                                    <div className="space-y-3">
+                                                                        <h6 className="text-[10px] uppercase font-bold text-muted-foreground flex items-center gap-2">
+                                                                            <Clock size={12} /> Horaires d'ouverture
+                                                                        </h6>
+                                                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                                                            {Object.entries(hours).map(([day, time]: [string, any]) => (
+                                                                                <div key={day} className="flex justify-between items-center p-2 bg-secondary/20 rounded-lg text-[11px] border border-border/20">
+                                                                                    <span className="capitalize font-medium">{day}</span>
+                                                                                    <span className={time?.toLowerCase().includes('fermé') ? 'text-red-400' : 'text-emerald-500 font-semibold'}>
+                                                                                        {time}
+                                                                                    </span>
+                                                                                </div>
+                                                                            ))}
+                                                                        </div>
+                                                                    </div>
+                                                                )}
+
+                                                                {/* Coordonnées GPS */}
+                                                                {(currentProspect.gps_lat || (currentProspect as any).lat) && (
+                                                                    <div className="p-3 bg-blue-500/5 rounded-xl border border-blue-500/10 flex items-center justify-between">
+                                                                        <div className="flex items-center gap-3">
+                                                                            <div className="p-2 bg-blue-500/10 rounded-lg text-blue-500">
+                                                                                <MapPin size={16} />
+                                                                            </div>
+                                                                            <div>
+                                                                                <p className="text-[10px] uppercase font-bold text-blue-500/70">Coordonnées GPS</p>
+                                                                                <p className="text-xs font-mono">
+                                                                                    {currentProspect.gps_lat || (currentProspect as any).lat}, {currentProspect.gps_lng || (currentProspect as any).lng}
+                                                                                </p>
+                                                                            </div>
+                                                                        </div>
+                                                                        <Button variant="ghost" size="sm" className="text-blue-500 hover:text-blue-400 hover:bg-blue-500/10 h-8 text-[10px]" asChild>
+                                                                            <a href={`https://www.google.com/maps/@${currentProspect.gps_lat || (currentProspect as any).lat},${currentProspect.gps_lng || (currentProspect as any).lng},17z`} target="_blank" rel="noopener noreferrer">
+                                                                                <Navigation size={12} className="mr-1" /> Naviguer
+                                                                            </a>
+                                                                        </Button>
+                                                                    </div>
+                                                                )}
                                                             </div>
                                                         );
                                                     })()}
